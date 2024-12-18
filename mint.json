@@ -77,6 +77,18 @@
       ]
     },
     {
+      "group": "Metrics",
+      "pages": [
+        "metrics/introduction"
+      ]
+    },
+    {
+      "group": "Examples",
+      "pages": [
+        "examples/introduction"
+      ]
+    },
+    {
       "group": "API Documentation",
       "pages": [
         "api-reference/introduction"
