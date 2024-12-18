@@ -27,15 +27,17 @@
   },
   "tabs": [
     {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
-  "tabs": [
-    {
       "name": "Metrics",
       "url": "metrics"
-    }
+    },
+    {
+      "name": "Guides",
+      "url": "guides"
+    },
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    },
   ],
   "anchors": [
     {
