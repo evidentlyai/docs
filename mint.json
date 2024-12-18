@@ -31,6 +31,12 @@
       "url": "api-reference"
     }
   ],
+  "tabs": [
+    {
+      "name": "Metrics",
+      "url": "metrics"
+    }
+  ],
   "anchors": [
     {
       "name": "Documentation",
