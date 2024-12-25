@@ -6,7 +6,6 @@
     "light": "/logo/evidently_ai_logo_docs.svg"
   },
   "favicon": "/logo/favicon.png",
-  {
   "colors": {
     "primary": "#ed0400",
     "light": "#f59aa2",
@@ -14,9 +13,11 @@
     "anchors": {
       "from": "#ed0400",
       "to": "#ed0400"
-      },
     }
-  }
+  },
+  "background": {
+    "style": "gradient"
+  },
   "topbarLinks": [
     {
       "name": "Talk to us",
