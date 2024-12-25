@@ -52,6 +52,10 @@
     {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "Changelog",
+      "url": "changelog"
     }
   ],
   "anchors": [
@@ -102,6 +106,12 @@
       "group": "API Documentation",
       "pages": [
         "api-reference/introduction"
+      ]
+    },
+    {
+      "group": "Changelog",
+      "pages": [
+        "changelog/changelog"
       ]
     },
     {
