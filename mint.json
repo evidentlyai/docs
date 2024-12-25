@@ -20,6 +20,9 @@
       "dark": "#221526"
     }
   },
+  "background": {
+    "style": "gradient"
+  }
   "topbarLinks": [
     {
       "name": "Support",
