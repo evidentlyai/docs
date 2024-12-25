@@ -22,11 +22,15 @@
     {
       "name": "Talk to us",
       "url": "https://www.evidentlyai.com/get-demo"
+    },
+    {
+      "name": "Website",
+      "url": "https://www.evidentlyai.com/get-demo"
     }
   ],
   "topbarCtaButton": {
     "name": "Sign up",
-    "url": "https://www.evidentlyai.com/register"
+    "url": "https://www.evidentlyai.com"
   },
   "tabs": [
     {
@@ -53,11 +57,6 @@
       "icon": "discord",
       "url": "https://discord.com/invite/xZjKRaNp8b"
     },
-    {
-      "name": "Website",
-      "icon": "newspaper",
-      "url": "https://www.evidentlyai.com/"
-    }
   ],
   "navigation": [
     {
