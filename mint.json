@@ -56,7 +56,7 @@
       "name": "Community",
       "icon": "discord",
       "url": "https://discord.com/invite/xZjKRaNp8b"
-    },
+    }
   ],
   "navigation": [
     {
@@ -106,8 +106,8 @@
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://linkedin.com/company/mintlify"
+    "x": "https://x.com/EvidentlyAI",
+    "github": "https://github.com/evidentlyai/evidently",
+    "linkedin": "https://www.linkedin.com/company/evidently-ai"
   }
 }
