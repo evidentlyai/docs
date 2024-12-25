@@ -25,7 +25,7 @@
     "body": {
       "family": "Manrope"
     }
-  }
+  },
   "topbarLinks": [
     {
       "name": "Website",
@@ -34,7 +34,7 @@
     {
       "name": "Talk to us",
       "url": "https://www.evidentlyai.com/get-demo"
-    },
+    }
   ],
   "topbarCtaButton": {
     "name": "Sign up",
