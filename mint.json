@@ -1,18 +1,18 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Evidently Documentation",
+  "name": "Evidently AI - Documentation",
   "logo": {
     "dark": "/logo/evidently_ai_logo_docs_dark.svg",
     "light": "/logo/evidently_ai_logo_docs.svg"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/favicon.svg",
   "colors": {
     "primary": "#ed0400",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "light": "#ffebeb",
+    "dark": "#ed0400",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#ed0400",
+      "to": "#ed0400"
     }
   },
   "topbarLinks": [
