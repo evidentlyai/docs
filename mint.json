@@ -72,6 +72,18 @@
   ],
   "navigation": [
     {
+      "group": "Overview",
+      "pages": [
+        "overview/introduction"
+      ]
+    },
+    {
+      "group": "Metrics",
+      "pages": [
+        "metrics/introduction"
+      ]
+    },
+    {
       "group": "Get Started",
       "pages": [
         "introduction",
@@ -88,12 +100,6 @@
         "essentials/settings",
         "essentials/navigation",
         "essentials/reusable-snippets"
-      ]
-    },
-    {
-      "group": "Metrics",
-      "pages": [
-        "metrics/introduction"
       ]
     },
     {
