@@ -15,10 +15,6 @@
       "from": "#ed0400",
       "to": "#ed0400"
       },
-    "background": {
-      "light": "#ffffff",
-      "dark": "#221526"
-      }
     }
   }
   "topbarLinks": [
