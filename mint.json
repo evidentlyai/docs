@@ -1,1 +1,113 @@
-
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Evidently AI - Documentation",
+  "logo": {
+    "dark": "/logo/evidently_ai_logo_docs_dark.svg",
+    "light": "/logo/evidently_ai_logo_docs.svg"
+  },
+  "favicon": "/logo/favicon.png",
+  {
+  "colors": {
+    "primary": "#ed0400",
+    "light": "#f59aa2",
+    "dark": "#ed0400",
+    "anchors": {
+      "from": "#ed0400",
+      "to": "#ed0400"
+      },
+    }
+  }
+  "topbarLinks": [
+    {
+      "name": "Talk to us",
+      "url": "https://www.evidentlyai.com/get-demo"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Sign up",
+    "url": "https://www.evidentlyai.com/register"
+  },
+  "tabs": [
+    {
+      "name": "Metrics",
+      "url": "metrics"
+    },
+    {
+      "name": "Examples",
+      "url": "examples"
+    },
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Documentation",
+      "icon": "book-open-cover",
+      "url": "https://mintlify.com/docs"
+    },
+    {
+      "name": "Community",
+      "icon": "discord",
+      "url": "https://mintlify.com/community"
+    },
+    {
+      "name": "Blog",
+      "icon": "newspaper",
+      "url": "https://mintlify.com/blog"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "development"
+      ]
+    },
+    {
+      "group": "Essentials",
+      "pages": [
+        "essentials/markdown",
+        "essentials/code",
+        "essentials/images",
+        "essentials/settings",
+        "essentials/navigation",
+        "essentials/reusable-snippets"
+      ]
+    },
+    {
+      "group": "Metrics",
+      "pages": [
+        "metrics/introduction"
+      ]
+    },
+    {
+      "group": "Examples",
+      "pages": [
+        "examples/introduction"
+      ]
+    },
+    {
+      "group": "API Documentation",
+      "pages": [
+        "api-reference/introduction"
+      ]
+    },
+    {
+      "group": "Endpoint Examples",
+      "pages": [
+        "api-reference/endpoint/get",
+        "api-reference/endpoint/create",
+        "api-reference/endpoint/delete"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "x": "https://x.com/mintlify",
+    "github": "https://github.com/mintlify",
+    "linkedin": "https://linkedin.com/company/mintlify"
+  }
+}
