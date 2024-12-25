@@ -18,6 +18,14 @@
   "background": {
     "style": "gradient"
   },
+  "font": {
+    "headings": {
+      "family": "Manrope"
+    },
+    "body": {
+      "family": "Manrope"
+    }
+  }
   "topbarLinks": [
     {
       "name": "Website",
