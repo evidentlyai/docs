@@ -44,19 +44,19 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/evidentlyai/evidently"
     },
     {
       "name": "Community",
       "icon": "discord",
-      "url": "https://mintlify.com/community"
+      "url": "https://discord.com/invite/xZjKRaNp8b"
     },
     {
-      "name": "Blog",
+      "name": "Website",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://www.evidentlyai.com/"
     }
   ],
   "navigation": [
