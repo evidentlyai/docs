@@ -20,13 +20,13 @@
   },
   "topbarLinks": [
     {
-      "name": "Talk to us",
+      "name": "Website",
       "url": "https://www.evidentlyai.com/get-demo"
     },
     {
-      "name": "Website",
+      "name": "Talk to us",
       "url": "https://www.evidentlyai.com/get-demo"
-    }
+    },
   ],
   "topbarCtaButton": {
     "name": "Sign up",
