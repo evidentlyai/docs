@@ -94,8 +94,8 @@
       "group": "Get Started",
       "pages": [
         "introduction",
-        "quickstart",
-        "development"
+        "quickstart_ml",
+        "quickstart_llm"
       ]
     },
     {
