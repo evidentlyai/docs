@@ -130,37 +130,37 @@
     {
       "group": "Projects",
       "pages": [
-        "projects_overview",
-        "projects_manage"
+        "doc/platform/projects_overview",
+        "doc/platform/projects_manage"
       ]
     },
     {
       "group": "Datasets",
       "pages": [
-        "datasets_overview",
-        "dataset_generate",
-        "datasets_workflow"
+        "doc/platform/datasets_overview",
+        "doc/platform/dataset_generate",
+        "doc/platform/datasets_workflow"
       ]
     },
     {
       "group": "Evaluations",
       "pages": [
-        "evals_overview",
-        "evals_no_code",
-        "evals_explore",
-        "evals_scheduled"
+        "doc/platform/evals_overview",
+        "doc/platform/evals_no_code",
+        "doc/platform/evals_explore",
+        "doc/platform/evals_scheduled"
       ]
     },
     {
       "group": "Dashboard",
       "pages": [
-        "dashboard_overview",
-        "dashboard_tabs",
-        "dashboard_panel_types",
-        "dashboard_add_panels"
+        "doc/platform/dashboard_overview",
+        "doc/platform/dashboard_tabs",
+        "doc/platform/dashboard_panel_types",
+        "doc/platform/dashboard_add_panels"
       ]
     },
-    "alerts"
+    "doc/platform/alerts"
   ]
 },
     {
