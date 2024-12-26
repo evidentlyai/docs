@@ -42,6 +42,10 @@
   },
   "tabs": [
     {
+      "name": "Docs",
+      "url": "docs"
+    },
+    {
       "name": "Overview",
       "url": "overview"
     },
