@@ -83,6 +83,19 @@
   ],
   "navigation": [
     {
+    "group": "Get Started",
+    "pages": [
+        "introduction",
+        {
+          "group": "Quickstart",
+          "pages": [
+            "quickstart_ml",
+            "quickstart_llm"
+          ]
+        }
+      ]
+    },
+    {
       "group": "Essentials",
       "pages": [
         "essentials/test/test"
@@ -98,19 +111,6 @@
       "group": "Metrics",
       "pages": [
         "metrics/introduction"
-      ]
-    },
-    {
-    "group": "Get Started",
-    "pages": [
-        "introduction",
-        {
-          "group": "Quickstart",
-          "pages": [
-            "quickstart_ml",
-            "quickstart_llm"
-          ]
-        }
       ]
     },
     {
