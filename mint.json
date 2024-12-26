@@ -83,6 +83,12 @@
   ],
   "navigation": [
     {
+      "group": "Essentials",
+      "pages": [
+        "essentials/test/test"
+      ]
+    },
+    {
       "group": "Introduction",
       "pages": [
         "overview/introduction"
@@ -105,12 +111,6 @@
             "quickstart_llm"
           ]
         }
-      ]
-    },
-    {
-      "group": "Essentials",
-      "pages": [
-        "essentials/test/test"
       ]
     },
     {
