@@ -104,14 +104,11 @@
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Setup",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "docs/setup/installation",
+        "docs/setup/cloud",
+        "docs/setup/self-hosting",
       ]
     },
     {
