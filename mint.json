@@ -100,23 +100,30 @@
       ]
     },
     {
-  "group": "Evaluation library",
-  "pages": [
-    "docs/library/overview",
-    "docs/library/column_mapping",
-    {
-      "group": "Run an evaluation",
-      "pages": [
-        "docs/library/descriptors",
-        "docs/library/report",
-        "docs/library/tests",
-        "docs/library/output_formats",
-        "docs/library/metric_generator"
+    "group": "Evaluation library",
+    "pages": [
+      "docs/library/overview",
+      "docs/library/column_mapping",
+      {
+        "group": "Run an evaluation",
+        "pages": [
+          "docs/library/descriptors",
+          "docs/library/report",
+          "docs/library/tests",
+          "docs/library/output_formats",
+          "docs/library/metric_generator"
+        ]
+      },
+        "docs/library/snapshots"
       ]
     },
-    "docs/library/snapshots"
-  ]
-},
+    {
+      "group": "Tracing",
+      "pages": [
+        "docs/tracing/overview",
+        "docs/setup/tracing_setup"
+      ]
+    },
     {
       "group": "Introduction",
       "pages": [
