@@ -91,11 +91,16 @@
       ]
     },
     {
-      "group": "Get Started",
-      "pages": [
+    "group": "Get Started",
+    "pages": [
         "introduction",
-        "quickstart_ml",
-        "quickstart_llm"
+        {
+          "group": "Quickstart",
+          "pages": [
+            "quickstart_ml",
+            "quickstart_llm"
+          ]
+        }
       ]
     },
     {
