@@ -104,9 +104,9 @@
       ]
     },
     {
-      "group": "Setup",
+      "group": "Essentials",
       "pages": [
-        "overview/introduction",
+        "essentials/test",
       ]
     },
     {
