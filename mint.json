@@ -127,6 +127,7 @@
     {
   "group": "Platform",
   "pages": [
+      "docs/platform/overview",
     {
       "group": "Projects",
       "pages": [
