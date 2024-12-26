@@ -103,7 +103,15 @@
     "group": "Evaluation library",
     "pages": [
       "docs/library/overview",
-      "docs/library/column_mapping",
+      {
+        "group": "Prepare input data",
+        "pages": [
+          "docs/library/data_overview",
+          "docs/library/column_mapping",
+          "docs/library/classification_data",
+          "docs/library/recsys_data"
+        ]
+      },
       {
         "group": "Run an evaluation",
         "pages": [
