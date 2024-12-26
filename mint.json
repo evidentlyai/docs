@@ -110,7 +110,7 @@
     {
       "group": "Essentials",
       "pages": [
-        "docs/essentials/test"
+        "essentials/test"
       ]
     },
     {
