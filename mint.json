@@ -121,7 +121,7 @@
       "group": "Tracing",
       "pages": [
         "docs/tracing/overview",
-        "docs/setup/tracing_setup"
+        "docs/tracing/tracing_setup"
       ]
     },
     {
