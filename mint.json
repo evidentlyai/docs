@@ -125,6 +125,45 @@
       ]
     },
     {
+  "group": "Platform",
+  "pages": [
+    {
+      "group": "Projects",
+      "pages": [
+        "projects_overview",
+        "projects_manage"
+      ]
+    },
+    {
+      "group": "Datasets",
+      "pages": [
+        "datasets_overview",
+        "dataset_generate",
+        "datasets_workflow"
+      ]
+    },
+    {
+      "group": "Evaluations",
+      "pages": [
+        "evals_overview",
+        "evals_no_code",
+        "evals_explore",
+        "evals_scheduled"
+      ]
+    },
+    {
+      "group": "Dashboard",
+      "pages": [
+        "dashboard_overview",
+        "dashboard_tabs",
+        "dashboard_panel_types",
+        "dashboard_add_panels"
+      ]
+    },
+    "alerts"
+  ]
+},
+    {
       "group": "Introduction",
       "pages": [
         "overview/introduction"
