@@ -100,18 +100,23 @@
       ]
     },
     {
-      "group": "Evaluation library",
+  "group": "Evaluation library",
+  "pages": [
+    "docs/library/overview",
+    "docs/library/column_mapping",
+    {
+      "group": "Run an evaluation",
       "pages": [
-        "docs/library/overview",
-        "docs/library/column_mapping",
         "docs/library/descriptors",
         "docs/library/report",
         "docs/library/tests",
         "docs/library/output_formats",
-        "docs/library/metric_generator",
-        "docs/library/snapshots"
+        "docs/library/metric_generator"
       ]
     },
+    "docs/library/snapshots"
+  ]
+}
     {
       "group": "Introduction",
       "pages": [
