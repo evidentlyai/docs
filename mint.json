@@ -42,10 +42,6 @@
   },
   "tabs": [
     {
-      "name": "Essentials",
-      "url": "essentials"
-    },
-    {
       "name": "Overview",
       "url": "overview"
     },
