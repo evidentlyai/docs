@@ -92,9 +92,11 @@
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Setup",
       "pages": [
-        "docs/test/test"
+        "docs/setup/installation",
+        "docs/setup/cloud",
+        "docs/setup/self-hosting",
       ]
     },
     {
