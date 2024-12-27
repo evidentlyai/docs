@@ -28,7 +28,7 @@ import CreateProject from '/snippets/create_project.mdx';
     !pip install evidently[llm]
     ```
 
-    Components run the evals:
+    Components to run the evals:
 
     ```python
     import pandas as pd
@@ -80,7 +80,9 @@ import CreateProject from '/snippets/create_project.mdx';
     * Text length: character count. 
     * Denials: detect if the chatbot denied an answer. 
 
-The last eval uses LLM-as-a-judge with a template Evidently prompt. It returns a label with an explanation. You will need an OpenAI token (eval defaults to `gpt-4o-mini`). 
+The last eval uses LLM-as-a-judge with a template Evidently prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label with an explanation. 
+
+<Note>No OpenAI key? We provide an alternative below.</Note>
 
 Set the OpenAI key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
 
@@ -88,7 +90,7 @@ Set the OpenAI key as an environment variable. [See Open AI docs](https://help.o
     ## import os
     ## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
     ```
-Run the evals:
+Run all the evals together:
 
     ```python
     text_evals_report = Report(metrics=[
@@ -103,7 +105,7 @@ Run the evals:
     text_evals_report.run(reference_data=None, current_data=evaluation_dataset)
     ```
 
-**Alternative**. If you don't want to use LLM judge, you can run a deterministic eval: check if words "sorry" or "apologize" are present (True/False).
+**Alternative**. Run a deterministic eval instead of LLM judge: check if words "sorry" or "apologize" are present (True/False).
 
     ```python
     text_evals_report = Report(metrics=[
