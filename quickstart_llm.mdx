@@ -1,6 +1,6 @@
 ---
-title: 'Quickstart LLM'
-description: 'Start building awesome documentation in under 5 minutes'
+title: 'LLM Evaluation Quickstart'
+description: 'Evaluate text outputs in under 5 minutes'
 noindex: true
 ---
 import CloudSignup from '/snippets/cloud_signup.mdx';
@@ -8,7 +8,6 @@ import CreateProject from '/snippets/create_project.mdx';
 
 <Tabs>
   <Tab title="Evidently Cloud">
-    This quickstart shows how to evaluate text data, such as inputs and outputs from your LLM system.
 
     You will run evals locally in Python and send results to Evidently Cloud for analysis and monitoring.
 
@@ -18,16 +17,17 @@ import CreateProject from '/snippets/create_project.mdx';
 
     <CloudSignup word="cloud" />
 
-    # 2. Installation
+    Now, switch to your Python environment.
+
+    # 2. Installation and imports
 
     Install the Evidently Python library:
 
     ```python
     !pip install evidently[llm]
     ```
-    Now, switch to your Python environment.
 
-    Import the components to run the evals:
+    Components run the evals:
 
     ```python
     import pandas as pd
@@ -36,7 +36,7 @@ import CreateProject from '/snippets/create_project.mdx';
     from evidently.descriptors import *
     ```
 
-    Import the components to connect with Evidently Cloud:
+    Components to connect with Evidently Cloud:
 
     ```python
     from evidently.ui.workspace.cloud import CloudWorkspace
@@ -48,7 +48,7 @@ import CreateProject from '/snippets/create_project.mdx';
 
     # 4. Import the toy dataset
 
-    Prepare your data as a pandas dataframe with texts and metadata columns. Here’s a toy chatbot dataset with "Questions" and "Answers".
+    Prepare your data as a pandas dataframe. Here’s a toy chatbot dataset with "Questions" and "Answers".
 
     ```python
     data = [
@@ -64,59 +64,32 @@ import CreateProject from '/snippets/create_project.mdx';
         ["Can you tell me the latest stock market trends?", "I'm sorry, but I can't provide real-time stock market trends. You might want to check a financial news website or consult a financial advisor."]
     ]
 
-    # Columns
     columns = ["question", "answer"]
 
     # Creating the DataFrame
     evaluation_dataset = pd.DataFrame(data, columns=columns)
 
     ```
-
-    **Collecting live data**: use the open-source `tracely` library to collect the inputs and outputs from your LLM app. Check the [Tracing Quickstart](cloud_quickstart_tracing.md). You can then download the traced dataset for evaluation.
-
+<Callout type="note" emoji="ℹ️">
+**Collecting live data**: you can also trace inputs and outputs from your LLM app, and download the dataset created from traces for evals. Check the [Tracing Quickstart](cloud_quickstart_tracing.md). 
+</Callout>
+  
     # 5. Run your first eval
 
-    You have two options:
-
-    * Run evals that work locally.
-
-    * Use LLM-as-a-judge (requires an OpenAI token).
-
-    **Define your evals**. You will evaluate all "Answers" for:
-
+    Let's Evaluate all "Answers" for:
     * Sentiment: from -1 for negative to 1 for positive.
+    * Text length: character count. 
+    * Denials: detect if the chatbot denied an answer. 
 
-    * Text length: character count.
+The last eval uses LLM-as-a-judge using a template Evidently prompt. It returns a label with an explanation. You will need an OpenAI token (eval defaults to `gpt-4o-mini`). 
 
-    * Presence of "sorry" or "apologize": True/False.
-
-    ```python
-    text_evals_report = Report(metrics=[
-        TextEvals(column_name="answer", descriptors=[
-            Sentiment(),
-            TextLength(),
-            IncludesWords(words_list=['sorry', 'apologize'], display_name="Denials"),
-            ]
-        ),
-    ])
-
-    text_evals_report.run(reference_data=None, current_data=evaluation_dataset)
-    ```
-
-    **Set the OpenAI key**. It's best to set an environment variable: [see Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety) for tips.
+**Set the OpenAI key** as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
 
     ```python
     ## import os
     ## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
     ```
-
-    **Define your evals**. Evaluate all "Answers" for:
-
-    * Sentiment: from -1 for negative to 1 for positive.
-
-    * Text length: character count.
-
-    * Whether the chatbot denied an answer: returns "OK" / "Denial" labels with explanations. This uses LLM-as-a-judge (defaults to `gpt-4o-mini`) with a template Evidently prompt.
+**Run the evals**:
 
     ```python
     text_evals_report = Report(metrics=[
@@ -131,7 +104,22 @@ import CreateProject from '/snippets/create_project.mdx';
     text_evals_report.run(reference_data=None, current_data=evaluation_dataset)
     ```
 
-    Each evaluation is a `descriptor`. You can choose from multiple built-in evaluations or create custom ones, including LLM-as-a-judge.
+**Alternative**. To run evals that work locally, let's switch the LLM judge for determinstic check: if words "sorry" or "apologize" are present (return True/False).
+
+    ```python
+    text_evals_report = Report(metrics=[
+        TextEvals(column_name="answer", descriptors=[
+            Sentiment(),
+            TextLength(),
+            IncludesWords(words_list=['sorry', 'apologize'], display_name="Denials"),
+            ]
+        ),
+    ])
+
+    text_evals_report.run(reference_data=None, current_data=evaluation_dataset)
+    ```
+
+    Each evaluation is a `descriptor`. You can choose from multiple built-in evaluations or create custom ones.
 
     # 6. Send results to Evidently Cloud
 
