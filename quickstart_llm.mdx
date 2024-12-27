@@ -1,5 +1,5 @@
 ---
-title: 'LLM Evaluation Quickstart'
+title: 'LLM Evaluation'
 description: 'Evaluate text outputs in under 5 minutes'
 noindex: true
 ---
@@ -13,13 +13,13 @@ import CreateProject from '/snippets/create_project.mdx';
 
     Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
 
-    # 1. Set up Evidently Cloud
+    ## 1. Set up Evidently Cloud
 
     <CloudSignup word="cloud" />
 
     Now, switch to your Python environment.
 
-    # 2. Installation and imports
+    ## 2. Installation and imports
 
     Install the Evidently Python library:
 
@@ -42,13 +42,13 @@ import CreateProject from '/snippets/create_project.mdx';
     from evidently.ui.workspace.cloud import CloudWorkspace
     ```
 
-    # 3. Create a Project
+    ## 3. Create a Project
 
         <CreateProject word="project" / > 
 
-    # 4. Import the toy dataset
+    ## 4. Import the toy dataset
 
-    Prepare your data as a pandas dataframe. Here’s a toy chatbot dataset with "Questions" and "Answers".
+    Pass data as a pandas dataframe. Here’s a toy chatbot dataset with "Questions" and "Answers".
 
     ```python
     data = [
@@ -74,22 +74,22 @@ import CreateProject from '/snippets/create_project.mdx';
 **Collecting live data**: you can also trace inputs and outputs from your LLM app, and download the dataset created from traces for evals. Check the [Tracing Quickstart](cloud_quickstart_tracing.md). 
 </Callout>
   
-    # 5. Run your first eval
+    ## 5. Run your first eval
 
-    Let's Evaluate all "Answers" for:
+    Let's evaluate all "Answers" for:
     * Sentiment: from -1 for negative to 1 for positive.
     * Text length: character count. 
     * Denials: detect if the chatbot denied an answer. 
 
-The last eval uses LLM-as-a-judge using a template Evidently prompt. It returns a label with an explanation. You will need an OpenAI token (eval defaults to `gpt-4o-mini`). 
+The last eval uses LLM-as-a-judge with a template Evidently prompt. It returns a label with an explanation. You will need an OpenAI token (eval defaults to `gpt-4o-mini`). 
 
-**Set the OpenAI key** as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
+Set the OpenAI key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
 
     ```python
     ## import os
     ## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
     ```
-**Run the evals**:
+Run the evals:
 
     ```python
     text_evals_report = Report(metrics=[
@@ -104,7 +104,7 @@ The last eval uses LLM-as-a-judge using a template Evidently prompt. It returns 
     text_evals_report.run(reference_data=None, current_data=evaluation_dataset)
     ```
 
-**Alternative**. To run evals that work locally, let's switch the LLM judge for determinstic check: if words "sorry" or "apologize" are present (return True/False).
+**Alternative**. If you don't want to use LLM judge, you can run a deterministic eval: check if words "sorry" or "apologize" are present (True/False).
 
     ```python
     text_evals_report = Report(metrics=[
@@ -119,9 +119,9 @@ The last eval uses LLM-as-a-judge using a template Evidently prompt. It returns 
     text_evals_report.run(reference_data=None, current_data=evaluation_dataset)
     ```
 
-    Each evaluation is a `descriptor`. You can choose from multiple built-in evaluations or create custom ones.
+    Each evaluation is a `descriptor`. You can choose from multiple built-in evals or create a custom ones.
 
-    # 6. Send results to Evidently Cloud
+    ## 6. Send results to Evidently Cloud
 
     **Upload the Report** and include raw data for detailed analysis:
 
@@ -135,7 +135,7 @@ The last eval uses LLM-as-a-judge using a template Evidently prompt. It returns 
 
     ![](../.gitbook/assets/cloud/qs_denials.png)
 
-    # 7. Get a dashboard
+    ## 7. Get a dashboard
 
     Go to the "Dashboard" tab and enter the "Edit" mode. Add a new tab, and select the "Descriptors" template.
 
