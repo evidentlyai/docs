@@ -85,8 +85,9 @@
         {
           "group": "Quickstart",
           "pages": [
+            "quickstart_llm", 
             "quickstart_ml",
-            "quickstart_llm"
+            "quickstart_tracing"
           ]
         }
       ]
