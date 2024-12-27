@@ -181,15 +181,10 @@
     {
       "group": "Metrics",
       "pages": [
-        "metrics/introduction"
+        "metrics/introduction", 
+        "metrics/all_metrics",
+        "metrics/all_descriptors"
       ]
-    },
-        {
-     "group": "Reference",
-     "pages": [
-       "metrics/all_metrics",
-       "metrics/all_descriptors"
-     ]
     },
     {
      "group": "Presets",
