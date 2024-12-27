@@ -184,6 +184,52 @@
         "metrics/introduction"
       ]
     },
+        {
+     "group": "Reference",
+     "pages": [
+       "metrics/all_metrics",
+       "metrics/all_descriptors"
+     ]
+    },
+    {
+     "group": "Presets",
+     "pages": [
+       "metrics/preset_text_evals",
+       "metrics/preset_data_drift", 
+       "metrics/explainer_data_stats",
+       "metrics/preset_classification",
+       "metrics/preset_regression",
+       "metrics/preset_recsys"
+     ]
+    },
+    {
+     "group": "Metric Customization",
+     "pages": [
+       "metrics/customize_metric",
+       "metrics/customize_descriptor", 
+       "metrics/customize_llm_judge",
+       "metrics/customize_hf_descriptor",
+       "metrics/customize_data_drift",
+       "metrics/customize_embedding_drift"
+     ]
+    },
+    {
+     "group": "Report Customization",
+     "pages": [
+       "metrics/customize_colors",
+       "metrics/customize_add_text"
+     ]
+    },
+    {
+     "group": "Explainers",
+     "pages": [
+       "metrics/explainer_drift",
+       "metrics/explainer_recsys",
+       "metrics/explainer_regression",
+       "metrics/explainer_classification", 
+       "metrics/explainer_data_stats"
+     ]
+    },
     {
       "group": "Examples",
       "pages": [
