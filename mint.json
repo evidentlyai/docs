@@ -130,13 +130,6 @@
   "pages": [
       "docs/platform/overview",
     {
-      "group": "Tracing",
-      "pages": [
-        "docs/tracing/overview",
-        "docs/tracing/tracing_setup"
-      ]
-    },
-    {
       "group": "Projects",
       "pages": [
         "docs/platform/projects_overview",
@@ -149,6 +142,13 @@
         "docs/platform/datasets_overview",
         "docs/platform/dataset_generate",
         "docs/platform/datasets_workflow"
+      ]
+    },
+    {
+      "group": "Tracing",
+      "pages": [
+        "docs/tracing/overview",
+        "docs/tracing/tracing_setup"
       ]
     },
     {
