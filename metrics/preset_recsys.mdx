@@ -3,3 +3,63 @@ title: 'RecSys'
 description: 'Overview of the Recommender Systems Preset'
 noindex: "true"
 ---
+
+### RecSys (Recommender System) Preset
+
+`RecsysPreset` evaluates the quality of the recommender system. Recommendations and true relevance scores are required. For some metrics, training data and item features are required.
+
+**Composition**:
+
+* `PrecisionTopKMetric()`
+
+* `RecallTopKMetric()`
+
+* `FBetaTopKMetric()`
+
+* `MAPKMetric()`
+
+* `NDCGKMetric()`
+
+* `MRRKMetric()`
+
+* `HitRateKMetric()`
+
+* `PersonalizationMetric()`
+
+* `PopularityBias()`
+
+* `RecCasesTable()`
+
+* `ScoreDistribution()`
+
+* `DiversityMetric()`
+
+* `SerendipityMetric()`
+
+* `NoveltyMetric()`
+
+* `ItemBiasMetric()` (pass column as a parameter)
+
+* `UserBiasMetric()` (pass column as a parameter)
+
+**Required parameter**:
+
+* `k`
+
+**Optional parameters**:
+
+* `min_rel_score: Optional[int]`
+
+* `no_feedback_users: bool`
+
+* `normalize_arp: bool`
+
+* `user_ids: Optional[List[Union[int, str]]]`
+
+* `display_features: Optional[List[str]]`
+
+* `item_features: Optional[List[str]]`
+
+* `user_bias_columns: Optional[List[str]]`
+
+* `item_bias_columns: Optional[List[str]]`

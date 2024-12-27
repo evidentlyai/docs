@@ -3,3 +3,21 @@ title: 'Data Summary'
 description: 'Overview of the Data Summary Preset.'
 noindex: "true"
 ---
+
+Presets use the default parameters for each Metric. 
+
+### Data Quality Preset
+
+`DataQualityPreset` captures column and dataset summaries. Input columns are required. Prediction and target are optional.
+
+**Composition**:
+
+* `DatasetSummaryMetric()`
+
+* `ColumnSummaryMetric()` for `all` or specified `columns`
+
+* `DatasetMissingValuesMetric()`
+
+**Optional parameters**:
+
+* `columns`

@@ -3,3 +3,31 @@ title: 'Regression'
 description: 'Overview of the Regression Quality Presets'
 noindex: "true"
 ---
+
+### Regression Preset
+
+`RegressionPreset` evaluates the quality of a regression model. Prediction and target are required. Input features are optional.
+
+**Composition**:
+
+* `RegressionQualityMetric()`
+
+* `RegressionPredictedVsActualScatter()`
+
+* `RegressionPredictedVsActualPlot()`
+
+* `RegressionErrorPlot()`
+
+* `RegressionAbsPercentageErrorPlot()`
+
+* `RegressionErrorDistribution()`
+
+* `RegressionErrorNormality()`
+
+* `RegressionTopErrorMetric()`
+
+* `RegressionErrorBiasTable()` for all or specified `columns`
+
+**Optional parameters**:
+
+* `columns`

@@ -3,3 +3,25 @@ title: 'All Metrics'
 description: 'All dataset and column-level evaluations.'
 noindex: "true"
 ---
+
+This is a reference page. It shows all the available Metrics, Descriptors and Presets.
+
+You can use the menu on the right to navigate the sections. We organize the Metrics by logical groups. Note that these groups do **not** match the Presets with a similar name. For example, there are more Data Quality Metrics than included in the `DataQualityPreset`.
+
+# How to read the tables
+
+* **Name**: the name of the Metric.
+
+* **Description**: plain text explanation. For Metrics, we also specify whether it applies to the whole dataset or individual columns.
+
+* **Parameters**: required and optional parameters for the Metric or Preset. We also specify the defaults that apply if you do not pass a custom parameter.
+
+**Metric visualizations**. Each Metric includes a default render. To see the visualization, navigate to the examples and run the notebook with all Metrics or Metric Presets.
+
+We are doing our best to maintain this page up to date. In case of discrepancies, check the "All metrics" notebook in examples. If you notice an error, please send us a pull request with an update!
+
+
+| Metric              | Desc                                     | Parameters                                            | Condition                                    |
+| ------------------- | ---------------------------------------- | ----------------------------------------------------- | -------------------------------------------- |
+| **RecallTopK()**    | Calculates the recall at `k`. Works fast | **Required**: <ul><li>Item 1</li><li>Item 2</li></ul> | Auto test condition: +/- 10% from reference. |
+| **PrecisionTopK()** | Calculates the precision at `k`.         | **Required**:                                         |                                              |

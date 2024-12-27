@@ -3,3 +3,83 @@ title: 'Data Drift'
 description: 'Overview of the Data Drift Preset.'
 noindex: "true"
 ---
+
+### Data Drift Preset
+
+`DataDriftPreset` evaluates the data distribution drift in all individual columns, and share of drifting columns in the dataset. Input columns are required.
+
+**Composition**:
+
+* `DataDriftTable()` for all or specified `columns`
+
+* `DatasetDriftMetric()` for all or specified `columns`
+
+**Optional parameters**:
+
+* `columns`
+
+* `stattest`
+
+* `cat_stattest`
+
+* `num_stattest`
+
+* `per_column_stattest`
+
+* `text_stattest`
+
+* `stattest_threshold`
+
+* `cat_stattest_threshold`
+
+* `num_stattest_threshold`
+
+* `per_column_stattest_threshold`
+
+* `text_stattest_threshold`
+
+* `embeddings`
+
+* `embeddings_drift_method`
+
+* `drift_share`
+
+How to set data drift parameters, embeddings drift parameters.
+
+### Target Drift Preset
+
+`TargetDriftPreset` evaluates the prediction or target drift. Target and/or prediction is required. Input features are optional.
+
+**Composition**:
+
+* `ColumnDriftMetric()` for `target` and/or `prediction` columns
+
+* `ColumnCorrelationsMetric()`  for `target` and/or `prediction` columns
+
+* `TargetByFeaturesTable()` for all or specified `columns`
+
+* `ColumnValuePlot()` for `target` and/or `prediction` columns - if the task is `regression`
+
+This section of the docs explains how evaluations work in Evidently, and lists all available Metrics (built-in evals) and Presets (templated combinations of Metrics).
+
+**Optional parameters**:
+
+* `columns`
+
+* `stattest`
+
+* `cat_stattest`
+
+* `num_stattest`
+
+* `per_column_stattest`
+
+* `stattest_threshold`
+
+* `cat_stattest_threshold`
+
+* `num_stattest_threshold`
+
+* `per_column_stattest_threshold`
+
+How to set data drift parameters.
