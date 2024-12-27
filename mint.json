@@ -218,11 +218,12 @@
     {
      "group": "Explainers",
      "pages": [
+       "metrics/explainer_llm_evals",
        "metrics/explainer_drift",
+       "metrics/explainer_data_stats",
        "metrics/explainer_recsys",
        "metrics/explainer_regression",
-       "metrics/explainer_classification", 
-       "metrics/explainer_data_stats"
+       "metrics/explainer_classification"
      ]
     },
     {
