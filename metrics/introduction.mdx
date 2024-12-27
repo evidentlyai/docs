@@ -5,11 +5,16 @@ noindex: "true"
 mode: "wide"
 ---
 
-Evidently offers 100+ customizable evals with visualizations. That's a core library feature. Before exploring, make sure you ran a simple eval (for [LLMs](../quickstart_llm), for [ML](../quickstart_ml)) and know the key components:
-* **Descriptors** evaluate data row-by-row: return scores like text length or "PII detected" for each input.
-* **Metrics** work at the dataset or column level. These are checks like accuracy, data drift, or column means. You also need Metrics to summarize row-level results.
+Evaluations are a core feature of the Evidently library. There 100+ evals with built-in visuals. Before exploring, make sure you know a simple eval workflow (for [LLMs](../quickstart_llm), for [ML](../quickstart_ml)) and understand the key components:
+
+* **Descriptors** evaluate data row-by-row. They return scores (like text length) or labels (like "PII present") for each input.
+
+* **Metrics** work at the dataset or column level. These are checks like accuracy or  data drift. You also need Metrics to summarize row-level results.
+
 * **Tests** let you add optional Pass/Fail checks on top of Metrics.
-* **Reports** are how you group and visualize the evaluation results. 
+
+* **Reports** are how you group and visualize the evaluation results.
+
 * **Presets** are pre-configured Reports for common scenarios.
 
 ## Popular links
