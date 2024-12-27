@@ -1,5 +1,13 @@
----
-title: 'New file'
-description: 'Description of your new file.'
----
+Connect to Evidently Cloud using your API token:
 
+```python
+ws = CloudWorkspace(token="YOUR_API_TOKEN", url="https://app.evidently.cloud")
+```
+
+Create a Project within your Organization:
+
+```python
+project = ws.create_project("My project name", org_id="YOUR_ORG_ID")
+project.description = "My project description"
+project.save()
+```
