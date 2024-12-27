@@ -185,7 +185,7 @@
        "metrics/all_metrics",
        "metrics/all_descriptors",
        {
-         "group": "Presets",
+         "group": "All Presets",
          "pages": [
            "metrics/preset_text_evals",
            "metrics/preset_data_drift", 
