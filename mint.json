@@ -179,7 +179,7 @@
       ]
     },
     {
-      "group": "Metrics",
+      "group": "Evaluations",
       "pages": [
         "metrics/introduction", 
         "metrics/all_metrics",
