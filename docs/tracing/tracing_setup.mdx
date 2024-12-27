@@ -3,3 +3,197 @@ title: 'Set up tracing'
 description: 'Description of your new file.'
 noindex: true
 ---
+
+
+### Installation
+
+Tracely is available as a PyPI package. To install it using pip package manager, run:
+```bash
+pip install tracely
+```
+
+
+---
+description: Set up LLM tracing with tracely.
+---   
+
+For an end-to-end example, check the [Tracing Quickstart](../get-started/cloud_quickstart_tracing.md).
+
+# Installation and Imports
+
+Install the `tracely` package from PyPi.
+
+```python
+!pip install tracely 
+```
+
+Imports:
+
+```python
+from tracely import init_tracing
+from tracely import trace_event
+```
+
+# Initialize tracing 
+
+Use `init_tracing` to enable tracely tracing. Example:
+
+```python
+init_tracing(
+   address="https://app.evidently.cloud/",
+   api_key=”YOUR_EVIDENTLY_TOKEN”,
+   project_id="YOUR_PROJECT_ID",
+   export_name="YOUR_TRACING_DATASET_NAME",
+   )
+```
+
+## Tracing parameters
+
+| **Parameter**                  | **Description**                                                                                                                                                       |
+|--------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `address: Optional[str]`       | The URL of the collector service where tracing data will be sent. For Evidently Cloud, set `https://app.evidently.cloud/`.<br>**Required:** No, **Default:** `None` |
+| `exporter_type: Optional[str]` | Specifies the type of exporter to use for tracing. Options are `grpc` for gRPC protocol or `http` for HTTP protocol.<br>**Required:** No, **Default:** `None` |
+| `api_key: Optional[str]`       | The authorization API key for Evidently Cloud tracing. This key authenticates your requests and is necessary for sending data to Evidently Cloud.<br>**Required:** No, **Default:** `None` |
+| `project_id: str`       | The ID of your Project in Evidently Cloud. <br>**Required:** Yes, **Default:** `None` |
+| `export_name: Optional[str]`   | A string name assigned to the exported tracing data. All data with the same `export_name` will be grouped into a single dataset.<br>**Required:** No, **Default:** `None` |
+| `as_global: bool = True`       | Indicates whether to register the tracing provider globally for OpenTelemetry (`opentelemetry.trace.TracerProvider`) or use it locally within a scope. **Default:** `True` |
+
+# Tracing a function
+
+To trace a function call use `trace_event()` decorator. 
+
+**Example 1.** To log all arguments of the function:
+
+```
+@trace_event()
+```
+
+**Example 2.** To log only input arguments of the function:
+
+```
+@trace_event(track_args=[])
+```
+
+**Example 3.** To log only "arg1" and "arg2":
+
+```
+@trace_event(track_args=["arg1", "arg2"])
+```
+
+See the [Tracing Quickstart](../get-started/cloud_quickstart_tracing.md) for an end-to-end example.
+
+| **Parameter**                | **Description**                                                                                                                                                  |
+|------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `span_name: Optional[str]`   | The name of the span to track. This is how the event will be labeled in the trace. By giving it a name, you can identify and analyze this particular step within your tracing data.<br>**Required:** No, **Default:** `None` |
+| `track_args: Optional[List[str]]` | A list of arguments to capture during tracing. If set to `None`, it captures all arguments by default. If set to `[]`, it captures no arguments.<br>**Required:** No, **Default:** `None` |
+| `ignore_args: Optional[List[str]]` | A list of arguments to ignore from tracking. For instance, if a function has sensitive information that you don’t want to log, you can list those arguments here. If set to `None`, no arguments are ignored.<br>**Required:** No, **Default:** `None` |
+| `track_output: Optional[bool]` | Indicates whether to track the output of the function call. If set to `True`, the trace will include the function’s output, allowing you to see not just what was passed in but also what was returned.<br>**Required:** No, **Default:** `True` |
+
+
+### Usage
+
+#### Init
+
+To send your traces to Evidently you need to initialize tracely:
+
+```python
+from tracely import init_tracing
+
+init_tracing(
+    address="https://app.evidently.cloud",              # Trace Collector Address
+    api_key="",                                         # API Key from Evidently Cloud
+    project_id="a1d08c46-0624-49e3-a9f5-11a13b4a2aa5",  # Project ID from Evidently Cloud
+    export_name="tracing-dataset",
+)
+```
+
+All parameters can be set using environment varialbes:
+
+- `EVIDENTLY_TRACE_COLLECTOR` - trace collector address (default to https://app.evidently.cloud)
+- `EVIDENTLY_TRACE_COLLECTOR_API_KEY` - API Key to access Evidently Cloud for creating dataset and uploading traces
+- `EVIDENTLY_TRACE_COLLECTOR_EXPORT_NAME` - Export name in Evidently Cloud
+- `EVIDENTLY_TRACE_COLLECTOR_PROJECT_ID` - Project ID from Evidently Cloud to create Export dataset in
+
+#### Decorator
+Once Tracely is initialized, you can decorate your functions with `trace_event` to start collecting traces for a specific function:
+
+```python
+from tracely import init_tracing
+from tracely import trace_event
+
+
+init_tracing()
+
+@trace_event()
+def process_request(question: str, session_id: str):
+    # do work
+    return "work done"
+```
+The `trace_event` decorator accepts several arguments:
+
+- `span_name` - the name of the span to send in the event (defaults to the function name)
+- `track_args` - a list of function arguments to include in the event (defaults to `None`, indicating that all arguments should be included)
+- `ingore_args` - a list of function arguments to exclude (defaults to `None`, meaning no arguments are ignored)
+- `track_output` - indicates whether the event should track the function's return value (defaults to `True`)
+- `parse_output` - indicates whether the result should be parsed (e.g., dict, list, and tuple types would be split into separate fields; defaults to `True`)
+
+#### Context Manager
+
+If you need to create a trace event without using a decorator (e.g., for a specific piece of code), you can do so with the context manager:
+
+```python
+import uuid
+
+from tracely import init_tracing
+from tracely import create_trace_event
+
+
+init_tracing()
+
+session_id = str(uuid.uuid4())
+
+with create_trace_event("external_span", session_id=session_id) as event:
+    event.set_attribute("my-attribute", "value")
+    # do work
+    event.set_result({"data": "data"})
+```
+
+The `create_trace_event` function accepts the following arguments:
+
+- `name` - the name of the event to label it
+- `parse_output` - indicates whether the result (if set) should be parsed (dict, list and tuple types would be split in separate fields), default to `True`
+- `**params` - key-value style parameters to set as attributes
+
+The `event` object has the following methods:
+
+- `set_attribute` - set a custom attribute for the event
+- `set_result` - set a result for the event (only one result can be set per event)
+
+
+## Extending events with additional attributes
+
+If you want to add a new attribute to active event span, you can use `get_current_span()` to get access to current span:
+
+```python
+import uuid
+
+from tracely import init_tracing
+from tracely import create_trace_event
+from tracely import get_current_span
+
+init_tracing()
+
+session_id = str(uuid.uuid4())
+
+with create_trace_event("external_span", session_id=session_id):
+    span = get_current_span()
+    span.set_attribute("my-attribute", "value")
+    # do work
+    span.set_result({"data": "data"})
+
+```
+
+Object from `tracely.get_current_span()` have 2 methods:
+
+- `set_attribute` - add new attribute to active span
+- `set_result` - set a result field to an active span (have no effect in decorated functions with return values)
