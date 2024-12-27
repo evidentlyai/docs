@@ -29,7 +29,7 @@
   "topbarLinks": [
     {
       "name": "Website",
-      "url": "https://www.evidentlyai.com/get-demo"
+      "url": "https://www.evidentlyai.com"
     },
     {
       "name": "Talk to us",
@@ -38,7 +38,7 @@
   ],
   "topbarCtaButton": {
     "name": "Sign up",
-    "url": "https://www.evidentlyai.com"
+    "url": "https://www.evidentlyai.com/register"
   },
   "tabs": [
     {
@@ -126,16 +126,16 @@
       ]
     },
     {
+  "group": "Platform",
+  "pages": [
+      "docs/platform/overview",
+    {
       "group": "Tracing",
       "pages": [
         "docs/tracing/overview",
         "docs/tracing/tracing_setup"
       ]
     },
-    {
-  "group": "Platform",
-  "pages": [
-      "docs/platform/overview",
     {
       "group": "Projects",
       "pages": [
