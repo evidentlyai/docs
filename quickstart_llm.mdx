@@ -4,6 +4,7 @@ description: 'Start building awesome documentation in under 5 minutes'
 noindex: true
 ---
 import CloudSignup from '/snippets/cloud_signup.mdx';
+import CreateProject from '/snippets/create_project.mdx';
 
 <Tabs>
   <Tab title="Evidently Cloud">
@@ -15,11 +16,7 @@ import CloudSignup from '/snippets/cloud_signup.mdx';
 
     # 1. Set up Evidently Cloud
 
-    Now, switch to your Python environment.
-
-<CloudSignup word="cloud" />
-
-
+    <CloudSignup word="cloud" />
 
     # 2. Installation
 
@@ -28,6 +25,7 @@ import CloudSignup from '/snippets/cloud_signup.mdx';
     ```python
     !pip install evidently[llm]
     ```
+    Now, switch to your Python environment.
 
     Import the components to run the evals:
 
@@ -46,19 +44,7 @@ import CloudSignup from '/snippets/cloud_signup.mdx';
 
     # 3. Create a Project
 
-    Connect to Evidently Cloud using your API token:
-
-    ```python
-    ws = CloudWorkspace(token="YOUR_API_TOKEN", url="https://app.evidently.cloud")
-    ```
-
-    Create a Project within your Organization:
-
-    ```python
-    project = ws.create_project("My test project", org_id="YOUR_ORG_ID")
-    project.description = "My project description"
-    project.save()
-    ```
+        <CreateProject word="project" / > 
 
     # 4. Import the toy dataset
 
