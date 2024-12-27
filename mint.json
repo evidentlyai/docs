@@ -191,7 +191,7 @@
      "pages": [
        "metrics/preset_text_evals",
        "metrics/preset_data_drift", 
-       "metrics/preset_data_quality"
+       "metrics/preset_data_quality",
        "metrics/preset_classification",
        "metrics/preset_regression",
        "metrics/preset_recsys"
