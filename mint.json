@@ -148,8 +148,8 @@
     {
       "group": "Tracing",
       "pages": [
-        "docs/tracing/overview",
-        "docs/tracing/tracing_setup"
+        "docs/platform/tracing_overview",
+        "docs/platftorm/tracing_setup"
       ]
     },
     {
