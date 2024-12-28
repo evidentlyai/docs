@@ -44,13 +44,13 @@ init_tracing(
 
 You can also set parameters using environment variables.
 
-| Parameter       | Description                                                                                                                                       | Environment Variable                    |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| `address`       | Trace collector address. Defaults to `https://app.evidently.cloud/`.                                                                              | `EVIDENTLY_TRACE_COLLECTOR`             |
-| `api_key`       | Evidently Cloud API key.                                                                                           | `EVIDENTLY_TRACE_COLLECTOR_API_KEY`     |
-| `export_name`   | Tracing dataset name. Traces with the same name are grouped into a single dataset.                                                                | `EVIDENTLY_TRACE_COLLECTOR_EXPORT_NAME` |
-| `project_id`    | Destination Project ID in Evidently Cloud.                                                                                                | `EVIDENTLY_TRACE_COLLECTOR_PROJECT_ID`  |
-| `exporter_type` | Trace export protocol: `grpc` or `http`.                                                                                                  | -                                       |
+| Parameter       | Description                                                                                                                          | Environment Variable                    |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------- |
+| `address`       | Trace collector address. Defaults to `https://app.evidently.cloud/`.                                                                 | `EVIDENTLY_TRACE_COLLECTOR`             |
+| `api_key`       | Evidently Cloud API key.                                                                                                             | `EVIDENTLY_TRACE_COLLECTOR_API_KEY`     |
+| `export_name`   | Tracing dataset name. Traces with the same name are grouped into a single dataset.                                                   | `EVIDENTLY_TRACE_COLLECTOR_EXPORT_NAME` |
+| `project_id`    | Destination Project ID in Evidently Cloud.                                                                                           | `EVIDENTLY_TRACE_COLLECTOR_PROJECT_ID`  |
+| `exporter_type` | Trace export protocol: `grpc` or `http`.                                                                                             | -                                       |
 | `as_global`     | Registers the tracing provider (`opentelemetry.trace.TracerProvider`) globally (`True`) or use locally (`False`). Default is `True`. | -                                       |
 
 ## Decorator
@@ -84,24 +84,14 @@ You can also specify which function arguments should be included in the trace.
 @trace_event(track_args=["arg1", "arg2"])
 ```
 
-The `trace_event` decorator accepts several arguments:
-
 | **Parameter**                      | **Description**                                                                                                                                                                                                                                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `span_name: Optional[str]`         | The name of the span to track. This is how the event will be labeled in the trace. By giving it a name, you can identify and analyze this particular step within your tracing data.**Required:** No, **Default:** `None`                           |
-| `track_args: Optional[List[str]]`  | A list of arguments to capture during tracing. If set to `None`, it captures all arguments by default. If set to `[]`, it captures no arguments.**Required:** No, **Default:** `None`                                                              |
-| `ignore_args: Optional[List[str]]` | A list of arguments to ignore from tracking. For instance, if a function has sensitive information that you don’t want to log, you can list those arguments here. If set to `None`, no arguments are ignored.**Required:** No, **Default:** `None` |
-| `track_output: Optional[bool]`     | Indicates whether to track the output of the function call. If set to `True`, the trace will include the function’s output, allowing you to see not just what was passed in but also what was returned.**Required:** No, **Default:** `True`       |
+| `span_name: Optional[str]`         |  The name of the span to send in the event. Defaults to the function name.                        |
+| `track_args: Optional[List[str]]`  | A list of function arguments to include in the event. If set to `None` (default), all arguments are included.|
+| `ignore_args: Optional[List[str]]` | A list of function  arguments to exclude. For instance, you can list arguments that contain sensitive information that you don’t want to log. If set to `None` (default), no arguments are ignored.|
+| `track_output: Optional[bool]`     | Indicates whether to track the function's return value (defaults to `True`).|
+| `parse_output: Optional[bool]`     | Indicates whether the result should be parsed, e.g., `dict`, `list`, and `tuple` types will be split into separate fields (defaults to `True`).|
 
-* `span_name` - the name of the span to send in the event (defaults to the function name)
-
-* `track_args` - a list of function arguments to include in the event (defaults to `None`, indicating that all arguments should be included)
-
-* `ingore_args` - a list of function arguments to exclude (defaults to `None`, meaning no arguments are ignored)
-
-* `track_output` - indicates whether the event should track the function's return value (defaults to `True`)
-
-* `parse_output` - indicates whether the result should be parsed (e.g., dict, list, and tuple types would be split into separate fields; defaults to `True`)
 
 #### Context Manager
 
