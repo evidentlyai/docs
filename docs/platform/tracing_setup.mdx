@@ -12,7 +12,7 @@ noindex: "true"
   **Prerequisite**: You need an Evidently account, API key and a created Project.
 </Info>
 
-## Installation and Imports
+## Installation
 
 Install the `tracely` package from PyPi:
 
@@ -20,18 +20,13 @@ Install the `tracely` package from PyPi:
 pip install tracely
 ```
 
-Imports:
-
-```python
-from tracely import init_tracing
-from tracely import trace_event
-```
-
 ## Initialize tracing
 
 To start sending traces, use `init_tracing`:
 
 ```python
+from tracely import init_tracing
+
 init_tracing(
    address="https://app.evidently.cloud/",
    api_key=”YOUR_EVIDENTLY_TOKEN”,
@@ -39,8 +34,6 @@ init_tracing(
    export_name="YOUR_TRACING_DATASET_NAME",
    )
 ```
-
-### Tracing parameters
 
 You can also set parameters using environment variables.
 
@@ -58,6 +51,9 @@ You can also set parameters using environment variables.
 Once `Tracely` is initialized, you can decorate your functions with `trace_event` to start collecting traces for a specific function:
 
 ```python
+from tracely import init_tracing
+from tracely import trace_event
+
 @trace_event()
 def process_request(question: str, session_id: str):
     # do work
@@ -83,25 +79,33 @@ You can also specify which function arguments should be included in the trace.
 ```
 @trace_event(track_args=["arg1", "arg2"])
 ```
+| **Parameter**                      | **Description**                                                                                                                                | **Default**                  |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `span_name: Optional[str]`         | The name of the span to send in the event.                                                                                                     | Function name                |
+| `track_args: Optional[List[str]]`  | A list of function arguments to include in the event.                                                                                          | `None` (all arguments)       |
+| `ignore_args: Optional[List[str]]` | A list of function arguments to exclude, e.g., arguments that contain sensitive data.                                                           | `None` (no arguments ignored) |
+| `track_output: Optional[bool]`     | Indicates whether to track the function's return value.                                                                                        | `True`                       |
+| `parse_output: Optional[bool]`     | Indicates whether the result should be parsed, e.g., `dict`, `list`, and `tuple` types will be split into separate fields.                      | `True`                       |
 
-| **Parameter**                      | **Description**                                                                                                                                                                                     |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `span_name: Optional[str]`         | The name of the span to send in the event. Defaults to the function name.                                                                                                                           |
-| `track_args: Optional[List[str]]`  | A list of function arguments to include in the event. Defaults to `None`: all arguments are included.                                                                                       |
-| `ignore_args: Optional[List[str]]` | A list of function  arguments to exclude, e.g. arguments that contain sensitive data. Defaults to `None`: no arguments are ignored. |
-| `track_output: Optional[bool]`     | Indicates whether to track the function's return value. Defaults to `True`.                                                                                                                        |
-| `parse_output: Optional[bool]`     | Indicates whether the result should be parsed, e.g., `dict`, `list`, and `tuple` types will be split into separate fields. Defaults to `True`.                                                     |
 
-#### Context Manager
 
-If you need to create a trace event without using a decorator (e.g., for a specific piece of code), you can do so with the context manager:
+| **Parameter**                      | **Description**                                                                                                                                |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `span_name: Optional[str]`         | The name of the span to send in the event. Defaults to the function name.                                                                      |
+| `track_args: Optional[List[str]]`  | A list of function arguments to include in the event. Defaults to `None`: all arguments are included.                                          |
+| `ignore_args: Optional[List[str]]` | A list of function  arguments to exclude, e.g. arguments that contain sensitive data. Defaults to `None`: no arguments are ignored.            |
+| `track_output: Optional[bool]`     | Indicates whether to track the function's return value. Defaults to `True`.                                                                    |
+| `parse_output: Optional[bool]`     | Indicates whether the result should be parsed, e.g., `dict`, `list`, and `tuple` types will be split into separate fields. Defaults to `True`. |
+
+## Context Manager
+
+If you need to create a trace event without using a decorator (e.g., for a specific piece of code), you can use the context manager:
 
 ```python
 import uuid
 
 from tracely import init_tracing
 from tracely import create_trace_event
-
 
 init_tracing()
 
@@ -126,6 +130,24 @@ The `event` object has the following methods:
 * `set_attribute` - set a custom attribute for the event
 
 * `set_result` - set a result for the event (only one result can be set per event)
+
+### `create_trace_event` Function Arguments  
+
+| Parameter        | Description                                                                                                                   | Default |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `name`           | The name of the event used as its label.                                                                                      | -       |
+| `parse_output`   | Whether to parse the result into separate fields for `dict`, `list`, or `tuple` types.                                        | `True`  |
+| `**params`       | Key-value parameters to set as attributes.                                                                                    | -       |
+
+---
+
+### `event` Object Methods  
+
+| Method             | Description                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------ |
+| `set_attribute`    | Sets a custom attribute for the event.                                                            |
+| `set_result`       | Sets a result for the event. Only one result can be set per event.                                |
+
 
 ## Extending events with additional attributes
 
