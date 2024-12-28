@@ -9,7 +9,7 @@ noindex: "true"
 </Info>
 
 <Info>
-  **Prerequisite**: You need an Evidently account, API key and a destination Project.
+  **Prerequisite**: You need an Evidently account, API key and a created Project.
 </Info>
 
 ## Installation and Imports
@@ -44,14 +44,14 @@ init_tracing(
 
 You can also set parameters using environment variables.
 
-| Parameter       | Description              | Environment Variable                  |
-| --------------- | ------------------------ | --------------------------------------|
-| `address`       | Trace collector address. Defaults to `https://app.evidently.cloud/`. | `EVIDENTLY_TRACE_COLLECTOR`                  |
-| `api_key`       | API key for authenticating requests to Evidently Cloud.  | `EVIDENTLY_TRACE_COLLECTOR_API_KEY`          |
-| `export_name`   | Tracing dataset name. Traces with the same name are grouped into a single dataset. | `EVIDENTLY_TRACE_COLLECTOR_EXPORT_NAME`      |
-| `project_id`    | ID of the Evidently Cloud project to send data to. | `EVIDENTLY_TRACE_COLLECTOR_PROJECT_ID`       |
-| `exporter_type` | Protocol for exporting traces: `grpc` or `http`. |  - |
-| `as_global`     | Registers the tracing provider (`opentelemetry.trace.TracerProvider`) globally (`True`, Default) or uses it locally (`False`). Default is `True`.  | - |
+| Parameter       | Description                                                                                                                                       | Environment Variable                    |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `address`       | Trace collector address. Defaults to `https://app.evidently.cloud/`.                                                                              | `EVIDENTLY_TRACE_COLLECTOR`             |
+| `api_key`       | Evidently Cloud API key.                                                                                           | `EVIDENTLY_TRACE_COLLECTOR_API_KEY`     |
+| `export_name`   | Tracing dataset name. Traces with the same name are grouped into a single dataset.                                                                | `EVIDENTLY_TRACE_COLLECTOR_EXPORT_NAME` |
+| `project_id`    | Destination Project ID in Evidently Cloud.                                                                                                | `EVIDENTLY_TRACE_COLLECTOR_PROJECT_ID`  |
+| `exporter_type` | Trace export protocol: `grpc` or `http`.                                                                                                  | -                                       |
+| `as_global`     | Registers the tracing provider (`opentelemetry.trace.TracerProvider`) globally (`True`) or use locally (`False`). Default is `True`. | -                                       |
 
 ## Decorator
 
