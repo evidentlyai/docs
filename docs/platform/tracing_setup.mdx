@@ -37,6 +37,8 @@ init_tracing(
 
 You can also set parameters using environment variables.
 
+### `init_tracing()` Function Arguments
+
 | Parameter       | Description                                                                                                                        | Environment Variable                    |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | `address`       | Trace collector address. Defaults to `https://app.evidently.cloud/`.                                                               | `EVIDENTLY_TRACE_COLLECTOR`             |
@@ -148,7 +150,7 @@ with create_trace_event("external_span", session_id=session_id):
 
 ```
 
-### `tracely.get_current_span()` Object  Methods
+### `get_current_span()` Object  Methods
 
 | **Method**      | **Description**                                                                                              |
 | --------------- | ------------------------------------------------------------------------------------------------------------ |
