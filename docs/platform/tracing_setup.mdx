@@ -84,14 +84,13 @@ You can also specify which function arguments should be included in the trace.
 @trace_event(track_args=["arg1", "arg2"])
 ```
 
-| **Parameter**                      | **Description**                                                                                                                                                                                                                                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `span_name: Optional[str]`         |  The name of the span to send in the event. Defaults to the function name.                        |
-| `track_args: Optional[List[str]]`  | A list of function arguments to include in the event. If set to `None` (default), all arguments are included.|
-| `ignore_args: Optional[List[str]]` | A list of function  arguments to exclude. For instance, you can list arguments that contain sensitive information that you don’t want to log. If set to `None` (default), no arguments are ignored.|
-| `track_output: Optional[bool]`     | Indicates whether to track the function's return value (defaults to `True`).|
-| `parse_output: Optional[bool]`     | Indicates whether the result should be parsed, e.g., `dict`, `list`, and `tuple` types will be split into separate fields (defaults to `True`).|
-
+| **Parameter**                      | **Description**                                                                                                                                                                                     |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `span_name: Optional[str]`         | The name of the span to send in the event. Defaults to the function name.                                                                                                                           |
+| `track_args: Optional[List[str]]`  | A list of function arguments to include in the event. Defaults to `None`: all arguments are included.                                                                                       |
+| `ignore_args: Optional[List[str]]` | A list of function  arguments to exclude, e.g. arguments that contain sensitive data. Defaults to `None`: no arguments are ignored. |
+| `track_output: Optional[bool]`     | Indicates whether to track the function's return value. Defaults to `True`.                                                                                                                        |
+| `parse_output: Optional[bool]`     | Indicates whether the result should be parsed, e.g., `dict`, `list`, and `tuple` types will be split into separate fields. Defaults to `True`.                                                     |
 
 #### Context Manager
 
