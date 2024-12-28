@@ -44,7 +44,7 @@ You can also set parameters using environment variables.
 | `export_name`   | Tracing dataset name. Traces with the same name are grouped into a single dataset.                                                   | `EVIDENTLY_TRACE_COLLECTOR_EXPORT_NAME` |
 | `project_id`    | Destination Project ID in Evidently Cloud.                                                                                           | `EVIDENTLY_TRACE_COLLECTOR_PROJECT_ID`  |
 | `exporter_type` | Trace export protocol: `grpc` or `http`.                                                                                             | -                                       |
-| `as_global`     | Registers the tracing provider (`opentelemetry.trace.TracerProvider`) globally (`True`) or use locally (`False`). Default is `True`. | -                                       |
+| `as_global`     | Registers the tracing provider (`opentelemetry.trace.TracerProvider`) globally (`True`) or use locally (`False`). Default: `True`. | -                                       |
 
 ## Decorator
 
@@ -79,27 +79,20 @@ You can also specify which function arguments should be included in the trace.
 ```
 @trace_event(track_args=["arg1", "arg2"])
 ```
-| **Parameter**                      | **Description**                                                                                                                                | **Default**                  |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `span_name: Optional[str]`         | The name of the span to send in the event.                                                                                                     | Function name                |
-| `track_args: Optional[List[str]]`  | A list of function arguments to include in the event.                                                                                          | `None` (all arguments)       |
-| `ignore_args: Optional[List[str]]` | A list of function arguments to exclude, e.g., arguments that contain sensitive data.                                                           | `None` (no arguments ignored) |
-| `track_output: Optional[bool]`     | Indicates whether to track the function's return value.                                                                                        | `True`                       |
-| `parse_output: Optional[bool]`     | Indicates whether the result should be parsed, e.g., `dict`, `list`, and `tuple` types will be split into separate fields.                      | `True`                       |
 
+### `trace_event` Decorator Arguments
 
+| **Parameter**                      | **Description**                                                                                                            | **Default**                     |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `span_name: Optional[str]`         | The name of the span to send in the event.                                                                                 | Function name                   |
+| `track_args: Optional[List[str]]`  | A list of function arguments to include in the event.                                                                      | `None` (all arguments included) |
+| `ignore_args: Optional[List[str]]` | A list of function arguments to exclude, e.g., arguments that contain sensitive data.                                      | `None` (no arguments ignored)   |
+| `track_output: Optional[bool]`     | Indicates whether to track the function's return value.                                                                    | `True`                          |
+| `parse_output: Optional[bool]`     | Indicates whether the result should be parsed, e.g., `dict`, `list`, and `tuple` types will be split into separate fields. | `True`                          |
 
-| **Parameter**                      | **Description**                                                                                                                                |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `span_name: Optional[str]`         | The name of the span to send in the event. Defaults to the function name.                                                                      |
-| `track_args: Optional[List[str]]`  | A list of function arguments to include in the event. Defaults to `None`: all arguments are included.                                          |
-| `ignore_args: Optional[List[str]]` | A list of function  arguments to exclude, e.g. arguments that contain sensitive data. Defaults to `None`: no arguments are ignored.            |
-| `track_output: Optional[bool]`     | Indicates whether to track the function's return value. Defaults to `True`.                                                                    |
-| `parse_output: Optional[bool]`     | Indicates whether the result should be parsed, e.g., `dict`, `list`, and `tuple` types will be split into separate fields. Defaults to `True`. |
+## Context manager
 
-## Context Manager
-
-If you need to create a trace event without using a decorator (e.g., for a specific piece of code), you can use the context manager:
+To create a trace event without using a decorator (e.g., for a specific piece of code), you can use the context manager:
 
 ```python
 import uuid
@@ -117,41 +110,24 @@ with create_trace_event("external_span", session_id=session_id) as event:
     event.set_result({"data": "data"})
 ```
 
-The `create_trace_event` function accepts the following arguments:
+### `create_trace_event` Function Arguments
 
-* `name` - the name of the event to label it
+| Parameter      | Description                                                                            | Default |
+| -------------- | -------------------------------------------------------------------------------------- | ------- |
+| `name`         | Span name.                                                                             | -       |
+| `parse_output` | Whether to parse the result into separate fields for `dict`, `list`, or `tuple` types. | `True`  |
+| `**params`     | Key-value parameters to set as attributes.                                             | -       |
 
-* `parse_output` - indicates whether the result (if set) should be parsed (dict, list and tuple types would be split in separate fields), default to `True`
+### `event` Object Methods
 
-* `**params` - key-value style parameters to set as attributes
+| Method          | Description                                                        |
+| --------------- | ------------------------------------------------------------------ |
+| `set_attribute` | Sets a custom attribute for the event.                             |
+| `set_result`    | Sets a result for the event. Only one result can be set per event. |
 
-The `event` object has the following methods:
+## Add event attributes
 
-* `set_attribute` - set a custom attribute for the event
-
-* `set_result` - set a result for the event (only one result can be set per event)
-
-### `create_trace_event` Function Arguments  
-
-| Parameter        | Description                                                                                                                   | Default |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `name`           | The name of the event used as its label.                                                                                      | -       |
-| `parse_output`   | Whether to parse the result into separate fields for `dict`, `list`, or `tuple` types.                                        | `True`  |
-| `**params`       | Key-value parameters to set as attributes.                                                                                    | -       |
-
----
-
-### `event` Object Methods  
-
-| Method             | Description                                                                                      |
-| ------------------ | ------------------------------------------------------------------------------------------------ |
-| `set_attribute`    | Sets a custom attribute for the event.                                                            |
-| `set_result`       | Sets a result for the event. Only one result can be set per event.                                |
-
-
-## Extending events with additional attributes
-
-If you want to add a new attribute to active event span, you can use `get_current_span()` to get access to current span:
+If you want to add a new attribute to an active event span, you can use `get_current_span()` to get access to the current span:
 
 ```python
 import uuid
@@ -172,8 +148,9 @@ with create_trace_event("external_span", session_id=session_id):
 
 ```
 
-Object from `tracely.get_current_span()` have 2 methods:
+### `tracely.get_current_span()` Object  Methods
 
-* `set_attribute` - add new attribute to active span
-
-* `set_result` - set a result field to an active span (have no effect in decorated functions with return values)
+| **Method**          | **Description**                                                                                                     |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `set_attribute`     | Adds a new attribute to the active span.                                                                            |
+| `set_result`        | Sets a result field for the active span. ~Has no effect in decorated functions that define return values.~    |
