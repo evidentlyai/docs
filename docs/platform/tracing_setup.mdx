@@ -5,16 +5,16 @@ noindex: "true"
 ---
 
 <Info>
-  For a simple end-to-end example, check the [Tracing Quickstart](../quickstart_tracing).
+  **Quickstart:** For a simple end-to-end example, check the [Tutorial.](../quickstart_tracing)
 </Info>
 
 <Info>
-  **Prerequisite**: Create an Evidently accoung, a Project and grab the API key.
+  **Prerequisite**: You need an Evidently account, API key and a destination Project.
 </Info>
 
 # Installation and Imports
 
-Install the `tracely` package from PyPi.
+Install the `tracely` package from PyPi:
 
 ```bash
 pip install tracely
@@ -29,7 +29,7 @@ from tracely import trace_event
 
 ## Initialize tracing
 
-To start sending traces, use `init_tracing`. Example:
+To start sending traces, use `init_tracing`:
 
 ```python
 init_tracing(
@@ -40,11 +40,11 @@ init_tracing(
    )
 ```
 
-| Parameter | Environment variable name   | Description                                                        | Type  | Default                         |
-| --------- | --------------------------- | ------------------------------------------------------------------ | ----- | ------------------------------- |
-| `address` | `EVIDENTLY_TRACE_COLLECTOR` | The URL of the collector service where tracing data will be sent.  | `str` | `https://app.evidently.cloud/`. |
-
-
+| Parameter     | Environment variable name               | Description                     | Default                         |
+| ------------- | --------------------------------------- | ------------------------------- | ------------------------------- |
+| `address`     | `EVIDENTLY_TRACE_COLLECTOR`             | Trace collector address (`str`) | `https://app.evidently.cloud/`. |
+| `api_key`     | `EVIDENTLY_TRACE_COLLECTOR_API_KEY`     | Evidently Cloud API Key.        | `None`                          |
+| `export_name` | `EVIDENTLY_TRACE_COLLECTOR_EXPORT_NAME` | Export name in Evidently Cloud  | `None`                          |
 
 All parameters can be set using environment varialbes:
 
