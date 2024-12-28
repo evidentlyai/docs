@@ -40,18 +40,18 @@ init_tracing(
    )
 ```
 
-All parameters can be set using environment variables.
-
 ### Tracing parameters
 
-| Parameter                | Environment variable name               | Description                                                                                                                                                                                                     |
-| ------------------------ | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `address`                | `EVIDENTLY_TRACE_COLLECTOR`             | Trace collector address (`str`). Defaults to`https://app.evidently.cloud/`.                                                                                                                                     |
-| `api_key`                | `EVIDENTLY_TRACE_COLLECTOR_API_KEY`     | Evidently Cloud API Key to authenticate your requests. |
-| `export_name`            | `EVIDENTLY_TRACE_COLLECTOR_EXPORT_NAME` | Export name in Evidently Cloud. A string name assigned to the exported tracing data. All data with the same `export_name` will be grouped into a single dataset.**Required:** No, **Default:** `None`           |
-| `project_id: str`        | `EVIDENTLY_TRACE_COLLECTOR_PROJECT_ID`  | Project ID from Evidently Cloud where you'll send the data. The ID of your Project in Evidently Cloud. **Required:** Yes, **Default:** `None`                                                                   |
-| `exporter_type:`         |                                         | Specifies the type of exporter to use for tracing. Options are `grpc` for gRPC protocol or `http` for HTTP protocol.**Required:** No, **Default:** `None`                                                       |
-| `as_global: bool = True` |                                         | ndicates whether to register the tracing provider globally for OpenTelemetry (`opentelemetry.trace.TracerProvider`) or use it locally within a scope. **Default:** `True`                                       |
+You can also set parameters using environment variables.
+
+| Parameter                | Environment variable name               | Description                                                                                                                                                                                           |
+| ------------------------ | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `address`                | `EVIDENTLY_TRACE_COLLECTOR`             | Trace collector address. Defaults to`https://app.evidently.cloud/`.                                                                                                                           |
+| `api_key`                | `EVIDENTLY_TRACE_COLLECTOR_API_KEY`     | Evidently Cloud API Key to authenticate your requests.                                                                                                                                                |
+| `export_name`            | `EVIDENTLY_TRACE_COLLECTOR_EXPORT_NAME` | Export name ((`str`) assigned to the tracing data. Data with the same `export_name` will be grouped into a single dataset. |
+| `project_id: str`        | `EVIDENTLY_TRACE_COLLECTOR_PROJECT_ID`  | Project ID from Evidently Cloud where you'll send the data. The ID of your Project in Evidently Cloud. **Required:** Yes, **Default:** `None`                                                         |
+| `exporter_type`         |                                         | [Optional]Type of exporter to use for tracing: `grpc` for gRPC protocol or `http` for HTTP protocol.                                         |
+| `as_global` |                                         | Indicates whether to register the tracing provider globally for OpenTelemetry (`opentelemetry.trace.TracerProvider`) or use it locally (`bool`). Default `True`.                             |
 
 ## Decorator
 
