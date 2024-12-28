@@ -40,6 +40,12 @@ init_tracing(
    )
 ```
 
+| Parameter | Environment variable name   | Description                                                        | Type  | Default                         |
+| --------- | --------------------------- | ------------------------------------------------------------------ | ----- | ------------------------------- |
+| `address` | `EVIDENTLY_TRACE_COLLECTOR` | The URL of the collector service where tracing data will be sent.  | `str` | `https://app.evidently.cloud/`. |
+
+
+
 All parameters can be set using environment varialbes:
 
 * `EVIDENTLY_TRACE_COLLECTOR` - trace collector address.
