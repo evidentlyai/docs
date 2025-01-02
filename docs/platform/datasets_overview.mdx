@@ -10,23 +10,29 @@ noindex: true
 
 ## What is a Dataset?
 
-**Datasets** are collections of data from your application used for analysis and automated checks. You can bring in existing datasets, capture data from production systems, or create synthetic datasets for evaluations.
+**Datasets** are collections of data from your application used for analysis and automated checks. You can bring in existing datasets, capture live data, or create synthetic datasets.
 
-[ADD IMG]
+\[ADD IMG]
 
-## How to create a Dataset? 
+## How to create a Dataset?
 
 You can add Datasets to the platform in multiple ways:
-* **Upload directly**. Use the UI to upload CSV files or push datasets programmatically via the Python API.
-* **Upload with Reports**. Attach datasets to Reports when running local evaluations. This is optional—you can also upload only summary metrics without the raw data.
-* **Generate synthetic data**. Use built-in platform features to generate synthetic datasets for evaluation or to diversify existing data.
+
+* **Upload directly**. Use the UI to upload CSV files or push datasets via the Python API.
+
+* **Upload with Reports**. Attach datasets to Reports when running local evaluations. This is optional—you can also upload only summary metrics.
+
+* **Generate synthetic data**. Use built-in platform features to generate synthetic evaluation datasets.
+
 * **Create from Traces**. During tracing, Evidently automatically generates tabular datasets that can be used for evaluations.
 
 ## Synthetic Data
 
 You can synthesize evaluation datasets directly in Evidently Platform:
+
 * **Generate from examples or description**. Define specific test scenarios and generate matching datasets.
-* **Generate from source documents**. Generate Q&A pairs from source documents like PDF, CSV or markdown files (great for RAG evaluations).
+
+* **Generate from source documents**. Generate Q\&A pairs from source documents like PDF, CSV or markdown files (great for RAG evaluations).
 
 After creating or uploading datasets, you can edit or diversify them further using the "more like this" feature.
 
@@ -34,8 +40,8 @@ After creating or uploading datasets, you can edit or diversify them further usi
 
 Here are common use cases for datasets in Evidently:
 
-* **Organize evaluation datasets**. Save curated datasets with expected inputs and optional ground truth outputs. You can collaborate on them as a team in UI, and access programmatically for CI/CD checks.
+* **Organize evaluation datasets**. Save curated datasets with expected inputs and optional ground truth outputs. You can bring in domain experts to collaborate on these datasets in UI, and access them programmatically for CI/CD checks.
 
-* **Debug evaluation results**. After you run an evaluation, view the dataset to identify and debug specific failures. E.g. you can sort all text outputs by the evaluated scores.
+* **Debug evaluation results**. After you run an evaluation, view the dataset to identify and debug specific failures. E.g. you can sort all text outputs by added scores.
 
-* **Store ML inference logs or LLM traces**. Collect raw data from production or experimental runs, use it as a source of truth, and run evaluations directly in Evidently.
+* **Store ML inference logs or LLM traces**. Collect raw data from production or experimental runs, use it as a source of truth, and run evaluations over it.
