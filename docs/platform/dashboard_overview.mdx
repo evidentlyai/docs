@@ -1,5 +1,51 @@
 ---
 title: 'Overview'
-description: 'Description of your new file.'
+description: 'Introduction to Dashboard.'
 noindex: true
 ---
+
+
+<Check>
+Dashboard is available in **Evidently OSS**, **Evidently Cloud** and **Evidently Enterprise**.
+</Check>
+
+## What is a Dashboard?
+
+A Dashboard provides a clear view of your AI application performance, whether over time or across experiments and tests. Each Project has its own Dashboard.
+
+[ADD IMG]
+
+When you create a new Project, the Dashboard starts empty. To populate it, run evaluations and save at least one Report to the Project. Once you’ve added Reports, you can plot values from individual Reports over time.
+
+## When to use Dashboard?
+
+You can use the same Dashboard to monitor live production quality evaluations or to track results from offline experiments.
+
+The "Show in order" toggle lets you switch between two views:
+* Time Series: Displays data with actual time intervals, ideal for live monitoring.
+* Sequential: Shows results in equal spacing, perfect for experiments.
+
+All Panels in a Dashboard reflect the date range set by the time range filter. You can zoom in on any time series visualization for detailed analysis.
+
+## What is a Panel?
+
+A Panel is a visual element in the Dashboard that displays specific values or test results. Panels can be counters, line plots, bar plots, etc.
+
+You can customize your Dashboard by adding Panels:
+* Using the Python API. Define "dashboard-as-code" programmatically.
+* Through the UI (Cloud and Enterprise only). Add Panels directly from the interface.
+
+To create a Panel, you:
+* Select a specific value. You can plot both Metrics (e.g. drift score) or Test results (e.g. Pass/Fail). 
+* Define Panel parameters like type, size, and title.
+* Use Tags (optional). If you add Tags (e.g., model version) to Reports during generation, you can later filter and visualize specific data subsets on separate Panels.
+
+## What is a Tab?
+
+<Check>
+Multiple Tabs are available in **Evidently Cloud** and **Evidently Enterprise**.
+</Check>
+
+You can also use:
+* **Multiple Tabs**. Organize Panels within the same Dashboard into different Tabs to logically group your views.
+* **Pre-built Tabs**. Start with dashboard templates for common use cases to simplify setup.
