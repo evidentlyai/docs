@@ -10,7 +10,7 @@ noindex: true
 
 ## What is a Dashboard?
 
-A Dashboard provides a clear view of your AI application performance, whether over time or across multiple experiments and tests. 
+A Dashboard provides a clear view of your AI application performance, whether over time or across multiple experiments and tests.
 
 ![](/images/dashboard_llm_light.png)
 
@@ -23,11 +23,14 @@ You can use the Dashboard to track live production quality or results from offli
 The "Show in order" toggle lets you switch between two views:
 
 * **Time Series.** Displays data with actual time intervals, ideal for live monitoring.
+
 * **Sequential.** Shows results in equal spacing, perfect for experiments.
 
 All Panels in a Dashboard reflect the date range set by the time range filter. You can zoom in on any time series visualization for detailed analysis.
 
-**From Dashboard to debugging**. By clicking on any individual value on the Dashboard, you can open the associated Report and dataset to see raw examples.
+<Tip>
+  **From Dashboard to Data**. By clicking on any individual value on the Dashboard, you can open the associated Report and source Dataset for further debugging.
+</Tip>
 
 ## What is a Panel?
 
@@ -36,12 +39,15 @@ A Panel is a visual element in the Dashboard that displays specific values or te
 You can customize your Dashboard by adding Panels:
 
 * **Using Python API**. Define dashboard as code.
+
 * **Through the UI**. Add Panels directly from the interface. (Cloud and Enterprise only).
 
 To create a Panel, you need to specify:
 
 * **Value**. You can plot both Metrics (e.g., drift score) or Test results (e.g., Pass/Fail).
+
 * **Panel parameters** like type, size, and title.
+
 * **Tags** (optional). You can filter and visualize specific data subsets. To enable this, you must first add Tags (e.g. a model version) to Reports when you run an evaluation.
 
 ## Using Tabs
@@ -50,7 +56,7 @@ To create a Panel, you need to specify:
   Multiple Tabs are available in **Evidently Cloud** and **Evidently Enterprise**.
 </Check>
 
-You can organize Panels within the same Dashboard into different Tabs to logically group your views.
+You can logically organize Panels within the same Dashboard into different Tabs.
 
 ![](/images/dashboard_llm_tabs.gif)
 
