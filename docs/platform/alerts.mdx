@@ -1,5 +1,37 @@
 ---
 title: 'Alerts'
-description: 'Description of your new file.'
+description: 'How to set up alerts.'
 noindex: true
 ---
+<Info>
+Built-in alerting is a Pro feature available in the **Evidently Cloud** and **Evidently Enterprise**. 
+</Info>
+
+To enable alerts, open the Project and navigate to the "Alerts" section in the left menu. You must set:
+* A notification channel.
+* An alert condition. 
+
+## Notification channels
+
+You can choose between the following options:
+* **Email**. Add email addresses to send alerts to. 
+* **Slack**. Add a Slack webhook. 
+* **Discord**. Add a Discord webhook.
+
+## Alert conditions
+
+### Failed tests
+
+If you use Tests (conditional checks) in your Project, you can tie alerting to the failed Tests in a Test Suite. Toggle this option on the Alerts page. Evidently will set an alert to the defined channel if any of the Tests fail.
+
+<Tip>
+**How to avoid alert fatigue?** When you create a Test Suite, you can mark certain conditions as Warnings using the `is_critical` parameter. Set is `False` for non-critical checks to avoid triggering alerts.
+</Tip>
+
+### Custom conditions 
+
+You can also set alerts on individual Metric values. For example, you can generate Alerts when the share of drifting features is above a certain threshold. 
+
+Click on the plus sign below the “Add new Metric alert” and follow the prompts to set an alert condition. 
+
+![](../.gitbook/assets/cloud/alerts.png)
