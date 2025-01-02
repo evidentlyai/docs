@@ -1,5 +1,35 @@
 ---
 title: 'Installation'
-description: 'Description of your new file.'
+description: 'How to install the open-source Python library..'
 noindex: true
 ---
+
+# Evidently
+
+`Evidently` is available as a Python package. To install it using the **pip package manager**, run:
+
+```python
+pip install evidently
+```
+
+To install `evidently` using **conda installer**, run:
+
+```sh
+conda install -c conda-forge evidently
+```
+
+# Evidently LLM
+
+To run evaluations specific to LLMs that include additional dependencies, run:
+
+```python
+pip install evidently[llm]
+```
+
+# Tracely
+
+To use tracing based on OpenTelemetry, install the sister package **tracely**:
+
+```sh
+pip install tracely
+```
