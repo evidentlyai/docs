@@ -14,18 +14,21 @@ A Dashboard provides a clear view of your AI application performance, whether ov
 
 \[ADD IMG]
 
-When you create a new Project, the Dashboard is empty. To populate it, run an evaluation and save at least one Report to the Project. You can then plot values from individual Reports over time.
+When you create a new Project, the Dashboard is empty. To populate it, run an evaluation and save at least one Report to the Project. You can then plot values from individual Reports over time.&#x20;
+
+By clicking on the individual value on the Dashboard, you can open the underlying Report and see the associated dataset for detailed debugging.
 
 ## When to use Dashboard?
 
-You can use Dashboard to track live production quality or results from sequential offline experiments.
+You can use the Dashboard to track live production quality or results from offline experiments.
 
 The "Show in order" toggle lets you switch between two views:
 
-* **Time Series**: Displays data with actual time intervals, ideal for live monitoring.
-* **Sequential**: Shows results in equal spacing, perfect for experiments.
+* **Time Series.** Displays data with actual time intervals, ideal for live monitoring.
 
-All Panels in a Dashboard reflect the date range set by the time range filter. You can zoom in on any time series visualization for detailed analysis.
+* **Sequential.** Shows results in equal spacing, perfect for experiments.
+
+All Panels in a Dashboard reflect the date range set by the time range filter. You can zoom in on any time series visualization for detailed analysis.&#x20;
 
 ## What is a Panel?
 
@@ -33,7 +36,8 @@ A Panel is a visual element in the Dashboard that displays specific values or te
 
 You can customize your Dashboard by adding Panels:
 
-* **Using Python API**. Define "dashboard-as-code" programmatically.
+* **Using Python API**. Define dashboard composition programmatically.
+
 * **Through the UI**. Add Panels directly from the interface. (Cloud and Enterprise only).
 
 To create a Panel, you need to specify:
@@ -42,9 +46,9 @@ To create a Panel, you need to specify:
 
 * **Panel parameters** like type, size, and title.
 
-* **Tags** (optional). If you added Tags like model version to Reports when you run an evaluation, you can to filter and visualize specific data subsets on Panels.
+* **Tags** (optional). You can use Tags to filter and visualize specific data subsets on Panels. To do that, you must add Tags (e.g. a model version) to Reports when you run an evaluation.
 
-## What is a Tab?
+## Using Tabs
 
 <Check>
   Multiple Tabs are available in **Evidently Cloud** and **Evidently Enterprise**.
