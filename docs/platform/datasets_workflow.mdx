@@ -6,15 +6,13 @@ noindex: true
 
 To access or upload your Datasets in UI, navigate to the Dataset Page inside your Project.
 
-You will be able to view all Datasets, both raw datasets uploaded directly to the platform or generated as a result of an evaluation.
+You will be able to view all Datasets, both raw datasets you uploaded and new datasets generated as a result of an evaluation.
 
 <Tip>
-  **Tracing**. Datasets created from Traces are in the Tracing menu section.
+  **Tracing datasets** are in the Tracing menu section.
 </Tip>
 
 # User interface
-
-## Upload a CSV file
 
 To upload any existing dataset as a CSV file, click on "Add dataset".
 
@@ -36,11 +34,11 @@ ws.add_dataset(
     description = "Optional description")
 ```
 
-You must always specify the "dataset\_name" you want to see in the UI. The description is optional.
+You must always specify the dataset `name` you will see in the UI. The description is optional.
 
-To get a Project ID, grab it from the existing Project page or create a new Project first. (How to [work with Projects](projects_overview))
+To get a Project ID, grab it from the existing Project page or [create a new Project first](projects_manage).
 
-## Download Dataset
+## Download the Dataset
 
 You can also download the Dataset from Evidently platform to your local environment. For example, if you store the test dataset on the platform and want to pull it into your local evaluation script.
 
@@ -50,14 +48,18 @@ Use the `load_dataset` method:
 downloaded_df = ws.load_dataset(dataset_id = "YOUR_DATASET_ID") 
 ```
 
-## Include Dataset
+## Include the Dataset
 
-You can also include Datasets when you upload Reports to the platform. This way, after running an evaluation locally you simultaneously upload the evaluation result and the Dataset it was generated for, with added scores if applicable.
+You can include Datasets when you upload Reports to the platform. This way, after running an evaluation locally you simultaneously upload:
+* the Report with evaluation result, and 
+* the Dataset it was generated for, with added scores if applicable.
 
-Use `include_data` parameter (False by default):
+By default, you upload only the Report. 
+
+To include the Dataset, use the `include_data` parameter:
 
 ```python
 ws.add_report(project.id, data_report, include_data=True)
 ```
 
-This is optional. Check the docs on [generating snapshots](../library/snapshots) for details.
+Check the docs on [generating snapshots](../library/snapshots) for details.
