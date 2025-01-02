@@ -8,11 +8,9 @@ noindex: true
 
 You can create or delete a Project directly in the user interface.
 
-* To create a Project, click on the “plus” sign on the home page, type your Project name and description.
-
-* To change the Project name or description, hover on the existing Project, click "edit" and make the changes.
-
-* To delete the Project, hover on the existing Project and click "delete".
+* **Create a Project**. Click on the “plus” sign on the home page, type your Project name and description.
+* **Edit a Project**. To change the Project name or description, hover on the existing Project, click "edit" and make the changes.
+* **Delete a Project**. Hover on the existing Project and click "delete".
 
 <Warning>
   Deleting a Project deletes all the data inside it.
@@ -74,27 +72,27 @@ To find a specific Project by its name, use the `search_project` method:
 ws.search_project("project_name")
 ```
 
-## \[DANGER] Delete Project
+### \[DANGER] Delete Project
 
 <Warning>
   Deleting a Project deletes all the data inside it.
 </Warning>
 
-To delete the Project and all the data inside it:
+To delete the Project:
 
 ```
 # ws.delete_project("PROJECT ID")
 ```
 
-# Project parameters
+## Project parameters
 
 Each Project has the following parameters.
 
-| Parameter                                       | Description                                                                                                                                                                                                                                                          | Example                                                                     |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `name: str`                                     | Project name.                                                                                                                                                                                                                                                        | -                                                                           |
-| `id: UUID4 = Field(default_factory=uuid.uuid4)` | Unique identifier of the Project. Assigned automatically.                                                                                                                                                                                                            | -                                                                           |
-| `description: Optional[str] = None`             | Optional description. Visible when you browse Projects.                                                                                                                                                                                                              | -                                                                           |
-| `dashboard: DashboardConfig`                    | Dashboard configuration that describes the composition of the monitoring Panels.  | See [Dashboard Design](dashboard_add_panels) for details. You don't need to explicitly pass `DashboardConfig` if you use the `.dashboard.add_panel` method to add Panels.                                                                          |
-| `date_from: Optional[datetime.datetime] = None` | Start DateTime of the monitoring Dashboard. By default, Evidently shows data for all available periods based on the Report timestamps. You can set a different DateTime.                                                                                             | `from datetime import datetime, timedelta``datetime.now() + timedelta(-30)` |
-| `date_to: Optional[datetime.datetime] = None`   | End DateTime of the monitoring Dashboard. Works the same as above.                                                                                                                                                                                                   | Same as `date_from`.                                                        |
+| Parameter                                       | Description                                                                                                                                                              | Example                                                                                                                                                                   |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name: str`                                     | Project name.                                                                                                                                                            | -                                                                                                                                                                         |
+| `id: UUID4 = Field(default_factory=uuid.uuid4)` | Unique identifier of the Project. Assigned automatically.                                                                                                                | -                                                                                                                                                                         |
+| `description: Optional[str] = None`             | Optional description. Visible when you browse Projects.                                                                                                                  | -                                                                                                                                                                         |
+| `dashboard: DashboardConfig`                    | Dashboard configuration that describes the composition of the monitoring Panels.                                                                                         | See [Dashboard Design](dashboard_add_panels) for details. You don't need to explicitly pass `DashboardConfig` if you use the `.dashboard.add_panel` method. |
+| `date_from: Optional[datetime.datetime] = None` | Start DateTime of the monitoring Dashboard. By default, Evidently shows data for all available periods based on the Report timestamps. | `datetime.now() + timedelta(-30)`                                                                                               |
+| `date_to: Optional[datetime.datetime] = None`   | End DateTime of the monitoring Dashboard.                                                                                                      | Works the same as `date_from`.                                                                                                                                                      |
