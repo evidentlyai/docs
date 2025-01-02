@@ -9,12 +9,14 @@ noindex: true
 </Info>
 
 To enable alerts, open the Project and navigate to the "Alerts" in the left menu. You must set:
+
 * A notification channel.
 * An alert condition.
 
 ## Notification channels
 
 You can choose between the following options:
+
 * **Email**. Add email addresses to send alerts to.
 * **Slack**. Add a Slack webhook.
 * **Discord**. Add a Discord webhook.
@@ -26,7 +28,7 @@ You can choose between the following options:
 If you use Tests (conditional checks) in your Project, you can tie alerting to the failed Tests in a Test Suite. Toggle this option on the Alerts page. Evidently will set an alert to the defined channel if any of the Tests fail.
 
 <Tip>
-  **How to avoid alert fatigue?** When you create a Test Suite, you can mark certain conditions as Warnings using the `is_critical` parameter. Set is `False` for non-critical checks to avoid triggering alerts.
+  **How to avoid alert fatigue?** Use the `is_critical` parameter to mark non-critical Test as Warnings. Setting it to `False` prevent alerts for those checks even if they fail.
 </Tip>
 
 ### Custom conditions
