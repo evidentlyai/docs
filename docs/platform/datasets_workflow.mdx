@@ -12,17 +12,17 @@ You will be able to view all Datasets, both raw datasets you uploaded and new da
   **Tracing datasets** are in the Tracing menu section.
 </Tip>
 
-# User interface
+## User interface
 
 To upload any existing dataset as a CSV file, click on "Add dataset".
 
 When you upload the Dataset, you must also add a **column mapping**. This allows Evidently to understand the meaning of specific columns and prepare your Dataset for future evaluations.
 
-# Python API
+## Python API
 
 To work with Datasets programmatically from Python, you must first [connect to Workspace](../setup/cloud).
 
-## Upload the Dataset
+### Upload the Dataset
 
 Prepare your dataset as a Pandas DataFrame. To upload a dataframe `df` to the specified Project in workspace `ws`, use the `add_dataset` method:
 
@@ -38,9 +38,9 @@ You must always specify the dataset `name` you will see in the UI. The descripti
 
 To get a Project ID, grab it from the existing Project page or [create a new Project first](projects_manage).
 
-## Download the Dataset
+### Download the Dataset
 
-You can also download the Dataset from Evidently platform to your local environment. For example, if you store the test dataset on the platform and want to pull it into your local evaluation script.
+You can pull the Dataset stored or generated on the platform to your local environment. For example, call the evaluation dataset to use in a CI/CD testing script.
 
 Use the `load_dataset` method:
 
@@ -48,13 +48,14 @@ Use the `load_dataset` method:
 downloaded_df = ws.load_dataset(dataset_id = "YOUR_DATASET_ID") 
 ```
 
-## Include the Dataset
+### Include the Dataset
 
 You can include Datasets when you upload Reports to the platform. This way, after running an evaluation locally you simultaneously upload:
-* the Report with evaluation result, and 
-* the Dataset it was generated for, with added scores if applicable.
 
-By default, you upload only the Report. 
+* the Report with evaluation result,
+* the Dataset it was generated for, with new added scores if applicable.
+
+By default, you upload only the Report.
 
 To include the Dataset, use the `include_data` parameter:
 
