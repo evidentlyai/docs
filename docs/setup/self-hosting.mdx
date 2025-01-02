@@ -8,13 +8,11 @@ noindex: true
   **Evidently Enterprise.** This page explains how to self-host the open-source platform. [Contact us](https://www.evidentlyai.com/get-demo) to get access to the self-hostable Enterprise version with extra features and support.
 </Info>
 
-In addition to using Evidently Python library, you can self-host the UI Service to get a monitoring Dashboard and organize the results of your evaluations. This is optional: you can also run evaluations and view results directly in Python or export them to JSON or HTML.
+In addition to using Evidently Python library, you can self-host the UI Service to get a monitoring Dashboard and organize the results of your evaluations. This is optional: you can also run evaluations and view results directly in Python or export them to JSON or HTML files.
 
 To get a self-hostable Dashboard, you must:
-
-1. Create a Workspace (local or remote) to store your data.
-
-2. Launch the UI service.
+* Create a Workspace (local or remote) to store your data.
+* Launch the UI service.
 
 ## 1. Create a Workspace
 
@@ -22,19 +20,16 @@ To get a self-hostable Dashboard, you must:
   Sign up for a free [Evidently Cloud](cloud) account to get a managed version instantly.
 </Tip>
 
-Once you [install Evidently](installation), you will need to create a `workspace`. This designates a remote or local directory where you will store the evaluation results (as JSON `snapshots` of the Evidently `Reports`). The UI Service will read the data from this source.
+Once you [install Evidently](installation), you will need to create a `workspace`. This designates a remote or local directory where you will store the evaluation results (JSON Reports called `snapshots`). The UI Service will read the data from this source.
 
 There are three scenarios, based on where you run the UI Service and store data.
-
 * **Local Workspace**. Both the UI Service and data storage are local.
-
 * **Remote Workspace**. Both the UI Service and data storage are remote.
-
 * **Workspace with remote data storage**. Run the UI Service and store data on different servers.
 
 ### Local Workspace
 
-In this scenario, you generate, store the snapshots and run the monitoring UI on the same machine.
+Here, you generate, store the snapshots and run the monitoring UI on the same machine.
 
 Imports:
 
@@ -52,6 +47,10 @@ ws = Workspace.create("evidently_ui_workspace")
 You can pass a `path` parameter to specify the path to a local directory.
 
 ### Remote Workspace
+
+<Info>
+  **Code example (Docker)**. See the [remote service example](https://github.com/evidentlyai/evidently/tree/main/examples/service).
+</Info>
 
 In this scenario, you send the snapshots to a remote server. You must run the Monitoring UI on the same remote server. It will directly interface with the filesystem where the snapshots are stored.
 
@@ -75,10 +74,6 @@ You can pass the following parameters:
 | -------------------------- | -------------------------------------------------------------------------------------------- |
 | `self.base_url = base_url` | URL for the remote UI service.                                                               |
 | `self.secret = secret`     | String with secret, None by default. Use it if access to the URL is protected by a password. |
-
-<Info>
-  **Code example (Docker)**. See the [remote service example](https://github.com/evidentlyai/evidently/tree/main/examples/service).
-</Info>
 
 ### Remote snapshot storage
 
