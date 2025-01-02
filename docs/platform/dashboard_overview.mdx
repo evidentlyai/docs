@@ -10,15 +10,15 @@ noindex: true
 
 ## What is a Dashboard?
 
-A Dashboard provides a clear view of your AI application performance, whether over time or across experiments and tests. Each Project has its own Dashboard.
+A Dashboard provides a clear view of your AI application performance, whether over time or across multiple experiments and tests. Each Project has its own Dashboard.
 
 \[ADD IMG]
 
-When you create a new Project, it's Dashboard is empty. To populate it, run evaluations and save at least one Report to the Project. You can then plot values from individual Reports over time.
+When you create a new Project, the Dashboard is empty. To populate it, run an evaluation and save at least one Report to the Project. You can then plot values from individual Reports over time.
 
 ## When to use Dashboard?
 
-You can use Dashboard to monitor live production quality evaluations or to track results from offline experiments.
+You can use Dashboard to track live production quality or results from sequential offline experiments.
 
 The "Show in order" toggle lets you switch between two views:
 
@@ -34,12 +34,14 @@ A Panel is a visual element in the Dashboard that displays specific values or te
 You can customize your Dashboard by adding Panels:
 
 * **Using Python API**. Define "dashboard-as-code" programmatically.
-
 * **Through the UI**. Add Panels directly from the interface. (Cloud and Enterprise only).
 
 To create a Panel, you need to specify:
+
 * **Value**. You can plot both Metrics (e.g. drift score) or Test results (e.g. Pass/Fail).
+
 * **Panel parameters** like type, size, and title.
+
 * **Tags** (optional). If you added Tags like model version to Reports when you run an evaluation, you can to filter and visualize specific data subsets on Panels.
 
 ## What is a Tab?
