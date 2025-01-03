@@ -116,6 +116,7 @@
       {
         "group": "Run an evaluation",
         "pages": [
+          "docs/library/evaluations_overview",
           "docs/library/descriptors",
           "docs/library/report",
           "docs/library/tests",
