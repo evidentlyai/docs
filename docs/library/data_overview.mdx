@@ -3,6 +3,8 @@ title: 'Overview'
 description: 'How to prepare input data to run evaluations.'
 ---
 
+## Data structure
+
 **Tabular format**. To run an evaluation, you must prepare your data in tabular format as a pandas DataFrame. All column names must be strings.
 
 **Flexible structure**. The table can include any combination of numerical, categorical, text, metadata (including timestamps or IDs), and embeddings columns.
@@ -53,11 +55,11 @@ Here are a few examples.
   <Tab title="Ranking">
     To evaluate ranking or recommendations, pass a table that contains columns with rank/score and interaction result. User/query and item features are optional but useful for some evals.
 
-    | User ID | Movie ID | Movie Title  | Genre         | Average Viewer Rating | Watched Duration (%) | Predicted Rank |
-    | ------- | -------- | ------------ | ------------- | ------------------- | --------------------- | -------------------- | -------------- |
-    | U001    | M001     | The Matrix   | Sci-Fi         | 4.8                   | 100                  | 1              |
-    | U002    | M002     | Titanic      | Romance/Drama  | 4.5                   | 80                   | 2              |
-    | U001    | M003     | Interstellar | Sci-Fi         | 4.7                   | 90                   | 2              |
+    \| User ID | Movie ID | Movie Title  | Genre         | Average Viewer Rating | Watched Duration (%) | Predicted Rank |
+    \| ------- | -------- | ------------ | ------------- | ------------------- | --------------------- | -------------------- | -------------- |
+    \| U001    | M001     | The Matrix   | Sci-Fi         | 4.8                   | 100                  | 1              |
+    \| U002    | M002     | Titanic      | Romance/Drama  | 4.5                   | 80                   | 2              |
+    \| U001    | M003     | Interstellar | Sci-Fi         | 4.7                   | 90                   | 2              |
   </Tab>
 
   <Tab title="Embeddings">
@@ -69,3 +71,24 @@ Here are a few examples.
     | 0.619608 | 0.628758 | 0.670588 | 0.661438 | 0.636601 | ... | 0.525490 | 0.509804 | 0.500000 |
   </Tab>
 </Tabs>
+
+## Column Mapping
+
+Some evaluations require specific columns or data types present. 
+
+For example, to evaluate classification quality, you need both predicted labels (prediction) and actual labels (target) columns. To specify where they are located in your table, you can map the data schema using the Column Mapping object.
+
+## Two Datasets
+
+By default, evaluations use a single dataset (`current` dataset). Optionally, you can include a second dataset (`reference` dataset). Both datasets must have identical structures. 
+
+When to use two datasets:
+* **Side-by-side comparison**. Compare outputs or data quality across two periods or model versions in a single Report.
+* **Data drift detection**. Detect distribution shifts by comparing datasets, such as this week’s data to the previous one. (Reference dataset is required). 
+* **Simplify test setup**. Automatically generate test conditions (e.g., min-max ranges) from the reference dataset without manual configuration.
+
+## Data sampling 
+
+Running evaluations on large datasets (millions of rows) can take time. This depends on the specific evaluation as well as your infrastructure. Since pandas processes data in memory, it’s often more efficient to use samples.
+
+For example, in data drift detection, you can apply random or stratified sampling and compare samples instead of processing the entire dataset.
