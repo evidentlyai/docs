@@ -7,15 +7,11 @@ description: 'How to prepare input data to run evaluations.'
 
 **Tabular format**. To run an evaluation, you must prepare your data in tabular format as a pandas DataFrame. All column names must be strings.
 
-**Flexible structure**. The table can include any combination of numerical, categorical, text, metadata (including timestamps or IDs), and embedding columns.
-
-### Examples
-
-Here are a few examples.
+**Flexible structure**. The table can include any combination of numerical, categorical, text, metadata (including timestamps or IDs), and embedding columns. Here are a few examples.
 
 <Tabs>
   <Tab title="LLM logs">
-    To evaluate generative AI quality, pass LLM outputs with optional context and ground truth. You can include any number of text and metadata columns.
+    To evaluate generative AI quality, pass LLM outputs with optional context and ground truth and any metadata.
 
     | Question                             | Context                                                                                                   | Answer                          |
     | ------------------------------------ | --------------------------------------------------------------------------------------------------------- | ------------------------------- |
@@ -25,7 +21,9 @@ Here are a few examples.
   </Tab>
 
   <Tab title="Data table">
-    Pass any data table to get a data overview, run data quality and distribution drift checks. This could also be production logs of your ML model with input features and prediction columns.
+    Pass any data table to get a data overview, run data quality and distribution drift checks. 
+    
+    These can also be production logs of your ML model without ground truth: include input features and predicted values.
 
     | Order ID | Product                | Category    | Quantity | Price  | Payment Method | Shipping Status |
     | -------- | ---------------------- | ----------- | -------- | ------ | -------------- | --------------- |
@@ -75,11 +73,11 @@ Here are a few examples.
   </Tab>
 </Tabs>
 
-## Column Mapping
+## Data definition
 
 Some evaluations require specific columns or data types present.
 
-For example, to evaluate classification quality, you need both predicted labels (prediction) and actual labels (target) columns. To specify where they are located in your table, you can map the data schema using the Column Mapping object.
+For example, to evaluate classification quality, you need both predicted labels (prediction) and actual labels (target) columns. To specify where they are located in your table, you can map the data schema using the Data Definition object.
 
 ## Two datasets
 
@@ -90,9 +88,7 @@ By default, evaluations use a single dataset (`current` dataset). Optionally, yo
 When to use two datasets:
 
 * **Side-by-side comparison**. Compare outputs or data quality across two periods or model versions in a single Report.
-
 * **Data drift detection. (Required)**. Detect distribution shifts by comparing datasets, such as this week’s data to the previous one. You always need two datasets.
-
 * **Simplify test setup**. Automatically generate test conditions (e.g., min-max ranges) from the reference dataset without manual configuration.
 
 ## Data sampling
