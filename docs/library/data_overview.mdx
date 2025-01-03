@@ -10,6 +10,7 @@ description: 'How to prepare input data to run evaluations.'
 **Flexible structure**. The table can include any combination of numerical, categorical, text, metadata (including timestamps or IDs), and embeddings columns.
 
 ### Examples
+
 Here are a few examples.
 
 <Tabs>
@@ -80,7 +81,7 @@ Some evaluations require specific columns or data types present.
 
 For example, to evaluate classification quality, you need both predicted labels (prediction) and actual labels (target) columns. To specify where they are located in your table, you can map the data schema using the Column Mapping object.
 
-## Two Datasets
+## Two datasets
 
 By default, evaluations use a single dataset (`current` dataset). Optionally, you can include a second dataset (`reference` dataset). Both datasets must have identical structures.
 
