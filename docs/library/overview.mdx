@@ -21,7 +21,7 @@ You can use Evidently as a standalone open-source tool or as part of the Evident
     Evidently supports [3 evaluation modes](/docs/library/evaluations_overview) with a declarative API.
 
     * `Descriptors` compute row-level scores for individual inputs.
-    * `Metrics` compute and aggregate dataset scores.
+    * `Metrics` compute dataset-level scores.
     * `Tests` add pass/fail conditions to metrics. You can set conditions manually or automatically infer from the reference dataset, like min-max ranges.
 
     Pick from 100+ metrics or add yours.
@@ -36,11 +36,9 @@ You can use Evidently as a standalone open-source tool or as part of the Evident
   </Step>
 </Steps>
 
-## Available evaluations&#x20;
+## Available evaluations
 
-Evaluations are a core part of the library. Evidently has 100+ built-in evals, and Presets that group popular checks together.
-
-Each evaluation has optional **interactive visuals** to explore results, such as feature or score distributions.
+Evaluations are a core part of the library. Evidently has 100+ built-in evals, and Presets that group popular checks together. Each evaluation has an optional **interactive visualization** to help explore and interpret the results.
 
 Here are examples of things you can check:
 
