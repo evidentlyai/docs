@@ -65,11 +65,11 @@ Here are a few examples.
   <Tab title="Embeddings">
     To evaluate embeddings drift, pass embeddings as numerical columns.
 
-    | User ID | Movie ID | Title  | Genre         | Avg Rating | Watched (%) | Predicted Rank |
-    | ------- | -------- | ------------ | ------------- | --------------------- | -------------------- | -------------- |
-    | U001    | M001     | The Matrix   | Sci-Fi        | 4.8                   | 100                  | 1              |
-    | U002    | M002     | Titanic      | Romance/Drama | 4.5                   | 80                   | 2              |
-    | U001    | M003     | Interstellar | Sci-Fi        | 4.7                   | 90                   | 2              |
+    | User ID | Movie ID | Title        | Genre         | Avg Rating | Watched (%) | Predicted Rank |
+    | ------- | -------- | ------------ | ------------- | ---------- | ----------- | -------------- |
+    | U001    | M001     | The Matrix   | Sci-Fi        | 4.8        | 100         | 1              |
+    | U002    | M002     | Titanic      | Romance/Drama | 4.5        | 80          | 2              |
+    | U001    | M003     | Interstellar | Sci-Fi        | 4.7        | 90          | 2              |
   </Tab>
 </Tabs>
 
@@ -87,7 +87,7 @@ When to use two datasets:
 
 * **Side-by-side comparison**. Compare outputs or data quality across two periods or model versions in a single Report.
 
-* **Data drift detection**. Detect distribution shifts by comparing datasets, such as this week’s data to the previous one. (Reference dataset is required).
+* **(Required) Data drift detection**. Detect distribution shifts by comparing datasets, such as this week’s data to the previous one. You always need two datasets.
 
 * **Simplify test setup**. Automatically generate test conditions (e.g., min-max ranges) from the reference dataset without manual configuration.
 
