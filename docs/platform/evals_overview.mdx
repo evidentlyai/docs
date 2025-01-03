@@ -3,3 +3,139 @@ title: 'Overview'
 description: 'Description of your new file.'
 noindex: true
 ---
+
+## What is snapshot?
+
+A `snapshot` is a JSON summary containing evaluation results. It captures the data and AI system performance for the specific dataset or data batch you evaluated. Snapshots can include metrics, test results, column summaries, and additional render data. You choose what to include when running your evaluation.
+
+The snapshot functionality is based on Evidently [Reports and Test Suites](https://github.com/evidentlyai/evidently/blob/main/docs/book/tests-and-reports/overview.md). Put simply, a snapshot is a JSON "version" of an Evidently Report or Test Suite.
+
+When you run individual evaluations, you can explore and compare their results. As you send multiple snapshots to a Project, you can also use a Dashboard to track results over time. This helps you monitor metric changes across experiments or track evaluations on production data.
+
+You can optionally include the Dataset together with the evaluation results you upload.
+
+
+
+This page walks you through how to run evaluations locally in Python and send the results to Evidently Platform. This applies both to on-the-fly evaluations during experiments and to those you run automatically during batch monitoring or regression testing.
+
+Once you upload the evaluation results as JSON `snapshots`, you can explore, compare, and track them on the Evidently Platform.
+
+
+
+
+
+## When you need evals
+
+You need evals at different stages of your AI product development:
+
+When You Need Evals
+
+Example Questions
+
+**Ad-hoc analysis**. You may run evaluations on the fly whenever you need to troubleshoot an issue or understand a specific trend.
+
+* What are the predictions with the highest error?
+
+* How often do particular topics come up?
+
+* How does my system perform on adversarial inputs?
+
+**Experimenting**. During development, you may test different parameters, models, or prompts. Evaluations help you compare outcomes and iterate with confidence.
+
+* Does the classification precision and recall improve with iterations?
+
+* Which prompt delivers more accurate answers?
+
+* Does switching from GPT to Claude enhance the quality of retrieval?
+
+**Regression Testing**. When you update a model or make a fix, you need to evaluate its quality on new or previous inputs, often as part of CI/CD pipelines.
+
+* Does changing the prompt lead to different answers to previous user queries?
+
+* What is the quality of my ML model after retraining it on new data?
+
+## Evaluation workflow
+
+You perform evaluations by generating [Reports or Test Suites](https://docs.evidentlyai.com/user-guide/tests-and-reports/introduction) using one of these methods:
+
+* Local evaluations using the Python library
+
+* No-code evaluations directly in the UI
+
+### [](https://docs.evidentlyai.com/user-guide/evaluations/evals_overview#evals-in-python)&#xA;Evals in Python
+
+Supported in: `Evidently OSS`, `Evidently Cloud` and `Evidently Enterprise`.
+
+This is perfect for development, CI/CD workflows, or custom evaluation pipelines. Once you run an eval in Python on your dataset, you upload the results to the Evidently Platform.
+
+<img height="1080" width="1919" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-29f96cf57cca6885ee22f193a202da485f88390a%252Fevals_flow_python.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=8ea39c01&sv=2" />
+
+You get to choose what you upload:
+
+* **Results only (Default)**. You can upload just the evaluation outcomes as JSON snapshots. They include column summaries, metric distributions, and test results. For tabular data, this typically provides the necessary insights while keeping data private.
+
+* **Results and Dataset**. Alternatively, you can include the dataset along with the evaluation results. This is useful for text data evaluations or whenever you want detailed row-level analysis, like investigating specific completions with low scores.
+
+**What’s a snapshot?** This is a rich JSON version of the Report or a Test Suite with the results of an individual evaluation run that you upload to the platform.
+
+See how to run local evals in detail:
+
+[Generate snapshots](https://docs.evidentlyai.com/user-guide/evaluations/snapshots)
+
+### [](https://docs.evidentlyai.com/user-guide/evaluations/evals_overview#no-code-evals)&#xA;No-code evals
+
+Supported in: `Evidently Cloud` and `Evidently Enterprise`.
+
+With no-code evaluations, you work directly in the user interface. This is great for non-technical users or when you prefer to run evaluations on Evidently infrastructure.
+
+Here's what you can do:
+
+* **Evaluate uploaded datasets**. Run evaluations on collected [traces](https://docs.evidentlyai.com/user-guide/tracing/tracing_overview) (if you've instrumented your LLM application) or on [Datasets](https://docs.evidentlyai.com/user-guide/datasets/datasets_overview) you previously uploaded.
+
+* **Upload CSV data**. Use a drag-and-drop interface to upload CSV files and run evaluations entirely on the Platform.
+
+<img height="1080" width="1919" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-2daadfe4e61ae0daaad37b202ee55317eee674fd%252Fevals_flow_nocode.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=dff9910a&sv=2" />
+
+Once you run the evaluation using a no-code flow, you create the same Report or Test Suite that you would generate using Python.
+
+How to run No-code evals:
+
+[Run no code evals](https://docs.evidentlyai.com/user-guide/evaluations/no_code_evals)
+
+The rest of the workflow is the same. After you run your evals with any method, you can access the results in the UI, and go to the Explore view for further analysis.&#x20;
+
+[](https://docs.evidentlyai.com/user-guide/evaluations/evals_overview#evaluation-results)
+Evaluation results&#x20;
+------------------------
+
+Supported in: Supported in: `Evidently OSS`, `Evidently Cloud` and `Evidently Enterprise`.
+
+The result of each evaluation is either a Report (when it's just a summary of metrics) or a Test Suite (when it also includes pass/fail results on set conditions).
+
+**Browse the results**. To access them, enter your Project and navigate to the "Reports" or "Test Suites" section in the left menu. Here, you can view all your evaluation artifacts and browse them by Tags, time, or metadata. You can also download them as HTML or JSON.
+
+<img height="1318" width="2580" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-4e12a9f57e9dfeee381743efa9708d4eaf80b2ee%252Fbrowse_reports-min.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=7b5ef304&sv=2" />
+
+To see and compare the evaluation results, click on "Explore" next to the individual Report or Test Suite.&#x20;
+
+**Explore view**. You'll get the Report or Test Suite and, if available, the dataset linked to the evaluation.
+
+Supported in: `Evidently Cloud` and `Evidently Enterprise`. In Evidently OSS, you can can access only the Report.
+
+* To view the Report only, click on the "dataset" sign at the top to hide the dataset.
+
+* To see results from a specific evaluation within the Report, use the dropdown menu to select the Metric.
+
+* To compare Reports side by side, click on "duplicate snapshot" (this will keep the current Metric in view), and then select a different Report for comparison.
+
+<img height="1562" width="2410" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-3c786cced77562d7baffa100636ce6e30297e62a%252Fexplore_view-min.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=11f37cf0&sv=2" />
+
+**Dashboard**. As you run multiple evaluations, you can build a Dashboard to visualize results over time.
+
+Supported in: Supported in: `Evidently OSS`, `Evidently Cloud` and `Evidently Enterprise`.
+
+The Dashboard aggregates data from various Reports or Test Suites within a Project, allowing you to track progress, see performance improvements, and monitor how tests perform over time.
+
+<img height="1658" width="2922" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-2375a068033618f6abee93161c20929eb582b40a%252Fproject_dashboard-min.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=155d63ff&sv=2" />
+
+How to create a Dashboard:

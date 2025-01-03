@@ -121,10 +121,10 @@
           "docs/library/report",
           "docs/library/tests",
           "docs/library/output_formats",
+          "docs/library/tags_metadata",
           "docs/library/metric_generator"
         ]
       },
-        "docs/library/snapshots"
       ]
     },
     {
@@ -171,7 +171,14 @@
         "docs/platform/dashboard_add_panels"
       ]
     },
-    "docs/platform/alerts"
+    {
+      "group": "Monitoring",
+      "pages": [
+        "docs/platform/monitoring_overview",
+        "docs/platform/evals_scheduled",
+        "docs/platform/alerts"
+      ]
+    },
   ]
 },
     {

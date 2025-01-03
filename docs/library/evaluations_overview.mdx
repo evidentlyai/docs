@@ -1,5 +1,104 @@
 ---
-title: 'New file'
-description: 'Description of your new file.'
+title: 'Overview'
+description: 'How evaluations work.'
 ---
 
+* **Descriptors** return row-level scores (like text length) or labels (like “PII present”) for each input.
+
+* **Metrics** work at the dataset or column level. These are checks like accuracy or  data drift. You also need Metrics to summarize row-level results.
+
+* **Tests** let you add optional Pass/Fail checks on top of Metrics.
+
+* **Reports** are how you group and visualize the evaluation results.
+
+* **Presets** are pre-configured Reports for common scenarios.
+
+
+
+## How it works
+
+Here is the general workflow.
+
+**1. Create or connect to a** [**Project**](https://docs.evidentlyai.com/user-guide/projects/add_project) in your Workspace where you want to send the snapshots. This will organize all your evaluations in one place.
+
+Copy
+
+`project = ws.get_project("PROJECT_ID")`
+
+**2. Prepare the data**. You run each evaluation on a Dataset.
+
+You can prep your input data locally as a Pandas DataFrame or first upload it to the Evidently Platform and call it from there.
+
+**Working with data**. Check how to prepare your [input data](https://docs.evidentlyai.com/user-guide/input-data/data-requirements) or upload and manage [Datasets](https://docs.evidentlyai.com/user-guide/datasets/datasets_overview).
+
+**3. Define the snapshot compostion**. Define what you want to evaluate.
+
+* Create a `Report` or `Test Suite` object.
+
+* Pass the chosen `metrics` or `tests`.
+
+* Optionally, pass custom parameters for Metric calculations and/or Test conditions.
+
+**Reports and Tests**. Check how to get [Reports](https://docs.evidentlyai.com/user-guide/tests-and-reports/get-reports), run [Test Suites](https://docs.evidentlyai.com/user-guide/tests-and-reports/run-tests) or generate [Text Descriptors](https://docs.evidentlyai.com/user-guide/tests-and-reports/text-descriptors).
+
+**4. Run the Report or Test Suite**. Execute the evaluation on your dataset.
+
+* Pass the `current` dataset you want to evaluate or profile.
+
+* Optional (but highly recommended): pass the `column_mapping` to define the data schema.
+
+* Optional (required for data distribution checks): pass the `reference` dataset.
+
+* Optional: add a `tags` or `metadata` to identify this specific evaluation run.
+
+* Optional: and a custom `timestamp` to the current run.
+
+**5. Send the snapshot**.
+
+After you compute the Report or Test Suite, use the `add_report` or `add_test_suite` methods to send them to a corresponding Project in your workspace.
+
+[](https://docs.evidentlyai.com/user-guide/evaluations/snapshots#examples)
+Examples
+--------
+
+### [](https://docs.evidentlyai.com/user-guide/evaluations/snapshots#send-snapshots)&#xA;Send snapshots
+
+**Report**. To create and send a Report with data summaries for a single dataset `batch1` to the workspace `ws`:
+
+Copy
+
+`data_report = Report(`
+`      metrics=[`
+`          DataQualityPreset(),`
+`      ],`
+`   )`
+`data_report.run(reference_data=None, current_data=batch1)`
+`ws.add_report(project.id, data_report)`
+
+**Test Suite**. To create and send a Test Suite with data drift checks, passing current and reference data:
+
+Copy
+
+`drift_checks = TestSuite(tests=[`
+`  DataDriftTestPreset(),`
+`])`
+`drift_checks.run(reference_data=reference_batch, current_data=batch1)`
+`ws.add_test_suite(project.id, drift_checks)`
+
+**Send a snapshot**. The `add_report` or `add_test_suite` methods generate snapshots automatically. If you already have a snapshot (e.g., you previously saved it), you can load it load and send it to your Project:
+
+Copy
+
+`ws.add_snapshot(project.id, snapshot.load("data_drift_snapshot.json"))`
+
+**Snapshot size**. A single upload to Evidently Cloud should not exceed 50MB (Free plan) or 500MB (Pro plan). This limitation applies to the size of the JSON, not the dataset itself. Example: a data drift report for 50 columns and 10,000 rows of current and reference data results in a snapshot of approximately 1MB. (For 100 columns x 10,000 rows: \~ 3.5MB; for 100 columns x 100,000 rows: \~ 9MB). The size varies depending on the metrics or tests used.
+
+### [](https://docs.evidentlyai.com/user-guide/evaluations/snapshots#add-dataset)&#xA;Add dataset
+
+When you upload a Report or Test Suite, you can optionally include the Dataset you evaluated, together with added Descriptors (if any). This helps with row-level debugging and analysis.
+
+Use the `include_data` parameters (defaults to False):
+
+Copy
+
+`ws.add_report(project.id, data_report, include_data=True)`
