@@ -11,7 +11,7 @@ description: 'How to prepare input data to run evaluations.'
 
 <Tabs>
   <Tab title="LLM logs">
-    To evaluate generative AI quality, pass LLM outputs with optional context and ground truth and any metadata.
+    To evaluate LLM outputs, pass any text columns with optional context, ground truth and metadata.
 
     | Question                             | Context                                                                                                   | Answer                          |
     | ------------------------------------ | --------------------------------------------------------------------------------------------------------- | ------------------------------- |
@@ -21,8 +21,8 @@ description: 'How to prepare input data to run evaluations.'
   </Tab>
 
   <Tab title="Data table">
-    Pass any data table to get a data overview, run data quality and distribution drift checks. 
-    
+    Pass any data table to get a data overview, run data quality and distribution drift checks.
+
     These can also be production logs of your ML model without ground truth: include input features and predicted values.
 
     | Order ID | Product                | Category    | Quantity | Price  | Payment Method | Shipping Status |
@@ -88,7 +88,9 @@ By default, evaluations use a single dataset (`current` dataset). Optionally, yo
 When to use two datasets:
 
 * **Side-by-side comparison**. Compare outputs or data quality across two periods or model versions in a single Report.
+
 * **Data drift detection. (Required)**. Detect distribution shifts by comparing datasets, such as this week’s data to the previous one. You always need two datasets.
+
 * **Simplify test setup**. Automatically generate test conditions (e.g., min-max ranges) from the reference dataset without manual configuration.
 
 ## Data sampling
