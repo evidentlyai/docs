@@ -74,18 +74,18 @@
     {
       "name": "Community",
       "icon": "discord",
-      "url": "https://discord.com/invite/xZjKRaNp8b"
+      "url": "https://discord.com/invoke/xZjKRaNp8b"
     }
   ],
   "navigation": [
     {
-    "group": "Get Started",
-    "pages": [
+      "group": "Get Started",
+      "pages": [
         "introduction",
         {
           "group": "Quickstart",
           "pages": [
-            "quickstart_llm", 
+            "quickstart_llm",
             "quickstart_ml",
             "quickstart_tracing"
           ]
@@ -101,86 +101,86 @@
       ]
     },
     {
-    "group": "Evaluation library",
-    "pages": [
-      "docs/library/overview",
-      {
-        "group": "Prepare input data",
-        "pages": [
-          "docs/library/data_overview",
-          "docs/library/column_mapping",
-          "docs/library/classification_data",
-          "docs/library/recsys_data"
-        ]
-      },
-      {
-        "group": "Run an evaluation",
-        "pages": [
-          "docs/library/evaluations_overview",
-          "docs/library/descriptors",
-          "docs/library/report",
-          "docs/library/tests",
-          "docs/library/output_formats",
-          "docs/library/tags_metadata",
-          "docs/library/metric_generator"
-        ]
-      },
-      ]
-    },
-    {
-  "group": "Platform",
-  "pages": [
-      "docs/platform/overview",
-    {
-      "group": "Projects",
+      "group": "Evaluation library",
       "pages": [
-        "docs/platform/projects_overview",
-        "docs/platform/projects_manage"
+        "docs/library/overview",
+        {
+          "group": "Prepare input data",
+          "pages": [
+            "docs/library/data_overview",
+            "docs/library/column_mapping",
+            "docs/library/classification_data",
+            "docs/library/recsys_data"
+          ]
+        },
+        {
+          "group": "Run an evaluation",
+          "pages": [
+            "docs/library/evaluations_overview",
+            "docs/library/descriptors",
+            "docs/library/report",
+            "docs/library/tests",
+            "docs/library/output_formats",
+            "docs/library/tags_metadata",
+            "docs/library/metric_generator"
+          ]
+        }
       ]
     },
     {
-      "group": "Datasets",
+      "group": "Platform",
       "pages": [
-        "docs/platform/datasets_overview",
-        "docs/platform/datasets_workflow",
-        "docs/platform/dataset_generate"
+        "docs/platform/overview",
+        {
+          "group": "Projects",
+          "pages": [
+            "docs/platform/projects_overview",
+            "docs/platform/projects_manage"
+          ]
+        },
+        {
+          "group": "Datasets",
+          "pages": [
+            "docs/platform/datasets_overview",
+            "docs/platform/datasets_workflow",
+            "docs/platform/dataset_generate"
+          ]
+        },
+        {
+          "group": "Tracing",
+          "pages": [
+            "docs/platform/tracing_overview",
+            "docs/platform/tracing_setup"
+          ]
+        },
+        {
+          "group": "Evaluations",
+          "pages": [
+            "docs/platform/evals_overview",
+            "docs/platform/evals_no_code",
+            "docs/platform/evals_explore",
+            "docs/platform/evals_scheduled"
+          ]
+        },
+        {
+          "group": "Dashboard",
+          "pages": [
+            "docs/platform/dashboard_overview",
+            "docs/platform/dashboard_tabs",
+            "docs/platform/dashboard_panel_types",
+            "docs/platform/dashboard_add_panels"
+          ]
+        },
+        {
+          "group": "Monitoring",
+          "pages": [
+            "docs/platform/monitoring_overview",
+            "docs/platform/evals_scheduled",
+            "docs/platform/alerts"
+          ]
+        }
       ]
     },
-    {
-      "group": "Tracing",
-      "pages": [
-        "docs/platform/tracing_overview",
-        "docs/platform/tracing_setup"
-      ]
-    },
-    {
-      "group": "Evaluations",
-      "pages": [
-        "docs/platform/evals_overview",
-        "docs/platform/evals_no_code",
-        "docs/platform/evals_explore",
-        "docs/platform/evals_scheduled"
-      ]
-    },
-    {
-      "group": "Dashboard",
-      "pages": [
-        "docs/platform/dashboard_overview",
-        "docs/platform/dashboard_tabs",
-        "docs/platform/dashboard_panel_types",
-        "docs/platform/dashboard_add_panels"
-      ]
-    },
-    {
-      "group": "Monitoring",
-      "pages": [
-        "docs/platform/monitoring_overview",
-        "docs/platform/evals_scheduled",
-        "docs/platform/alerts"
-      ]
-    },
-  ]
-},
     {
       "group": "Introduction",
       "pages": [
@@ -188,52 +188,52 @@
       ]
     },
     {
-     "group": "Evaluations",
-     "pages": [
-       "metrics/introduction", 
-       "metrics/all_metrics",
-       "metrics/all_descriptors",
-       {
-         "group": "All Presets",
-         "pages": [
-           "metrics/preset_text_evals",
-           "metrics/preset_data_drift", 
-           "metrics/preset_data_quality",
-           "metrics/preset_classification",
-           "metrics/preset_regression",
-           "metrics/preset_recsys"
-         ]
-       }
-     ]
+      "group": "Evaluations",
+      "pages": [
+        "metrics/introduction",
+        "metrics/all_metrics",
+        "metrics/all_descriptors",
+        {
+          "group": "All Presets",
+          "pages": [
+            "metrics/preset_text_evals",
+            "metrics/preset_data_drift",
+            "metrics/preset_data_quality",
+            "metrics/preset_classification",
+            "metrics/preset_regression",
+            "metrics/preset_recsys"
+          ]
+        }
+      ]
     },
     {
-     "group": "Metric Customization",
-     "pages": [
-       "metrics/customize_metric",
-       "metrics/customize_descriptor", 
-       "metrics/customize_llm_judge",
-       "metrics/customize_hf_descriptor",
-       "metrics/customize_data_drift",
-       "metrics/customize_embedding_drift"
-     ]
+      "group": "Metric Customization",
+      "pages": [
+        "metrics/customize_metric",
+        "metrics/customize_descriptor",
+        "metrics/customize_llm_judge",
+        "metrics/customize_hf_descriptor",
+        "metrics/customize_data_drift",
+        "metrics/customize_embedding_drift"
+      ]
     },
     {
-     "group": "Report Customization",
-     "pages": [
-       "metrics/customize_colors",
-       "metrics/customize_add_text"
-     ]
+      "group": "Report Customization",
+      "pages": [
+        "metrics/customize_colors",
+        "metrics/customize_add_text"
+      ]
     },
     {
-     "group": "Explainers",
-     "pages": [
-       "metrics/explainer_llm_evals",
-       "metrics/explainer_drift",
-       "metrics/explainer_data_stats",
-       "metrics/explainer_recsys",
-       "metrics/explainer_regression",
-       "metrics/explainer_classification"
-     ]
+      "group": "Explainers",
+      "pages": [
+        "metrics/explainer_llm_evals",
+        "metrics/explainer_drift",
+        "metrics/explainer_data_stats",
+        "metrics/explainer_recsys",
+        "metrics/explainer_regression",
+        "metrics/explainer_classification"
+      ]
     },
     {
       "group": "Examples",
