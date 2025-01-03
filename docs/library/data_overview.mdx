@@ -7,7 +7,7 @@ description: 'How to prepare input data to run evaluations.'
 
 **Tabular format**. To run an evaluation, you must prepare your data in tabular format as a pandas DataFrame. All column names must be strings.
 
-**Flexible structure**. The table can include any combination of numerical, categorical, text, metadata (including timestamps or IDs), and embeddings columns.
+**Flexible structure**. The table can include any combination of numerical, categorical, text, metadata (including timestamps or IDs), and embedding columns.
 
 ### Examples
 
@@ -15,7 +15,7 @@ Here are a few examples.
 
 <Tabs>
   <Tab title="LLM logs">
-    To evaluate generative AI quality, pass LLM outputs with optional context and ground truth. You can inlcude any number of text and metadata columns.
+    To evaluate generative AI quality, pass LLM outputs with optional context and ground truth. You can include any number of text and metadata columns.
 
     | Question                             | Context                                                                                                   | Answer                          |
     | ------------------------------------ | --------------------------------------------------------------------------------------------------------- | ------------------------------- |
@@ -25,7 +25,7 @@ Here are a few examples.
   </Tab>
 
   <Tab title="Data table">
-    Pass any data table to get a data overview, run data quality and distribution drift checks. This could also be production logs of your ML model with input features and prediction column.
+    Pass any data table to get a data overview, run data quality and distribution drift checks. This could also be production logs of your ML model with input features and prediction columns.
 
     | Order ID | Product                | Category    | Quantity | Price  | Payment Method | Shipping Status |
     | -------- | ---------------------- | ----------- | -------- | ------ | -------------- | --------------- |
@@ -35,7 +35,7 @@ Here are a few examples.
   </Tab>
 
   <Tab title="Classification">
-    To evaluate classification quality, pass a table that contains columns with predicted and actual label. Features are optional, but useful for some evals.
+    To evaluate classification quality, pass a table that contains columns with predicted and actual labels. Input features are optional but useful for some evals.
 
     | Timestamp           | Transaction ID | Amount  | Location      | Device Type | Fraud Label | Target |
     | ------------------- | -------------- | ------- | ------------- | ----------- | ----------- | ------ |
@@ -45,7 +45,7 @@ Here are a few examples.
   </Tab>
 
   <Tab title="Regression">
-    To evaluate regression quality, pass a table that contains columns with predicted and actual values. Input features are optional.
+    To evaluate regression quality, pass a table that contains columns with predicted and actual values. Input features are optional but useful for some evals.
 
     | Prop ID | Location      | Sq ft | Type      | Bedrooms | Has Garden | Predicted  ($) | Actual ($) |
     | ------- | ------------- | ----- | --------- | -------- | ---------- | -------------- | ---------- |
@@ -55,7 +55,7 @@ Here are a few examples.
   </Tab>
 
   <Tab title="Ranking">
-    To evaluate ranking or recommendations, pass a table that contains columns with rank/score and interaction result. User/query and item features are optional but useful for some evals.
+    To evaluate ranking or recommendations, pass a table that contains columns with rank/score and interaction results. User/query and item features are optional but useful for some evals.
 
     | User ID | Movie ID | Movie Title  | Genre         | Average Viewer Rating | Watched Duration (%) | Predicted Rank |
     | ------- | -------- | ------------ | ------------- | --------------------- | -------------------- | -------------- |
@@ -97,6 +97,6 @@ When to use two datasets:
 
 ## Data sampling
 
-Running evaluations on large datasets (millions of rows) can take time. This depends on the specific evaluation as well as your infrastructure. Since pandas processes data in memory, it’s often more efficient to use samples.
+Running evaluations on large datasets (millions of rows) can take time. This depends on the specific evaluation as well as your infrastructure. Since pandas process data in memory, it’s often more efficient to use samples.
 
 For example, in data drift detection, you can apply random or stratified sampling and compare samples instead of processing the entire dataset.
