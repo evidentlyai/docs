@@ -157,9 +157,9 @@
           "group": "Evaluations",
           "pages": [
             "docs/platform/evals_overview",
+            "docs/platform/evals_api",
             "docs/platform/evals_no_code",
-            "docs/platform/evals_explore",
-            "docs/platform/evals_scheduled"
+            "docs/platform/evals_explore"
           ]
         },
         {
