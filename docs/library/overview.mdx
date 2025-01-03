@@ -14,35 +14,29 @@ You can use Evidently as a standalone open-source tool or as part of the Evident
 
 <Steps>
   <Step title="Pass input data">
-    Use text, tabular, or embeddings data. Optionally define a schema.
+    Use text, tabular, or embeddings data. Optionally [define a schema](data_overview).
   </Step>
 
   <Step title="Configure evaluations">
-    Pick from 100+ metrics or add yours. Optionally set pass/fail conditions.
+    Evidently supports [3 evaluation modes](eval_overview) with a declarative API.
+
+    * `Descriptors` compute row-level scores for individual inputs.
+    * `Metrics` compute and aggregate dataset scores.
+    * `Tests` add pass/fail conditions to metrics. You can set conditions manually or automatically infer from the reference dataset, like min-max ranges.
+
+    Pick from 100+ metrics or add yours.
   </Step>
 
   <Step title="Get results">
-    Choose your format:
+    Choose how to get the outputs.&#x20;
 
-    * Get a visual Report in an interactive Python environment (Jupyter, Colab).
-
-    * Export as JSON, Python dictionary, pandas DataFrame, or HTML file.
-
-    * Upload to the Evidently Platform to store and track over time.
+    * **View the Report** in an interactive Python environment (Jupyter, Colab).
+    * **Export** as JSON, Python dictionary, pandas DataFrame, or HTML file.
+    * **Upload** to the Evidently Platform to store and track over time.
   </Step>
 </Steps>
 
-## Evaluation API
-
-Evidently supports 3 evaluation modes with a declarative API.
-
-* `Descriptors` let you compute row-level scores for individual inputs.
-
-* `Metrics` let you compute and aggregate dataset scores.
-
-* `Tests` let you check metrics for pass/fail outcomes. You can set conditions manually or infer them from a reference dataset, like min-max ranges.
-
-## 100+ metrics
+## Available evaluations&#x20;
 
 Evidently has 100+ built-in evals. Each evaluation has optional **interactive visuals** to explore results, such as feature or score distributions.
 
