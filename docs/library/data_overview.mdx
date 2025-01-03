@@ -13,55 +13,64 @@ Here are a few examples.
   <Tab title="LLM logs">
     To evaluate generative AI quality, pass LLM outputs with optional context and ground truth. You can inlcude any number of text and metadata columns.
 
-    | Question                             | Context                                                                                             | Answer                  |
-    | ------------------------------------ | --------------------------------------------------------------------------------------------------- | ----------------------- |
-    | How old is the universe?             | The universe is believed to have originated from the Big Bang that occurred 13.8 billion years ago. | 13.8 billion years old. |
-    | What’s the lifespan of Baobab trees? | Baobab trees can live up to 2,500 years. They are often called the “Tree of Life”.                  | Up to 2,500 years.      |
+| Question                             | Context                                                                                             | Answer                  |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------- | ----------------------- |
+| How old is the universe?             | The universe is believed to have originated from the Big Bang that occurred 13.8 billion years ago. | 13.8 billion years old. |
+| What’s the lifespan of Baobab trees? | Baobab trees can live up to 2,500 years. They are often called the “Tree of Life”.                  | Up to 2,500 years.      |
+| What is the speed of light?          | The speed of light in a vacuum is approximately 299,792 kilometers per second (186,282 miles per second). | Close to 299,792 km per second. |
+
   </Tab>
 
   <Tab title="Data table">
     Pass any data table to get an exploratory data overview, run data quality and distribution drift checks. This could also be production logs of your ML model with input features and prediction column.
 
-    | Order ID | Product             | Category    | Quantity | Price  | Payment Method |
-    | -------- | ------------------- | ----------- | -------- | ------ | -------------- |
-    | ORD001   | Wireless Headphones | Electronics | 1        | 120.00 | Credit Card    |
-    | ORD002   | Yoga Mat            | Sports      | 2        | 45.00  | PayPal         |
+| Order ID | Product             | Category    | Quantity | Price  | Payment Method | Shipping Status   |
+| -------- | ------------------- | ----------- | -------- | ------ | -------------- | ----------------- |
+| ORD001   | Wireless Headphones | Electronics | 1        | 120.00 | Credit Card    | Shipped           |
+| ORD002   | Yoga Mat            | Sports      | 2        | 45.00  | PayPal         | In Transit        |
+| ORD003   | Stainless Steel Bottle | Kitchen    | 3        | 30.00  | Debit Card     | Delivered         |
+
   </Tab>
 
   <Tab title="Classification">
     To evaluate classification quality, pass a table that contains columns with predicted and actual label. Features are optional, but useful for some evals.
 
-    | Timestamp           | Transaction ID | Amount  | Location      | Device Type | Fraud Label | Target |
-    | ------------------- | -------------- | ------- | ------------- | ----------- | ----------- | ------ |
-    | 2023-12-01 10:15:23 | TXN001         | 250.00  | New York, USA | Mobile      | 0           | 0      |
-    | 2023-12-01 10:17:45 | TXN002         | 5000.00 | London, UK    | Desktop     | 1           | 1      |
+ | Timestamp           | Transaction ID | Amount  | Location      | Device Type | Fraud Label | Target |
+| ------------------- | -------------- | ------- | ------------- | ----------- | ----------- | ------ |
+| 2023-12-01 10:15:23 | TXN001         | 250.00  | New York, USA | Mobile      | 0           | 0      |
+| 2023-12-01 10:17:45 | TXN002         | 5000.00 | London, UK    | Desktop     | 1           | 1      |
+| 2023-12-01 10:20:10 | TXN003         | 1200.00 | Sydney, AUS   | Tablet      | 0           | 0      |
+
   </Tab>
 
   <Tab title="Regression">
-    To evaluate regression quality, pass a table that contains columns with predicted and actual value. Features are optional, but useful for some evals.
+    To evaluate regression quality, pass a table that contains columns with predicted and actual values. Input features are optional.
 
-    | Timestamp           | Property ID | Location           | Size (sq ft) | Property Type | Bedrooms | Bathrooms | Has Garden | Predicted Price ($) | Actual Price ($) |
-    | ------------------- | ----------- | ------------------ | ------------ | ------------- | -------- | --------- | ---------- | ------------------- | ---------------- |
-    | 2023-12-01 10:15:23 | PROP001     | New York, USA      | 850          | Apartment     | 2        | 1         | No         | 850,000             | 870,000          |
-    | 2023-12-01 10:17:45 | PROP002     | San Francisco, USA | 1200         | House         | 3        | 2         | Yes        | 1,250,000           | 1,300,000        |
+| Property ID | Location           | Size (sq ft) | Property Type | Bedrooms | Bathrooms | Has Garden | Predicted Price ($) | Actual Price ($) |
+| ----------- | ------------------ | ------------ | ------------- | -------- | --------- | ---------- | ------------------- | ---------------- |
+| PROP001     | New York, USA      | 850          | Apartment     | 2        | 1         | No         | 850,000             | 870,000          |
+| PROP002     | San Francisco, USA | 1200         | House         | 3        | 2         | Yes        | 1,250,000           | 1,300,000        |
+| PROP003     | London, UK         | 950          | Flat          | 2        | 2         | No         | 700,000             | 720,000          |
+
   </Tab>
 
-    <Tab title="Ranking">
-    To evaluate ranking or recommendations quality, pass a table that contains columns with predicted rank or score and interaction result. User/query and iteam features are optional, but useful for some evals.
+  <Tab title="Ranking">
+    To evaluate ranking or recommendations, pass a table that contains columns with predicted rank/score and interaction result. User/query and item features are optional but useful for some evals.
 
-| User ID  | Movie ID   | Movie Title         | Genre         | Timestamp           | Average Viewer Rating | Watched Duration (%) | Predicted Rank |
-|----------|------------|---------------------|---------------|---------------------|-----------------------|----------------------|----------------|
-| U001     | M001       | The Matrix          | Sci-Fi        | 2023-12-01 10:15:23 | 4.8                   | 100                  | 1              |
-| U002     | M002       | Titanic             | Romance/Drama | 2023-12-01 11:00:45 | 4.5                   | 80                   | 2              |
+| User ID | Movie ID | Movie Title         | Genre         | Timestamp           | Average Viewer Rating | Watched Duration (%) | Predicted Rank |
+| ------- | -------- | ------------------- | ------------- | ------------------- | --------------------- | -------------------- | -------------- |
+| U001    | M001     | The Matrix          | Sci-Fi        | 2023-12-01 10:15:23 | 4.8                   | 100                  | 1              |
+| U002    | M002     | Titanic             | Romance/Drama | 2023-12-01 11:00:45 | 4.5                   | 80                   | 2              |
+| U001    | M003     | Interstellar        | Sci-Fi        | 2023-12-01 12:30:00 | 4.7                   | 90                   | 2              |
+
   </Tab>
 
-      <Tab title="Embeddings">
-To evaluate embeddings drift, pass embeddings as numerical columns.
+  <Tab title="Embeddings">
+    To evaluate embeddings drift, pass embeddings as numerical columns.
 
-| col_0    | col_1    | col_2    | col_3    | col_4    | ... | col_98   | col_99   | col_100  |
-|----------|----------|----------|----------|----------|-----|----------|----------|----------|
-| 0.171242 | 0.149020 | 0.122876 | 0.121569 | 0.137255 | ... | 0.614379 | 0.613072 | 0.612000 |
-| 0.619608 | 0.628758 | 0.670588 | 0.661438 | 0.636601 | ... | 0.525490 | 0.509804 | 0.500000 |
-
+    | col\_0   | col\_1   | col\_2   | col\_3   | col\_4   | ... | col\_98  | col\_99  | col\_100 |
+    | -------- | -------- | -------- | -------- | -------- | --- | -------- | -------- | -------- |
+    | 0.171242 | 0.149020 | 0.122876 | 0.121569 | 0.137255 | ... | 0.614379 | 0.613072 | 0.612000 |
+    | 0.619608 | 0.628758 | 0.670588 | 0.661438 | 0.636601 | ... | 0.525490 | 0.509804 | 0.500000 |
   </Tab>
 </Tabs>
