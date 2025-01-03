@@ -12,26 +12,27 @@ You can use Evidently as a standalone open-source tool or as part of the Evident
 
 ## Workflow
 
-* **Pass input data**. Use text, tabular, or embeddings data. Optionally define a schema.
-
-* **Define evaluations**. Choose from 100+ metrics. Optionally set pass/fail conditions.
-
-* **Get results** in any of the formats:
-
-  * A visual Report or Test Suite in an interactive Python environment (Jupyter, Colab).
-
-  * Export as JSON, Python dict, pandas DataFrame, or HTML file.
-
-  * Upload to the Evidently Platform to store and track over time.
+<Steps>
+  <Step title="Pass input data">
+    Use text, tabular, or embeddings data. Optionally define a schema.
+  </Step>
+  <Step title="Configure evaluations">
+    Pick from 100+ metrics or add yours. Optionally set pass/fail conditions.
+  </Step>
+  <Step title="Get results">
+    Choose your format:
+* Get a visual Report in an interactive Python environment (Jupyter, Colab).
+* Export as JSON, Python dictionary, pandas DataFrame, or HTML file.
+* Upload to the Evidently Platform to store and track over time.
+  </Step>
+</Steps>
 
 ## Evaluation API
 
 Evidently supports 3 evaluation modes with a declarative API.
 
 * `Descriptors` let you compute row-level scores for individual inputs.
-
 * `Metrics` let you compute and aggregate dataset scores.
-
 * `Tests` let you check metrics for pass/fail outcomes. You can set conditions manually or infer them from a reference dataset, like min-max ranges.
 
 ## 100+ metrics
