@@ -4,13 +4,32 @@ description: "Evidently Python library at a glance. "
 noindex: "true"
 ---
 
-Custom view
+Evidently library simplifies quality evaluations for AI systems. It supports both predictive ML models and generative AI systems, from classification to RAG.
 
-<Card title="New Card" icon="bolt">
-  Insert content here
-</Card>
+You can use Evidently as a standalone open-source tool or as part of the Evidently Platform.
 
-Evidently has 100+ built-in evals. You can also add custom ones. Each metric has an optional visualization: you can use it in `Reports`, `Test Suites`, or plot on a `Dashboard`.
+[ADD IMG]
+
+## Workflow
+* **Pass input data**. Use text, tabular, or embeddings data. Optionally define a schema.
+* **Define evaluations**. Choose from 100+ metrics or add custom ones. Optionally set pass/fail conditions.
+* **Get results** in any of the formats: 
+  * View as a visual Report or Test Suite in an interactive Python environment (Jupyter, Colab).
+  * Export as JSON, Python dict, pandas, or HTML file.
+  * Upload to the Evidently Platform to store and track over time.
+  
+## Evaluation API
+
+Evidently supports 3 evaluation modes with a declarative API. 
+* `Descriptors` let you compute row-level scores for individual inputs. 
+* `Metrics` let you compute and aggregate dataset scores. 
+* `Tests` let you check metrics for pass/fail outcomes. You can set conditions manually or infer them from a reference dataset, like min-max ranges. 
+
+## 100+ metrics
+
+Evidently has 100+ built-in evals. Each evaluation has optional **interactive visuals** to explore results, such as feature or score distributions.
+
+You can also implement custom checks as Python functions or define your prompts for LLM-as-a-judge.
 
 Here are examples of things you can check:
 
@@ -25,4 +44,3 @@ Here are examples of things you can check:
 |                                 **🗂 Ranking (inc. RAG)**                                |                                         **🛒 Recommendations**                                         |
 |                              NDCG, MAP, MRR, Hit Rate, etc.                              |                         Serendipity, novelty, diversity, popularity bias, etc.                         |
 
-You can also implement custom checks as Python functions or define your prompts for LLM-as-a-judge.
