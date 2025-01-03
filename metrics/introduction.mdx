@@ -5,23 +5,30 @@ noindex: "true"
 mode: "wide"
 ---
 
-Evaluations are a core feature of the Evidently library. There 100+ evals with built-in visuals. Before exploring, make sure you're familiar with the eval workflow (for [LLMs](../quickstart_llm), for [ML](../quickstart_ml)) and these key concepts:
+Evaluations are a core feature of the Evidently library. There 100+ evals with built-in visuals. Before exploring, make sure you're familiar with the eval workflow (for [LLMs](../quickstart_llm), for [ML](../quickstart_ml)) and core concepts.
 
-* **Descriptors** return row-level scores (like text length) or labels (like “PII present”) for each input.
-* **Metrics** work at the dataset or column level. These are checks like accuracy or  data drift. You also need Metrics to summarize row-level results.
-* **Tests** let you add optional Pass/Fail checks on top of Metrics.
-* **Reports** are how you group and visualize the evaluation results.
-* **Presets** are pre-configured Reports for common scenarios.
+## Reference tables
 
-## Popular links
-
-<CardGroup cols={4}>
+<CardGroup cols={2}>
   <Card title="All Descriptors" icon="table-list" href="all_descriptors">
     Reference table.
   </Card>
 
   <Card title="All Metrics" icon="chart-simple" href="all_metrics">
     Reference table.
+  </Card>
+
+</CardGroup>
+
+## Popular links
+
+<CardGroup cols={4}>
+  <Card title="How LLM eval works" icon="table-list" href="all_descriptors">
+    Explainer, placeholder. 
+  </Card>
+
+  <Card title="How Data Drift works" icon="chart-simple" href="all_metrics">
+    Explainer, placeholder.
   </Card>
 
   <Card title="LLM judges" icon="sparkles" href="customize_llm_judge">
