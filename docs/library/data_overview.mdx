@@ -43,21 +43,21 @@ Here are a few examples.
   <Tab title="Regression">
     To evaluate regression quality, pass a table that contains columns with predicted and actual values. Input features are optional.
 
-    | Prop ID | Location           | Sq ft | Type      | Bedrooms  | Has Garden | Predicted Price ($) | Actual Price ($) |
-    | ------- | ------------------ | ----- | --------- | -------- | --------- | ---------- | ------------------- | ---------------- |
-    | P01     | New York, USA      | 850   | Apartment | 2         | No         | 850,000             | 870,000          |
-    | P02     | New York, USA | 1200  | House     | 3         | Yes        | 1,250,000           | 1,300,000        |
-    | P03     | London, UK         | 950   | Flat      | 2         | No         | 700,000             | 720,000          |
+    \| Prop ID | Location           | Sq ft | Type      | Bedrooms  | Has Garden | Predicted Price ($) | Actual Price ($) |
+    \| ------- | ------------------ | ----- | --------- | -------- | --------- | ---------- | ------------------- | ---------------- |
+    \| P01     | New York, USA      | 850   | Apartment | 2         | No         | 850,000             | 870,000          |
+    \| P02     | New York, USA | 1200  | House     | 3         | Yes        | 1,250,000           | 1,300,000        |
+    \| P03     | London, UK         | 950   | Flat      | 2         | No         | 700,000             | 720,000          |
   </Tab>
 
   <Tab title="Ranking">
     To evaluate ranking or recommendations, pass a table that contains columns with rank/score and interaction result. User/query and item features are optional but useful for some evals.
 
-    | User ID | Movie ID | Movie Title  | Genre         | Timestamp           | Average Viewer Rating | Watched Duration (%) | Predicted Rank |
+    | User ID | Movie ID | Movie Title  | Genre         | Average Viewer Rating | Watched Duration (%) | Predicted Rank |
     | ------- | -------- | ------------ | ------------- | ------------------- | --------------------- | -------------------- | -------------- |
-    | U001    | M001     | The Matrix   | Sci-Fi        | 2023-12-01 10:15:23 | 4.8                   | 100                  | 1              |
-    | U002    | M002     | Titanic      | Romance/Drama | 2023-12-01 11:00:45 | 4.5                   | 80                   | 2              |
-    | U001    | M003     | Interstellar | Sci-Fi        | 2023-12-01 12:30:00 | 4.7                   | 90                   | 2              |
+    | U001    | M001     | The Matrix   | Sci-Fi         | 4.8                   | 100                  | 1              |
+    | U002    | M002     | Titanic      | Romance/Drama  | 4.5                   | 80                   | 2              |
+    | U001    | M003     | Interstellar | Sci-Fi         | 4.7                   | 90                   | 2              |
   </Tab>
 
   <Tab title="Embeddings">
