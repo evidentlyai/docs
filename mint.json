@@ -182,12 +182,6 @@
       ]
     },
     {
-      "group": "Introduction",
-      "pages": [
-        "overview/introduction"
-      ]
-    },
-    {
       "group": "Evaluations",
       "pages": [
         "metrics/introduction",
@@ -239,6 +233,12 @@
       "group": "Examples",
       "pages": [
         "examples/introduction"
+      ]
+    },
+    {
+      "group": "F.A.Q.",
+      "pages": [
+        "overview/introduction"
       ]
     },
     {
