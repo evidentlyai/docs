@@ -105,18 +105,10 @@
       "pages": [
         "docs/library/overview",
         {
-          "group": "Prepare input data",
-          "pages": [
-            "docs/library/data_overview",
-            "docs/library/column_mapping",
-            "docs/library/classification_data",
-            "docs/library/recsys_data"
-          ]
-        },
-        {
           "group": "Run an evaluation",
           "pages": [
             "docs/library/evaluations_overview",
+            "docs/library/data_definition",
             "docs/library/descriptors",
             "docs/library/report",
             "docs/library/tests",
