@@ -135,8 +135,6 @@ Some Presets are “small”: they group a handful of Metrics in a single widget
 
     There are also large, more interactive Presets, offering comprehensive evals for specific scenarios that include multiple widgets. For example:
 
-
-
     <Tabs>
       <Tab title="Data Drift">
         Identifies shifts in individual column distributions and consolidates the results.
@@ -146,26 +144,16 @@ Some Presets are “small”: they group a handful of Metrics in a single widget
 
       <Tab title="Classification">
         Breaks down classification metrics and includes debugging tools like prediction bias plots.
-
-
       </Tab>
 
       <Tab title="RecSys">
         Measures the performance of ranking or recommendation systems.
-
-
       </Tab>
 
       <Tab title="Data Summary">
         Summarizes all dataset columns, generating statistics and profiles for each.
-
-
       </Tab>
     </Tabs>
-
-
-
-
   </Tab>
 
   <Tab title="Classification">
@@ -184,6 +172,64 @@ Some Presets are “small”: they group a handful of Metrics in a single widget
     Multiple regession quality metrics like MAE, ME, RMSE, etc.
   </Tab>
 </Tabs>
+
+You can freely combine Presets and individual Metrics in a custom Report next to each other.
+
+Reports are great for analysis and debugging. However, in many cases, you don’t want to review all the scores individually but rather confirm that nothing is off.
+
+## Test Suites and Tests 
+
+### What is a Test?
+
+**Tests** let you validate your results against specific expectations. You create a Test by adding a **condition** parameter to a Metric. Each Test will calculate a given value, check it against the rule, and report a pass/fail result.&#x20;
+
+* You can run multiple Tests in one go.&#x20;
+
+* You can create Tests on the dataset or column level.
+
+* You can formulate custom conditions or use defaults.
+
+A **Test Suite** is a collection of individual Test results. It works as an extension to a Report. Once you configure Tests, your Report will have an **additional tab** that shows a summary of outcomes.&#x20;
+
+You can navigate the results by test status or column name. Here is an example:![](/images/concepts/overview_test_suite_example-min.png)
+
+Each Test results in one of the following statuses:
+
+* **Pass:** The condition was met.
+
+* **Fail:** The condition wasn’t met.
+
+* **Warning:** The condition wasn’t met, but the check is marked as non-critical.
+
+* **Error:** Something went wrong with the Test itself, such as an execution error.
+
+You can view extra details to debug. Here are some examples of individual Tests:
+
+<Tabs>
+    <Tab title="Text length">
+    Test that less than 5% of LLM responses fall outside the approved length.&#x20;
+    ![](/images/concepts/overview_descriptor_test_example-min.png)
+    
+  <Tab title="LLM correctness">
+    Verify that less than 10% of responses are labeled as "incorrect" by the LLM judge.&#x20;
+  </Tab>
+
+  </Tab>
+
+  <Tab title="Recall">
+    Check if recall stays within ±10% of a reference model.
+  </Tab>
+
+  <Tab title="Value stability">
+    Test that the mean value of a column is within ±2 of its standard deviation. 
+  </Tab>
+
+  <Tab title="Dataset drift">
+    Test that no more than 50% of features show drift. (Dataset-level Test)
+  </Tab>
+</Tabs>
+
+
 
 ***
 
