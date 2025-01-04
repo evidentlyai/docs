@@ -24,7 +24,7 @@ Here is how the core evaluation workflow works in Evidently:
   <Step title="Run evaluations">
     Pick from 100+ built-in or add custom metrics. Optionally, set test conditions. Here are some types of evals implemented in the library.
 
-    | **Type**                   | **Example Checks**                                                         |
+    | **Type**                   | **Example checks**                                                         |
     | -------------------------- | -------------------------------------------------------------------------- |
     | **🔡 Text qualities**      | Length, sentiment, special symbols, regular expression matches, etc.       |
     | **📝 LLM outputs**         | Semantic similarity, relevance, faithfulness, custom LLM judges, etc.      |
@@ -105,7 +105,21 @@ Metrics range from simple stats like row number to complex algorithmic and promp
   </Tab>
 </Tabs>
 
-You can combine multiple individual Metrics in a Report. 
+### What is a Report?
+
+A **Report** is an object you create to structure and execute evaluations. You choose the Metrics to include one by one, run the Report on your dataset, and get a clear visual summary of the results.&#x20;
+
+* You can combine multiple individual Metrics in a Report. 
+
+* You can also pass two datasets for a side-by-side comparison for each Metric. 
+
+* You can include both built-in Metrics and custom Metrics in the Report.
+
+ [ADD IMG]
+
+![](/images/concepts/overview_small_preset_cat_value_compare_example.png)
+
+However, in many cases, it makes sense to start with **Presets** to simplify the initial setup.
 
 <Card title="Explore evaluations" icon="chart-simple" horizontal="horizontal" href="/metrics">
   See all metrics and how to customize.
