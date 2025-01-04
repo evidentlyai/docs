@@ -1,21 +1,28 @@
 ---
 title: "Overview"
-description: "Evidently Python library at a glance. "
+description: "Core concepts and components of the Evidently Python library."
 noindex: "true"
 ---
 
-Evidently library simplifies quality evaluations for AI systems. It supports both predictive ML models and generative AI systems, from classification to RAG.
+The Evidently Python library is an open-source tool designed to evaluate, test and monitor the quality of AI systems, from experimentation to production.
 
-You can use Evidently as a standalone open-source tool or as part of the Evidently Platform.
+Evidently has a modular architecture. You can use the library as a standalone evaluation tool, or together with the Monitoring Platform (self-hosted UI or Evidently Cloud) to track evaluations over time.
+
+This page gives a closer look at the library. For a Platform overview, [head here](/docs/platform/overview).
+
+## At a glance
 
 \[ADD IMG]
 
+Here is how the core evaluation workflow works in Evidently:
 
-## Available evaluations
+<Steps>
+  <Step title="Get input data">
+    Pass a dataset with text, tabular or embeddings data. Optionally include the reference dataset for comparison.
+  </Step>
 
-Evaluations are a core part of the library. Evidently has 100+ built-in evals, and Presets that group popular checks together. Each evaluation has an optional **interactive visualization** to help explore and interpret the results.
-
-Here are examples of things you can check:
+  <Step title="Run evaluations">
+    Pick from 100+ built-in or add custom metrics. Optionally, set test conditions. Here are some types of evals implemented in the library.
 
 |                                                                                          |                                                                                                        |
 | :--------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: |
@@ -26,7 +33,28 @@ Here are examples of things you can check:
 |                                   **🎯 Classification**                                  |                                            **📈 Regression**                                           |
 |            Accuracy, precision, recall, ROC AUC, confusion matrix, bias, etc.            |                  MAE, ME, RMSE, error distribution, error normality, error bias, etc.                  |
 |                                 **🗂 Ranking (inc. RAG)**                                |                                         **🛒 Recommendations**                                         |
-|                              NDCG, MAP, MRR, Hit Rate, etc.                              |                         Serendipity, novelty, diversity, popularity bias, etc.                         |
+|                              NDCG, MAP, MRR, Hit Rate, etc.                              |                         Serendipity, novelty, diversity, popularity bias, etc.       
+  </Step>
+
+  <Step title="Explore results">
+    Choose your format: 
+
+    * View visual Reports directly in Python environments like Jupyter or Colab.
+
+    * Export as JSON, Python dictionary, pandas DataFrame, or HTML file.
+
+    * Upload to Evidently Platform to store and track over time.
+  </Step>
+</Steps>
+
+Run evaluations. Pick from 100+ built-in or add custom metrics. Optionally, set test conditions.
+Here are some types of evals implemented in the library.
+
+Evaluations are a core part of the library. Evidently has 100+ built-in evals, and Presets that group popular checks together. Each evaluation has an optional **interactive visualization** to help explore and interpret the results.
+
+Here are examples of things you can check:
+
+                  |
 
 You can also implement custom checks in Python or define your prompts for LLM-as-a-judge.
 
