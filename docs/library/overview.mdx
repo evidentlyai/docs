@@ -24,16 +24,17 @@ Here is how the core evaluation workflow works in Evidently:
   <Step title="Run evaluations">
     Pick from 100+ built-in or add custom metrics. Optionally, set test conditions. Here are some types of evals implemented in the library.
 
-    |                                                                                          |                                                                                    |
-    | :--------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------: |
-    |                                  **🔡 Text descriptors**                                 |                              **📝 LLM output quality**                             |
-    | Length, sentiment, toxicity, language, special symbols, regular expression matches, etc. |   Semantic similarity, response relevance, faithfulness, custom LLM judges, etc.   |
-    |                                    **🛢 Data quality**                                   |                           **📊 Data distribution drift**                           |
-    |  Missing values, duplicates, min-max ranges, new categorical values, correlations, etc.  | 20+ statistical tests and distance metrics to compare shifts in data distribution. |
-    |                                   **🎯 Classification**                                  |                                  **📈 Regression**                                 |
-    |            Accuracy, precision, recall, ROC AUC, confusion matrix, bias, etc.            |        MAE, ME, RMSE, error distribution, error normality, error bias, etc.        |
-    |                                **🗂 Ranking (incl. RAG)**                                |                               **🛒 Recommendations**                               |
-    |                              NDCG, MAP, MRR, Hit Rate, etc.                              |               Serendipity, novelty, diversity, popularity bias, etc.               |
+| **Type**                                                 | **Example Checks**                                                                       |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| **🔡 Text descriptors**                                   | Length, sentiment, toxicity, language, special symbols, regular expression matches, etc. |
+| **📝 LLM output quality**                                 | Semantic similarity, response relevance, faithfulness, custom LLM judges, etc.           |
+| **🛢 Data quality**                                       | Missing values, duplicates, min-max ranges, new categorical values, correlations, etc.   |
+| **📊 Data distribution drift**                            | 20+ statistical tests and distance metrics to compare shifts in data distribution.       |
+| **🎯 Classification**                                     | Accuracy, precision, recall, ROC AUC, confusion matrix, bias, etc.                       |
+| **📈 Regression**                                         | MAE, ME, RMSE, error distribution, error normality, error bias, etc.                     |
+| **🗂 Ranking (incl. RAG)**                                | NDCG, MAP, MRR, Hit Rate, etc.                                                           |
+| **🛒 Recommendations**                                    | Serendipity, novelty, diversity, popularity bias, etc.                                   |
+
   </Step>
 
   <Step title="Explore results">
@@ -79,10 +80,9 @@ Metrics range from simple stats like row number to complex algorithmic and promp
 
 <Tabs>
   <Tab title="ValueMean">
-    Compute the mean value of any given column. [ADD IMG]
+    Compute the mean value of any given column. \[ADD IMG]
 
-![](/images/concepts/overview_small_preset_cat_value_example.png.png)
-    
+    ![](/images/concepts/overview_small_preset_cat_value_example.png)
   </Tab>
 
   <Tab title="ValueDrift">
@@ -106,17 +106,7 @@ Metrics range from simple stats like row number to complex algorithmic and promp
   </Tab>
 </Tabs>
 
-
-
-
-
 You can combine multiple individual Metrics in a Report. 
-
-
-
-
-
-
 
 <Card title="Explore evaluations" icon="chart-simple" horizontal="horizontal" href="/metrics">
   See all metrics and how to customize.
