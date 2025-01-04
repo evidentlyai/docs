@@ -5,11 +5,9 @@ noindex: "true"
 mode: "wide"
 ---
 
-Evaluations are a core feature of the Evidently library. 
+Evaluations are a core feature of the Evidently library. It offers both an catalog of 100+ ready-made evaluations, and a framework to easily implement and configure yours.
 
-Evidently is both an extensive catalog of 100+ ready-made evaluations, and a framework to easily implement and configure yours.
-
-This section of the docs provides reference for all available evals and customization guides. Before exploring, make sure you're familiar with the eval workflow (check a Quickstart for [LLMs](../quickstart_llm), for [ML](../quickstart_ml)) and core concepts like `Descriptors`, `Metrics` and `Tests`.
+Before exploring, make sure you're familiar with the eval workflow (check a Quickstart for [LLMs](../quickstart_llm), for [ML](../quickstart_ml)) and core concepts like `Descriptors`, `Metrics` and `Tests`.
 
 ## Reference tables
 
@@ -22,27 +20,19 @@ This section of the docs provides reference for all available evals and customiz
     Reference table for all dataset-level evals.
   </Card>
 
-    <Card title="All Presets" icon="chart-simple" href="all_metrics">
+  <Card title="All Presets" icon="files" href="all_presets">
     Navigation page for pre-built eval templates.
   </Card>
 </CardGroup>
 
 ## Popular links
 
-<CardGroup cols={4}>
-  <Card title="How LLM eval works" icon="table-list" href="all_descriptors">
-    Explainer, placeholder.
-  </Card>
-
-  <Card title="How Data Drift works" icon="chart-simple" href="all_metrics">
-    Explainer, placeholder.
-  </Card>
-
+<CardGroup cols={2}>
   <Card title="LLM judges" icon="sparkles" href="customize_llm_judge">
-    How to create.
+    How to create a custom LLM judge.
   </Card>
 
-  <Card title="Data Drift" icon="sparkles" href="explainer_data_drift">
-    How to detect.
+  <Card title="Data Drift" icon="chart-waterfall" href="customize_data_drift">
+    How to customize data drift detection.
   </Card>
 </CardGroup>
