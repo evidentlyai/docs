@@ -6,11 +6,11 @@ noindex: "true"
 
 The Evidently Python library is an open-source tool designed to evaluate, test and monitor the quality of AI systems, from experimentation to production.
 
-Evidently has a modular architecture. You can use the evaluationlibrary on its own, or together with the Monitoring Platform (self-hosted or Evidently Cloud).
+Evidently has a modular architecture. You can use the evaluation library on its own, or together with the Monitoring Platform (self-hosted or Evidently Cloud).
 
 This page gives a closer look at the library. For a Platform overview, [head here](/docs/platform/overview).
 
-## At a glance
+# At a glance
 
 \[ADD IMG]
 
@@ -22,21 +22,20 @@ Here is how the core evaluation workflow works in Evidently:
   </Step>
 
   <Step title="Run evaluations">
-For a quick start, you can use evaluation `Presets`. Alternatively, create a custom evaluation setup. You can compute row-level `Descriptors` for text data and use `Metrics` for dataset-level evals. Optionally, add `Tests` to get pass/fail results. 
-    
-There are 100+ built-in evals. You can also add yours. Examples: 
+    For a quick start, you can use evaluation `Presets`. Alternatively, create a custom evaluation setup. You can compute row-level `Descriptors` for text data and use `Metrics` for dataset-level evals. Optionally, add `Tests` to get pass/fail results.
 
-    | **Type**                   | **Example checks**                                                         |
-    | -------------------------- | -------------------------------------------------------------------------- |
-    | **🔡 Text qualities**      | Length, sentiment, special symbols, pattern  matches, etc.       |
-    | **📝 LLM outputs**         | Semantic similarity, relevance, faithfulness, custom LLM judges, etc.      |
-    | **🛢 Data quality**        | Missing values, duplicates, min-max ranges, new values, correlations, etc. |
-    | **📊 Data drift**          | 20+ tests and distance metrics to detect distribution drift.               |
-    | **🎯 Classification**      | Accuracy, precision, recall, ROC AUC, confusion matrix, bias, etc.         |
-    | **📈 Regression**          | MAE, ME, RMSE, error distribution, error normality, error bias, etc.       |
+    There are 100+ built-in evals. You can also add yours. Examples:
+
+    | **Type**                  | **Example checks**                                                         |
+    | ------------------------- | -------------------------------------------------------------------------- |
+    | **🔡 Text qualities**     | Length, sentiment, special symbols, pattern  matches, etc.                 |
+    | **📝 LLM outputs**        | Semantic similarity, relevance, faithfulness, custom LLM judges, etc.      |
+    | **🛢 Data quality**       | Missing values, duplicates, min-max ranges, new values, correlations, etc. |
+    | **📊 Data drift**         | 20+ tests and distance metrics to detect distribution drift.               |
+    | **🎯 Classification**     | Accuracy, precision, recall, ROC AUC, confusion matrix, bias, etc.         |
+    | **📈 Regression**         | MAE, ME, RMSE, error distribution, error normality, error bias, etc.       |
     | **🗂 Ranking (inc. RAG)** | NDCG, MAP, MRR, Hit Rate, etc.                                             |
-    | **🛒 Recommendations**     | Serendipity, novelty, diversity, popularity bias, etc.                     |
-
+    | **🛒 Recommendations**    | Serendipity, novelty, diversity, popularity bias, etc.                     |
   </Step>
 
   <Step title="Explore results">
@@ -48,12 +47,15 @@ There are 100+ built-in evals. You can also add yours. Examples:
   </Step>
 </Steps>
 
-There are 3 core components you may need to run evals: Descriptors, Metrics and Tests.
+# Core concepts
 
+Below is a conceptual explanation of how any evaluatons work in Evidently. For a practical code example:
+* Check the quickstarts for [LLM evaluation](quickstart_llm) or [ML evaluation](quickstart_ml).
+* Read the [user guide](/docs/library/evaluations_overview).
 
 ## Input data
 
-**Tabular data**. To run an evaluation, you must prepare your data in tabular format as a pandas DataFrame. All column names must be strings. 
+**Tabular data**. To run an evaluation, you must prepare your data in tabular format as a pandas DataFrame. All column names must be strings.
 
 **Flexible structure**. The table can include any combination of numerical, categorical, text, metadata (including timestamps or IDs), and embedding columns. Here are a few examples.
 
@@ -143,18 +145,20 @@ For example, in data drift detection, you can apply random or stratified samplin
 
 ## Descriptors
 
-To evaluate text data and LLM outputs, you need `Descriptors`. 
+To evaluate text data and LLM outputs, you need `Descriptors`.
 
 A Descriptor is a row-level score or label that assesses a specific quality of a given text. It’s different from Metrics like accuracy which give a score for an entire dataset.
 
-A simple example of a descriptor is `TextLength`. Descriptors range from deterministic to ML and LLM-based checks. For example, descriptors that use the "LLM judge" approach can label responses as "relevant" or "not relevant" using an evaluation prompt sent to a selected LLM. 
+A simple example of a descriptor is `TextLength`. Descriptors range from deterministic to ML and LLM-based checks. For example, descriptors that use the "LLM judge" approach can label responses as "relevant" or "not relevant" using an evaluation prompt sent to a selected LLM.
 
 Descriptors can also use two texts at once, such as checking `SemanticSimilarity` between two columns.
 
 You can use built-in Evidently descriptors and configurable templates (like LLM judges), or add your custom checks in Python. Each Descriptor returns a result that can be:
 
 * **Numerical**. Any scores like symbol count or sentiment score.
+
 * **Categorical**. Labels or binary “true”/“false” results for pattern matches.
+
 * **Text string**. Like explanations generated by LLM.
 
 Evidently adds the computed descriptor values directly to the dataset.![](/images/concepts/overview_descriptors_export.png)
@@ -173,12 +177,12 @@ A `Metric` is a key building block for evaluations at the **dataset** or **colum
 
 **Using Metrics directly.** You can also compute Metrics directly on the data you have, like a table with ML model logs. You can use Metrics both to understand your data (like column statistics) and to evaluate different aspects of AI quality (like response accuracy).
 
-Metrics range from simple stats like row number to complex algorithmic and prompt-based evals. 
+Metrics range from simple stats like row number to complex algorithmic and prompt-based evals.
 
-    <Card title="Explore evaluations" icon="chart-simple" horizontal="horizontal" href="/metrics">
-      There is a separate docs section that shows all Descriptors and Metrics.
-    </Card>
-    
+<Card title="Explore evaluations" icon="chart-simple" horizontal="horizontal" href="/metrics">
+  There is a separate docs section that shows all Descriptors and Metrics.
+</Card>
+
 Some examples:
 
 <Tabs>
@@ -227,7 +231,7 @@ However, in many cases, it makes sense to start with **Presets** to simplify the
 
 ### Metric Presets
 
-Metric Presets are pre-designed evaluation templates. They make it simple to compute multiple related Metrics at once without lengthy setup. 
+Metric Presets are pre-designed evaluation templates. They make it simple to compute multiple related Metrics at once without lengthy setup.
 
 **Small Presets**. Some Presets are “small”: they group a handful of Metrics in a single widget. For example:
 
@@ -237,7 +241,7 @@ Metric Presets are pre-designed evaluation templates. They make it simple to com
 
     ![](/images/concepts/overview_small_preset_num_value_example-min.png)
 
-**Comprehensive Presets**. There are also large, more interactive Presets for specific scenarios that include multiple widgets. For example:
+    **Comprehensive Presets**. There are also large, more interactive Presets for specific scenarios that include multiple widgets. For example:
 
     <Tabs>
       <Tab title="Data Drift">
