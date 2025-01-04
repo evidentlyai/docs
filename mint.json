@@ -42,12 +42,12 @@
   },
   "tabs": [
     {
-      "name": "Overview",
-      "url": "overview"
-    },
-    {
       "name": "Metrics",
       "url": "metrics"
+    },
+    {
+      "name": "F.A.Q.",
+      "url": "faq"
     },
     {
       "name": "Examples",
