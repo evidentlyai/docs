@@ -8,21 +8,24 @@ The Evidently Python library is an open-source tool designed to evaluate, test a
 
 Evidently has a modular architecture. You can use the evaluation library on its own, or together with the Monitoring Platform (self-hosted or Evidently Cloud).
 
-This page gives a closer look at the library. For a Platform overview, [head here](/docs/platform/overview).
+This page gives a closer look at the library. There is also a [Platform overview](/docs/platform/overview).
 
 # At a glance
 
 \[ADD IMG]
 
-Here is how the core evaluation workflow works in Evidently:
+Here is how the core evaluation workflow works:
 
 <Steps>
   <Step title="Pass the input data">
-    Pass a dataset with text, tabular or embeddings data. Optionally include a second reference dataset for comparison.
+    Pass a dataset with text, tabular or embeddings data. Optionally include a second dataset for comparison.
   </Step>
 
   <Step title="Run evaluations">
-    For a quick start, you can use evaluation `Presets`. Alternatively, create a custom evaluation setup. You can compute row-level `Descriptors` for text data and use `Metrics` for dataset-level evals. Optionally, add `Tests` to get pass/fail results.
+    You can start with evaluation `Presets` or create a custom eval:
+    * Compute row-level `Descriptors` for text data.
+    * Use `Metrics` for dataset-level evals. 
+    * Optionally, add `Tests` to get pass/fail results.
 
     There are 100+ built-in evals. You can also add yours. Examples:
 
@@ -40,10 +43,9 @@ Here is how the core evaluation workflow works in Evidently:
 
   <Step title="Explore results">
     * View visual Reports directly in Python environments like Jupyter or Colab.
-
     * Export as JSON, Python dictionary, pandas DataFrame, or HTML file.
-
     * Upload to Evidently Platform to store and track over time.
+    This exportability makes it easy to integrate Evidently with existing workflows and tools.
   </Step>
 </Steps>
 
