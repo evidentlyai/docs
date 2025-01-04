@@ -24,17 +24,16 @@ Here is how the core evaluation workflow works in Evidently:
   <Step title="Run evaluations">
     Pick from 100+ built-in or add custom metrics. Optionally, set test conditions. Here are some types of evals implemented in the library.
 
-| **Type**                                                 | **Example Checks**                                                                       |
-| --------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| **🔡 Text descriptors**                                   | Length, sentiment, toxicity, language, special symbols, regular expression matches, etc. |
-| **📝 LLM output quality**                                 | Semantic similarity, response relevance, faithfulness, custom LLM judges, etc.           |
-| **🛢 Data quality**                                       | Missing values, duplicates, min-max ranges, new categorical values, correlations, etc.   |
-| **📊 Data distribution drift**                            | 20+ statistical tests and distance metrics to compare shifts in data distribution.       |
-| **🎯 Classification**                                     | Accuracy, precision, recall, ROC AUC, confusion matrix, bias, etc.                       |
-| **📈 Regression**                                         | MAE, ME, RMSE, error distribution, error normality, error bias, etc.                     |
-| **🗂 Ranking (incl. RAG)**                                | NDCG, MAP, MRR, Hit Rate, etc.                                                           |
-| **🛒 Recommendations**                                    | Serendipity, novelty, diversity, popularity bias, etc.                                   |
-
+    | **Type**                   | **Example Checks**                                                         |
+    | -------------------------- | -------------------------------------------------------------------------- |
+    | **🔡 Text qualities**      | Length, sentiment, special symbols, regular expression matches, etc.       |
+    | **📝 LLM outputs**         | Semantic similarity, relevance, faithfulness, custom LLM judges, etc.      |
+    | **🛢 Data quality**        | Missing values, duplicates, min-max ranges, new values, correlations, etc. |
+    | **📊 Data drift**          | 20+ tests and distance metrics to detect distribution drift.               |
+    | **🎯 Classification**      | Accuracy, precision, recall, ROC AUC, confusion matrix, bias, etc.         |
+    | **📈 Regression**          | MAE, ME, RMSE, error distribution, error normality, error bias, etc.       |
+    | **🗂 Ranking (incl. RAG)** | NDCG, MAP, MRR, Hit Rate, etc.                                             |
+    | **🛒 Recommendations**     | Serendipity, novelty, diversity, popularity bias, etc.                     |
   </Step>
 
   <Step title="Explore results">
