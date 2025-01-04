@@ -36,8 +36,8 @@ Here is how the core evaluation workflow works in Evidently:
     | **🛒 Recommendations**     | Serendipity, novelty, diversity, popularity bias, etc.                     |
 
     <Card title="Explore evaluations" icon="chart-simple" horizontal="horizontal" href="/metrics">
-  Browse all available Metrics and see how to customize.
-</Card>
+      Browse all available Metrics and see how to customize.
+    </Card>
   </Step>
 
   <Step title="Explore results">
@@ -238,7 +238,7 @@ Evidently has a powerful API to set up Test conditions.&#x20;
 
 * **Manual setup.** You can add thresholds to Metrics one by one, using simple syntax like **greater than (`gt`)** or **less than (`lt`)**. By picking different Metrics to test against, you can formulate fine-grained conditions like "less than 10% of texts can fall outside 10–100 character length."
 
-* **Manual setup with reference.** If you have a reference dataset (like a previous data batch), you can set **relative** conditions without setting exact thresholds. For example, you can check if the min-max value range stays within ±5% of the reference range without defining it explicitly.
+* **Manual setup with reference.** If you have a reference dataset (like a previous data batch), you can set conditions **relative** to it. For example, you can check if the min-max value range stays within ±5% of the reference range without setting exact thresholds. 
 
 * **Automatic setup.** You can run any Test using built-in defaults. These are either:
 
