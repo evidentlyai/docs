@@ -190,6 +190,7 @@
         {
           "group": "All Presets",
           "pages": [
+            "metrics/all_presets",
             "metrics/preset_text_evals",
             "metrics/preset_data_drift",
             "metrics/preset_data_quality",
