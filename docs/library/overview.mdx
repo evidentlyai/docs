@@ -34,6 +34,10 @@ Here is how the core evaluation workflow works in Evidently:
     | **📈 Regression**          | MAE, ME, RMSE, error distribution, error normality, error bias, etc.       |
     | **🗂 Ranking (incl. RAG)** | NDCG, MAP, MRR, Hit Rate, etc.                                             |
     | **🛒 Recommendations**     | Serendipity, novelty, diversity, popularity bias, etc.                     |
+
+    <Card title="Explore evaluations" icon="chart-simple" horizontal="horizontal" href="/metrics">
+  Browse all available Metrics and see how to customize.
+</Card>
   </Step>
 
   <Step title="Explore results">
@@ -45,11 +49,7 @@ Here is how the core evaluation workflow works in Evidently:
   </Step>
 </Steps>
 
-There are 3 core components you may need to run evals: Descriptors, Metrics and Tests. The page below gives a conceptual overview of they work across all types of evaluations. To see all available evals, check:
-
-<Card title="Explore evaluations" icon="chart-simple" horizontal="horizontal" href="/metrics">
-  Browse all Metrics, Tests and Decriptors and see how to customize.
-</Card>
+There are 3 core components you may need to run evals: Descriptors, Metrics and Tests.
 
 ## Descriptors
 
@@ -271,13 +271,17 @@ You can use Evidently Reports and Test Suites on their own or as part of a monit
 Reports are great for exploratory evals:
 
 * **Ad hoc evals.** Run one-time analyses on your data, models or LLM outputs.
+
 * **Experiments.** Compare models, prompts, or datasets side by side.
+
 * **Debugging.** Investigate data or model issues.
 
 Test Suites are great for automated checks like:
 
 * **Data validation.** Test inputs and outputs in prediction pipelines. 
+
 * **CI/CD and regression testing.** Check AI system performance after updates.
+
 * **Safety testing**. Run structured behavioral tests like adversarial testing. 
 
 For automation, you can integrate Evidently with tools like Airflow. You can trigger actions based on Test results, such as sending alerts or halting a pipeline.
@@ -287,6 +291,7 @@ For automation, you can integrate Evidently with tools like Airflow. You can tri
 You can use **Reports** together with the **Evidently Platform** in production workflows:
 
 * Reports serve as a metric computation layer, running evaluations on your data.
+
 * The Platform lets you store, compare results, and track them on Dashboard with alerts.
 
 \[ADD IMG]
@@ -294,7 +299,9 @@ You can use **Reports** together with the **Evidently Platform** in production w
 This setup works for both experiments and production monitoring. For example:
 
 * **Experiments.** Log evaluations while experimenting with prompts or model versions. Use the Platform to compare runs and track progress.
+
 * **Regression Tests.** Use Test Suites to validate updates on your golden dataset. Debug failures and maintain a history of results on the Platform.
+
 * **Batch Monitoring.** Integrate Reports into your data pipelines to compute Metrics for data batches. Use the Platform for performance tracking and alerting.
 
 Evidently Cloud also offers managed evaluations to generate Reports directly on the platform.
@@ -302,6 +309,7 @@ Evidently Cloud also offers managed evaluations to generate Reports directly on 
 You can choose:
 
 * Self-host the open-source platform version. 
+
 * Sign up for [Evidently Cloud](https://www.evidentlyai.com/register) (Recommended). 
 
 [Read more on the platform](/docs/platform/overview).
