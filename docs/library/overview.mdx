@@ -45,7 +45,11 @@ Here is how the core evaluation workflow works in Evidently:
   </Step>
 </Steps>
 
-There are 3 core components you may need to run evals: Descriptors, Metrics and Tests.
+There are 3 core components you may need to run evals: Descriptors, Metrics and Tests. The page below gives a conceptual overview of they work across all types of evaluations. To see all available evals, check:
+
+<Card title="Explore evaluations" icon="chart-simple" horizontal="horizontal" href="/metrics">
+  Browse all Metrics, Tests and Decriptors and see how to customize.
+</Card>
 
 ## Descriptors
 
@@ -53,7 +57,7 @@ To evaluate text data like LLM outputs, you'll need `Descriptors`. These are row
 
 You can use built-in descriptors, configurable templates (like LLM judges), or add yours.
 
-Descriptors let you evaluate anything from TextLength, Sentiment, or whether the text contains personal data. They can also compare two texts, such as checking SemanticSimilarity between two columns. Each Descriptor returns a result that can be:
+Descriptors let you evaluate anything from `TextLength`, `Sentiment`, or whether the text contains personal data. They can also compare two texts, such as checking `SemanticSimilarity` between two columns. Each Descriptor returns a result that can be:
 
 * **Numerical**. Any scores like symbol count or cosine similarity.
 
@@ -206,14 +210,13 @@ Each Test results in one of the following statuses:
 You can view extra details to debug. Here are some examples of individual Tests:
 
 <Tabs>
-    <Tab title="Text length">
+  <Tab title="Text length">
     Test that less than 5% of LLM responses fall outside the approved length.&#x20;
     ![](/images/concepts/overview_descriptor_test_example-min.png)
-    
-  <Tab title="LLM correctness">
-    Verify that less than 10% of responses are labeled as "incorrect" by the LLM judge.&#x20;
   </Tab>
 
+  <Tab title="LLM correctness">
+    Verify that less than 10% of responses are labeled as "incorrect" by the LLM judge.&#x20;
   </Tab>
 
   <Tab title="Recall">
@@ -229,10 +232,84 @@ You can view extra details to debug. Here are some examples of individual Tests:
   </Tab>
 </Tabs>
 
+### Test Conditions
 
+Evidently has a powerful API to set up Test conditions.&#x20;
 
-***
+* **Manual setup.** You can add thresholds to Metrics one by one, using simple syntax like **greater than (`gt`)** or **less than (`lt`)**. By picking different Metrics to test against, you can formulate fine-grained conditions like "less than 10% of texts can fall outside 10–100 character length."
 
-<Card title="Explore evaluations" icon="chart-simple" horizontal="horizontal" href="/metrics">
-  See all metrics and how to customize.
-</Card>
+* **Manual setup with reference.** If you have a reference dataset (like a previous data batch), you can set **relative** conditions without setting exact thresholds. For example, you can check if the min-max value range stays within ±5% of the reference range without defining it explicitly.
+
+* **Automatic setup.** You can run any Test using built-in defaults. These are either:
+
+  * **Heuristics**. For example, the Test on missing values assumes none should be preset.
+
+  * **Heuristics relative to reference.** Here, conditions adjust to a reference. For instance, the Test on missing values assumes their share should stay within ±10% of the reference.
+
+### Test Presets
+
+For even faster setup, there are **Test Presets**. These are pre-made Test Suites for common use cases. Each Metric Preset has a corresponding Test Preset that you can enable as an add-on. 
+
+When you use a Test Preset:
+
+* Evidently run a predefined set of Tests.
+
+* These Tests use default conditions, either static or inferred from the reference dataset.
+
+For example: 
+
+* **Data Summary**. The Metric Preset gives an overview and stats for all columns. The Test Suite checks for quality issues like missing values, duplicates, etc. across all values.
+
+* **Classification.** The Metric Preset shows quality metrics like precision or recall. The Test Suite verifies these metrics against a baseline, like a dummy baseline calculated by Evidently or previous model performance.
+
+## Building your workflow
+
+You can use Evidently Reports and Test Suites on their own or as part of a monitoring system. 
+
+### Independent use
+
+Reports are great for exploratory evals:
+
+* **Ad hoc evals.** Run one-time analyses on your data, models or LLM outputs.
+
+* **Experiments.** Compare models, prompts, or datasets side by side.
+
+* **Debugging.** Investigate data or model issues.
+
+Test Suites are great for automated checks like:
+
+* **Data validation.** Test inputs and outputs in prediction pipelines. 
+
+* **CI/CD and regression testing.** Check AI system performance after updates.
+
+* **Safety testing**. Run structured behavioral tests like adversarial testing. 
+
+For automation, you can integrate Evidently with tools like Airflow. You can trigger actions based on Test results, such as sending alerts or halting a pipeline.
+
+### As part of platform
+
+You can use **Reports** together with the **Evidently Platform** in production workflows:
+
+* Reports serve as a metric computation layer, running evaluations on your data.
+
+* The Platform lets you store, compare results, and track them on Dashboard with alerts.
+
+\[ADD IMG]
+
+This setup works for both experiments and production monitoring. For example:
+
+* **Experiments.** Log evaluations while experimenting with prompts or model versions. Use the Platform to compare runs and track progress.
+
+* **Regression Tests.** Use Test Suites to validate updates on your golden dataset. Debug failures and maintain a history of results on the Platform.
+
+* **Batch Monitoring.** Integrate Reports into your data pipelines to compute Metrics for data batches. Use the Platform for performance tracking and alerting.
+
+Evidently Cloud also offers managed evaluations to generate Reports directly on the platform.
+
+You can choose:
+
+* Self-host the open-source platform version. 
+
+* Sign up for [<u>Evidently Cloud</u>](https://www.evidentlyai.com/register) (Recommended). 
+
+[Read more on the platform](/docs/platform/overview).
