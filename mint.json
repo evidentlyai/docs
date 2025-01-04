@@ -239,7 +239,11 @@
     {
       "group": "About",
       "pages": [
-        "faq/introduction"
+        "faq/introduction",
+        "faq/why_evidently",
+        "faq/oss_vs_cloud",
+        "faq/deployment",
+        "faq/migration",
       ]
     },
     {
