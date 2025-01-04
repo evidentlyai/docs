@@ -24,16 +24,16 @@ Here is how the core evaluation workflow works in Evidently:
   <Step title="Run evaluations">
     Pick from 100+ built-in or add custom metrics. Optionally, set test conditions. Here are some types of evals implemented in the library.
 
-|                                                                                          |                                                                                                        |
-| :--------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: |
-|                                  **🔡 Text descriptors**                                 |                                           **📝 LLM outputs**                                           |
-| Length, sentiment, toxicity, language, special symbols, regular expression matches, etc. | Semantic similarity, retrieval relevance, summarization quality, etc. with model- and LLM-based evals. |
-|                                    **🛢 Data quality**                                   |                                     **📊 Data distribution drift**                                     |
-|  Missing values, duplicates, min-max ranges, new categorical values, correlations, etc.  |           20+ statistical tests and distance metrics to compare shifts in data distribution.           |
-|                                   **🎯 Classification**                                  |                                            **📈 Regression**                                           |
-|            Accuracy, precision, recall, ROC AUC, confusion matrix, bias, etc.            |                  MAE, ME, RMSE, error distribution, error normality, error bias, etc.                  |
-|                                 **🗂 Ranking (inc. RAG)**                                |                                         **🛒 Recommendations**                                         |
-|                              NDCG, MAP, MRR, Hit Rate, etc.                              |                         Serendipity, novelty, diversity, popularity bias, etc.       
+    |                                                                                          |                                                                                    |
+    | :--------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------: |
+    |                                  **🔡 Text descriptors**                                 |                              **📝 LLM output quality**                             |
+    | Length, sentiment, toxicity, language, special symbols, regular expression matches, etc. |   Semantic similarity, relevance, helpfulness, templates for custom LLM judges.    |
+    |                                    **🛢 Data quality**                                   |                           **📊 Data distribution drift**                           |
+    |  Missing values, duplicates, min-max ranges, new categorical values, correlations, etc.  | 20+ statistical tests and distance metrics to compare shifts in data distribution. |
+    |                                   **🎯 Classification**                                  |                                  **📈 Regression**                                 |
+    |            Accuracy, precision, recall, ROC AUC, confusion matrix, bias, etc.            |        MAE, ME, RMSE, error distribution, error normality, error bias, etc.        |
+    |                                **🗂 Ranking (incl. RAG)**                                |                               **🛒 Recommendations**                               |
+    |                              NDCG, MAP, MRR, Hit Rate, etc.                              |               Serendipity, novelty, diversity, popularity bias, etc.               |
   </Step>
 
   <Step title="Explore results">
@@ -54,7 +54,7 @@ Evaluations are a core part of the library. Evidently has 100+ built-in evals, a
 
 Here are examples of things you can check:
 
-                  |
+|
 
 You can also implement custom checks in Python or define your prompts for LLM-as-a-judge.
 
