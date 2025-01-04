@@ -67,14 +67,16 @@ That said, we recommend giving this a read to understand everything the library 
 ## Input data
 
 First, you need to get your data ready. For example, generate outputs from your ML or LLM system that you want to evaluate.
+
 * **Tabular data**. Prepare your data as a pandas DataFrame. All column names must be strings.
-* **Flexible structure**. The table can include any combination of numerical, categorical, text, metadata (including timestamps or IDs), and embedding columns. 
+
+* **Flexible structure**. The table can include any combination of numerical, categorical, text, metadata (including timestamps or IDs), and embedding columns.
 
 Here are a few examples.
 
 <Tabs>
   <Tab title="LLM logs">
-**LLM logs** Pass any text columns with LLM inputs and outputs. Add optional context or ground truth.
+    **LLM logs**. Pass any text columns with inputs/outputs, context or ground truth.
 
     | Question                             | Context                                                                                                   | Answer                          |
     | ------------------------------------ | --------------------------------------------------------------------------------------------------------- | ------------------------------- |
@@ -84,7 +86,7 @@ Here are a few examples.
   </Tab>
 
   <Tab title="Data table">
-**Data table** Pass any data table to get a data overview, run data quality and distribution drift checks.
+    **Data table** Pass any data table to get a data overview, run data quality and distribution drift checks.
 
     These can also be production logs of your ML model without ground truth: include input features and predicted values.
 
@@ -96,7 +98,7 @@ Here are a few examples.
   </Tab>
 
   <Tab title="Classification">
-**Classification logs**. To evaluate classification quality, pass a table that contains columns with predicted and actual labels. Input features are optional but useful for some evals.
+    **Classification logs**. To evaluate classification quality, pass a table that contains columns with predicted and actual labels. Input features are optional but useful for some evals.
 
     | Timestamp           | Transaction ID | Amount  | Location      | Device Type | Fraud Label | Target |
     | ------------------- | -------------- | ------- | ------------- | ----------- | ----------- | ------ |
@@ -106,7 +108,7 @@ Here are a few examples.
   </Tab>
 
   <Tab title="Regression">
-**Regression logs**. To evaluate regression quality, pass a table that contains columns with predicted and actual values. Input features are optional but useful for some evals.
+    **Regression logs**. To evaluate regression quality, pass a table that contains columns with predicted and actual values. Input features are optional but useful for some evals.
 
     | Prop ID | Location      | Sq ft | Type      | Bedrooms | Has Garden | Predicted  ($) | Actual ($) |
     | ------- | ------------- | ----- | --------- | -------- | ---------- | -------------- | ---------- |
@@ -116,7 +118,7 @@ Here are a few examples.
   </Tab>
 
   <Tab title="Ranking">
-**Ranking logs**. To evaluate ranking or recommendations, pass a table that contains columns with rank/score and interaction results. User/query and item features are optional but useful for some evals.
+    **Ranking logs**. To evaluate ranking or recommendations, pass a table that contains columns with rank/score and interaction results. User/query and item features are optional but useful for some evals.
 
     | User ID | Movie ID | Movie Title  | Genre         | Average Viewer Rating | Watched Duration (%) | Predicted Rank |
     | ------- | -------- | ------------ | ------------- | --------------------- | -------------------- | -------------- |
@@ -126,7 +128,7 @@ Here are a few examples.
   </Tab>
 
   <Tab title="Embeddings">
-**Embeddings**. To evaluate embeddings drift, pass embeddings as numerical columns.
+    **Embeddings**. To evaluate embeddings drift, pass embeddings as numerical columns.
 
     | User ID | Movie ID | Title        | Genre         | Avg Rating | Watched (%) | Predicted Rank |
     | ------- | -------- | ------------ | ------------- | ---------- | ----------- | -------------- |
