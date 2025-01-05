@@ -1,6 +1,6 @@
 ---
 title: 'Open-source vs. Cloud'
-description: 'What is the difference in features?'
+description: 'Deployment options and feature overview.'
 noindex: "true"
 ---
 
@@ -12,59 +12,73 @@ Evidently AI develop two distinct products:
 
 * The Evidently Platform.
 
-The **Evidently Python library** lets users run various data and AI evaluations and get Reports and Test Suites with the evaluation results. It is best suited for individual data scientists, AI and ML engineers who work on analyzing the quality of their AI systems in a Python environment. The core **Evidently library** is open-source and available under Apache 2.0 license.
+### **Evidently Python Library**
 
-The **Evidently Platform** is a web application for AI testing and observability built for teams who want to collaborate and streamline AI quality workflows.
-* **Open-source version**. A basic version of the platform is available within the open-source Evidently library. It has a limited feature set in favor of a lightweight deployment.
-* **Commercial edition**. Premium features related to collaboration, raw data processing, alerting, security, safety testing and no-code UI are available only in the commercial edition (Evidently Cloud or Enterprise). 
+The **Evidently Python library** allows users to run various data and AI evaluations and generate Reports and Test Suites with evaluation results. It is best suited for individual data scientists, AI, and ML engineers analyzing the quality of AI systems in a Python environment.&#x20;
 
-## Evidently Platform: Deployment options
+The core library is open-source and available under the **Apache 2.0** license.
 
-Here’s how you can deploy the Evidently Platform:
+### Evidently Platform
 
-* **Evidently Cloud**. This is the recommended option and the easiest way to start. The platform is hosted and managed by Evidently AI.
+The **Evidently Platform** is a web application designed for AI testing and observability. It is tailored for teams looking to collaborate on AI quality from experiments to production monitoring.
 
-* **Evidently Enterprise (Self-Hosted)**. For teams with strict security requirements, we offer a complete self-hostable platform. This is a feature-full version equivalent to Evidently Cloud but is deployed in your private cloud or on-premises. 
+* **Open-source version**. A basic version of the platform is included in the open-source Evidently library. It has a limited feature set in favor of a very lightweight deployment.
 
-## OSS vs. Enterprise: Deployment and Support
+* **Commercial edition**. Offers additional advanced features for AI quality workflows, collaboration, and scalability. Two deployment options are available:
+
+  * **Evidently Cloud**. The recommended and easiest way to start. Evidently Cloud is hosted and managed by Evidently AI.
+
+  * **Evidently Enterprise (Self-Hosted)**. Designed for teams with strict security requirements. This version offers a full-featured platform equivalent to Evidently Cloud that can be deployed in private clouds or on-premises.
+
+## OSS vs. Enterprise
+
+Commercial and open-source platforms differ in features, level of support, and maintenance costs.
+
+### Feature availability
+
+| Feature                         | Open-source | Cloud and Enterprise |
+| ------------------------------- | ----------- | -------------------- |
+| Tracing                         | +           | +                    |
+| Evaluations (100+ checks)       | +           | +                    |
+| Reports and Test Suites         | +           | +                    |
+| Monitoring dashboard            | +           | +                    |
+| API access                      | +           | +                    |
+| Custom metrics                  | +           | +                    |
+| Synthetic data generation       | -           | +                    |
+| Red-teaming                     | -           | +                    |
+| Data storage                    | -           | +                    |
+| Pre-built monitoring tabs       | -           | +                    |
+| No-code dashboard configuration | -           | +                    |
+| No-code evaluations             | -           | +                    |
+| Scheduled evaluations           | -           | +                    |
+| Alerting                        | -           | +                    |
+| Authentication                  | -           | +                    |
+| Role-based access control       | -           | +                    |
+| Team collaboration features     | -           | +                    |
+
+In summary:
+
+* All the core evaluation features are open-source.
+
+* The OSS version of the Evidently Platform includes the basic feature set for storing and visualizing the evaluation results. It prioritizes lightweight deployment and is suitable for smaller-scale applications.&#x20;
+
+* The commercial version of the platform includes additional functionality related to dataset management, collaboration, no-code workflows and safety testing. It includes security features like role-based access control and comes with a scalable backend.[
+  ](https://evi.mintlify.app/faq/why_evidently)
+
+### Deployment and Support
 
 The commercial platform version includes dedicated support and onboarding.
 
+* **Evidently OSS.** We provide documentation and a Discord community forum, but as a small team, we can’t offer extensive support to open-source users. If you’re running Evidently OSS in production, you must be comfortable troubleshooting and resolving issues on your own. If you need more hands-on support, we recommend upgrading to Evidently Cloud or getting an Enterprise license.
+
+* **Evidently Cloud** and **Evidently Enterprise**. We offer varying tiers of support based on the selected Plan. In any scenario, you get direct access to the developers who built the platform. We provide incident response and resolution, as well as ongoing assistance on questions around feature configuration and use. For the Enterprise plan, we offer onboarding and training sessions to help establish best practices.
+
 ### Hosting and maintenance
+
+Maintenance requirementsd depend on the setup you choose.
 
 * **Evidently OSS**. You’re responsible for deploying and managing the platform within your environment, including backups, upgrades, and scaling. While the software is free, you need engineering resources for maintenance and cloud resources for storage and compute.
 
 * **Evidently Cloud**. The platform is fully managed by the Evidently team, so that you can focus on building your AI products without worrying about infrastructure. This includes automatic updates, security patches, and scalability, making it the most cost-effective option. The platform is instantly available upon signup. 
 
-* **Evidently Enterprise (Self-Hosted)**. For large organizations that need to keep data on-premises. Unlike the OSS version, the Enterprise version comes with dedicated support, but your team must still manage setup, configuration, and maintenance.
-
-### Support 
-
-* **Evidently OSS.** We provide documentation and a Discord community forum, but as a small team, we can’t offer extensive support to open-source users. If you’re running Evidently OSS in production, you must be comfortable troubleshooting and resolving issues on your own. If you need more hands-on support, we recommend upgrading to Evidently Cloud or getting an Enterprise license.
-
-**Evidently Cloud** and **Evidently Enterprise**. We offer varying tiers of support based on the selected Plan. In any scenario, you get direct access to the developers who built the platform. We provide incident response and resolution, as well as ongoing assistance on questions around feature configuration and use. For the Enterprise plan, we offer onboarding and training sessions to help establish best practices.
-
-|                                 | Open-source  | Cloud and Enterprise  |
-|---------------------------------|--------------|-----------------------|
-| Tracing                         | +            | +                     |
-| Evaluations (100+ checks)       | +            | +                     |
-| Reports and Test Suites         | +            | +                     |
-| Monitoring dashboard            | +            | +                     |
-| API access                      | +            | +                     |
-| Custom metrics                  | +            | +                     |
-| Synthetic data generation       | -            | +                     |
-| Red-teaming.                    | -            | +                     |
-| Data storage                    | -            | +                     |
-| Pre-built monitoring tabs       | -            | +                     |
-| No-code dashboard configuration | -            | +                     |
-| No-code evaluations             | -            | +                     |
-| Scheduled evaluations           | -            | +                     |
-| Alerting                        | -            | +                     |
-| Authentication                  | -            | +                     |
-| Role-based access control       | -            | +                     |
-| Team collaboration features     | -            | +                     |
-
-In summary:
-* All the core evaluation features are open-source. 
-* The OSS version of the Evidently Platform includes the basic feature set for storing and visualizing the evaluation results. It is not optimized for large-scale use in favor of being easily deployable on a local machine. 
-* The commercial version of the platform includes additional functionality and enterprise security features like role-based access control and team collaboration tools, and comes with a scalable backend.
+* **Evidently Enterprise (Self-Hosted)**. For large organizations that need to keep data on-premises. The Enterprise version comes with dedicated implementation support, but your team must still manage ongoing configuration and maintenance.
