@@ -148,7 +148,7 @@ When to use two datasets:
 
 * **Side-by-side comparison**. Compare outputs or data quality across two periods, prompt/model versions, etc.
 
-* **Data drift detection. (Required)**. Detect distribution shifts by comparing datasets, such as this week’s data to the previous one. 
+* **Data drift detection. (Required)**. Detect distribution shifts by comparing datasets, such as this week’s data to the previous one.
 
 * **Simplify test setup**. Automatically generate test conditions (e.g., min-max ranges) from the reference dataset without manual configuration.
 
@@ -164,7 +164,7 @@ A simple example of a descriptor is `TextLength` or `Sentiment`. Descriptors ran
 
 Descriptors can also use two texts, like checking `SemanticSimilarity` between two columns.
 
-You can use built-in descriptors, configure templates or add fully custom checks in Python. Each Descriptor returns a result that can be:
+You can use [built-in descriptors](/metrics/all_descriptors), configure templates or add fully custom checks in Python. Each Descriptor returns a result that can be:
 
 * **Numerical**. Any scores like symbol count or sentiment score.
 
@@ -188,13 +188,7 @@ A `Metric` is a key building block for evaluations at the **dataset** or **colum
 
 **Using Metrics directly.** You can also compute Metrics directly on the data you have, like a table with ML model logs. You can use Metrics both to understand your data (like column statistics) and to evaluate different aspects of AI quality (like response accuracy).
 
-Metrics also range from simple statistics to complex algorithmic evals.
-
-<Card title="Explore evaluations" icon="chart-simple" horizontal="horizontal" href="/metrics">
-  There is a separate docs section that shows all Descriptors and Metrics.
-</Card>
-
-Some examples:
+Metrics also range from simple statistics to complex algorithmic evals. ([See all Metrics](/metrics/all_metrics)). Some examples:
 
 <Tabs>
   <Tab title="ValueMean">
@@ -226,7 +220,7 @@ Some examples:
 
 ### What is a Report?
 
-A **Report** is an object you create to structure and execute evaluations. You choose the Metrics to include one by one, run the Report on your dataset, and get a clear visual summary of the results.&#x20;
+A **Report** is an object you create to structure and execute evaluations. You choose the Metrics to include, run the Report on your dataset, and get a clear visual summary of the results.&#x20;
 
 * You can combine multiple individual Metrics in a Report. 
 
@@ -242,7 +236,7 @@ However, in many cases, it makes sense to start with **Presets** to simplify the
 
 ### Metric Presets
 
-Metric Presets are pre-designed evaluation templates. They make it simple to compute multiple related Metrics at once without lengthy setup.
+Metric Presets are pre-designed evaluation templates. They make it simple to compute multiple related Metrics at once without lengthy setup. ([See all Presets](/metrics/all_presets)). 
 
 **Small Presets**. Some Presets are “small”: they group a handful of Metrics in a single widget. For example:
 
@@ -349,7 +343,7 @@ You can view extra details to debug. Examples:
 
 ### Test Conditions
 
-Evidently has a powerful API to set up Test conditions.&#x20;
+Evidently has a powerful API to [set up Test conditions](/docs/library/tests).&#x20;
 
 * **Manual setup.** You can add thresholds to Metrics one by one, using simple syntax like **greater than (`gt`)** or **less than (`lt`)**. By picking different Metrics to test against, you can formulate fine-grained conditions like "less than 10% of texts can fall outside 10–100 character length."
 
