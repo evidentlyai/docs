@@ -1,6 +1,7 @@
 ---
 title: 'Overview'
 description: 'General evaluation workflow.'
+noindex: true
 ---
 
 ## Connect to workspace
@@ -32,11 +33,12 @@ ws.get_project("PROJECT_ID")
 
   <Step title="Configure Report">
     * Create a `Report` object with the chosen `metrics`  or `metric_presets`.
+
     * Optionally, pass custom parameters to a `Metric` to customize for Metric calculations.
   </Step>
 
   <Step title="(Optional). Add Test conditions">
-  Optionally, pass custom parameters to a `Metric` to add `Tests` to run conditional Pass/Fail checks. 
+    Optionally, pass custom parameters to a `Metric` to add `Tests` to run conditional Pass/Fail checks.
   </Step>
 
   <Step title="(Optional). Add Tags ">
