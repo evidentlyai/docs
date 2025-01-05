@@ -136,9 +136,7 @@ Here are a few examples.
   </Tab>
 </Tabs>
 
-**Data Definition**. Some evaluations require specific columns or data types present. For example, to evaluate classification quality, you need both predicted labels (prediction) and actual labels (target) columns.
-
-To specify where they are located in your table, you can map the data schema using the [Data Definition](/docs/library/data_definition) object.
+**Data Definition**. Some evaluations require specific columns or data types present. For example, to evaluate classification quality, you need both predictions and actual labels. To specify where they are located in your table, you can map the data schema using [Data Definition](/docs/library/data_definition).
 
 **Two datasets**. Typically you run evaluations for a single dataset (`current` dataset). Optionally, you can include a second (`reference`) dataset). Both datasets must have identical structures.
 
@@ -146,13 +144,15 @@ To specify where they are located in your table, you can map the data schema usi
 
 When to use two datasets:
 
-* **Side-by-side comparison**. Compare outputs or data quality across two periods, prompt/model versions, etc.
+* **Side-by-side comparison**. This lets you compare outputs or data quality across two periods, prompt/model versions, etc.
 
-* **Data drift detection. (Required)**. Detect distribution shifts by comparing datasets, such as this week’s data to the previous one.
+* **Data drift detection. (Required)**. You can detect distribution shifts by comparing datasets, such as this week’s data to the previous one.
 
-* **Simplify test setup**. Automatically generate test conditions (e.g., min-max ranges) from the reference dataset without manual configuration.
+* **Simplify test setup**. You can automatically generate test conditions (e.g., min-max ranges) from the reference dataset without manual configuration.
 
-**Data sampling**. Running evaluations on large datasets (millions of rows) can take time. This depends on the specific evaluation as well as your infrastructure. Since pandas process data in memory, it’s often more efficient to use samples. For example, in data drift detection, you can apply random or stratified sampling and compare samples instead of processing the entire dataset.
+<Info>
+  **Data sampling**. Running evaluations on large datasets (millions of rows) can take time. This depends on the specific evaluation (some are more computationally intensive than others), your dataset (e.g., if you run column-level evals and have lots of columns), and your infrastructure (data is processed in-memory). If the computation takes too long, it’s often more efficient to use samples. For example, in data drift detection, you can apply random or stratified sampling.
+</Info>
 
 ## Descriptors
 
@@ -236,7 +236,7 @@ However, in many cases, it makes sense to start with **Presets** to simplify the
 
 ### Metric Presets
 
-Metric Presets are pre-designed evaluation templates. They make it simple to compute multiple related Metrics at once without lengthy setup. ([See all Presets](/metrics/all_presets)). 
+Metric Presets are pre-designed evaluation templates. They make it simple to compute multiple related Metrics at once without lengthy setup. ([See all Presets](/metrics/all_presets)).
 
 **Small Presets**. Some Presets are “small”: they group a handful of Metrics in a single widget. For example:
 
