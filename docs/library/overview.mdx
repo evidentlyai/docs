@@ -399,7 +399,9 @@ You can use **Reports** together with the **Evidently Platform** in production w
 
 * **Reports** serve as a metric computation layer, running evaluations on your data.
 
-* The **Platform** lets you store, compare results, and track them on Dashboard with alerts.
+* The **Platform** lets you store, compare, track and alert on evaluation results.
+
+Reports are stored as JSON files, which can be natively parsed to visualize metrics on a Dashboard.
 
 ![](/images/evals_flow_python.png)
 
@@ -411,7 +413,7 @@ This setup works for both experiments and production monitoring. For example:
 
 * **Batch Monitoring.** Integrate Reports into your data pipelines to compute Metrics for data batches. Use the Platform for performance tracking and alerting.
 
-**Evidently Cloud** also offers managed evaluations to generate Reports directly on the platform.
+**Evidently Cloud** also offers managed evaluations to generate Reports directly on the platform, and other features such as synthetic data and test generation.
 
 **Platform deployment options.** You can choose:
 
