@@ -1,5 +1,44 @@
 ---
 title: 'Batch monitoring'
-description: 'Description of your new file.'
+description: 'How to run batch evaluation jobs.'
 noindex: true
 ---
+
+Read the overview of the approach [here](/docs/platform/monitoring_overview).
+
+![](/images/monitoring_flow_batch.png)
+
+<Steps>
+  <Step title="Configure evaluations">
+ 
+    To implement batch evaluations, use the basic flow of the Evidently evaluation library to compute Reports on a schedule. By configuring the Report contents, you can define which metrics to capture and optionally set test conditions.
+
+    Check the Quickstart examples or explore the [detailed guide.](/docs/library/evaluations_overview)
+
+    <CardGroup cols={2}>
+      <Card title="LLM quickstart" icon="comment-text" href="/quickstart_llm">
+        Evaluate the quality of text outputs.
+      </Card>
+
+      <Card title="ML quickstart" icon="table" href="/quickstart_ml">
+        Test tabular data quality and data drift.
+      </Card>
+    </CardGroup>
+
+    You will need to independently orchestrate the execution of the evaluations on a chosen cadence: consider using tools like Airflow.
+  </Step>
+
+  <Step title="Configure the dashboard">
+    To track the results over time on a Dashboard, set it up using pre-built Tabs or configure your own choice of monitoring Panels.
+
+    Check the [Dashboard guide](/docs/platform/dashboard_overview).&#x20;
+  </Step>
+
+  <Step title="Configure alerts">
+    Set up alerts on Metric values or Test failures.&#x20;
+
+
+
+    Check the section on [Alerts](/docs/platform/alerts).
+  </Step>
+</Steps>

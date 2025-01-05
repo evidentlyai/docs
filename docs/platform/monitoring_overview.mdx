@@ -8,7 +8,7 @@ AI observability lets you evaluate the quality of the inputs and outputs of your
 
 Evidently offers several ways to set up monitoring.&#x20;
 
-## Batch monitoring jobs 
+## Batch monitoring jobs
 
 <Check>
   Supported in: `Evidently OSS`, `Evidently Cloud` and `Evidently Enterprise`.
@@ -18,7 +18,7 @@ Evidently offers several ways to set up monitoring.&#x20;
 
 ![](/images/monitoring_flow_batch.png)
 
-How it works:
+**How it works**:
 
 * **Build your evaluation pipeline**. Create a pipeline in your infrastructure to run monitoring jobs. This can be a Python script, cron job, or orchestrated with a tool like Airflow. Run it at regular intervals (e.g., hourly, daily) or trigger it when new data or labels arrive.
 
@@ -26,7 +26,7 @@ How it works:
 
 * **Store and visualize snapshots**. Store and monitor results in Evidently Cloud, or in a designated self-hosted workspace.
 
-Benefits of this approach:
+**Benefits of this approach**:
 
 * **Decouples log storage and monitoring metrics**. In this setup, does not store raw data or model predictions unless you choose to. By default, it only retains the snapshots with data summaries and test results. This protects data privacy and avoids duplicating logs if they’re already stored elsewhere, like for retraining.
 
@@ -46,13 +46,13 @@ Benefits of this approach:
 
 **How it works:**
 
-* **Instrument your app**. Use the `Tracely` library (based on OpenTelemetry) to capture all relevant data from your application, including inputs, outputs and intermediate steps. ([Tracing](/docs/platform/tracing_setup)).
+* **Instrument your app**. Use the `Tracely` library to capture all relevant data from your application, including inputs, outputs and intermediate steps. ([Tracing](/docs/platform/tracing_setup)).
 
 * **Store raw data**. Evidently Platform stores all raw data, providing a complete record of activity.
 
 * **Schedule evaluations**. Set up evaluations to run automatically at scheduled times. This will generate Reports or run Tests directly on the Evidently Platform. You can also manually run evaluations anytime to assess individual predictions.
 
-Benefits of this approach:
+**Benefits of this approach**:
 
 * **Solves the data capture**. You collect complex traces and all production data in one place, making it easier to manage and analyze.
 
