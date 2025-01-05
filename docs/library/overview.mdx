@@ -136,8 +136,7 @@ Here are a few examples.
   </Tab>
 </Tabs>
 
-
-**Data Definition**. Some evaluations require specific columns or data types present. For example, to evaluate classification quality, you need both predicted labels (prediction) and actual labels (target) columns. 
+**Data Definition**. Some evaluations require specific columns or data types present. For example, to evaluate classification quality, you need both predicted labels (prediction) and actual labels (target) columns.
 
 To specify where they are located in your table, you can map the data schema using the [Data Definition](/docs/library/data_definition) object.
 
@@ -147,27 +146,25 @@ To specify where they are located in your table, you can map the data schema usi
 
 When to use two datasets:
 
-* **Side-by-side comparison**. Compare outputs or data quality across two periods or model versions in a single Report.
+* **Side-by-side comparison**. Compare outputs or data quality across two periods, prompt/model versions, etc.
 
-* **Data drift detection. (Required)**. Detect distribution shifts by comparing datasets, such as this week’s data to the previous one. You always need two datasets.
+* **Data drift detection. (Required)**. Detect distribution shifts by comparing datasets, such as this week’s data to the previous one. 
 
 * **Simplify test setup**. Automatically generate test conditions (e.g., min-max ranges) from the reference dataset without manual configuration.
 
-**Data sampling**. Running evaluations on large datasets (millions of rows) can take time. This depends on the specific evaluation as well as your infrastructure. Since pandas process data in memory, it’s often more efficient to use samples.
-
-For example, in data drift detection, you can apply random or stratified sampling and compare samples instead of processing the entire dataset.
+**Data sampling**. Running evaluations on large datasets (millions of rows) can take time. This depends on the specific evaluation as well as your infrastructure. Since pandas process data in memory, it’s often more efficient to use samples. For example, in data drift detection, you can apply random or stratified sampling and compare samples instead of processing the entire dataset.
 
 ## Descriptors
 
 To evaluate text data and LLM outputs, you need `Descriptors`.
 
-A Descriptor is a row-level score or label that assesses a specific quality of a given text. It’s different from Metrics like accuracy which give a score for an entire dataset.
+A **Descriptor** is a row-level score or label that assesses a specific quality of a given text. It’s different from metrics (like accuracy or precision) that give a score for an entire dataset.
 
-A simple example of a descriptor is `TextLength` or `Sentiment`. Descriptors range from deterministic to LLM-based checks. For example, descriptors that use the "LLM judge" approach can label responses as "relevant" or "not relevant" using an evaluation prompt sent to a selected LLM.
+A simple example of a descriptor is `TextLength` or `Sentiment`. Descriptors range from deterministic to complex ML-based checks. Some let you implement "LLM judges": for example, they can label responses as "relevant" or "not relevant" using an evaluation prompt sent to an LLM.
 
-Descriptors can also use two texts, such as checking `SemanticSimilarity` between two columns.
+Descriptors can also use two texts, like checking `SemanticSimilarity` between two columns.
 
-You can use built-in Evidently descriptors and configurable templates or add your custom checks in Python. Each Descriptor returns a result that can be:
+You can use built-in descriptors, configure templates or add fully custom checks in Python. Each Descriptor returns a result that can be:
 
 * **Numerical**. Any scores like symbol count or sentiment score.
 
@@ -191,7 +188,7 @@ A `Metric` is a key building block for evaluations at the **dataset** or **colum
 
 **Using Metrics directly.** You can also compute Metrics directly on the data you have, like a table with ML model logs. You can use Metrics both to understand your data (like column statistics) and to evaluate different aspects of AI quality (like response accuracy).
 
-Metrics range from simple stats like row number to complex algorithmic and prompt-based evals.
+Metrics also range from simple statistics to complex algorithmic evals.
 
 <Card title="Explore evaluations" icon="chart-simple" horizontal="horizontal" href="/metrics">
   There is a separate docs section that shows all Descriptors and Metrics.
