@@ -12,6 +12,8 @@ Read the overview of the approach [here](/docs/platform/monitoring_overview).
   <Step title="Configure evaluations">
     To implement batch evaluations, use the basic flow of the Evidently evaluation library to compute Reports on a schedule. By configuring the Report contents, you can define which metrics to capture and optionally set test conditions.
 
+
+
     Check the Quickstart examples or explore the [detailed guide.](/docs/library/evaluations_overview)
 
     <CardGroup cols={2}>
@@ -25,17 +27,26 @@ Read the overview of the approach [here](/docs/platform/monitoring_overview).
     </CardGroup>
 
     You will need to independently orchestrate the execution of the evaluations on a chosen cadence: consider using tools like Airflow.
+
+
+
+    You can send Reports from different points in your pipeline: for example, first send the Reports with data quality and data drift checks, and after you receive the delayed labels, send a new Report to the same Project. You can backdate your snapshots as needed.
+
+    ![](/images/monitoring_batch_workflow_min.png)
   </Step>
 
-  <Step title="Configure the dashboard">
-    
-    As you send multiple Reports to the platform, you can also use a Dashboard to track results over time. Set it up using pre-built Tabs or configure your own choice of monitoring Panels.
+  <Step title="Configure the Dashboard">
+    As you send multiple Reports to the platform, you can set up a Dashboard to track results over time. Set it up using pre-built Tabs or configure your own choice of monitoring Panels.
+
+
 
     Check the [Dashboard guide](/docs/platform/dashboard_overview).&#x20;
   </Step>
 
   <Step title="Configure alerts">
     Set up alerts on Metric values or Test failures.&#x20;
+
+
 
     Check the section on [Alerts](/docs/platform/alerts).
   </Step>
