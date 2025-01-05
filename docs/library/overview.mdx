@@ -182,7 +182,7 @@ A `Metric` is a key building block for evaluations at the **dataset** or **colum
 
 **Using Metrics with Descriptors.** After computing row-level Descriptors, you can use Metrics to aggregate the results across the dataset. For instance, you can calculate the `ValueMean` for sentiment or similarity scores. Descriptors are treated like any other column.
 
-**Using Metrics directly.** You can also compute Metrics directly on the data you have, like a table with ML model logs. You can use Metrics both to understand your data (like column statistics) and to evaluate different aspects of AI quality (like response accuracy).
+**Using Metrics directly.** You can also compute Metrics directly on the data you have, like a table with ML model logs. You can use Metrics both to understand your data shape and to evaluate different aspects of AI quality like response accuracy.
 
 There are [built-in Metrics](/metrics/all_metrics) that range from simple statistics to complex algorithmic evals. Some examples:
 
@@ -266,7 +266,7 @@ Metric Presets are pre-configured evaluation templates. They make it simple to c
 <Tabs>
   <Tab title="Data Drift">
     Compute data distribution shifts for all columns in the dataset and summarize the results.
-    ![](/images/concepts/overview\_drift\_report-min.png)
+    ![](/images/concepts/overview_drift_report-min.png)
   </Tab>
 
   <Tab title="Classification">
