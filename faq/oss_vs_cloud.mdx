@@ -24,7 +24,7 @@ The **Tracely Python library** lets users capture near real-time data from their
 
 ### Evidently Platform
 
-The **Evidently Platform** is a web application designed for AI testing and observability. It is tailored for teams looking to collaborate on AI quality from experiments to production monitoring. It natively integrates with Evidently and Tracely and has two versions:
+The **Evidently Platform** is a web application designed for AI testing and observability. It is tailored for teams looking to collaborate on AI quality from experiments to production monitoring. It natively integrates with Evidently and Tracely and has two options:
 
 * **Open-source edition**. A basic version of the platform is included in the open-source Evidently library. It has a limited feature set in favor of a very lightweight deployment.
 
@@ -34,31 +34,30 @@ The **Evidently Platform** is a web application designed for AI testing and obse
 
   * **Evidently Enterprise (Self-Hosted)**. Designed for teams with strict security requirements. This version offers a full-featured platform equivalent to Evidently Cloud that can be deployed in private clouds or on-premises.
 
-## OSS vs. Enterprise
+## OSS vs. Cloud / Enterprise
 
-Commercial and open-source platforms differ in features, level of support, and maintenance costs.
+Platforms editions differ in features, level of support, and maintenance costs.
 
 ### Feature availability
 
-| Feature                         | Open-source | Cloud and Enterprise |
-| ------------------------------- | ----------- | -------------------- |
-| Tracing                         | +           | +                    |
-| Evaluations (100+ checks)       | +           | +                    |
-| Reports and Test Suites         | +           | +                    |
-| Monitoring dashboard            | +           | +                    |
-| API access                      | +           | +                    |
-| Custom metrics                  | +           | +                    |
-| Synthetic data generation       | -           | +                    |
-| Red-teaming                     | -           | +                    |
-| Data storage                    | -           | +                    |
-| Pre-built monitoring tabs       | -           | +                    |
-| No-code dashboard configuration | -           | +                    |
-| No-code evaluations             | -           | +                    |
-| Scheduled evaluations           | -           | +                    |
-| Alerting                        | -           | +                    |
-| Authentication                  | -           | +                    |
-| Role-based access control       | -           | +                    |
-| Team collaboration features     | -           | +                    |
+|                                | Feature                          | Open-source | Cloud and Enterprise |
+| :----------------------------- | -------------------------------- | ----------- | -------------------- |
+| **Core**                       | Tracing                          | +           | +                    |
+|                                | Evaluations (100+ checks)        | +           | +                    |
+|                                | Reports and Test Suites          | +           | +                    |
+|                                | Monitoring dashboard             | +           | +                    |
+|                                | API access                       | +           | +                    |
+|                                | Custom metrics                   | +           | +                    |
+| **Advanced**                   | No-code evaluations              | -           | +                    |
+|                                | No-code dashboard configuration  | -           | +                    |
+|                                | Pre-built monitoring tabs        | -           | +                    |
+|                                | Synthetic data generation        | -           | +                    |
+|                                | Alerting                         | -           | +                    |
+| **Backend**                    | Scheduled evaluations            | -           | +                    |
+|                                | Data storage                     | -           | +                    |
+| **Security and collaboration** | Authentication                   | -           | +                    |
+|                                | Role-based access control        | -           | +                    |
+|                                | Team collaboration features      | -           | +                    |
 
 In summary:
 
@@ -73,7 +72,7 @@ In summary:
 
 The commercial platform version includes dedicated support and onboarding.
 
-* **Evidently OSS.** We provide documentation and a Discord community forum, but as a small team, we can’t offer extensive support to open-source users. If you’re running Evidently OSS in production, you must be comfortable troubleshooting and resolving issues on your own. If you need more hands-on support, we recommend upgrading to Evidently Cloud or getting an Enterprise license.
+* **Evidently OSS.** We provide documentation and a Discord community forum, but as a small team, we can’t offer extensive support to open-source users. If you’re running Evidently OSS in production, you must be comfortable troubleshooting and resolving issues on your own. If you need more hands-on support, we recommend upgrading to Evidently Cloud or Enterprise.
 
 * **Evidently Cloud** and **Evidently Enterprise**. We offer varying tiers of support based on the selected Plan. In any scenario, you get direct access to the developers who built the platform. We provide incident response and resolution, as well as ongoing assistance on questions around feature configuration and use. For the Enterprise plan, we offer onboarding and training sessions to help establish best practices.
 
