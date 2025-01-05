@@ -1,35 +1,50 @@
 ---
 title: 'Run evals via API'
-description: 'Overview'
+description: 'How to run evals and log them on the platform'
 noindex: true
 ---
 
-Check the general evaluation flow.
+![](/images/evals_flow_python.png)
 
-You get to choose what you upload:
+<Steps>
+  <Step title="Configure evaluations">
+    To run evals, use the basic flow of the Evidently evaluation library. For comparative evals, use Reports. For regression testing or other testing scenarios, add Tests conditions.
+
+    When you compute Reports, you choose what you upload:
 
 * **Results only (Default)**. You can upload just the evaluation outcomes as JSON snapshots. They include column summaries, metric distributions, and test results. For tabular data, this typically provides the necessary insights while keeping data private.
 
 * **Results and Dataset**. Alternatively, you can include the dataset along with the evaluation results. This is useful for text data evaluations or whenever you want detailed row-level analysis, like investigating specific completions with low scores.
 
-  *
+    Check the Quickstart examples or explore the [detailed guide.](/docs/library/evaluations_overview)
 
-## What is snapshot?
+    <CardGroup cols={2}>
+      <Card title="LLM quickstart" icon="comment-text" href="/quickstart_llm">
+        Evaluate the quality of text outputs.
+      </Card>
 
-*What’s a snapshot?*\* This is a rich JSON version of the Report or a Test Suite with the results of an individual evaluation run that you upload to the platform.
+      <Card title="ML quickstart" icon="table" href="/quickstart_ml">
+        Test tabular data quality and data drift.
+      </Card>
+    </CardGroup>
+  </Step>
 
-See how to run local evals in detail:
+  <Step title="Explore the results">
+    Once you run the evaluation, you can use the Explore view to debug the indiviudal Results and compare the outcomes between runs.
 
-[Generate snapshots](https://docs.evidentlyai.com/user-guide/evaluations/snapshots)
+    Understand the [Explore view](/docs/platform/evals_explore).
+  </Step>
 
-A `snapshot` is a JSON summary containing evaluation results. It captures the data and AI system performance for the specific dataset or data batch you evaluated. Snapshots can include metrics, test results, column summaries, and additional render data. You choose what to include when running your evaluation.
+  <Step title="(Optional). Set up a Dashboard.">
+    Optionally, configure a Dashboard to track results over time. This helps you monitor metric changes across experiments to see your progress or results of ongoing safety Tests. 
 
-The snapshot functionality is based on Evidently [Reports and Test Suites](https://github.com/evidentlyai/evidently/blob/main/docs/book/tests-and-reports/overview.md). Put simply, a snapshot is a JSON "version" of an Evidently Report or Test Suite.
+    Check the docs on [Dashboard](/docs/platform/dashboard_overview).
+  </Step>
+  
+  <Step title="(Optional). Configure alerts">
+    Optionally, configure alerts on failed Tests.
 
-When you run individual evaluations, you can explore and compare their results. As you send multiple snapshots to a Project, you can also use a Dashboard to track results over time. This helps you monitor metric changes across experiments or track evaluations on production data.
+    Check the section on [Alerts](/docs/platform/alerts).
+  </Step>
+</Steps>
 
-You can optionally include the Dataset together with the evaluation results you upload.
-
-This page walks you through how to run evaluations locally in Python and send the results to Evidently Platform. This applies both to on-the-fly evaluations during experiments and to those you run automatically during batch monitoring or regression testing.
-
-Once you upload the evaluation results as JSON `snapshots`, you can explore, compare, and track them on the Evidently Platform.
