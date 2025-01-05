@@ -10,37 +10,27 @@ noindex: true
   <Step title="Configure evaluations">
     To run evals, use the basic flow of the Evidently evaluation library. For comparative evals, use Reports. For regression testing or other testing scenarios, add Tests conditions.
 
+
+
     When you compute Reports, you choose what you upload:
 
-* **Results only (Default)**. You can upload just the evaluation outcomes as JSON snapshots. They include column summaries, metric distributions, and test results. For tabular data, this typically provides the necessary insights while keeping data private.
-
-* **Results and Dataset**. Alternatively, you can include the dataset along with the evaluation results. This is useful for text data evaluations or whenever you want detailed row-level analysis, like investigating specific completions with low scores.
-
-    Check the Quickstart examples or explore the [detailed guide.](/docs/library/evaluations_overview)
-
-    <CardGroup cols={2}>
-      <Card title="LLM quickstart" icon="comment-text" href="/quickstart_llm">
-        Evaluate the quality of text outputs.
-      </Card>
-
-      <Card title="ML quickstart" icon="table" href="/quickstart_ml">
-        Test tabular data quality and data drift.
-      </Card>
-    </CardGroup>
+    * Check the Quickstart examples or explore the [detailed guide.](/docs/library/evaluations_overview)
   </Step>
 
   <Step title="Explore the results">
     Once you run the evaluation, you can use the Explore view to debug the indiviudal Results and compare the outcomes between runs.
 
+
+
     Understand the [Explore view](/docs/platform/evals_explore).
   </Step>
 
   <Step title="(Optional). Set up a Dashboard.">
-    Optionally, configure a Dashboard to track results over time. This helps you monitor metric changes across experiments to see your progress or results of ongoing safety Tests. 
+    Optionally, configure a Dashboard to track results over time. This helps you monitor metric changes across experiments to see your progress or results of ongoing safety Tests.
 
     Check the docs on [Dashboard](/docs/platform/dashboard_overview).
   </Step>
-  
+
   <Step title="(Optional). Configure alerts">
     Optionally, configure alerts on failed Tests.
 
@@ -48,3 +38,16 @@ noindex: true
   </Step>
 </Steps>
 
+When you compute Reports, you choose what you upload:
+
+* **Results only (Default)**. You can upload just the evaluation outcomes as JSON snapshots. They include column summaries, metric distributions, and test results. For tabular data, this typically provides the necessary insights while keeping data private.
+
+* **Results and Dataset**. Alternatively, you can include the dataset along with the evaluation results. This is useful for text data evaluations or whenever you want detailed row-level analysis, like investigating specific completions with low scores.Check the Quickstart examples or explore the [detailed guide.](/docs/library/evaluations_overview)<CardGroup cols={2}>
+    <Card title="LLM quickstart" icon="comment-text" href="/quickstart_llm">
+      Evaluate the quality of text outputs.
+    </Card>
+
+    <Card title="ML quickstart" icon="table" href="/quickstart_ml">
+      Test tabular data quality and data drift.
+    </Card>
+  </CardGroup>
