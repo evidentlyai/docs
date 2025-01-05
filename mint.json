@@ -167,7 +167,8 @@
           "group": "Monitoring",
           "pages": [
             "docs/platform/monitoring_overview",
-            "docs/platform/evals_scheduled",
+            "docs/platform/monitoring_scheduled_evals",
+            "docs/platform/monitoring_local_batch",
             "docs/platform/alerts"
           ]
         }
