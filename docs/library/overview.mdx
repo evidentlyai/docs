@@ -18,11 +18,11 @@ Here is how the core evaluation workflow works:
 
 <Steps>
   <Step title="Pass the input data">
-    Pass a dataset with text, tabular or embeddings data. Optionally include a second dataset for comparison.
+    Pass text, tabular or embeddings data to evaluate.
   </Step>
 
   <Step title="Run evaluations">
-    You can start with evaluation `Presets` or create a custom eval:
+    You can start with `Presets` or create a custom evaluation:
 
     * Compute row-level `Descriptors` for text data.
 
@@ -119,21 +119,21 @@ Here are a few examples.
   <Tab title="Ranking">
     **Ranking logs**. To evaluate ranking or recommendations, pass data that contains columns with rank/score and interaction result. Features are optional but useful for some evals.
 
-    | User ID | Movie ID | Movie Title  | Genre         | Average Viewer Rating | Watched Duration (%) | Predicted Rank |
-    | ------- | -------- | ------------ | ------------- | --------------------- | -------------------- | -------------- |
-    | U001    | M001     | The Matrix   | Sci-Fi        | 4.8                   | 100                  | 1              |
-    | U002    | M002     | Titanic      | Romance/Drama | 4.5                   | 80                   | 2              |
-    | U001    | M003     | Interstellar | Sci-Fi        | 4.7                   | 90                   | 2              |
-  </Tab>
-
-  <Tab title="Embeddings">
-    **Embeddings**. To evaluate embeddings drift, pass embeddings as numerical columns.
-
     | User ID | Movie ID | Title        | Genre         | Avg Rating | Watched (%) | Predicted Rank |
     | ------- | -------- | ------------ | ------------- | ---------- | ----------- | -------------- |
     | U001    | M001     | The Matrix   | Sci-Fi        | 4.8        | 100         | 1              |
     | U002    | M002     | Titanic      | Romance/Drama | 4.5        | 80          | 2              |
     | U001    | M003     | Interstellar | Sci-Fi        | 4.7        | 90          | 2              |
+  </Tab>
+
+  <Tab title="Embeddings">
+    **Embeddings**. To evaluate embeddings drift, pass embeddings as numerical columns.
+
+ | col_0    | col_1    | col_2    | col_3    | col_4    | ... | col_98   | col_99   | col_100  |
+|----------|----------|----------|----------|----------|-----|----------|----------|----------|
+| 0.171242 | 0.149020 | 0.122876 | 0.121569 | 0.137255 | ... | 0.614379 | 0.613072 | 0.612000 |
+| 0.619608 | 0.628758 | 0.670588 | 0.661438 | 0.636601 | ... | 0.525490 | 0.509804 | 0.500000 |
+
   </Tab>
 </Tabs>
 
