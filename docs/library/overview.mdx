@@ -134,7 +134,6 @@ Here are a few examples.
   </Tab>
 </Tabs>
 
-
 **Data Definition**. Some evaluations require specific columns or data types present. For example, to evaluate classification quality, you need both predictions and actual labels. To specify where they are located in your table, you can map the data schema using [Data Definition](/docs/library/data_definition).
 
 **Two datasets**. Typically you run evaluations for a single dataset (`current` dataset). Optionally, you can include a second (`reference`) dataset). Both datasets must have identical structures.
@@ -185,7 +184,7 @@ A `Metric` is a key building block for evaluations at the **dataset** or **colum
 
 **Using Metrics directly.** You can also compute Metrics directly on the data you have, like a table with ML model logs. You can use Metrics both to understand your data (like column statistics) and to evaluate different aspects of AI quality (like response accuracy).
 
-Metrics also range from simple stats to complex algorithmic evals. ([See all Metrics](/metrics/all_metrics)). Examples:
+There are [built-in Metrics](/metrics/all_metrics) that range from simple statistics to complex algorithmic evals. Some examples:
 
 <Tabs>
   <Tab title="ValueMean">
