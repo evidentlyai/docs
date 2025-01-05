@@ -129,19 +129,19 @@ Here are a few examples.
   <Tab title="Embeddings">
     **Embeddings**. To evaluate embeddings drift, pass embeddings as numerical columns.
 
- | col_0    | col_1    | col_2    | col_3    | col_4    | ... | col_98   | col_99   | col_100  |
-|----------|----------|----------|----------|----------|-----|----------|----------|----------|
-| 0.171242 | 0.149020 | 0.122876 | 0.121569 | 0.137255 | ... | 0.614379 | 0.613072 | 0.612000 |
-| 0.619608 | 0.628758 | 0.670588 | 0.661438 | 0.636601 | ... | 0.525490 | 0.509804 | 0.500000 |
-
+    | col\_0   | col\_1   | col\_2   | col\_3   | col\_4   | ... | col\_98  | col\_99  | col\_100 |
+    | -------- | -------- | -------- | -------- | -------- | --- | -------- | -------- | -------- |
+    | 0.171242 | 0.149020 | 0.122876 | 0.121569 | 0.137255 | ... | 0.614379 | 0.613072 | 0.612000 |
+    | 0.619608 | 0.628758 | 0.670588 | 0.661438 | 0.636601 | ... | 0.525490 | 0.509804 | 0.500000 |
   </Tab>
 </Tabs>
 
-**Data Definition**. Some evaluations require specific columns or data types present.
 
-For example, to evaluate classification quality, you need both predicted labels (prediction) and actual labels (target) columns. To specify where they are located in your table, you can map the data schema using the Data Definition object.
+**Data Definition**. Some evaluations require specific columns or data types present. For example, to evaluate classification quality, you need both predicted labels (prediction) and actual labels (target) columns. 
 
-**Two datasets**. Typically you run evaluations use a single dataset (`current` dataset): this is the data you evaluate. Optionally, you can include a second dataset (`reference` dataset). Both datasets must have identical structures.
+To specify where they are located in your table, you can map the data schema using the [Data Definition](/docs/library/data_definition) object.
+
+**Two datasets**. Typically you run evaluations for a single dataset (`current` dataset). Optionally, you can include a second (`reference`) dataset). Both datasets must have identical structures.
 
 ![](/images/datasets_input_data_two.png)
 
