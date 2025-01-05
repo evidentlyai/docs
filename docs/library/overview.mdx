@@ -30,16 +30,16 @@ Here is how the core evaluation workflow works:
 
     There are 100+ built-in evals. You can also add yours. Examples:
 
-    | **Type**                  | **Example checks**                                                         |
-    | ------------------------- | -------------------------------------------------------------------------- |
-    | **🔡 Text qualities**     | Length, sentiment, special symbols, pattern  matches, etc.                 |
-    | **📝 LLM outputs**        | Semantic similarity, relevance, faithfulness, custom LLM judges, etc.      |
-    | **🛢 Data quality**       | Missing values, duplicates, min-max ranges, correlations, etc. |
-    | **📊 Data drift**         | 20+ tests and distance metrics to detect distribution drift.               |
-    | **🎯 Classification**     | Accuracy, precision, recall, ROC AUC, confusion matrix, bias, etc.         |
-    | **📈 Regression**         | MAE, ME, RMSE, error distribution, error normality, error bias, etc.       |
-    | **🗂 Ranking (inc. RAG)** | NDCG, MAP, MRR, Hit Rate, etc.                                             |
-    | **🛒 Recommenders**    | Serendipity, novelty, diversity, popularity bias, etc.                     |
+    | **Type**                  | **Example checks**                                                    |
+    | ------------------------- | --------------------------------------------------------------------- |
+    | **🔡 Text qualities**     | Length, sentiment, special symbols, pattern  matches, etc.            |
+    | **📝 LLM outputs**        | Semantic similarity, relevance, faithfulness, custom LLM judges, etc. |
+    | **🛢 Data quality**       | Missing values, duplicates, min-max ranges, correlations, etc.        |
+    | **📊 Data drift**         | 20+ tests and distance metrics to detect distribution drift.          |
+    | **🎯 Classification**     | Accuracy, precision, recall, ROC AUC, confusion matrix, bias, etc.    |
+    | **📈 Regression**         | MAE, ME, RMSE, error distribution, error normality, error bias, etc.  |
+    | **🗂 Ranking (inc. RAG)** | NDCG, MAP, MRR, Hit Rate, etc.                                        |
+    | **🛒 Recommenders**       | Serendipity, novelty, diversity, popularity bias, etc.                |
   </Step>
 
   <Step title="Explore results">
@@ -158,11 +158,9 @@ To evaluate text data and LLM outputs, you need `Descriptors`.
 
 A **Descriptor** is a row-level score or label that assesses a specific quality of a given text. It’s different from metrics (like accuracy or precision) that give a score for an entire dataset.
 
-A simple example of a descriptor is `TextLength` or `Sentiment`. Descriptors range from deterministic to complex ML-based checks. Some let you implement "LLM judges": for example, they can label responses as "relevant" or "not relevant" using an evaluation prompt sent to an LLM.
+A simple example of a descriptor is `TextLength` or `Sentiment`. Descriptors range from deterministic to complex ML-based checks. For example, LLM-based descriptors can help label responses as "relevant" or "not relevant" using an evaluation prompt. Descriptors can also use two texts at once, like checking `SemanticSimilarity` between two columns.
 
-Descriptors can also use two texts, like checking `SemanticSimilarity` between two columns.
-
-You can use [built-in descriptors](/metrics/all_descriptors), configure templates or add fully custom checks in Python. Each Descriptor returns a result that can be:
+You can use [built-in descriptors](/metrics/all_descriptors), configure templates or add custom checks in Python. Each Descriptor returns a result that can be:
 
 * **Numerical**. Any scores like symbol count or sentiment score.
 
