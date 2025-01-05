@@ -170,7 +170,7 @@ You can use [built-in descriptors](/metrics/all_descriptors), configure template
 
 Evidently adds the computed descriptor values directly to the dataset.![](/images/concepts/overview_descriptors_export.png)
 
-This helps with debugging: for example, you can sort to find the negative responses. You can export the results to a Pandas DataFrame or view on the Evidently Platform
+This helps with debugging: for example, you can sort to find the negative responses. You can view the results as a Pandas DataFrame or on the Evidently Platform.
 
 After you get the Descriptors, you can use them to compute Metrics and Tests.
 
@@ -216,54 +216,50 @@ Metrics also range from simple stats to complex algorithmic evals. ([See all Met
 
 ### What is a Report?
 
-A **Report** is an object you create to structure and execute evaluations. You choose the Metrics to include, run the Report on your dataset, and get a clear visual summary of the results.&#x20;
+A **Report** is an object you create to structure and execute evaluations. You choose the Metrics, run the Report on your dataset, and get a visual summary or simply export the computation result.
 
 * You can combine multiple individual Metrics in a Report. 
 
-* You can also pass two datasets for a side-by-side comparison for each Metric. 
+* You can also pass two datasets for a side-by-side comparison. 
 
-* You can include both built-in Metrics and custom Metrics in the Report.
+* You can include both built-in Metrics and custom Metrics.
 
 \[ADD IMG]
 
 ![](/images/concepts/overview_small_preset_cat_value_compare_example.png)
 
-However, in many cases, it makes sense to start with **Presets** to simplify the initial setup.
+In many cases, it makes sense to start with **Presets** to simplify the initial setup.
 
 ### Metric Presets
 
-Metric Presets are pre-designed evaluation templates. They make it simple to compute multiple related Metrics at once without lengthy setup. ([See all Presets](/metrics/all_presets)).
+Metric Presets are pre-configured evaluation templates. They make it simple to compute multiple related Metrics at once without lengthy setup. ([See all Presets](/metrics/all_presets)).
 
-**Small Presets**. Some Presets are “small” and look like widgets with a handful of Metrics. Examples:&#x20;
+**Small Presets**. Some Presets are “small” and simply display a handful of Metrics on a single widgets. Examples:&#x20;
 
 <Tabs>
   <Tab title="ValueStats">
     You can view all relevant descriptive value statistics at once. The stats will be chosen based on the column or descriptor type (categorical, numerical, text).
 
     ![](/images/concepts/overview_small_preset_num_value_example-min.png)
-
-    **Comprehensive Presets**. There are also large, more interactive Presets for specific scenarios that include multiple widgets. For example:
-
+   </Tab>
     <Tabs>
       <Tab title="Data Drift">
         Identifies shifts in individual column distributions and consolidates the results.
-
         ![](/images/concepts/overview_drift_report-min.png)
-      </Tab>
-
-      <Tab title="Classification">
+    </Tab>
+    <Tab title="Classification">
         Breaks down classification metrics and includes debugging tools like prediction bias plots.
-      </Tab>
-
+    </Tab>
       <Tab title="RecSys">
         Measures the performance of ranking or recommendation systems.
       </Tab>
-
       <Tab title="Data Summary">
         Summarizes all dataset columns, generating statistics and profiles for each.
       </Tab>
     </Tabs>
   </Tab>
+
+    **Comprehensive Presets**. There are also large, more interactive Presets for specific scenarios that include multiple widgets. For example:
 
   <Tab title="Classification">
     Multiple classification quality metrics like Precision, Recall, Accuracy, ROC AUC, etc. together.
