@@ -14,13 +14,28 @@ noindex: true
 
 ![](/images/dataset_llm.png)
 
+To view Datasets, go to the **Dataset Page** within your Project. There, you'll find:
+
+* Source datasets you uploaded.
+
+* Synthetic data you generated.
+
+* New datasets with added scores from evaluations (local or cloud).
+
+<Tip>
+  **Looking for tracing data?** It is in the Tracing menu section.
+</Tip>
+
 ## How to create a Dataset?
 
 You can add Datasets to the platform in multiple ways:
 
 * **Upload directly**. Use the UI to upload CSV files or push datasets via the Python API.
+
 * **Upload with Reports**. Attach datasets to Reports when running local evaluations. This is optional—you can also upload only summary metrics.
+
 * **Generate synthetic data**. Use built-in platform features to generate synthetic evaluation datasets.
+
 * **Create from Traces**. During tracing, Evidently automatically generates tabular datasets that can be used for evaluations.
 
 ## Synthetic Data
@@ -28,6 +43,7 @@ You can add Datasets to the platform in multiple ways:
 You can synthesize evaluation datasets directly in Evidently Platform:
 
 * **Generate from examples or description**. Describe specific test scenarios and generate matching datasets.
+
 * **Generate from source documents**. Generate Q\&A pairs from source documents like PDF, CSV or markdown files (great for RAG evaluations).
 
 After creating or uploading datasets, you can edit or diversify them further using the "more like this" feature.
@@ -37,5 +53,7 @@ After creating or uploading datasets, you can edit or diversify them further usi
 Here are common use cases for datasets in Evidently:
 
 * **Organize evaluation datasets**. Save curated datasets with expected inputs and optional ground truth outputs. You can bring in domain experts to collaborate on these datasets in UI, and access them programmatically for CI/CD checks.
+
 * **Debug evaluation results**. After you run an evaluation, view the dataset to identify and debug specific failures. E.g. you can sort all text outputs by added scores.
+
 * **Store ML inference logs or LLM traces**. Collect raw data from production or experimental runs, use it as a source of truth, and run evaluations over it.

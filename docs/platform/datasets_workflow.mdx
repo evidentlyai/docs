@@ -4,41 +4,33 @@ description: 'How to create, upload and manage Datasets.'
 noindex: true
 ---
 
-To access or upload your Datasets in UI, navigate to the Dataset Page inside your Project.
-
-You will be able to view all Datasets, both raw datasets you uploaded and new datasets generated as a result of an evaluation.
-
 <Tip>
-  **Tracing datasets** are in the Tracing menu section.
+  You must first connect to [Evidently Cloud](/setup/cloud) and [create a Project](/docs/platform/projects_manage).&#x20;
 </Tip>
 
-## User interface
+## Upload a Dataset&#x20;
 
-To upload any existing dataset as a CSV file, click on "Add dataset".
+<Tabs>
+  <Tab title="Python">
+    Prepare your dataset as a Pandas DataFrame. To upload a dataframe `df` to the specified Project in workspace `ws`, use the `add_dataset` method:
 
-When you upload the Dataset, you must also add a **column mapping**. This allows Evidently to understand the meaning of specific columns and prepare your Dataset for future evaluations.
+    ```python
+    ws.add_dataset(
+        df,
+        name = "dataset_name",
+        project_id = project.id, 
+        description = "Optional description")
+    ```
 
-## Python API
+    You must always specify the dataset `name` you will see in the UI. The description is optional.
+  </Tab>
 
-To work with Datasets programmatically from Python, you must first [connect to Workspace](../setup/cloud).
+  <Tab title="UI">
+    To upload any existing dataset as a CSV file, click on "Add dataset". When you upload the Dataset, you must also add a [**data definition**](/docs/library/data_definition). This lets Evidently understand the role of specific columns and prepare your Dataset for future evaluations.
+  </Tab>
+</Tabs>
 
-### Upload the Dataset
-
-Prepare your dataset as a Pandas DataFrame. To upload a dataframe `df` to the specified Project in workspace `ws`, use the `add_dataset` method:
-
-```python
-ws.add_dataset(
-    df,
-    name = "dataset_name",
-    project_id = project.id, 
-    description = "Optional description")
-```
-
-You must always specify the dataset `name` you will see in the UI. The description is optional.
-
-To get a Project ID, grab it from the existing Project page or [create a new Project first](projects_manage).
-
-### Download the Dataset
+## Download the Dataset
 
 You can pull the Dataset stored or generated on the platform to your local environment. For example, call the evaluation dataset to use in a CI/CD testing script.
 
@@ -48,11 +40,12 @@ Use the `load_dataset` method:
 downloaded_df = ws.load_dataset(dataset_id = "YOUR_DATASET_ID") 
 ```
 
-### Include the Dataset
+## Include the Dataset
 
 You can include Datasets when you upload Reports to the platform. This way, after running an evaluation locally you simultaneously upload:
 
 * the Report with evaluation result,
+
 * the Dataset it was generated for, with new added scores if applicable.
 
 By default, you upload only the Report.
@@ -63,4 +56,4 @@ To include the Dataset, use the `include_data` parameter:
 ws.add_report(project.id, data_report, include_data=True)
 ```
 
-Check the docs on [generating snapshots](../library/snapshots) for details.
+Check the docs on [generating snapshots](/docs/library/evaluations_overview) for details.
