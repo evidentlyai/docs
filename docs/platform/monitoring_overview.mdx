@@ -1,5 +1,61 @@
 ---
-title: 'Overview'
-description: 'How production monitoring works.'
-noindex: true
+title: "Overview"
+description: "How production AI quality monitoring works."
+noindex: "true"
 ---
+
+AI observability lets you evaluate the quality of the inputs and outputs of your AI application  as it runs in production. This helps you spot and fix issues while keeping an up-to-date view of your system behavior.&#x20;
+
+Evidently offers several ways to set up monitoring.&#x20;
+
+## Batch monitoring jobs 
+
+<Check>
+  Supported in: `Evidently OSS`, `Evidently Cloud` and `Evidently Enterprise`.
+</Check>
+
+**Best for**: batch ML pipelines, regression testing, and near real-time ML systems that don’t need instant quality evaluations.
+
+![](/images/monitoring_flow_batch.png)
+
+How it works:
+
+* **Build your evaluation pipeline**. Create a pipeline in your infrastructure to run monitoring jobs. This can be a Python script, cron job, or orchestrated with a tool like Airflow. Run it at regular intervals (e.g., hourly, daily) or trigger it when new data or labels arrive.
+
+* **Run metric calculations**. Implement the evaluation step in the pipeline using the Evidently Python library. Select the evals, and compute JSON Report `snapshots` that will summarize data, metrics, and test results.
+
+* **Store and visualize snapshots**. Store and monitor results in Evidently Cloud, or in a designated self-hosted workspace.
+
+Benefits of this approach:
+
+* **Decouples log storage and monitoring metrics**. In this setup, does not store raw data or model predictions unless you choose to. By default, it only retains the snapshots with data summaries and test results. This protects data privacy and avoids duplicating logs if they’re already stored elsewhere, like for retraining.
+
+* **Full control over the evaluation pipeline**. You decide when evaluations happen. This setup is great for batch ML models, where you can easily add monitoring as another step in your existing pipeline. For online inference, you can log your predictions to a database and set up separate monitoring jobs to query data at intervals.
+
+* **Fits most ML evaluation scenarios**. Many evaluations, like data drift detection, naturally work in batches since you need to collect a set of new data points before running them. Model quality checks often only happen when new labeled data arrives, which can be delayed. Analyzing prediction or user behavior shifts is also usually more meaningful when done at intervals like hourly or daily rather than recalculating after every single event.
+
+## Tracing with scheduled evals
+
+<Check>
+  Supported in: `Evidently Cloud` and `Evidently Enterprise`. Scheduled evaluations are in beta on Evidently Cloud. Contact our team to try it.
+</Check>
+
+**Best for**: LLM-powered applications
+
+![](/images/monitoring_flow_tracing.png)
+
+**How it works:**
+
+* **Instrument your app**. Use the `Tracely` library (based on OpenTelemetry) to capture all relevant data from your application, including inputs, outputs and intermediate steps. ([Tracing](/docs/platform/tracing_setup)).
+
+* **Store raw data**. Evidently Platform stores all raw data, providing a complete record of activity.
+
+* **Schedule evaluations**. Set up evaluations to run automatically at scheduled times. This will generate Reports or run Tests directly on the Evidently Platform. You can also manually run evaluations anytime to assess individual predictions.
+
+Benefits of this approach:
+
+* **Solves the data capture**. You collect complex traces and all production data in one place, making it easier to manage and analyze.
+
+* **Easy to re-run evals**. With raw traces stored on the platform, you can easily re-run evaluations or add new metrics whenever needed.
+
+* **No-code**. Once your trace instrumentation is set up, you can manage everything from the UI.
