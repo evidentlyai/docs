@@ -163,11 +163,11 @@ To evaluate text data and LLM outputs, you need `Descriptors`.
 
 A Descriptor is a row-level score or label that assesses a specific quality of a given text. It’s different from Metrics like accuracy which give a score for an entire dataset.
 
-A simple example of a descriptor is `TextLength`. Descriptors range from deterministic to ML and LLM-based checks. For example, descriptors that use the "LLM judge" approach can label responses as "relevant" or "not relevant" using an evaluation prompt sent to a selected LLM.
+A simple example of a descriptor is `TextLength` or `Sentiment`. Descriptors range from deterministic to LLM-based checks. For example, descriptors that use the "LLM judge" approach can label responses as "relevant" or "not relevant" using an evaluation prompt sent to a selected LLM. 
 
-Descriptors can also use two texts at once, such as checking `SemanticSimilarity` between two columns.
+Descriptors can also use two texts, such as checking `SemanticSimilarity` between two columns.
 
-You can use built-in Evidently descriptors and configurable templates (like LLM judges), or add your custom checks in Python. Each Descriptor returns a result that can be:
+You can use built-in Evidently descriptors and configurable templates or add your custom checks in Python. Each Descriptor returns a result that can be:
 
 * **Numerical**. Any scores like symbol count or sentiment score.
 
