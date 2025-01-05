@@ -87,7 +87,7 @@ Here are a few examples.
   </Tab>
 
   <Tab title="Data table">
-    **Data table**. You can pass any data table to get descriptive stats or run data quality and data drift checks. You can this when evaluating ML model performance without ground truth: include input features and predictions.
+    **Data table**. You can pass any dataset to run run data quality and data drift checks. Use this when evaluating ML model performance without ground truth: include input features and predictions.
 
     | Order ID | Product                | Category    | Quantity | Price  | Payment Method | Shipping Status |
     | -------- | ---------------------- | ----------- | -------- | ------ | -------------- | --------------- |
@@ -163,7 +163,7 @@ To evaluate text data and LLM outputs, you need `Descriptors`.
 
 A Descriptor is a row-level score or label that assesses a specific quality of a given text. It’s different from Metrics like accuracy which give a score for an entire dataset.
 
-A simple example of a descriptor is `TextLength` or `Sentiment`. Descriptors range from deterministic to LLM-based checks. For example, descriptors that use the "LLM judge" approach can label responses as "relevant" or "not relevant" using an evaluation prompt sent to a selected LLM. 
+A simple example of a descriptor is `TextLength` or `Sentiment`. Descriptors range from deterministic to LLM-based checks. For example, descriptors that use the "LLM judge" approach can label responses as "relevant" or "not relevant" using an evaluation prompt sent to a selected LLM.
 
 Descriptors can also use two texts, such as checking `SemanticSimilarity` between two columns.
 
