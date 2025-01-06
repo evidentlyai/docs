@@ -230,7 +230,7 @@
       "pages": [
         "examples/LLM_judge",
         "examples/regression_testing",
-        "examples/LLM_judge",
+        "examples/LLM_evals",
         "examples/data_drift_monitoring"
       ]
     },
