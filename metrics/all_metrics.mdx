@@ -4,22 +4,28 @@ description: 'Referenc page for all dataset and column-level evals.'
 noindex: "true"
 ---
 
-You can use **Metrics** and Metric **Presets** to assess data quality, data drift and quality of AI outputs (LLM, regression, classification, ranking, etc.). Each Metric includes a default visualization. Read about [Key Concepts](/docs/library/overview).
+You can use **Metrics** and **Presets** to assess data quality, data drift and AI output quality (LLM, regression, classification, ranking, etc.) Each Metric includes a default visual. Learn more in [Key Concepts](/docs/library/overview).
 
-How to read the tables:
-* **Metric**: he name of Metric or Preset you can pass to `Report`.
-* **Description** explains what it does. Complex metrics link to explainer pages. 
-* **Parameters** shows available Metric options. You can also add conditional `tests` to any Metric using standard operators like `eq` (equal), `gt` (greater than), etc. Read about [Tests API](/docs/library/tests).
-* **Test defaults** are conditions that apply when you invoke Tests but do not set a pass/fail condition yourself.
-  * **With reference**: if you provide a reference dataset during the Report `run`, the conditions are set relative to reference.
-  * **No reference**: if you do not provide a reference, Tests will use fixed heuristics (like expect no missing values).
+<Accordion title="How to read the tables" defaultOpen={false}>
+  * **Metric**: the name of Metric or Preset you can pass to `Report`.
+
+  * **Description:** what it does. Complex Metrics link to explainer pages.
+
+  * **Parameters:** available Metric options. You can also add conditional `tests` to any Metric using standard operators like `eq` (equal), `gt` (greater than), etc. Check [Tests API](/docs/library/tests).
+
+  * **Test defaults** are conditions that apply when you invoke Tests but do not set a pass/fail condition yourself.
+
+    * **With reference**: if you provide a reference dataset during the Report `run`, the conditions are set relative to reference.
+
+    * **No reference**: if you do not provide a reference, Tests will use fixed heuristics (like expect no missing values).
+</Accordion>
 
 ## Text Evals
 
-| Metric          | Description | Parameters | Test Default |
-| --------------- | ----------- | ---------- | ------------ |
-| **TextEvals()** | Preset.       |  (See [descriptors](/docs/metrics/all_descriptors)).
-          |              |
+| Metric          | Description | Parameters                                          | Test Default |
+| --------------- | ----------- | --------------------------------------------------- | ------------ |
+| **TextEvals()** | Preset.     | (See [descriptors](/docs/metrics/all_descriptors)). |              |
+|                 |             |                                                     |              |
 
 ## Value Stats
 
