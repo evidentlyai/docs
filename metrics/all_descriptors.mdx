@@ -4,7 +4,9 @@ description: 'All row-level evaluations for text data.'
 noindex: "true"
 ---
 
-This is a reference page with all available Descriptors, including the ones you can template. To see how to run them for your data, check the [LLM Evaluation Quickstart](/quickstart_llm).
+Descriptors let you evaluate the quality of LLM-based applications (summarization, Q&A, chatbots, agents, RAGs, etc) by comparing them against a known target output or through open-ended evaluations.
+
+This is a reference page with all available Descriptors and templates. To see how to run them for your data, check the [LLM Evaluation Quickstart](/quickstart_llm).
 
 ## Pattern match
 
@@ -49,36 +51,36 @@ Validate structured data formats or code syntax.
 
 Descriptive text statistics.
 
-| Name                               | Descriptor                                                                                                                       | Parameters                                               |
-| :--------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| **TextLength()**                   |  Measures the length of the text in symbols. Returns an absolute number.                                                         | **Optional:** `display_name`                             |
-| **OOV()**                          |  - Calculates the percentage of out-of-vocabulary words based on imported NLTK vocabulary. Returns a score on a scale: 0 to 100. | **Optional:** `display_name`, `ignore_words: Tuple = ()` |
-| **NonLetterCharacterPercentage()** |  - Calculates the percentage of non-letter characters. Returns a score on a scale: 0 to 100.                                     | **Optional:** `display_name`                             |
-| **SentenceCount()**                |  - Counts the number of sentences in the text. Returns an absolute number.                                                       | **Optional:** `display_name`                             |
-| **WordCount()**                    |  - Counts the number of words in the text. Returns an absolute number.                                                           | **Optional:** `display_name`                             |
+| Name                               | Descriptor                                                                                                                      | Parameters                                               |
+| :--------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| **TextLength()**                   | Measures the length of the text in symbols. Returns an absolute number.                                                         | **Optional:** `display_name`                             |
+| **OOV()**                          | - Calculates the percentage of out-of-vocabulary words based on imported NLTK vocabulary. Returns a score on a scale: 0 to 100. | **Optional:** `display_name`, `ignore_words: Tuple = ()` |
+| **NonLetterCharacterPercentage()** | - Calculates the percentage of non-letter characters. Returns a score on a scale: 0 to 100.                                     | **Optional:** `display_name`                             |
+| **SentenceCount()**                | - Counts the number of sentences in the text. Returns an absolute number.                                                       | **Optional:** `display_name`                             |
+| **WordCount()**                    | - Counts the number of words in the text. Returns an absolute number.                                                           | **Optional:** `display_name`                             |
 
 ## LLM-based evals
 
 Use external LLMs with an evaluation prompt.
 
-| Name                        | Descriptor                                                                                                   | Parameters                                                                                                                                  |
-| :-------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| **LLMEval()**               |  - Scores the text using user-defined criteria.                                                              | See [docs](../customization/llm_as_a_judge.md) for examples and parameters.                                                                 |
-| **DeclineLLMEval()**        |  - Detects texts containing a refusal or rejection. Returns a label (DECLINE or OK) or score.                | See [docs](../customization/llm_as_a_judge.md) for parameters.                                                                              |
-| **PIILLMEval()**            |  - Detects texts containing PII (Personally Identifiable Information). Returns a label (PII or OK) or score. | See [docs](../customization/llm_as_a_judge.md) for parameters.                                                                              |
-| **NegativityLLMEval()**     |  - Detects negative texts. Returns a label (NEGATIVE or POSITIVE) or score.                                  | See [docs](../customization/llm_as_a_judge.md) for parameters.                                                                              |
-| **BiasLLMEval()**           |  - Detects biased texts. Returns a label (BIAS or OK) or score.                                              | See [docs](../customization/llm_as_a_judge.md) for parameters.                                                                              |
-| **ToxicityLLMEval()**       |  - Detects toxic texts. Returns a label (TOXICITY or OK) or score.                                           | See [docs](../customization/llm_as_a_judge.md) for parameters.                                                                              |
-| **ContextQualityLLMEval()** |  - Evaluates if CONTEXT is VALID or INVALID. Returns a label (VALID or INVALID) or score.                    | Run over the `context` column and pass the `question` column as a parameter. See [docs](../customization/llm_as_a_judge.md) for parameters. |
+| Name                        | Descriptor                                                                                                  | Parameters                                                                                                                                  |
+| :-------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **LLMEval()**               | - Scores the text using user-defined criteria.                                                              | See [docs](../customization/llm_as_a_judge.md) for examples and parameters.                                                                 |
+| **DeclineLLMEval()**        | - Detects texts containing a refusal or rejection. Returns a label (DECLINE or OK) or score.                | See [docs](../customization/llm_as_a_judge.md) for parameters.                                                                              |
+| **PIILLMEval()**            | - Detects texts containing PII (Personally Identifiable Information). Returns a label (PII or OK) or score. | See [docs](../customization/llm_as_a_judge.md) for parameters.                                                                              |
+| **NegativityLLMEval()**     | - Detects negative texts. Returns a label (NEGATIVE or POSITIVE) or score.                                  | See [docs](../customization/llm_as_a_judge.md) for parameters.                                                                              |
+| **BiasLLMEval()**           | - Detects biased texts. Returns a label (BIAS or OK) or score.                                              | See [docs](../customization/llm_as_a_judge.md) for parameters.                                                                              |
+| **ToxicityLLMEval()**       | - Detects toxic texts. Returns a label (TOXICITY or OK) or score.                                           | See [docs](../customization/llm_as_a_judge.md) for parameters.                                                                              |
+| **ContextQualityLLMEval()** | - Evaluates if CONTEXT is VALID or INVALID. Returns a label (VALID or INVALID) or score.                    | Run over the `context` column and pass the `question` column as a parameter. See [docs](../customization/llm_as_a_judge.md) for parameters. |
 
 ## ML-based evals
 
 Use pre-trained machine learning or embedding models.
 
-| Name                            | Descriptor                                                                                                                                                                                       | Parameters                                                                         |
-| :------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
-| **Semantic Similarity()**       |  - Calculates pairwise semantic similarity between columns using a transformer model. Returns a score: 0 (different) to 1 (identical). Example use: `SemanticSimilarity(with_column="response")` | **Required:** `with_column`**Optional:** `display_name`                            |
-| **Sentiment(**)                 |  Analyzes the sentiment of the text. Returns a score: -1 (negative) to 1 (positive).                                                                                                             | **Optional:** `display_name`                                                       |
-| **HuggingFaceModel()**          |  - Scores the text using a user-selected HuggingFace model.                                                                                                                                      | See [docs](../customization/huggingface_descriptor.md) for examples.               |
-| **HuggingFaceToxicityModel()**  | - Detects hate speech using a HuggingFace model. Returns predicted probability for the “hate” label. Scale: 0 to 1.                                                                              | **Optional:** `toxic_label`, `display_name`                                        |
-| **BERTScore()**                 |  - Calculates similarity between two text columns based on token embeddings. Returns [BERTScore](https://arxiv.org/pdf/1904.09675) (F1 Score). Example use: `BERTScore(with_column="reference")` | **Required:** `with_column`**Optional:** `model`, `tfidf_weighted`, `display_name` |
+| Name                           | Descriptor                                                                                                                                                                                      | Parameters                                                                         |
+| :----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| **Semantic Similarity()**      | - Calculates pairwise semantic similarity between columns using a transformer model. Returns a score: 0 (different) to 1 (identical). Example use: `SemanticSimilarity(with_column="response")` | **Required:** `with_column`**Optional:** `display_name`                            |
+| **Sentiment(**)                | Analyzes the sentiment of the text. Returns a score: -1 (negative) to 1 (positive).                                                                                                             | **Optional:** `display_name`                                                       |
+| **HuggingFaceModel()**         | - Scores the text using a user-selected HuggingFace model.                                                                                                                                      | See [docs](../customization/huggingface_descriptor.md) for examples.               |
+| **HuggingFaceToxicityModel()** | - Detects hate speech using a HuggingFace model. Returns predicted probability for the “hate” label. Scale: 0 to 1.                                                                             | **Optional:** `toxic_label`, `display_name`                                        |
+| **BERTScore()**                | - Calculates similarity between two text columns based on token embeddings. Returns [BERTScore](https://arxiv.org/pdf/1904.09675) (F1 Score). Example use: `BERTScore(with_column="reference")` | **Required:** `with_column`**Optional:** `model`, `tfidf_weighted`, `display_name` |

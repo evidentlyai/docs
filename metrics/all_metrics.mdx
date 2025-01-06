@@ -4,29 +4,50 @@ description: 'All dataset and column-level evaluations.'
 noindex: "true"
 ---
 
-You can use Evidently to test and evaluate:
+You can use **Metrics** and Metric **Presets** to:
 
-* **LLM-based applications**: summarization, Q\&A, chatbots, agents, RAGs, etc.
+* Aggregate results of row-level text evaluations (see [descriptors](/docs/metrics/all_descriptors)).
 
-* **Predictive ML models**: classification, regression, ranking, recommendations.
+* Assess data quality and data drift
 
-* **Data quality** and **data drift** for text, tabular data, embeddings.
+* Evaluate quality on predictive ML tasks (classification, regression, ranking, recommendations).
 
-This is a reference page. It shows all the available Metrics, Descriptors and Presets.
+This is a reference page that shows available Metrics and Presets. Each Metric also includes a default visualization. For more details on implementations of the individual Metrics and their parameters, see linked pages.
 
-You can use the menu on the right to navigate the sections. We organize the Metrics by logical groups. Note that these groups do **not** match the Presets with a similar name. For example, there are more Data Quality Metrics than included in the `DataQualityPreset`.
+## Value Stats
 
-# How to read the tables
+| Metric              | Description                                                                                                                                                                                           | Parameters                             | Test Condition                                                                                                                             |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **ValueStats()**    | <ul><li>Small Preset. Computes all relevant value statistics at once for a given column.</li><li>Returns different stats based on the column type (categorical, numerical, text, datetime).</li></ul> | **Required**: <ul><li>`column`</li></ul> | <ul><li>**No reference**. Tests for no missing values.</li><li>**With reference**. Tests are the same as for indiviudal Metrics.</li></ul> |
+| **MinValue()**      | <ul><li>Returns min value for a given numerical column.</li></ul>                                                                                                                                     | **Required**: <ul><li>`column`</li></ul> | <ul><li>**No reference**. N/A.</li><li>**With reference**. Tests that Min Value is within +/-10% from the reference.</li></ul>             |
+| **StdValue()**      | Calculates the precision at `k`.                                                                                                                                                                      | **Required**:                          |                                                                                                                                            |
+| **MeanValue()**     |                                                                                                                                                                                                       |                                        |                                                                                                                                            |
+| **MaxValue()**      |                                                                                                                                                                                                       |                                        |                                                                                                                                            |
+| **MedianValue()**   |                                                                                                                                                                                                       |                                        |                                                                                                                                            |
+| **QuantileValue()** |                                                                                                                                                                                                       |                                        |                                                                                                                                            |
+| **CategoryCount()** |                                                                                                                                                                                                       |                                        |                                                                                                                                            |
 
-* **Name**: the name of the Metric.
+column
+column
+column
+column
+column
+column, quantile (default 0.5)
+column, category
+column, left, right
+column, left, right
+column, values
+column, values
 
-* **Description**: plain text explanation. For Metrics, we also specify whether it applies to the whole dataset or individual columns.
+## Data Quality
 
-* **Parameters**: required and optional parameters for the Metric or Preset. We also specify the defaults that apply if you do not pass a custom parameter.
+## Data Drift
 
-**Metric visualizations**. Each Metric includes a default render. To see the visualization, navigate to the examples and run the notebook with all Metrics or Metric Presets.
+## Classification
 
-We are doing our best to maintain this page up to date. In case of discrepancies, check the "All metrics" notebook in examples. If you notice an error, please send us a pull request with an update!
+## Regression
+
+## Ranking
 
 | Metric              | Desc                                     | Parameters                                            | Condition                                    |
 | ------------------- | ---------------------------------------- | ----------------------------------------------------- | -------------------------------------------- |
