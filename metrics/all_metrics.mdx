@@ -1,26 +1,25 @@
 ---
 title: 'All Metrics'
-description: 'All dataset and column-level evaluations.'
+description: 'Referenc page for all dataset and column-level evals.'
 noindex: "true"
 ---
 
-You can use **Metrics** and Metric **Presets** to:
+You can use **Metrics** and Metric **Presets** to assess data quality, data drift and quality of AI outputs (LLM, regression, classification, ranking, etc.). Each Metric includes a default visualization. Read about [Key Concepts](/docs/library/overview).
 
-* Aggregate results of row-level text evaluations (see [descriptors](/docs/metrics/all_descriptors)).
-
-* Assess data quality and data drift
-
-* Evaluate quality on predictive ML tasks.
-
-This is a reference page that shows available Metrics and Presets. Each Metric also includes a default visualization. For more details on implementations of the individual Metrics and their parameters, see linked pages.
-
+How to read the tables:
+* **Metric**: he name of Metric or Preset you can pass to `Report`.
+* **Description** explains what it does. Complex metrics link to explainer pages. 
+* **Parameters** shows available Metric options. You can also add conditional `tests` to any Metric using standard operators like `eq` (equal), `gt` (greater than), etc. Read about [Tests API](/docs/library/tests).
+* **Test defaults** are conditions that apply when you invoke Tests but do not set a pass/fail condition yourself.
+  * **With reference**: if you provide a reference dataset during the Report `run`, the conditions are set relative to reference.
+  * **No reference**: if you do not provide a reference, Tests will use fixed heuristics (like expect no missing values).
 
 ## Text Evals
 
-| Metric                        | Description | Parameters | Test Default |
-| ----------------------------- | ----------- | ---------- | ------------ |
-| **TextEvals()**       | Preset           |            |              |
-
+| Metric          | Description | Parameters | Test Default |
+| --------------- | ----------- | ---------- | ------------ |
+| **TextEvals()** | Preset.       |  (See [descriptors](/docs/metrics/all_descriptors)).
+          |              |
 
 ## Value Stats
 
@@ -37,123 +36,117 @@ This is a reference page that shows available Metrics and Presets. Each Metric a
 
 ## Data Quality (Column)
 
-| Metric                        | Description | Parameters | Test Default |
-| ----------------------------- | ----------- | ---------- | ------------ |
-| **MissingValueCount()**       |             |            |              |
-| **NewCategoriesCount()**      |             |            |              |
-| **MissingCategoriesCount()**  |             |            |              |
-| **InRangeValueCount()**       |             |            |              |
-| **OutRangeValueCount()**      |             |            |              |
-| **InListValueCount()**        |             |            |              |
-| **OutListValueCount()**       |             |            |              |
-| **UniqueValueCount()**        |             |            |              |
-| **MostCommonValueCount()**        |             |            |              |
-| **MostCommonValueCount()**        |             |            |              |
+| Metric                       | Description | Parameters | Test Default |
+| ---------------------------- | ----------- | ---------- | ------------ |
+| **MissingValueCount()**      |             |            |              |
+| **NewCategoriesCount()**     |             |            |              |
+| **MissingCategoriesCount()** |             |            |              |
+| **InRangeValueCount()**      |             |            |              |
+| **OutRangeValueCount()**     |             |            |              |
+| **InListValueCount()**       |             |            |              |
+| **OutListValueCount()**      |             |            |              |
+| **UniqueValueCount()**       |             |            |              |
+| **MostCommonValueCount()**   |             |            |              |
+| **MostCommonValueCount()**   |             |            |              |
 
+## Data Quality (Dataset)
 
-## Data Quality (Dataset) 
-
-| Metric                        | Description       | Parameters | Test Default |
-| ----------------------------- | ----------------- | ---------- | ------------ |
-| **DataSummaryPreset()**       | Preset            |            |              |
-| **DatasetStats()**            | Small Preset      |            |              |
-| **RowCount()**                |                   |            |              |
-| **ColumnCount()**             |                   |            |              |
-| **ConstantColumnCount()**     |                   |            |              |
-| **EmptyRowCount()**           |                   |            |              |
-| **EmptyColumnCount()**        |                   |            |              |
-| **DuplicatedRowCount()**      |                   |            |              |
-| **DuplicatedColumnCount()**   |                   |            |              |
-| **DatasetMissingValueCount()**|                   |            |              |
-| **AlmostEmptyColumnCount()**  |                   |            |              |
-| **AlmostConstantColumnCount()**|                  |            |              |
-| **RowsWithMissingValuesCount()**|                 |            |              |
-| **ColumnsWithMissingValuesCount()**|             |            |              |
-
+| Metric                              | Description  | Parameters | Test Default |
+| ----------------------------------- | ------------ | ---------- | ------------ |
+| **DataSummaryPreset()**             | Preset       |            |              |
+| **DatasetStats()**                  | Small Preset |            |              |
+| **RowCount()**                      |              |            |              |
+| **ColumnCount()**                   |              |            |              |
+| **ConstantColumnCount()**           |              |            |              |
+| **EmptyRowCount()**                 |              |            |              |
+| **EmptyColumnCount()**              |              |            |              |
+| **DuplicatedRowCount()**            |              |            |              |
+| **DuplicatedColumnCount()**         |              |            |              |
+| **DatasetMissingValueCount()**      |              |            |              |
+| **AlmostEmptyColumnCount()**        |              |            |              |
+| **AlmostConstantColumnCount()**     |              |            |              |
+| **RowsWithMissingValuesCount()**    |              |            |              |
+| **ColumnsWithMissingValuesCount()** |              |            |              |
 
 ## Data Drift
 
-| Metric                        | Description | Parameters | Test Default |
-| ----------------------------- | ----------- | ---------- | ------------ |
-| **DataDriftPreset**             | Preset      |            |              |
-| **DriftedColumnsCount**       |             |            |              |
-| **ValueDrift**      |             |            |              |
-| **MultivariateDrift**      |             |            |              |
+| Metric                  | Description | Parameters | Test Default |
+| ----------------------- | ----------- | ---------- | ------------ |
+| **DataDriftPreset**     | Preset      |            |              |
+| **DriftedColumnsCount** |             |            |              |
+| **ValueDrift**          |             |            |              |
+| **MultivariateDrift**   |             |            |              |
 | **EmbeddingDrift**      |             |            |              |
-
 
 ## Correlations
 
-| Metric                        | Description | Parameters | Test Default |
-| ----------------------------- | ----------- | ---------- | ------------ |
-| **DatasetCorrelations**       |             |            |              |
-| **CorrelationChanges**        |             |            |              |
-| **Correlation**        |             |            |              |
-
+| Metric                  | Description | Parameters | Test Default |
+| ----------------------- | ----------- | ---------- | ------------ |
+| **DatasetCorrelations** |             |            |              |
+| **CorrelationChanges**  |             |            |              |
+| **Correlation**         |             |            |              |
 
 ## Classification
 
 || Metric                           | Description           | Parameters | Test Default |
-| -------------------------------- | --------------------- | ---------- | ------------ |
-| **ClassificationPreset**         | Preset               |            |              |
-| **ClassificationQuality**        | Small Preset         |            |              |
-| **ClassificationQualityByLabel** | Small Preset         |            |              |
-| **ClassificationDummyQuality**   | Small Preset         |            |              |
-| **LabelCount**                   |                      |            |              |
-| **Accuracy**                     |                      |            |              |
-| **Precision**                    |                      |            |              |
-| **Recall**                       |                      |            |              |
-| **F1Score**                      |                      |            |              |
-| **TPR**                          |                      |            |              |
-| **TNR**                          |                      |            |              |
-| **FPR**                          |                      |            |              |
-| **FNR**                          |                      |            |              |
-| **LogLoss**                      |                      |            |              |
-| **RocAUC**                       |                      |            |              |
-| **PrecisionByLabel**             |                      |            |              |
-| **F1ByLabel**                    |                      |            |              |
-| **RecallByLabel**                |                      |            |              |
-| **RocAUCByLabel**                |                      |            |              |
-| **Lift**                         |                      |            |              |
-| **DummyPrecision**               |                      |            |              |
-| **DummyRecall**                  |                      |            |              |
-| **DummyF1**                      |                      |            |              |
-
+\| -------------------------------- | --------------------- | ---------- | ------------ |
+\| **ClassificationPreset**         | Preset               |            |              |
+\| **ClassificationQuality**        | Small Preset         |            |              |
+\| **ClassificationQualityByLabel** | Small Preset         |            |              |
+\| **ClassificationDummyQuality**   | Small Preset         |            |              |
+\| **LabelCount**                   |                      |            |              |
+\| **Accuracy**                     |                      |            |              |
+\| **Precision**                    |                      |            |              |
+\| **Recall**                       |                      |            |              |
+\| **F1Score**                      |                      |            |              |
+\| **TPR**                          |                      |            |              |
+\| **TNR**                          |                      |            |              |
+\| **FPR**                          |                      |            |              |
+\| **FNR**                          |                      |            |              |
+\| **LogLoss**                      |                      |            |              |
+\| **RocAUC**                       |                      |            |              |
+\| **PrecisionByLabel**             |                      |            |              |
+\| **F1ByLabel**                    |                      |            |              |
+\| **RecallByLabel**                |                      |            |              |
+\| **RocAUCByLabel**                |                      |            |              |
+\| **Lift**                         |                      |            |              |
+\| **DummyPrecision**               |                      |            |              |
+\| **DummyRecall**                  |                      |            |              |
+\| **DummyF1**                      |                      |            |              |
 
 ## Regression
 
-| Metric                   | Description       | Parameters | Test Default |
-| ------------------------ | ----------------- | ---------- | ------------ |
-| **RegressionPreset**     | Preset            |            |              |
-| **RegressionQuality**    | Small Preset      |            |              |
-| **RegressionDummyQuality**| Small Preset     |            |              |
-| **MeanError**            |                   |            |              |
-| **MAE**                  |                   |            |              |
-| **RMSE**                 |                   |            |              |
-| **MAPE**                 |                   |            |              |
-| **R2Score**              |                   |            |              |
-| **AbsMaxError**          |                   |            |              |
-| **DummyMeanError**       |                   |            |              |
-| **DummyMAE**             |                   |            |              |
-| **DummyRMSE**            |                   |            |              |
-| **DummyMAPE**            |                   |            |              |
-| **DummyR2**              |                   |            |              |
-
+| Metric                     | Description  | Parameters | Test Default |
+| -------------------------- | ------------ | ---------- | ------------ |
+| **RegressionPreset**       | Preset       |            |              |
+| **RegressionQuality**      | Small Preset |            |              |
+| **RegressionDummyQuality** | Small Preset |            |              |
+| **MeanError**              |              |            |              |
+| **MAE**                    |              |            |              |
+| **RMSE**                   |              |            |              |
+| **MAPE**                   |              |            |              |
+| **R2Score**                |              |            |              |
+| **AbsMaxError**            |              |            |              |
+| **DummyMeanError**         |              |            |              |
+| **DummyMAE**               |              |            |              |
+| **DummyRMSE**              |              |            |              |
+| **DummyMAPE**              |              |            |              |
+| **DummyR2**                |              |            |              |
 
 ## Ranking
 
-| Metric                     | Description       | Parameters | Test Default |
-| -------------------------- | ----------------- | ---------- | ------------ |
-| **RecsysPreset()**         | Preset ?          |            |              |
-| **RecallTopK()**           |                   |            |              |
-| **FBetaTopK()**            |                   |            |              |
-| **PrecisionTopK()**        |                   |            |              |
-| **MAPK()**                 |                   |            |              |
-| **NDCGK()**                |                   |            |              |
-| **MRRK()**                 |                   |            |              |
-| **HitRateK()**             |                   |            |              |
-| **PersonalizationMetric()**|                   |            |              |
-| **PopularityBias()**       |                   |            |              |
-| **Diversity()**            |                   |            |              |
-| **Serendipity()**          |                   |            |              |
-| **Novelty()**              |                   |            |              |
+| Metric                      | Description | Parameters | Test Default |
+| --------------------------- | ----------- | ---------- | ------------ |
+| **RecsysPreset()**          | Preset ?    |            |              |
+| **RecallTopK()**            |             |            |              |
+| **FBetaTopK()**             |             |            |              |
+| **PrecisionTopK()**         |             |            |              |
+| **MAPK()**                  |             |            |              |
+| **NDCGK()**                 |             |            |              |
+| **MRRK()**                  |             |            |              |
+| **HitRateK()**              |             |            |              |
+| **PersonalizationMetric()** |             |            |              |
+| **PopularityBias()**        |             |            |              |
+| **Diversity()**             |             |            |              |
+| **Serendipity()**           |             |            |              |
+| **Novelty()**               |             |            |              |
