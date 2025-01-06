@@ -14,42 +14,146 @@ You can use **Metrics** and Metric **Presets** to:
 
 This is a reference page that shows available Metrics and Presets. Each Metric also includes a default visualization. For more details on implementations of the individual Metrics and their parameters, see linked pages.
 
+
+## Text Evals
+
+| Metric                        | Description | Parameters | Test Default |
+| ----------------------------- | ----------- | ---------- | ------------ |
+| **TextEvals()**       | Preset           |            |              |
+
+
 ## Value Stats
 
-| Metric              | Description                                                                                                                                                                                                    | Parameters                               | Test Condition                                                                                                                             |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| **ValueStats()**    | <ul><li>Small Preset. </li><li>Computes various value statistics for a given column.</li><li>Returns different stats based on the column type (categorical, numerical, text, datetime).</li></ul> | **Required**: <ul><li>`column`</li></ul> | <ul><li>**No reference**. Tests for no missing values.</li><li>**With reference**. Tests are the same as for indiviudal Metrics.</li></ul> |
-| **MinValue()**      | <ul><li>Column-level.</li><li>Returns min value for a given numerical column.</li></ul>                                                                                                                        | **Required**: <ul><li>`column`</li></ul> | <ul><li>**No reference**. N/A.</li><li>**With reference**. Tests that Min Value is within +/-10% from the reference.</li></ul>             |
-| **StdValue()**      | .                                                                                                                                                                                                              | **Required**:                            |                                                                                                                                            |
-| **MeanValue()**     |                                                                                                                                                                                                                |                                          |                                                                                                                                            |
-| **MaxValue()**      |                                                                                                                                                                                                                |                                          |                                                                                                                                            |
-| **MedianValue()**   |                                                                                                                                                                                                                |                                          |                                                                                                                                            |
-| **QuantileValue()** |                                                                                                                                                                                                                |                                          |                                                                                                                                            |
-| **CategoryCount()** |                                                                                                                                                                                                                |                                          |                                                                                                                                            |
+| Metric              | Description                                                                                                                                                                                                           | Parameters                               | Test Default                                                                                                                               |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **ValueStats()**    | <ul><li>Small Preset, column-level. </li><li>Computes various descriptive statistics for a given column.</li><li>Returns different stats based on the column type (categorical, numerical, text, datetime).</li></ul> | **Required**: <ul><li>`column`</li></ul> | <ul><li>**No reference**. Tests for no missing values.</li><li>**With reference**. Tests are the same as for indiviudal Metrics.</li></ul> |
+| **MinValue()**      | <ul><li>Column-level.</li><li>Returns min value for a given numerical column.</li></ul>                                                                                                                               | **Required**: <ul><li>`column`</li></ul> | <ul><li>**No reference**. N/A.</li><li>**With reference**. Tests that Min Value is within +/-10% from the reference.</li></ul>             |
+| **StdValue()**      | .                                                                                                                                                                                                                     |                                          |                                                                                                                                            |
+| **MeanValue()**     |                                                                                                                                                                                                                       |                                          |                                                                                                                                            |
+| **MaxValue()**      |                                                                                                                                                                                                                       |                                          |                                                                                                                                            |
+| **MedianValue()**   |                                                                                                                                                                                                                       |                                          |                                                                                                                                            |
+| **QuantileValue()** |                                                                                                                                                                                                                       |                                          |                                                                                                                                            |
+| **CategoryCount()** |                                                                                                                                                                                                                       |                                          |                                                                                                                                            |
 
-column
-column
-column
-column
-column
-column, quantile (default 0.5)
-column, category
-column, left, right
-column, left, right
-column, values
-column, values
+## Data Quality (Column)
 
-## Data Quality
+| Metric                        | Description | Parameters | Test Default |
+| ----------------------------- | ----------- | ---------- | ------------ |
+| **MissingValueCount()**       |             |            |              |
+| **NewCategoriesCount()**      |             |            |              |
+| **MissingCategoriesCount()**  |             |            |              |
+| **InRangeValueCount()**       |             |            |              |
+| **OutRangeValueCount()**      |             |            |              |
+| **InListValueCount()**        |             |            |              |
+| **OutListValueCount()**       |             |            |              |
+| **UniqueValueCount()**        |             |            |              |
+| **MostCommonValueCount()**        |             |            |              |
+| **MostCommonValueCount()**        |             |            |              |
+
+
+## Data Quality (Dataset) 
+
+| Metric                        | Description       | Parameters | Test Default |
+| ----------------------------- | ----------------- | ---------- | ------------ |
+| **DataSummaryPreset()**       | Preset            |            |              |
+| **DatasetStats()**            | Small Preset      |            |              |
+| **RowCount()**                |                   |            |              |
+| **ColumnCount()**             |                   |            |              |
+| **ConstantColumnCount()**     |                   |            |              |
+| **EmptyRowCount()**           |                   |            |              |
+| **EmptyColumnCount()**        |                   |            |              |
+| **DuplicatedRowCount()**      |                   |            |              |
+| **DuplicatedColumnCount()**   |                   |            |              |
+| **DatasetMissingValueCount()**|                   |            |              |
+| **AlmostEmptyColumnCount()**  |                   |            |              |
+| **AlmostConstantColumnCount()**|                  |            |              |
+| **RowsWithMissingValuesCount()**|                 |            |              |
+| **ColumnsWithMissingValuesCount()**|             |            |              |
+
 
 ## Data Drift
 
+| Metric                        | Description | Parameters | Test Default |
+| ----------------------------- | ----------- | ---------- | ------------ |
+| **DataDriftPreset**             | Preset      |            |              |
+| **DriftedColumnsCount**       |             |            |              |
+| **ValueDrift**      |             |            |              |
+| **MultivariateDrift**      |             |            |              |
+| **EmbeddingDrift**      |             |            |              |
+
+
+## Correlations
+
+| Metric                        | Description | Parameters | Test Default |
+| ----------------------------- | ----------- | ---------- | ------------ |
+| **DatasetCorrelations**       |             |            |              |
+| **CorrelationChanges**        |             |            |              |
+| **Correlation**        |             |            |              |
+
+
 ## Classification
+
+|| Metric                           | Description           | Parameters | Test Default |
+| -------------------------------- | --------------------- | ---------- | ------------ |
+| **ClassificationPreset**         | Preset               |            |              |
+| **ClassificationQuality**        | Small Preset         |            |              |
+| **ClassificationQualityByLabel** | Small Preset         |            |              |
+| **ClassificationDummyQuality**   | Small Preset         |            |              |
+| **LabelCount**                   |                      |            |              |
+| **Accuracy**                     |                      |            |              |
+| **Precision**                    |                      |            |              |
+| **Recall**                       |                      |            |              |
+| **F1Score**                      |                      |            |              |
+| **TPR**                          |                      |            |              |
+| **TNR**                          |                      |            |              |
+| **FPR**                          |                      |            |              |
+| **FNR**                          |                      |            |              |
+| **LogLoss**                      |                      |            |              |
+| **RocAUC**                       |                      |            |              |
+| **PrecisionByLabel**             |                      |            |              |
+| **F1ByLabel**                    |                      |            |              |
+| **RecallByLabel**                |                      |            |              |
+| **RocAUCByLabel**                |                      |            |              |
+| **Lift**                         |                      |            |              |
+| **DummyPrecision**               |                      |            |              |
+| **DummyRecall**                  |                      |            |              |
+| **DummyF1**                      |                      |            |              |
+
 
 ## Regression
 
+| Metric                   | Description       | Parameters | Test Default |
+| ------------------------ | ----------------- | ---------- | ------------ |
+| **RegressionPreset**     | Preset            |            |              |
+| **RegressionQuality**    | Small Preset      |            |              |
+| **RegressionDummyQuality**| Small Preset     |            |              |
+| **MeanError**            |                   |            |              |
+| **MAE**                  |                   |            |              |
+| **RMSE**                 |                   |            |              |
+| **MAPE**                 |                   |            |              |
+| **R2Score**              |                   |            |              |
+| **AbsMaxError**          |                   |            |              |
+| **DummyMeanError**       |                   |            |              |
+| **DummyMAE**             |                   |            |              |
+| **DummyRMSE**            |                   |            |              |
+| **DummyMAPE**            |                   |            |              |
+| **DummyR2**              |                   |            |              |
+
+
 ## Ranking
 
-| Metric              | Desc                                     | Parameters                                            | Condition                                    |
-| ------------------- | ---------------------------------------- | ----------------------------------------------------- | -------------------------------------------- |
-| **RecallTopK()**    | Calculates the recall at `k`. Works fast | **Required**: <ul><li>Item 1</li><li>Item 2</li></ul> | Auto test condition: +/- 10% from reference. |
-| **PrecisionTopK()** | Calculates the precision at `k`.         | **Required**:                                         |                                              |
+| Metric                     | Description       | Parameters | Test Default |
+| -------------------------- | ----------------- | ---------- | ------------ |
+| **RecsysPreset()**         | Preset ?          |            |              |
+| **RecallTopK()**           |                   |            |              |
+| **FBetaTopK()**            |                   |            |              |
+| **PrecisionTopK()**        |                   |            |              |
+| **MAPK()**                 |                   |            |              |
+| **NDCGK()**                |                   |            |              |
+| **MRRK()**                 |                   |            |              |
+| **HitRateK()**             |                   |            |              |
+| **PersonalizationMetric()**|                   |            |              |
+| **PopularityBias()**       |                   |            |              |
+| **Diversity()**            |                   |            |              |
+| **Serendipity()**          |                   |            |              |
+| **Novelty()**              |                   |            |              |
