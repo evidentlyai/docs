@@ -54,10 +54,6 @@
       "url": "faq"
     },
     {
-      "name": "API Reference",
-      "url": "api-reference"
-    },
-    {
       "name": "Changelog",
       "url": "changelog"
     }
@@ -175,7 +171,7 @@
       ]
     },
     {
-      "group": "Evaluations",
+      "group": "Reference",
       "pages": [
         "metrics/introduction",
         "metrics/all_metrics",
@@ -224,38 +220,37 @@
       ]
     },
     {
-      "group": "Examples",
+      "group": "Intro",
       "pages": [
         "examples/introduction"
       ]
     },
     {
-      "group": "About",
+      "group": "Examples",
       "pages": [
-        "faq/introduction",
+        "examples/regression_testing",
+        "examples/LLM_judge",
+        "examples/data_drift_monitoring"
+      ]
+    },
+    {
+      "group": "Intro",
+      "pages": [
+        "faq/introduction"
+      ]
+    },
+    {
+      "group": "F.A.Q.",
+      "pages": [
         "faq/why_evidently",
         "faq/oss_vs_cloud",
         "faq/migration_v1"
       ]
     },
     {
-      "group": "API Documentation",
-      "pages": [
-        "api-reference/introduction"
-      ]
-    },
-    {
       "group": "Changelog",
       "pages": [
         "changelog/changelog"
-      ]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
       ]
     }
   ],
