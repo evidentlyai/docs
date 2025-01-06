@@ -226,7 +226,7 @@
       ]
     },
     {
-      "group": "Examples",
+      "group": "Tutorials",
       "pages": [
         "examples/LLM_judge",
         "examples/regression_testing",
