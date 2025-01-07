@@ -3,13 +3,9 @@ title: 'Telemetry'
 description: 'What data is collected when you use the tool'
 ---
 
-# **What is Telemetry?**
+Telemetry refers to the collection of usage data. We collect some data to understand how many users we have and how they interact with Evidently. This helps us improve the tool and prioritize implementing the new features. Below we describe what is collected, how to opt out and why we'd appreciate if you keep the telemetry on.
 
-Telemetry refers to the collection of usage data. We collect some data to understand how many users we have and how they interact with Evidently. This helps us improve the tool and prioritize implementing the new features.
-
-Below we describe what is collected, how to opt out and why we'd appreciate if you keep the telemetry on.
-
-# **What data is collected?**
+## **What data is collected?**
 
 Telemetry is collected in Evidently starting from **version 0.4.0**.
 
@@ -17,71 +13,23 @@ We only collect telemetry when you use **Evidently Monitoring UI**. We DO NOT co
 
 We only collect **anonymous** usage data. We DO NOT collect personal data.
 
-We only collect **data about service usage**. Our telemetry is intentionally limited in scope. We DO NOT collect any sensitive information or data about the datasets you process. We DO NOT have access to the dataset schema, parameters, variable names, or anything related to the contents of the data or your code.
+We only collect data about **environment** and **service** use. Our telemetry is intentionally limited in scope. We DO NOT collect any sensitive information or data about the datasets you process. We DO NOT have access to the dataset schema, parameters, variable names, or anything related to the contents of the data or your code. We collect the following types of data.
 
-We collect the following types of data:
+### Environment data
 
-* **Environment data**. Basic information about the environment in which you run Evidently (Python version, operating system, etc.)
+Basic information about the environment in which you run Evidently: `Timestamp`, `User_id`, `Os_name`, `Os_version`, `Python_version`,`Tool_name`, `Tool_version`, `Source_ip`.
 
-* **Service usage data**. Actions performed in the service to understand which features are being used.
+<Info>
+  `source_ip` is NOT your IP address. We use `jitsu,` an [open-source tool](https://github.com/jitsucom/jitsu) for event collection. We always use strict `ip_policy` which obscures the exact IP. You can read more in Jitsu [docs](https://classic.jitsu.com/docs/sending-data/js-sdk/reference/parameters-reference).
+</Info>
 
-## Environment data
+<Info>
+  The `user_ID` is anonymized and allows us to match that actions are performed by the same user.
+</Info>
 
-We collect the following data:
+### Service usage actions
 
-* Timestamp
-
-* User\_id
-
-* Os\_name
-
-* Os\_version
-
-* Python\_version
-
-* Tool\_name
-
-* Tool\_version
-
-* Source\_ip
-
-**Note**: `source_ip` is NOT your IP address. We use `jitsu` - an [open-source tool](https://github.com/jitsucom/jitsu) for event collection. We always use a strict `ip_policy` which obscures the exact IP. You can read more in Jitsu [documentation](https://classic.jitsu.com/docs/sending-data/js-sdk/reference/parameters-reference).
-
-The `user_ID` is anonymized and only allows us to match that certain actions are performed by the same user.
-
-## Service usage data
-
-We collect the data about the following actions:
-
-* `Startup`
-
-* `Index`
-
-* `List_projects`
-
-* `Get_project_info`
-
-* `Project_dashboard`
-
-* `List_reports`
-
-* `List_test_suites`
-
-* `Get_snapshot_download`
-
-* `Add_project`
-
-* `Search_projects` (currently action is not supported in the UI)
-
-* `Update_project_info` (currently action is not supported in the UI)
-
-* `Get_snapshot_graph_data` (currently action is not supported in the UI)
-
-* `Get_snapshot_data` (currently action is not supported in the UI)
-
-* `List_project_dashboard_panels` (currently action is not supported in the UI)
-
-* `Add_snapshot`  (currently action is not supported in the UI)
+We collect the data about the following actions performed in the service to understand features being used: `Startup`, `Index`, `List_projects`, `Get_project_info`, `Project_dashboard`, `List_reports`, `List_test_suites`, `Get_snapshot_download`, `Add_project`, `Search_projects`, `Update_project_info`, `Get_snapshot_graph_data`, `Get_snapshot_data`, `List_project_dashboard_panels`,`Add_snapshot`.
 
 ## How to enable/disable telemetry?
 
@@ -142,6 +90,7 @@ unset DO_NOT_TRACK
     }
     ```
   </Accordion>
+
   <Accordion title="Action: index">
     ```
     {
@@ -378,7 +327,7 @@ unset DO_NOT_TRACK
   </Accordion>
 </AccordionGroup>
 
-# **Should I opt out?**
+## **Should I opt out?**
 
 Being open-source, we have no visibility into the tool usage unless someone actively reaches out to us or opens a GitHub issue.
 
