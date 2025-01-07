@@ -22,14 +22,14 @@ To add Tests:
 
 ![](/images/metrics/preset_data_drift_2-min.png)
 
-* **Column drift.** Checks for shifts in each column. The drift detection method is chosen automatically based on the column type (categorical, numerical, text) and number of observations.
+* **Column drift.** Checks for shifts in each column. The drift detection method is chosen automatically based on the column type and number of observations.
 
 * **Target / Prediction Drift**. If you dataset includes Prediction or Target value, it will be evaluated together with other columns.
 
 * **Overall dataset drift.** Returns the share of drifting columns in the Dataset. By default, Dataset Drift is detected if at least 50% of columns drift.
 
 <Info>
-  **Data Drift Explainer.** Check the [Data Drift Metrics](/metrics/explainer_recsys) to understand how different methods work.
+  **Data Drift Explainer.** Check the [Data Drift Metrics](/metrics/explainer_drift) to understand how different methods work.
 </Info>
 
 The table shows the drifting columns first. You can also choose to sort the rows by the feature name or type, and open up individual columns to see distribution details.
@@ -68,23 +68,23 @@ You can evaluate data drift in different scenarios.
 
 ## Report customization
 
-**Select Columns**. You can choose to apply Drift Detection only to some columns in the Dataset, for example, only to the important features. Pass them using the `columns` parameter.
+**Select columns**. You can apply Drift Detection only to some columns in the Dataset, for example, only to the important features. Use the `columns` parameter.
 
-**Change Drift Detection conditions.** Evidently has a large number of drift detection methods to choose from (univariate and multivariate), including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc. You can specify them or change the overall drift detection conditions by passing parameters to a Preset. You can also pick tests for individual columns or implement a fully custom drift detection method.
+**Change drift parameters.** Evidently has a large number of drift detection methods (univariate and multivariate), including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc. You can specify them or change the overall drift detection conditions. You can also pick tests by column or implement a custom drift method.
 
 <Info>
-  **Drift detection parameters**. Check available methods and parameters in [Drift Customization. ](/docs/metrics/customize_data_drift).
+  **Drift detection parameters**. Learn available methods and parameters in [Drift Customization. ](/docs/metrics/customize_data_drift).
 </Info>
 
 **Modify Report**. You can add other Metrics to the Report to get a more comprehensive evaluation. Here are some recommended options.
 
-* **Single out the Target/Prediction column.** If you want to evaluate drift in the Prediction column separately, you can add \`ValueDrift("prediction")\` to your Report so that you see the drift in this value in a separate widget.
+* **Single out the Target/Prediction column.** If you want to evaluate drift in the Prediction column separately, you can add `ValueDrift("prediction"` to your Report so that you see the drift in this value in a separate widget.
 
-* **Add data quality checks**. Add \`DataSummaryPreset\` to get descriptive statistics and run Tests on data quality issues, like detecting missing values. Note that the data drift checks drop the null values (and compare the distributions of non-empty features), so you may want to run such Tests separately.
+* **Add data quality checks**. Add `DataSummaryPreset` to get descriptive statistics and run data quality Tests, like detecting missing values. Note that the data drift checks drop the null values (and compare the distributions of non-empty features), so you may want to run such Tests separately.
 
 * **Check for correlation changes**. You can also consider adding checks on changes in correlations between the features.
 
-* **Use embedding drift detection**. To detect drift in embeddings data, use a separate `EmbeddingDrift` Metric.
+* **Detect embedding drift**. To detect drift in embeddings data, use `EmbeddingDrift`.
 
 <Info>
   **Creating a custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
