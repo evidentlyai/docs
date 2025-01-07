@@ -22,23 +22,23 @@ report
 
 To add Tests
 
-[ADD CODE]
+\[ADD CODE]
 
 ## Overview
 
 ![](/images/metrics/preset_recsys-min.png)
 
-**Scope.**`RecsysPreset` evaluates the quality of the recommender system by generating multiple metrics to assess the quality of ranking and diversity of recommended content.
+`RecsysPreset` evaluates the quality of the recommender system by generating multiple metrics to assess the quality of ranking and diversity of recommended content.
 
-**Use case**. When to use the Preset:
+It include 10+ metrics like NDCG at K, MAP at K, HitRate, diversity, serendipity, etc. You must provide a `k` parameter to evaluate the Top-K recommendations.
+
+When to use the Preset:
 
 * **Experimental evaluations** as you iterate on building your recommender system.
 
 * **Side-by-side comparison** for two different models or periods.&#x20;
 
 * **Production monitoring** checks after you acquire ground truth labels.&#x20;
-
-**Composition**. 10+ metrics like NDCG at K, MAP at K, HitRate, diversity, serendipity, etc. You must provide a `k` parameter to evaluate the Top-K recommendations.
 
 <Info>
   Check the complete list of Metrics included in each Preset on the [All Metrics page](/docs/metrics/all-metrics).
@@ -48,7 +48,9 @@ To add Tests
   Check the Ranking [Metrics Guide](/metrics/explainer_recsys) for an explanation of each metric.
 </Info>
 
-**Data requirements.** You must provide the following inputs:
+## Data requirements
+
+You must provide the following inputs:
 
 * **Prediction:** recommended items with rank or score
 
