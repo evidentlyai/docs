@@ -4,82 +4,90 @@ description: 'Overview of the Data Drift Preset.'
 noindex: "true"
 ---
 
-### Data Drift Preset
+To run a Preset on your data:
 
-`DataDriftPreset` evaluates the data distribution drift in all individual columns, and share of drifting columns in the dataset. Input columns are required.
+```python
+report = Report(metrics=[
+    DataDriftPreset(),
+])
+```
 
-**Composition**:
+To add Tests:
 
-* `DataDriftTable()` for all or specified `columns`
+\[ADD CODE]
 
-* `DatasetDriftMetric()` for all or specified `columns`
+## Overview
 
-**Optional parameters**:
+![](/images/metrics/preset_data_drift_2-min.png)
 
-* `columns`
+`DataDriftPreset` lets you evaluate shift in data distribution between the two datasets to detect if there are significant changes.&#x20;
 
-* `stattest`
+* **Column drift.** Evaluate drift in each dataset column. The drift detection method is chosen automatically for each column based on type (categorical, numerical, text, embeddings) and number of observations.
 
-* `cat_stattest`
+* **Overall dataset drift.** Returns the share of drifting columns in the Dataset. By default, Dataset Drift is detected if at least 50% of features drift.
 
-* `num_stattest`
+<Info>
+  **Data Drift Explainer.** Check the [Data Drift Explainer](/metrics/explainer_recsys) to understand different methods.
+</Info>
 
-* `per_column_stattest`
+The table shows the drifting columns first. You can also choose to sort the rows by the feature name or type, and open up individual columns to see distribution details.&#x20;
 
-* `text_stattest`
+**Target / Prediction Drift**. If you dataset includes Prediction or Target value, it will be evaluated together with other columns.
 
-* `stattest_threshold`
+![](/images/metrics/preset_data_drift-min.png)
 
-* `cat_stattest_threshold`
+If you choose Tests, you will get an alternative Test Suite view.
 
-* `num_stattest_threshold`
+\[ADD IMG]
 
-* `per_column_stattest_threshold`
+## Use Case
 
-* `text_stattest_threshold`
+You can evaluate data drift in different scenarios.
 
-* `embeddings`
+* **To monitor the ML model performance without ground truth.** When you do not have true labels or actuals, you can monitor the feature drift to check if the model still operates in a familiar environment. If you detect drift in features or prediction, you can trigger labelling and retraining, or decide to pause and switch to a different decision method.
 
-* `embeddings_drift_method`
+* **When you are debugging the ML model quality decay.** If you observe a drop in the model quality, you can evaluate Data Drift to explore the change in the feature patterns, e.g., to understand the change in the environment or discover the appearance of a new segment.
 
-* `drift_share`
+* **To understand model drift in an offline environment.** You can explore the historical data drift to understand past changes in the input data and define the optimal drift detection approach and retraining strategy.
 
-How to set data drift parameters, embeddings drift parameters.
+* **To decide on the model retraining.** Before feeding fresh data into the model, you might want to verify whether it even makes sense. If there is no data drift, the environment is stable, and retraining might not be necessary.
 
-### Target Drift Preset
+<Info>
+  For conceptual explanation, read about [Data Drift](https://www.evidentlyai.com/ml-in-production/data-drift) and [Concept Drift](https://www.evidentlyai.com/ml-in-production/concept-drift). To build intuition about different drift detection methods, check these research blogs: [numerical](https://www.evidentlyai.com/blog/data-drift-detection-large-datasets) data, [embeddings](https://www.evidentlyai.com/blog/embedding-drift-detection).
+</Info>
 
-`TargetDriftPreset` evaluates the prediction or target drift. Target and/or prediction is required. Input features are optional.
+## Data requirements
 
-**Composition**:
+* **Input columns.** You can provide any input features and prediction column, if available.
 
-* `ColumnDriftMetric()` for `target` and/or `prediction` columns
+* **Non-empty.** The columns compared for drift must be non-empty.&#x20;
 
-* `ColumnCorrelationsMetric()`  for `target` and/or `prediction` columns
+* **Column types.** Evidently can evaluate drift for numerical, categorical, text or embedding data. You can explicitly specify each column type when you run the Report. Otherwise Evidently will try to identify the numerical and categorical features automatically. It is recommended to use data definition to avoid errors. If you have text or embeddings data, you must always specify it.
 
-* `TargetByFeaturesTable()` for all or specified `columns`
+<Info>
+  **Data schema mapping**. Use the [data definition](/docs/library/data_definition) to map your input data.
+</Info>
 
-* `ColumnValuePlot()` for `target` and/or `prediction` columns - if the task is `regression`
+## Report customization
 
-This section of the docs explains how evaluations work in Evidently, and lists all available Metrics (built-in evals) and Presets (templated combinations of Metrics).
+**Select Columns**. You can choose to apply Drift Detection only to some columns in the Dataset, for example, only to the important features. Pass them using the \`columns\` parameter.
 
-**Optional parameters**:
+**Change Drift Detection conditions.** Evidently has a large number of drift detection methods to choose from (univariate and multivariate), including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc. You can specify them or change the overall drift detection conditions by passing parameters to a Preset. You can also pick tests for individual columns or implement a fully custom drift detection method.
 
-* `columns`
+<Info>
+  **Drift detection parameters**. Check available methods and parameters in [Drift Customization. ](/docs/metrics/customize_data_drift).
+</Info>
 
-* `stattest`
+**Modify Report**. You can add other Metrics to the Report to get a more comprehensive evaluation.  Two recommended options are:
 
-* `cat_stattest`
+* **Data quality checks**. Add \`DataSummaryPreset\` to get descriptive statistics and run Tests on data quality issues, like detecting missing values. Note that the data drift checks drop the null values (and compare the distributions of non-empty features), so you may want to run such Tests separately.
 
-* `num_stattest`
+* **Correlation changes**. You can also consider adding checks on changes in correlations between the features.
 
-* `per_column_stattest`
+* **Single out the Target/Prediction column.** If you want to evaluate drift in the Prediction column separately, you can add \`ValueDrift("prediction")\` to your Report so that you see the drift in this value in a separate widget.
 
-* `stattest_threshold`
+<Info>
+  **Creating a custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
+</Info>
 
-* `cat_stattest_threshold`
-
-* `num_stattest_threshold`
-
-* `per_column_stattest_threshold`
-
-How to set data drift parameters.
+**\[ADD on feature importances]**
