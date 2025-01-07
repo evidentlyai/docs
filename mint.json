@@ -249,6 +249,13 @@
       ]
     },
     {
+      "group": "Misc",
+      "pages": [
+        "faq/telemetry",
+        "faq/contact"
+      ]
+    },
+    {
       "group": "Changelog",
       "pages": [
         "changelog/changelog"
