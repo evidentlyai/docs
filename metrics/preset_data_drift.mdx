@@ -18,21 +18,21 @@ To add Tests:
 
 ## Overview
 
+`DataDriftPreset` lets you evaluate shift in data distribution between the two datasets to detect if there are significant changes.
+
 ![](/images/metrics/preset_data_drift_2-min.png)
 
-`DataDriftPreset` lets you evaluate shift in data distribution between the two datasets to detect if there are significant changes.&#x20;
+* **Column drift.** Checks for shifts in each column. The drift detection method is chosen automatically based on the column type (categorical, numerical, text) and number of observations.
 
-* **Column drift.** Evaluate drift in each dataset column. The drift detection method is chosen automatically for each column based on type (categorical, numerical, text, embeddings) and number of observations.
+* **Target / Prediction Drift**. If you dataset includes Prediction or Target value, it will be evaluated together with other columns.
 
-* **Overall dataset drift.** Returns the share of drifting columns in the Dataset. By default, Dataset Drift is detected if at least 50% of features drift.
+* **Overall dataset drift.** Returns the share of drifting columns in the Dataset. By default, Dataset Drift is detected if at least 50% of columns drift.
 
 <Info>
-  **Data Drift Explainer.** Check the [Data Drift Explainer](/metrics/explainer_recsys) to understand different methods.
+  **Data Drift Explainer.** Check the [Data Drift Metrics](/metrics/explainer_recsys) to understand how different methods work.
 </Info>
 
-The table shows the drifting columns first. You can also choose to sort the rows by the feature name or type, and open up individual columns to see distribution details.&#x20;
-
-**Target / Prediction Drift**. If you dataset includes Prediction or Target value, it will be evaluated together with other columns.
+The table shows the drifting columns first. You can also choose to sort the rows by the feature name or type, and open up individual columns to see distribution details.
 
 ![](/images/metrics/preset_data_drift-min.png)
 
@@ -48,7 +48,7 @@ You can evaluate data drift in different scenarios.
 
 * **When you are debugging the ML model quality decay.** If you observe a drop in the model quality, you can evaluate Data Drift to explore the change in the feature patterns, e.g., to understand the change in the environment or discover the appearance of a new segment.
 
-* **To understand model drift in an offline environment.** You can explore the historical data drift to understand past changes in the input data and define the optimal drift detection approach and retraining strategy.
+* **To understand model drift in an offline environment.** You can explore the [historical data drift]() to understand past changes and define the optimal drift detection approach and retraining strategy.
 
 * **To decide on the model retraining.** Before feeding fresh data into the model, you might want to verify whether it even makes sense. If there is no data drift, the environment is stable, and retraining might not be necessary.
 
@@ -58,11 +58,9 @@ You can evaluate data drift in different scenarios.
 
 ## Data requirements
 
-* **Input columns.** You can provide any input features and prediction column, if available.
+* **Input columns.** You can provide any input columns. They must be non-empty.
 
-* **Non-empty.** The columns compared for drift must be non-empty.&#x20;
-
-* **Column types.** Evidently can evaluate drift for numerical, categorical, text or embedding data. You can explicitly specify each column type when you run the Report. Otherwise Evidently will try to identify the numerical and categorical features automatically. It is recommended to use data definition to avoid errors. If you have text or embeddings data, you must always specify it.
+* **Column types.** The Preset can evaluate drift for numerical, categorical or text data. You can explicitly specify each column type. Otherwise, Evidently will try to identify the numerical and categorical features automatically. It is recommended to use data definition to avoid errors. If you have text data, you must always map it.
 
 <Info>
   **Data schema mapping**. Use the [data definition](/docs/library/data_definition) to map your input data.
@@ -70,7 +68,7 @@ You can evaluate data drift in different scenarios.
 
 ## Report customization
 
-**Select Columns**. You can choose to apply Drift Detection only to some columns in the Dataset, for example, only to the important features. Pass them using the \`columns\` parameter.
+**Select Columns**. You can choose to apply Drift Detection only to some columns in the Dataset, for example, only to the important features. Pass them using the `columns` parameter.
 
 **Change Drift Detection conditions.** Evidently has a large number of drift detection methods to choose from (univariate and multivariate), including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc. You can specify them or change the overall drift detection conditions by passing parameters to a Preset. You can also pick tests for individual columns or implement a fully custom drift detection method.
 
@@ -78,13 +76,15 @@ You can evaluate data drift in different scenarios.
   **Drift detection parameters**. Check available methods and parameters in [Drift Customization. ](/docs/metrics/customize_data_drift).
 </Info>
 
-**Modify Report**. You can add other Metrics to the Report to get a more comprehensive evaluation.  Two recommended options are:
-
-* **Data quality checks**. Add \`DataSummaryPreset\` to get descriptive statistics and run Tests on data quality issues, like detecting missing values. Note that the data drift checks drop the null values (and compare the distributions of non-empty features), so you may want to run such Tests separately.
-
-* **Correlation changes**. You can also consider adding checks on changes in correlations between the features.
+**Modify Report**. You can add other Metrics to the Report to get a more comprehensive evaluation. Here are some recommended options.
 
 * **Single out the Target/Prediction column.** If you want to evaluate drift in the Prediction column separately, you can add \`ValueDrift("prediction")\` to your Report so that you see the drift in this value in a separate widget.
+
+* **Add data quality checks**. Add \`DataSummaryPreset\` to get descriptive statistics and run Tests on data quality issues, like detecting missing values. Note that the data drift checks drop the null values (and compare the distributions of non-empty features), so you may want to run such Tests separately.
+
+* **Check for correlation changes**. You can also consider adding checks on changes in correlations between the features.
+
+* **Use embedding drift detection**. To detect drift in embeddings data, use a separate `EmbeddingDrift` Metric.
 
 <Info>
   **Creating a custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
