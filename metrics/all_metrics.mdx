@@ -94,38 +94,37 @@ You can use **Metrics** and **Presets** to assess data quality, data drift and A
 
 ## Classification
 
-| Metric                           | Description           | Parameters | Test Default |
-| -------------------------------- | --------------------- | ---------- | ---------- |
-| **ClassificationPreset**         | Preset               |            |             |
-| **ClassificationQuality**        | Small Preset         |            |             |
-| **ClassificationQualityByLabel** | Small Preset         |            |             |
-| **ClassificationDummyQuality**   | Small Preset         |            |             |
-| **LabelCount**                   |                      |            |             |
-| **Accuracy**                     |                      |            |             |
-| **Precision**                    |                      |            |             |
-| **Recall**                       |                      |            |             |
-| **F1Score**                      |                      |            |             |
-| **TPR**                          |                      |            |             |
-| **TNR**                          |                      |            |             |
-| **FPR**                          |                      |            |             |
-| **FNR**                          |                      |            |             |
-| **LogLoss**                      |                      |            |             |
-| **RocAUC**                       |                      |            |             |
-| **PrecisionByLabel**             |                      |            |             |
-| **F1ByLabel**                    |                      |            |             |
-| **RecallByLabel**                |                      |            |             |
-| **RocAUCByLabel**                |                      |            |             |
-| **Lift**                         |                      |            |             |
-| **DummyPrecision**               |                      |            |             |
-| **DummyRecall**                  |                      |            |             |
-| **DummyF1**                      |                      |            |             |
-
+| Metric                           | Description  | Parameters | Test Default |
+| -------------------------------- | ------------ | ---------- | ------------ |
+| **ClassificationPreset**         | Preset       |            |              |
+| **ClassificationQuality**        | Small Preset |            |              |
+| **ClassificationQualityByLabel** | Small Preset |            |              |
+| **ClassificationDummyQuality**   | Small Preset |            |              |
+| **LabelCount**                   |              |            |              |
+| **Accuracy**                     |              |            |              |
+| **Precision**                    |              |            |              |
+| **Recall**                       |              |            |              |
+| **F1Score**                      |              |            |              |
+| **TPR**                          |              |            |              |
+| **TNR**                          |              |            |              |
+| **FPR**                          |              |            |              |
+| **FNR**                          |              |            |              |
+| **LogLoss**                      |              |            |              |
+| **RocAUC**                       |              |            |              |
+| **PrecisionByLabel**             |              |            |              |
+| **F1ByLabel**                    |              |            |              |
+| **RecallByLabel**                |              |            |              |
+| **RocAUCByLabel**                |              |            |              |
+| **Lift**                         |              |            |              |
+| **DummyPrecision**               |              |            |              |
+| **DummyRecall**                  |              |            |              |
+| **DummyF1**                      |              |            |              |
 
 ## Regression
 
 | Metric                     | Description  | Parameters | Test Default |
 | -------------------------- | ------------ | ---------- | ------------ |
-| **RegressionPreset**       | Preset       |            |              |
+| **RegressionPreset**       | Preset. Includes metrics:       |            |              |
 | **RegressionQuality**      | Small Preset |            |              |
 | **RegressionDummyQuality** | Small Preset |            |              |
 | **MeanError**              |              |            |              |
@@ -144,7 +143,7 @@ You can use **Metrics** and **Presets** to assess data quality, data drift and A
 
 | Metric                      | Description | Parameters | Test Default |
 | --------------------------- | ----------- | ---------- | ------------ |
-| **RecsysPreset()**          | Preset ?    |            |              |
+| **RecsysPreset()**          | Preset. Includes: <ul><li>PrecisionTopK()</li><li>RecallTopK()</li><li>FBetaTopK()</li><li>MAPK()</li><li>NDCGK()</li><li>MRRK()</li><li>HitRateK()</li><li>Personalization()</li><li>PopularityBias()</li><li>Diversity()</li><li>Serendipity()</li><li>Novelty()</li></ul>    |            |              |
 | **RecallTopK()**            |             |            |              |
 | **FBetaTopK()**             |             |            |              |
 | **PrecisionTopK()**         |             |            |              |
@@ -157,3 +156,4 @@ You can use **Metrics** and **Presets** to assess data quality, data drift and A
 | **Diversity()**             |             |            |              |
 | **Serendipity()**           |             |            |              |
 | **Novelty()**               |             |            |              |
+
