@@ -80,7 +80,7 @@ You can evaluate data drift in different scenarios.
 
 * **Single out the Target/Prediction column.** If you want to evaluate drift in the Prediction column separately, you can add `ValueDrift("prediction"` to your Report so that you see the drift in this value in a separate widget.
 
-* **Add data quality checks**. Add `DataSummaryPreset` to get descriptive statistics and run data quality Tests, like detecting missing values. Note that the data drift checks drop the null values (and compare the distributions of non-empty features), so you may want to run such Tests separately.
+* **Add data quality checks**. Add `DataSummaryPreset` to get descriptive statistics and run data quality Tests, like detecting missing values. Data drift checks drop the null values (and compares the distributions of non-empty features), so you may want to run such Tests separately.
 
 * **Check for correlation changes**. You can also consider adding checks on changes in correlations between the features.
 
