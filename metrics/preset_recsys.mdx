@@ -30,7 +30,7 @@ To add Tests
 
 ![](/images/metrics/preset_recsys-min.png)
 
-It includes 10+ metrics like NDCG at K, MAP at K, HitRate, diversity, serendipity, etc. 
+It includes 10+ metrics like NDCG at K, MAP at K, HitRate, diversity, serendipity, etc.
 
 When to use the Preset:
 
@@ -52,15 +52,15 @@ When to use the Preset:
 
 You must provide the following inputs:
 
-* **Prediction:** recommended items with rank or score
+* **Prediction.** Recommended items with rank or score.
 
-* **Target:** True relevance score
+* **Target**. True relevance score or interaction result.
 
-* (Optional) **Input/user features**: for some diversity metrics
+* (Optional) **Input/user features**. For some diversity metrics.
 
-* (Optional) **Training data**: for some diversity metrics
+* (Optional) **Training data**. For some diversity metrics.
 
-* (Optional) **Reference dataset**. Provide to get a side-by-side comparison.
+* (Optional) **Reference dataset**. To get a side-by-side comparison.
 
 <Info>
   **Data schema mapping**. Use the [data definition](/docs/library/data_definition) to map your input data.
@@ -74,7 +74,7 @@ You must provide the following inputs:
   **Creating a custom Report**. Check how to create a [Report](/docs/library/report).
 </Info>
 
-**Test conditions.**  If you enable Tests and provide a reference dataset, Evidently will use the default Test conditions dynamically learned from the reference. If you want to set your own conditions, you must create a custom Report and add conditions to the individual Metrics.
+**Test conditions.**  When you enable Tests and provide a reference dataset, Evidently uses the default Test conditions based on heuristics and learned reference values. If you want to set your own pass/fail conditions, create a custom Report and add conditions to the individual Metrics.
 
 <Info>
   **Adding Test conditions**. Check how to specify [Tests](/docs/library/tests) for your Report.
