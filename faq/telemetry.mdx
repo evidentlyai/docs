@@ -88,6 +88,7 @@ We collect the data about the following actions:
 By default, telemetry is enabled.
 
 After starting up the service, you will see the following message in the terminal:
+
 ```
 Anonymous usage reporting is enabled. To disable it, set env variable {DO_NOT_TRACK_ENV} to any value
 ```
@@ -100,7 +101,8 @@ Set it to any value, for instance:
 export DO_NOT_TRACK=1
 ```
 
-After doing that and starting the service, you will see the message: 
+After doing that and starting the service, you will see the message:
+
 ```
 Anonymous usage reporting is disabled.
 ```
@@ -112,6 +114,72 @@ unset DO_NOT_TRACK
 ```
 
 ## Event log examples
+
+
+
+<AccordionGroup>
+  <Accordion title="Action: startup" defaultOpen="false">
+     ```
+  {
+    "_timestamp": "2023-07-07T14:08:44.332528Z",
+    "action": "startup",
+    "api_key": "s2s.5xmxpip2ax4ut5rrihfjhb.uqcoh71nviknmzp77ev6rd",
+    "error": null,
+    "eventn_ctx_event_id": "cfcc182d-5a2d-47d6-89dd-37590ec7b08a",
+    "extra": {},
+    "group_id": null,
+    "interface": "service_backend",
+    "os_name": "mac",
+    "os_version": "13.0.1",
+    "python_version": {
+      "major": 3,
+      "minor": 9,
+      "patch": 16
+    },
+    "source_ip": "78.163.128.1",
+    "src": "api",
+    "tool_name": "evidently",
+    "tool_version": "0.3.3",
+    "user_id": "16d5bb6f-0400-4e2c-90f3-c3b31c95a1d3"
+  }
+  ```
+  </Accordion>
+
+  <Accordion title="Action: index" defaultOpen="false">
+ ```
+  {
+    "_timestamp": "2023-07-07T14:10:54.355143Z",
+    "action": "index",
+    "api_key": "s2s.5xmxpip2ax4ut5rrihfjhb.uqcoh71nviknmzp77ev6rd",
+    "error": null,
+    "eventn_ctx_event_id": "96029e42-d2fc-4372-a1b5-b15e4d2ec6a0",
+    "extra": {},
+    "group_id": null,
+    "interface": "service_backend",
+    "os_name": "mac",
+    "os_version": "13.0.1",
+    "python_version": {
+      "major": 3,
+      "minor": 9,
+      "patch": 16
+    },
+    "source_ip": "78.163.128.1",
+    "src": "api",
+    "tool_name": "evidently",
+    "tool_version": "0.3.3",
+    "user_id": "16d5bb6f-0400-4e2c-90f3-c3b31c95a1d3"
+  }
+  ```
+  </Accordion>
+
+  <Accordion title="New Accordion" defaultOpen="false">
+
+  </Accordion>
+</AccordionGroup>
+
+
+
+
 
 <Accordion title="Action: startup" defaultOpen="false">
   ```
