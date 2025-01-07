@@ -26,11 +26,11 @@ To add Tests
 
 ## Overview
 
+`RecsysPreset` evaluates the quality of the recommender system by generating multiple metrics to assess the quality of ranking and diversity of recommendations. You must provide the `k` parameter to evaluate the Top-K recommendations.
+
 ![](/images/metrics/preset_recsys-min.png)
 
-`RecsysPreset` evaluates the quality of the recommender system by generating multiple metrics to assess the quality of ranking and diversity of recommended content.
-
-It include 10+ metrics like NDCG at K, MAP at K, HitRate, diversity, serendipity, etc. You must provide a `k` parameter to evaluate the Top-K recommendations.
+It includes 10+ metrics like NDCG at K, MAP at K, HitRate, diversity, serendipity, etc. 
 
 When to use the Preset:
 
@@ -41,11 +41,11 @@ When to use the Preset:
 * **Production monitoring** checks after you acquire ground truth labels.&#x20;
 
 <Info>
-  **Preset composition.** Verify the exact Preset composition at the [All Metrics reference page](/docs/metrics/all-metrics).
+  **Preset composition.** Verify the exact Preset composition at the [All Metrics reference page](/metrics/all-metrics).
 </Info>
 
 <Info>
-  **Metric explainers.** Check the [Ranking Metrics Explainer](/metrics/explainer_recsys) to see how each Metric works.
+  **Metric explainers.** Check the [Ranking and RecSys Metrics](/metrics/explainer_recsys) to see how each Metric works.
 </Info>
 
 ## Data requirements
@@ -68,7 +68,7 @@ You must provide the following inputs:
 
 ## Report customization
 
-**Metrics**. If you want to change the Metric composition, create a custom Report listing the individual Metrics. This is straightforward. You can also implement fully custom Metrics.
+**Metrics**. If you want to change the Metric composition, create a custom Report by simply listing the individual Metrics. You can also add custom Metrics.
 
 <Info>
   **Creating a custom Report**. Check how to create a [Report](/docs/library/report).
