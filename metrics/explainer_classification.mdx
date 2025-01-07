@@ -4,60 +4,82 @@ description: 'Open-source classification metrics.'
 noindex: "true"
 ---
 
-### Classification Preset
+#### **1. Model Quality Summary Metrics**
 
-`ClassificationPreset` evaluates the quality of a classification model. Prediction and target are required. Input features are optional.
+Evidently calculates a few standard model quality metrics: Accuracy, Precision, Recall, F1-score, ROC AUC, and LogLoss.
 
-**Composition**:
+**To support the model performance analysis, Evidently also generates interactive visualizations. They help analyze where the model makes mistakes and come up with improvement ideas.**
 
-* `ClassificationQualityMetric()`
+#### [](https://docs.evidentlyai.com/presets/class-performance#id-2.-class-representation)&#xA;2\. Class Representation
 
-* `ClassificationClassBalance()`
+Shows the number of objects of each class.
 
-* `ClassificationConfusionMatrix()`
+<img height="1014" width="2132" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-014d6141c52c22ea8c3367805211fd8d40e31849%252Fprob_class_perf_class_representation.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=8d30dd06&sv=2" />
 
-* `ClassificationQualityByClass()`
+#### [](https://docs.evidentlyai.com/presets/class-performance#id-3.-confusion-matrix)&#xA;3\. Confusion Matrix
 
-* `ClassificationClassSeparationPlot()` - if probabilistic classification
+Visualizes the classification errors and their type.
 
-* `ClassificationProbDistribution()` - if probabilistic classification
+<img height="1012" width="2134" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-d44aceed79a4f98cde410058c12367a63037f2ce%252Fprob_class_perf_confusion_matrix.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=cfaadbad&sv=2" />
 
-* `ClassificationRocCurve()` - if probabilistic classification
+#### [](https://docs.evidentlyai.com/presets/class-performance#id-4.-quality-metrics-by-class)&#xA;4\. Quality Metrics by Class
 
-* `ClassificationPRCurve()` - if probabilistic classification
+Shows the model quality metrics for the individual classes. In the case of multi-class problems, it will also include ROC AUC.
 
-* `ClassificationPRTable()` - if probabilistic classification
+<img height="1004" width="2134" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-54512715bad59a70038f7c168822fd087f1d2719%252Fprob_class_perf_quality_by_class.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=4606ec91&sv=2" />
 
-* `ClassificationQualityByFeatureTable()` for all or specified `columns`
+#### [](https://docs.evidentlyai.com/presets/class-performance#id-5.-class-separation-quality)&#xA;**5. Class Separation Quality**
 
-**Optional parameters**:
+A scatter plot of the predicted probabilities shows correct and incorrect predictions for each class.
 
-* `columns`
+It serves as a representation of both model accuracy and the quality of its calibration. It also helps visually **choose the best probability threshold for each class.**
 
-* `probas_threshold`
+<img height="1098" width="2136" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-e16ca5618f050c77396f80958fecebf330c24c72%252Fprob_class_perf_class_separation_quality.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=b3b31454&sv=2" />
 
-### Text Evals
+#### [](https://docs.evidentlyai.com/presets/class-performance#id-6.-probability-distribution)&#xA;6\. Probability Distribution
 
-`TextEvals()` provides a simplified interface to list `Descriptors` for a given text column. It returns a summary of evaluation results.
+A similar view as above, it shows the distribution of predicted probabilities.
 
-**Composition**:
+<img height="1076" width="2134" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-41006102d2e027f1b046d083bfd9fe097dee5563%252Fprob_class_perf_probability_distr.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=c65c377c&sv=2" />
 
-* `ColumnSummaryMetric()` for text descriptors for the specified text column:
+#### [](https://docs.evidentlyai.com/presets/class-performance#id-7.-roc-curve)&#xA;**7. ROC Curve**
 
-  * `Sentiment()`
+ROC Curve (**receiver operating characteristic curve**) shows the share of true positives and true negatives at different classification thresholds.
 
-  * `SentenceCount()`
+<img height="1012" width="2142" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-756dcacc9d462ad45745c6bb8f6dd23c5a18d9d2%252Fprob_class_perf_roc.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=caee6451&sv=2" />
 
-  * `OOV()`
+#### [](https://docs.evidentlyai.com/presets/class-performance#id-8.-precision-recall-curve)&#xA;8\. **Precision-Recall Curve**
 
-  * `TextLength()`
+The **precision**-**recall curve** shows the trade-off between **precision** and **recall** for different classification thresholds.
 
-  * `NonLetterCharacterPercentage()`
+<img height="1014" width="2134" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-f558cc77f29cde0d60ffddc81a622232ca022c41%252Fprob_class_perf_pr.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=7f49bf96&sv=2" />
 
-**Required parameters**:
+#### [](https://docs.evidentlyai.com/presets/class-performance#id-9.-precision-recall-table)&#xA;9\. Precision-Recall Table
 
-* `column_name`
+The table shows possible **outcomes for different classification thresholds** and **prediction coverage**. If you have two datasets, the table is generated for both.
 
-**Optional parameters**:
+<img height="1184" width="1794" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-23088b547ed1b7126b1584e67acd2bf42715582b%252Fprob_class_perf_pr_table_current.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=2b13494f&sv=2" />
 
-* `descriptors` list
+Each line in the table defines a case when only *top-X%* predictions are considered, with a 5% step. It shows the absolute number of predictions *(Count)* and the probability threshold *(Prob)* that correspond to this combination.
+
+The table then shows the quality metrics for a given combination. It includes *Precision*, *Recall*, the share of *True Positives (TP)*, and *False Positives (FP)*.
+
+This helps explore the quality of the model if you choose to act only on some of the predictions.
+
+#### [](https://docs.evidentlyai.com/presets/class-performance#id-10.-classification-quality-by-feature)&#xA;10\. Classification Quality by Feature
+
+In this table, we show a number of plots for each feature. To expand the plots, click on the feature name.
+
+<img height="646" width="2140" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-89edd11c3d8fe70b6e8d65cb7e37ca4f246b067f%252Fprob_class_perf_classification_quality_by_feature.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=1155f76a&sv=2" />
+
+In the tab “ALL”, you can see the distribution of classes against the values of the feature. If you compare the two datasets, it visually shows the changes in the feature distribution and in the relationship between the values of the feature and the target.
+
+<img height="1192" width="2096" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-84fc78dd31a5732be416239154f2c90515d78c42%252Fprob_class_perf_classification_quality_by_feature_example_all.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=8e13fd88&sv=2" />
+
+For each class, you can see the predicted probabilities alongside the values of the feature.
+
+<img height="1182" width="2092" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-95a87ddd8e3296f900797f822e06b5c623de08a4%252Fprob_class_perf_classification_quality_by_feature_example_class.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=761fd6cb&sv=2" />
+
+It visualizes the regions where the model makes errors of each type and reveals the low-performance segments. You can compare the distributions and see **if the errors are sensitive to the values of a given feature**.
+
+###

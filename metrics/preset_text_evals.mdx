@@ -3,3 +3,29 @@ title: 'Text Evals'
 description: 'Overview of the Text Evals Preset.'
 noindex: "true"
 ---
+
+### Text Evals
+
+`TextEvals()` provides a simplified interface to list `Descriptors` for a given text column. It returns a summary of evaluation results.
+
+**Composition**:
+
+* `ColumnSummaryMetric()` for text descriptors for the specified text column:
+
+  * `Sentiment()`
+
+  * `SentenceCount()`
+
+  * `OOV()`
+
+  * `TextLength()`
+
+  * `NonLetterCharacterPercentage()`
+
+**Required parameters**:
+
+* `column_name`
+
+**Optional parameters**:
+
+* `descriptors` list

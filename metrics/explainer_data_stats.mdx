@@ -3,3 +3,89 @@ title: 'Data stats and quality'
 description: 'Description of your new file.'
 noindex: "true"
 ---
+
+#### 1. Summary widget
+
+The table gives an overview of the dataset, including missing or empty features and other general information. It also shows the share of almost empty and almost constant features. This applies to cases when 95% or more features are missing or constant.
+
+<img height="1026" width="2172" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-893e96b92c369e8ad43eddc86aba54f79ce46b27%252Freports_data_quality_summary.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=2d5a9008&sv=2" />
+
+#### [](https://docs.evidentlyai.com/presets/data-quality#id-2.-features-widget)&#xA;2\. Features widget
+
+For each feature, this widget generates a set of visualizations. They vary depending on the feature type. There are 3 components:
+
+**2.1. Feature overview table**
+
+The table shows relevant statistical summaries for each feature based on its type and a visualization of feature distribution.
+
+**Example for a categorical feature:**
+
+<img height="908" width="2282" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-31dbb98333b62c917c7b2cbba158445774508baa%252Freports_data_quality_overview_cat.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=516d34b9&sv=2" />
+
+**Example for a numerical feature:**
+
+<img height="1106" width="2336" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-c7affc8d3dd2d0bee0b70eafdeb5867e5c52b30e%252Freports_data_quality_overview_num.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=cd19013a&sv=2" />
+
+**Example for a datetime feature:**
+
+<img height="802" width="2248" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-ebcc131d1b824e4754edd777804343a4ea5dfdb1%252Freports_data_quality_overview_datetime.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=a31fdfd&sv=2" />
+
+**Example for a text feature:**
+
+<img height="1042" width="2352" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-7074e49da73257ed1bd5ef7b675b8f63836ed15d%252Fmetric_column_summary_text-min.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=767b2d86&sv=2" />
+
+**2.2. Feature in time**
+
+If you click on "details", each feature would include additional visualization to show feature behavior in time.
+
+**Example for a categorical feature:**
+
+<img height="974" width="2280" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-71b9ba91a04fa177dffbbb2b25984be292f15283%252Freports_data_quality_in_time_cat.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=98c89f23&sv=2" />
+
+**Example for a numerical feature:**
+
+<img height="880" width="2348" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-a06be74e97d4d2fae56e8686520d0059161f36eb%252Freports_data_quality_in_time_num.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=cdb43752&sv=2" />
+
+**Example for a datetime feature:**
+
+<img height="928" width="2274" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-9b4017bb0fd6a38fae0b868c2cf016a2ec8e2250%252Freports_data_quality_in_time_datetime.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=fd11ef73&sv=2" />
+
+**2.3. Feature by target**
+
+Categorical and numerical features include an additional visualization that plots the interaction between a given feature and the target.
+
+**Example for a categorical feature:**
+
+<img height="964" width="2304" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-70efaf4625facf8c22e1821af9494b070322ca60%252Freports_data_quality_by_target_cat.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=92c8f6d4&sv=2" />
+
+**Example for a numerical feature:**
+
+<img height="876" width="2354" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-dae7161fc71ab08b8569678ce02dc8d58420f7c9%252Freports_data_quality_by_target_num.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=1b7fde00&sv=2" />
+
+#### [](https://docs.evidentlyai.com/presets/data-quality#id-3.-correlation-widget)&#xA;3\. Correlation widget
+
+This widget shows the correlations between different features.
+
+**3.1. Insights**
+
+This table shows a summary of pairwise feature correlations.
+
+For a single dataset, it lists the top-5 highly correlated variables from Cramer's v correlation matrix (categorical features) and from Spearman correlation matrix (numerical features).
+
+For two datasets, it lists the top-5 pairs of variables **where correlation changes** the most between the reference and current datasets. Similarly, it uses categorical features from Cramer's v correlation matrix and numerical features from Spearman correlation matrix.
+
+<img height="518" width="1940" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-cb472b98063f4e2f57029b8ea4e450d7c8a453c7%252Freports_data_quality_correlations.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=99257d7b&sv=2" />
+
+**3.2. Correlation heatmaps**
+
+**This widget has been removed from Preset in versions above 0.4.31**. You can add it to your Report as `DatasetCorrelationsMetric()`.
+
+This section includes four heatmaps.
+
+For categorical features, Evidently calculates the [Cramer's v](https://en.wikipedia.org/wiki/Cram%C3%A9r%27s_V) correlation matrix. For numerical features, Evidently calculates the [Pearson](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient), [Spearman](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient) and [Kendall](https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient) matrices.
+
+If your dataset includes the target, the target will be also shown in the matrix according to its type.
+
+<img height="812" width="2050" src="https://docs.evidentlyai.com/~gitbook/image?url=https%3A%2F%2F256125905-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeE67gM4508ESQxkbpOxj%252Fuploads%252Fgit-blob-b8e9570d01a6413c4c8eeabd91252bf263516e21%252Freports_data_quality_correlation_heatmaps.png%3Falt%3Dmedia&width=768&dpr=4&quality=100&sign=5565f244&sv=2" />
+
+### [](https://docs.evidentlyai.com/presets/data-quality#metrics-outputs)
