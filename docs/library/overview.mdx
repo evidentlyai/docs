@@ -61,7 +61,7 @@ Below is a detailed overview of how evaluations work in Evidently. If you prefer
 
 * Read the step-by-step [user guide](/docs/library/evaluations_overview).
 
-That said, we recommend giving this a read to understand everything the library can do.
+That said, we recommend giving this a read to understand the core library components, even if you start with using just one type of evals.
 
 ## Input data
 
@@ -149,7 +149,11 @@ When to use two datasets:
 * **Simplify test setup**. You can automatically generate test conditions (e.g., min-max ranges) from the reference dataset without manual configuration.
 
 <Info>
-  **Data sampling**. Running evaluations on large datasets (millions of rows) can take time. This depends on the specific evaluation (some are more computationally intensive than others), your dataset (e.g., if you run column-level evals and have lots of columns), and your infrastructure (data is processed in-memory). If the computation takes too long, it’s often more efficient to use samples. For example, in data drift detection, you can apply random or stratified sampling.
+  **Data sampling**. Running evaluations on large datasets (millions of rows) can take time. The computation time depends on:
+* the specific evaluation (some are more computationally intensive than others)
+* your dataset (e.g., if you run column-level evals and have lots of columns)
+* your infrastructure (data is processed in-memory). 
+  If the computation takes too long, it’s often more efficient to use samples. For example, in data drift detection, you can apply random or stratified sampling.
 </Info>
 
 ## Descriptors
@@ -243,21 +247,21 @@ Metric Presets are pre-configured evaluation templates. They make it simple to c
     ![](/images/concepts/overview_small_preset_num_value_example-min.png)
   </Tab>
 
-  <Tab title="Data Drift">
-    Identifies shifts in individual column distributions and consolidates the results.
-    ![](/images/concepts/overview_drift_report-min.png)
+  <Tab title="DatasetStats">
+    A quick overview of all dataset-level stats.
+
   </Tab>
 
   <Tab title="Classification">
-    Breaks down classification metrics and includes debugging tools like prediction bias plots.
+     Multiple classification quality metrics like Precision, Recall, Accuracy, ROC AUC, etc. together.
   </Tab>
 
-  <Tab title="RecSys">
-    Measures the performance of ranking or recommendation systems.
+  <Tab title="Regression">
+     Multiple regession quality metrics like MAE, ME, RMSE, etc.
   </Tab>
 
-  <Tab title="Data Summary">
-    Summarizes all dataset columns, generating statistics and profiles for each.
+  <Tab title="Correlations">
+    Correlations between all columns in the dataset on a heatmap..
   </Tab>
 </Tabs>
 
@@ -265,20 +269,20 @@ Metric Presets are pre-configured evaluation templates. They make it simple to c
 
 <Tabs>
   <Tab title="Data Drift">
-    Compute data distribution shifts for all columns in the dataset and summarize the results.
+    Identifies shifts in individual data distribution for all columns in the dataset and consolidates the results.
     ![](/images/concepts/overview_drift_report-min.png)
   </Tab>
 
+  <Tab title="Data Summary">
+     Summarizes all dataset columns, generating statistics and profiles for each.
+  </Tab>
+  
   <Tab title="Classification">
-    Multiple classification quality metrics like Precision, Recall, Accuracy, ROC AUC, etc. together.
+    Breaks down classification metrics and includes debugging plots.
   </Tab>
 
-  <Tab title="Dataset">
-    A quick overview of all dataset-level stats.
-  </Tab>
-
-  <Tab title="Correlations ">
-    Correlations between all columns in the dataset on a heatmap.
+  <Tab title="RecSys">
+    Measures the performance of ranking or recommendation systems.
   </Tab>
 
   <Tab title="Regression">
