@@ -149,14 +149,15 @@ When to use two datasets:
 * **Simplify test setup**. You can automatically generate test conditions (e.g., min-max ranges) from the reference dataset without manual configuration.
 
 <Info>
-  **Data sampling**. Running evaluations on large datasets (millions of rows) can take time. The computation time depends on:
+  **Data sampling**. For large datasets (millions of rows), evals can take some time. The depends on:
 
   * the specific evaluation (some are more computationally intensive than others)
 
   * your dataset (e.g., if you run column-level evals and have lots of columns)
 
   * your infrastructure (data is processed in-memory).
-    If the computation takes too long, it’s often more efficient to use samples. For example, in data drift detection, you can apply random or stratified sampling.
+
+If the computation takes too long, it’s often more efficient to use samples. For example, in data drift detection, you can apply random or stratified sampling.
 </Info>
 
 ## Descriptors
