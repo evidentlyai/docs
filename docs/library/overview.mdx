@@ -150,10 +150,13 @@ When to use two datasets:
 
 <Info>
   **Data sampling**. Running evaluations on large datasets (millions of rows) can take time. The computation time depends on:
-* the specific evaluation (some are more computationally intensive than others)
-* your dataset (e.g., if you run column-level evals and have lots of columns)
-* your infrastructure (data is processed in-memory). 
-  If the computation takes too long, it’s often more efficient to use samples. For example, in data drift detection, you can apply random or stratified sampling.
+
+  * the specific evaluation (some are more computationally intensive than others)
+
+  * your dataset (e.g., if you run column-level evals and have lots of columns)
+
+  * your infrastructure (data is processed in-memory).
+    If the computation takes too long, it’s often more efficient to use samples. For example, in data drift detection, you can apply random or stratified sampling.
 </Info>
 
 ## Descriptors
@@ -162,7 +165,7 @@ To evaluate text data and LLM outputs, you need `Descriptors`.
 
 A **Descriptor** is a row-level score or label that assesses a specific quality of a given text. It’s different from metrics (like accuracy or precision) that give a score for an entire dataset.
 
-A simple example of a descriptor is `TextLength` or `Sentiment`. Descriptors range from deterministic to complex ML-based checks. For example, LLM-based descriptors can help label responses as "relevant" or "not relevant" using an evaluation prompt. Descriptors can also use two texts at once, like checking `SemanticSimilarity` between two columns.
+A simple example of a descriptor is `TextLength`. Descriptors range from deterministic to complex ML-based checks. For example, LLM-based descriptors can help label responses as "relevant" or "not relevant" using an evaluation prompt. Descriptors can also use two texts at once, like checking `SemanticSimilarity` between two columns.
 
 You can use [built-in descriptors](/metrics/all_descriptors), configure templates or add custom checks in Python. Each Descriptor returns a result that can be:
 
@@ -249,15 +252,14 @@ Metric Presets are pre-configured evaluation templates. They make it simple to c
 
   <Tab title="DatasetStats">
     A quick overview of all dataset-level stats.
-
   </Tab>
 
   <Tab title="Classification">
-     Multiple classification quality metrics like Precision, Recall, Accuracy, ROC AUC, etc. together.
+    Multiple classification quality metrics like Precision, Recall, Accuracy, ROC AUC, etc. together.
   </Tab>
 
   <Tab title="Regression">
-     Multiple regession quality metrics like MAE, ME, RMSE, etc.
+    Multiple regession quality metrics like MAE, ME, RMSE, etc.
   </Tab>
 
   <Tab title="Correlations">
@@ -274,9 +276,9 @@ Metric Presets are pre-configured evaluation templates. They make it simple to c
   </Tab>
 
   <Tab title="Data Summary">
-     Summarizes all dataset columns, generating statistics and profiles for each.
+    Summarizes all dataset columns, generating statistics and profiles for each.
   </Tab>
-  
+
   <Tab title="Classification">
     Breaks down classification metrics and includes debugging plots.
   </Tab>
