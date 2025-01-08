@@ -4,7 +4,7 @@ description: "Reference page for all dataset and column-level evals."
 noindex: "true"
 ---
 
-You can use **Metrics** and **Presets** to assess data quality, data drift and AI output quality (LLM, regression, classification, ranking, etc.) Each Metric includes a default visual. Learn more in [Key Concepts](/docs/library/overview).
+You can use **Metrics** and **Presets** to assess data quality, drift or AI outputs (LLM, regression, classification, ranking, etc.) Each Metric includes a default visual. Learn more in [Key Concepts](/docs/library/overview).
 
 <Accordion title="How to read the tables" defaultOpen={false}>
   * **Metric**: the name of Metric or Preset you can pass to `Report`.
@@ -122,38 +122,37 @@ You can use **Metrics** and **Presets** to assess data quality, data drift and A
 
 ## Regression
 
-| Metric                     | Description  | Parameters | Test Default |
-| -------------------------- | ------------ | ---------- | ------------ |
-| **RegressionPreset**       | Preset. Includes metrics:       |            |              |
-| **RegressionQuality**      | Small Preset |            |              |
-| **RegressionDummyQuality** | Small Preset |            |              |
-| **MeanError**              |              |            |              |
-| **MAE**                    |              |            |              |
-| **RMSE**                   |              |            |              |
-| **MAPE**                   |              |            |              |
-| **R2Score**                |              |            |              |
-| **AbsMaxError**            |              |            |              |
-| **DummyMeanError**         |              |            |              |
-| **DummyMAE**               |              |            |              |
-| **DummyRMSE**              |              |            |              |
-| **DummyMAPE**              |              |            |              |
-| **DummyR2**                |              |            |              |
+| Metric                     | Description               | Parameters | Test Default |
+| -------------------------- | ------------------------- | ---------- | ------------ |
+| **RegressionPreset**       | Preset. Includes metrics: |            |              |
+| **RegressionQuality**      | Small Preset              |            |              |
+| **RegressionDummyQuality** | Small Preset              |            |              |
+| **MeanError**              |                           |            |              |
+| **MAE**                    |                           |            |              |
+| **RMSE**                   |                           |            |              |
+| **MAPE**                   |                           |            |              |
+| **R2Score**                |                           |            |              |
+| **AbsMaxError**            |                           |            |              |
+| **DummyMeanError**         |                           |            |              |
+| **DummyMAE**               |                           |            |              |
+| **DummyRMSE**              |                           |            |              |
+| **DummyMAPE**              |                           |            |              |
+| **DummyR2**                |                           |            |              |
 
 ## Ranking
 
-| Metric                      | Description | Parameters | Test Default |
-| --------------------------- | ----------- | ---------- | ------------ |
-| **RecsysPreset()**          | Preset. Includes: <ul><li>PrecisionTopK()</li><li>RecallTopK()</li><li>FBetaTopK()</li><li>MAPK()</li><li>NDCGK()</li><li>MRRK()</li><li>HitRateK()</li><li>Personalization()</li><li>PopularityBias()</li><li>Diversity()</li><li>Serendipity()</li><li>Novelty()</li></ul>    |            |              |
-| **RecallTopK()**            |             |            |              |
-| **FBetaTopK()**             |             |            |              |
-| **PrecisionTopK()**         |             |            |              |
-| **MAPK()**                  |             |            |              |
-| **NDCGK()**                 |             |            |              |
-| **MRRK()**                  |             |            |              |
-| **HitRateK()**              |             |            |              |
-| **PersonalizationMetric()** |             |            |              |
-| **PopularityBias()**        |             |            |              |
-| **Diversity()**             |             |            |              |
-| **Serendipity()**           |             |            |              |
-| **Novelty()**               |             |            |              |
-
+| Metric                      | Description                                                                                                                                                                                                                                                                  | Parameters | Test Default |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ------------ |
+| **RecsysPreset()**          | Preset. Includes: <ul><li>PrecisionTopK()</li><li>RecallTopK()</li><li>FBetaTopK()</li><li>MAPK()</li><li>NDCGK()</li><li>MRRK()</li><li>HitRateK()</li><li>Personalization()</li><li>PopularityBias()</li><li>Diversity()</li><li>Serendipity()</li><li>Novelty()</li></ul> |            |              |
+| **RecallTopK()**            |                                                                                                                                                                                                                                                                              |            |              |
+| **FBetaTopK()**             |                                                                                                                                                                                                                                                                              |            |              |
+| **PrecisionTopK()**         |                                                                                                                                                                                                                                                                              |            |              |
+| **MAPK()**                  |                                                                                                                                                                                                                                                                              |            |              |
+| **NDCGK()**                 |                                                                                                                                                                                                                                                                              |            |              |
+| **MRRK()**                  |                                                                                                                                                                                                                                                                              |            |              |
+| **HitRateK()**              |                                                                                                                                                                                                                                                                              |            |              |
+| **PersonalizationMetric()** |                                                                                                                                                                                                                                                                              |            |              |
+| **PopularityBias()**        |                                                                                                                                                                                                                                                                              |            |              |
+| **Diversity()**             |                                                                                                                                                                                                                                                                              |            |              |
+| **Serendipity()**           |                                                                                                                                                                                                                                                                              |            |              |
+| **Novelty()**               |                                                                                                                                                                                                                                                                              |            |              |
