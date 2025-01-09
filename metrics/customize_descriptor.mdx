@@ -3,3 +3,58 @@ title: 'Custom Descriptor'
 description: 'How to add a custom row-level text evaluator.'
 noindex: "true"
 ---
+
+Source: [https://github.com/evidentlyai/evidently/blob/feature/metrics-redesign/examples/cookbook/descriptors.ipynb](https://github.com/evidentlyai/evidently/blob/feature/metrics-redesign/examples/cookbook/descriptors.ipynb)
+
+Imports:
+
+```python
+
+from evidently.future.datasets import Dataset
+from evidently.future.datasets import DataDefinition
+from evidently.future.datasets import DatasetColumn
+from evidently.future.datasets import Descriptor
+```
+
+Create:
+
+```python
+#a custom funtion to apply over a single column and return a single column
+def is_empty_string_callable(data: DatasetColumn) -> DatasetColumn:
+    return DatasetColumn(type="cat", 
+                         data=pd.Series(["EMPTY" if val == "" else "NON EMPTY" for val in data.data])
+                        )
+
+#a custom funtion to apply over multiple columns and return a single column
+def exact_match_callable(dataset: Dataset) -> DatasetColumn:
+    return DatasetColumn(type="cat",
+                         data=pd.Series(["MATCH" if val else "MISMATCH" for val in dataset.column("JsonMatchLHS").data == dataset.column("JsonMatchRHS").data])
+                        )
+
+#a custom funtion to apply over multiple columns and return multiple columns
+def concat_question_answer_callable(dataset: Dataset) -> Union[DatasetColumn, Dict[str, DatasetColumn]]:
+    return {
+        "reversed_question": DatasetColumn(type="cat", data=pd.Series([value[::-1] for value in dataset.column("Question").data])),
+        "reversed_answer": DatasetColumn(type="cat", data=pd.Series([value[::-1] for value in dataset.column("Answer").data])),
+           }
+```
+
+Use:
+
+```python
+custom_descriptors = Dataset.from_pandas(
+    pd.DataFrame(data),
+    data_definition=data_definition,
+    descriptors=[
+        CustomColumnDescriptor("Question", is_empty_string_callable, alias="is Question empty?"),
+        CustomDescriptor(exact_match_callable, alias="Match between JsonMatchLHS and JsonMatchRHS"),
+        CustomDescriptor(concat_question_answer_callable),
+    ],
+)
+```
+
+Export results as usual, for example, to a dataframe:
+
+```python
+custom_descriptors.as_dataframe()
+```
