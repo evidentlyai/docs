@@ -30,8 +30,8 @@ Each Metric includes a default visual. Learn more in [Key Concepts](/docs/librar
 
 Use to summarize results of output-level text or LLM evals.
 
-| Metric          | Description                                                                                                                                                                                                                                                                                                 | Parameters | Test Defaults |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ------------- |
+| Metric          | Description                                                                                                                                                                                                                                                                                             | Parameters | Test Defaults |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ------------- |
 | **TextEvals()** | <ul><li>Large Preset.</li><li>Shows `ValueStats` for all descriptors.</li><li>You must specify descriptors ([see how](/docs/library/descriptors) and [all descriptors](/metrics/all_descriptors)).</li><li>Metric result: for all Metrics.</li><li>[Preset page](/metrics/preset/text_evals).</li></ul> | TBC        | TBC           |
 
 ## Columns
@@ -115,11 +115,14 @@ Use to detect distribution drift for text, tabular, embeddings data or over comp
 
 ## Correlations
 
-| Metric                  | Description | Parameters | Test Default |
-| ----------------------- | ----------- | ---------- | ------------ |
-| **DatasetCorrelations** |             |            |              |
-| **CorrelationChanges**  |             |            |              |
-| **Correlation**         |             |            |              |
+Use for exploratory data analysis, drift monitoring (correlation changes) or to check alignment between scores (e.g. LLM-based descriptors against human labels). 
+
+| Metric                     | Description                                                                                                                                       | Parameters                                                                                     | Test Defaults                                                                                       |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **DatasetCorrelations()**  | <ul><li>Calculates the correlations between all or set columns in the dataset.</li><li>Supported methods: Pearson, Spearman, Kendall, Cramer_V.</li><li>Metric result: TBC.</li></ul> | **Optional**: <ul><li>`columns`</li></ul> | TBC        |
+| **Correlation()**          | <ul><li>Calculates the correlation between two defined columns.</li><li>Metric result: TBC.</li></ul>          | **Required**: <ul><li>`column_x`</li><li>`column_y`</li></ul>**Optional**:<ul><li>`method` (default: `pearson`, available: `pearson`, `spearman`, `kendall`, `cramer_v`)</li></ul> | TBC |
+| **CorrelationChanges()**   | <ul><li>Dataset-level.</li><li>Reference required.</li><li>Checks the number of correlation violations (significant changes in correlation strength between columns) across all or set columns.</li><li>Metric result: TBC.</li></ul> | **Optional**: <ul><li>`columns`</li><li>`method` (default: `pearson`, available: `pearson`, `spearman`, `kendall`, `cramer_v`)</li><li>`corr_diff` (default: 0.25)</li></ul> | <ul><li>**With reference**: Fails if at least one correlation violation is detected.</li></ul>    |
+
 
 ## Classification
 
