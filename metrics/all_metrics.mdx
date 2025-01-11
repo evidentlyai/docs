@@ -148,19 +148,10 @@ Use for binary classification and aggregated results for multi-class.
 | **RocAUC()**                | <ul><li>Calculates ROC AUC.</li><li>Can visualize PR curve or table.</li><li>Metric result: TBC.</li></ul>                                                                  | **Required**: <ul><li>Set at least one visualization: `pr_table`, `roc_curve`.</li></ul> **Optional**: <ul><li>`top_k`</li></ul>                                                                                                  | <ul><li>**No reference**: Fails if ROC AUC is ≤ 0.5.</li><li>**With reference**: Fails if ROC AUC differs by >20%.</li></ul>                                                         |
 | **Lift()**                  | <ul><li>Calculates lift.</li><li>Can visualize lift curve or table.</li><li>Metric result: TBC.</li></ul>                                                                   | **Required**: <ul><li>Set at least one visualization: `lift_table`, `lift_curve`.</li></ul> **Optional**: <ul><li>`probas_threshold`</li><li>`top_k`</li></ul>                                                                    | TBC                                                                                                                                                                                  |
 
-<Accordion title="Dummy model quality" defaultOpen="false">
-  Utility Metrics: baseline in automated testing. Use if you want to get the qulaity of a dummy model created on the same data (based on heuristics). You can compare your model quality to verify that it's better than random.
-
-  | Metric                           | Description                                                                                             | Parameters | Test Defaults |
-  | -------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------- | ------------- |
-  | **ClassificationDummyQuality()** | <ul><li>Small Preset summarizing quality of a dummy model.</li><li>Metric result: all Metrics</li></ul> | TBC.       | TBC.          |
-  | **DummyPrecision**               | <ul><li>Calculates precision for a dummy model.</li><li>Metric result: TBC.</li></ul>                   | None       | TBC           |
-  | **DummyRecall**                  | <ul><li>Calculates recall for a dummy model.</li><li>Metric result: TBC.</li></ul>                      | None       | TBC           |
-  | **DummyF1**                      | <ul><li>Calculates F1 Score for a dummy model.</li><li>Metric result: TBC.</li></ul>                    | None       | TBC           |
-</Accordion>
+Dummy model quality:
 
 <Accordion title="Dummy model quality" defaultOpen={false}>
-  Utility Metrics: baseline in automated testing. Use if you want to get the qulaity of a dummy model created on the same data (based on heuristics). You can compare your model quality to verify that it's better than random.
+Use these Metics to get the qulaity of a dummy model created on the same data (based on heuristics). You can compare your model quality to verify that it's better than random. Also serves as a baseline in automated testing. 
 
   | Metric                           | Description                                                                                             | Parameters | Test Defaults |
   | -------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------- | ------------- |
