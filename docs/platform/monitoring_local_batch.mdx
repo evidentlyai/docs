@@ -10,9 +10,7 @@ Read the overview of the approach [here](/docs/platform/monitoring_overview).
 
 <Steps>
   <Step title="Configure evaluations">
-    To implement batch evaluations, use the basic flow of the Evidently evaluation library to compute Reports on a schedule. By configuring the Report contents, you can define which metrics to capture and optionally set test conditions.
-
-
+    To implement batch evaluations, use the basic flow of the Evidently evaluation library to compute Reports / Test Suites on a schedule. By configuring the Report contents, you can define which metrics to capture and optionally set test conditions.
 
     Check the Quickstart examples or explore the [detailed guide.](/docs/library/evaluations_overview)
 
@@ -28,8 +26,6 @@ Read the overview of the approach [here](/docs/platform/monitoring_overview).
 
     You will need to independently orchestrate the execution of the evaluations on a chosen cadence: consider using tools like Airflow.
 
-
-
     You can send Reports from different points in your pipeline: for example, first send the Reports with data quality and data drift checks, and after you receive the delayed labels, send a new Report to the same Project. You can backdate your snapshots as needed.
 
     ![](/images/monitoring_batch_workflow_min.png)
@@ -38,16 +34,16 @@ Read the overview of the approach [here](/docs/platform/monitoring_overview).
   <Step title="Configure the Dashboard">
     As you send multiple Reports to the platform, you can set up a Dashboard to track results over time. Set it up using pre-built Tabs or configure your own choice of monitoring Panels.
 
-
-
     Check the [Dashboard guide](/docs/platform/dashboard_overview).&#x20;
   </Step>
 
   <Step title="Configure alerts">
-    Set up alerts on Metric values or Test failures.&#x20;
-
-
+    Set up alerts on Metric values or Test failures.
 
     Check the section on [Alerts](/docs/platform/alerts).
   </Step>
 </Steps>
+
+<Tip>
+**Running Tests vs Reports**. You can also run Tests on your production data to ensure ongoing quality. Structuring your evaluations as Tests - as opposed to monitoring lots of metrics at once - can help reduce alert fatigue and simplify configuration when evaluating multiple conditions at once. For example, you can quickly verify that all columns in the input data are within a defined min-max range.
+</Tip>
