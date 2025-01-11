@@ -1,4 +1,48 @@
 ---
 title: 'Overview'
-description: 'Description of your new file.'
+description: 'Evidently Platform at a glance.'
 ---
+
+Evidently Platform lets you run various quality workflows across the AI product lifecycle. It supports both LLM-based apps and classic machine learning tasks (often part of larger AI solutions).
+
+![](/images/dashboard_llm_tabs.gif)
+
+## Key features
+
+<Info>
+  Evidently Platform has a lightweight open-source version for evaluation tracking and monitoring, and a Cloud/Enterprise version with added features like data storage, no-code tools, collaboration, and synthetic data. [Understand feature availability.](/faq/oss_vs_cloud)
+</Info>
+
+<Tabs>
+  <Tab title="Datasets">
+    Manage and organize evaluations, testing and production datasets. Store them on the Platform paired with relevant evaluations. Collaborate as a team by curating test cases.
+    ![](/images/dataset_llm.png)
+  </Tab>
+
+  <Tab title="Synthetic data">
+    Generate synthetic data for RAG, Q&A or any other use case and collaboratively review it on the platform to speed up and augment the process of designing test cases for your LLM app. Generate adversarial data for safety and stress-testing. 
+
+    ADD IMG
+  </Tab>
+
+  <Tab title="Evaluations">
+    Run evaluations locally using the Evidently Python library or no-code directly on the platform. Use 100+ built-in evals and templates. Track experiments and easily debug results.
+
+    ![](/images/evals_explore_view-min.png)
+  </Tab>
+
+  <Tab title="Regression testing">
+    Combine evaluations in conditional Test Suites, and easily get the evaluation results with Pass/Fail outcomes. Set up alerts on failed Tests. Track them over time using built-in dashboard.
+    ADD IMG
+  </Tab>
+
+  <Tab title="Monitoring">
+    Run evaluations for live systems, both batch and real-time. Track the results on a dashboard, easily connecting back to raw data as needed. Set up alerts on violations.
+    ![](/images/dashboard_llm_light.png)
+  </Tab>
+
+  <Tab title="Tracing">
+    Instrument your AI application to collect data for evaluation and analysis with any intermediate steps. Automatically get a ready-made structured dataset for analysis.
+    ADD IMG
+  </Tab>
+</Tabs>
