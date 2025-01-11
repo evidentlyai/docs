@@ -1,11 +1,13 @@
 ---
 title: 'Overview'
-description: 'General evaluation workflow.'
+description: 'End-to-end evaluation workflow.'
 noindex: true
 ---
 
+This page shows the core evaluation workflow with the open-source Evidently library. You can adapt it for many scenarios: from experiments and production monitoring, and across use cases: from data to LLM. 
+
 <Tip>
-  To log the evaluation results to the platform, first connect to [Evidently Cloud](/docs/setup/cloud) or your [local workspace](/docs/setup/self-hosting) and [create a Project](/docs/platform/projects_manage). It's optional: you can also run evals locally.
+  To log the evaluation results to the Evidently Platform, first connect to [Evidently Cloud](/docs/setup/cloud) or your [local workspace](/docs/setup/self-hosting) and [create a Project](/docs/platform/projects_manage). It's optional: you can also run evals locally.
 </Tip>
 
 ## Define and run the eval
@@ -123,3 +125,8 @@ Copy
 `ws.add_report(project.id, data_report, include_data=True)`
 
 Once you upload the evaluation results as JSON `snapshots`, you can explore, compare, and track them on the Evidently Platform.
+
+To delete snapshots in the Workspace ws, pass the Project ID and snapshot ID. You can see the snapshot ID on the Report or Test Suite page.
+
+Copy
+ws.delete_snapshot(project_id, snapshot_id)
