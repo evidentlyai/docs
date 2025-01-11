@@ -105,7 +105,7 @@ Dataset-level data quality metrics.
 
 Use to detect distribution drift for text, tabular, embeddings data or over computed text descriptors. 20+ drift methods listed separately: [text and tabular](/metrics/customize_data_drift), [embeddings](/metrics/customize_embedding_drift).
 
-<Info>**Metric explainers**. Check data drift [metrics explainers](/metrics/explainer_drift).</Info>
+<Note>**Metric explainers**. Check data drift [metrics explainers](/metrics/explainer_drift).</Note>
 
 | Metric                    | Description                                                                                                                                                                                                                                                                                                                                | Parameters                                                                                                                                                                                                                                                                             | Test Defaults                                                                                                                            |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -133,7 +133,7 @@ Use to evaluate quality on a classification task (probabilistic, non-probabilist
 
 Use for binary classification and aggregated results for multi-class.
 
-<Info>**Metric explainers**. Check classification [metrics explainers](/metrics/explainer_classification).</Info>
+<Note>**Metric explainers**. Check classification [metrics explainers](/metrics/explainer_classification).</Note>
 
 | Metric                      | Description                                                                                                                                                                 | Parameters                                                                                                                                                                                                                                                                       | Test Defaults                                                                                                                                                                        |
 | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -181,7 +181,7 @@ Use when you have multiple classes and want to evaluate quality separately.
 
 Use to evaluate the quality of a regression model. You must map predictions and target columns using [data definition](/docs/library/data_definition).
 
-<Info>**Metric explainers**. Check regression [metrics explainers](/metrics/explainer_regression).</Info>
+<Note>>**Metric explainers**. Check regression [metrics explainers](/metrics/explainer_regression).</Note>
 
 | Metric                | Description                                                                                                                                                                                                    | Parameters                                                                                                                                                                             | Test Defaults                                                                                                                                                                                   |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -211,7 +211,7 @@ Dummy metrics:
 
 ## Ranking
 
-Use to evaluate the quality of a ranking model, including search / retrieval and recommendations. You must map predictions and target columns using [data definition](/docs/library/data_definition). Some metrics require additional training data.
+Use to evaluate ranking, search / retrieval or recommendations. You must map predictions and target columns using [data definition](/docs/library/data_definition). Some metrics require additional training data.
 
 * TBC `no_feedback_user: bool = False`. Specifies whether to include the users who did not select any of the items, when computing the quality metric. Default: False.
 
