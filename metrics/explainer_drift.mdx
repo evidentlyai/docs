@@ -4,19 +4,26 @@ description: "How data drift detection works"
 noindex: "true"
 ---
 
+## Input data requirements
 
+#### [](https://docs.evidentlyai.com/reference/data-drift-algorithm#empty-columns)&#xA;Empty columns
 
-#### 4. Data Drift by Feature
+To evaluate data or prediction drift in the dataset, you need to ensure that the columns you test for drift are not empty. If these columns are empty in either reference or current data, Evidently will not calculate distribution drift and will raise an error.
 
-For numerical features, you can also explore the values mapped in a plot.
+[](https://docs.evidentlyai.com/reference/data-drift-algorithm#empty-values)
+**Empty values**
+
+If some columns contain empty or infinite values (+-np.inf), these values will be filtered out when calculating distribution drift in the corresponding column.
+
+By default, drift tests do not react to changes or increases in the number of empty values. Since the high number of nulls can be an important indicator, we recommend grouping the data drift tests (that check for distribution shift) with data integrity tests (that check for a share of nulls). You can choose from several null-related [tests](https://docs.evidentlyai.com/reference/all-tests#data-integrity) and metrics and set a threshold.
+
+## Tabular data drift
+
+#### For numerical features, you can also explore the values mapped in a plot.
 
 * The dark green line is the **mean**, as seen in the reference dataset.
 
 * The green area covers **one standard deviation** from the mean.
-
-
-
-
 
 For **small data with \<= 1000 observations** in the reference dataset:
 
@@ -38,7 +45,13 @@ All metrics use a threshold = 0.1 by default.
 
 **You can always modify this drift detection logic**. You can select any of the statistical tests available in the library (including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc.), specify custom thresholds, or pass a custom test. You can read more about using [data drift parameters and available drift detection methods](https://docs.evidentlyai.com/user-guide/customization/options-for-statistical-tests).
 
+## Text data drift
+
 Text content drift using a **domain classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions.
+
+<Info>
+  You can read more about the domain classifier approach in the [paper ](https://arxiv.org/pdf/1810.11953.pdf)“Failing Loudly: An Empirical Study of Methods for Detecting Dataset Shift.”&#x20;
+</Info>
 
 The default for **small data with \<= 1000 observations** detects drift if the ROC AUC of the drift detection classifier > possible ROC AUC of the random classifier at a 95th percentile.
 
@@ -48,7 +61,15 @@ For small data, the drift score is the ROC-AUC score of the domain classifier co
 
 For large data, the ROC AUC of the obtained classifier is directly compared against the set ROC AUC threshold.
 
-**You can also check for drift in Text Descriptors**. There is an additional method that detects drift in Text Descriptors (such as text length, share of OOV words). This test is available as part of [Text Overview Preset](https://docs.evidentlyai.com/presets/text-overview). You can also include it as a **TextDescriptorsDriftMetric()** in a custom Report, or in a Test Suite accordingly.
+This approach helps identify **how well a machine learning model can distinguish** between current and reference data. It also **protects against false positive** drift results for small datasets since we explicitly compare the classifier score against the “best random score” we could obtain. 
+
+If the drift is detected, Evidently will also calculate the **top features of the domain classifier**. The resulting output contains specific characteristic words that help identify whether a given sample belongs to reference or current. They normalized based on vocabulary, for example, to exclude non-interpretable words like articles.
+
+<Info>
+  **You can also check for drift in Text Descriptors**. There is an additional method that detects drift in Text Descriptors (such as text length, share of OOV words). This test is available as part of [Text Overview Preset](https://docs.evidentlyai.com/presets/text-overview). You can also include it as a **TextDescriptorsDriftMetric()** in a custom Report, or in a Test Suite accordingly.
+</Info>
+
+## Embeddings drift
 
 Embedding drift using a **classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions.
 
@@ -58,7 +79,7 @@ The default for **larger data with > 1000 observations** detects drift if the RO
 
 **You can choose other embedding drift detection methods**. You can specify custom thresholds and parameters such as dimensionality reduction and choose from other methods, including Euclidean distance, Cosine Similarity, Maximum Mean Discrepancy, and share of drifted embeddings. You must specify this as a [parameter](https://docs.evidentlyai.com/user-guide/customization/embeddings-drift-parameters).
 
-### Dataset-level drift
+## Dataset-level drift
 
 With Presets like `DatasetDriftPreset()`, Metrics like `DatasetDriftMetric()` or Tests like `TestShareOfDriftedColumns()` you can also set a rule on top of the individual feature drift results to detect dataset-level drift.
 
@@ -70,17 +91,7 @@ The descriptors are treated as tabular features. The default drift detection met
 
 **You can set different thresholds**. You can specify a custom threshold as a [parameter](https://docs.evidentlyai.com/user-guide/customization/options-for-statistical-tests).
 
-## Input data requirements
-
-#### [](https://docs.evidentlyai.com/reference/data-drift-algorithm#empty-columns)&#xA;Empty columns
-
-To evaluate data or prediction drift in the dataset, you need to ensure that the columns you test for drift are not empty. If these columns are empty in either reference or current data, Evidently will not calculate distribution drift and will raise an error.
-
-#### [](https://docs.evidentlyai.com/reference/data-drift-algorithm#empty-values)&#xA;Empty values
-
-If some columns contain empty or infinite values (+-np.inf), these values will be filtered out when calculating distribution drift in the corresponding column.
-
-By default, drift tests do not react to changes or increases in the number of empty values. Since the high number of nulls can be an important indicator, we recommend grouping the data drift tests (that check for distribution shift) with data integrity tests (that check for a share of nulls). You can choose from several null-related [tests](https://docs.evidentlyai.com/reference/all-tests#data-integrity) and metrics and set a threshold.
+##
 
 ## Resources
 
