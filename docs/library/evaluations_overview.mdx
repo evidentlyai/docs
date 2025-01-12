@@ -4,21 +4,23 @@ description: 'End-to-end evaluation workflow.'
 noindex: true
 ---
 
-This page shows the core evaluation workflow with the open-source Evidently library at glance and links to guides on specific components. You can adapt this workflow for all evaluation scenarios (experiments, regression testing, etc.) and use cases: from data to LLM.
+This page shows the core evaluation workflow with the open-source Evidently library at glance and links to guides on specific components. 
+
+You can adapt this workflow for all evaluation scenarios (experiments, regression testing, etc.) and use cases: from data to LLM.
+
+## Define and run the eval
 
 <Tip>
   To log the evaluation results to the Evidently Platform, first connect to [Evidently Cloud](/docs/setup/cloud) or your [local workspace](/docs/setup/self-hosting) and [create a Project](/docs/platform/projects_manage). It's optional: you can also run evals locally.
 </Tip>
 
-## Define and run the eval
-
 <Steps>
-  <Step title="Prepare the input data" icon="asterisk">
-    Get your data in a tabular format like a `pandas.DataFrame`. More on [data requirements](/docs/library/overview#input_data). You can also download data from the Evidently Platform (like [pull tracing a dataset](/docs/platform/datasets_workflow)).
+  <Step title="Prepare the input data">
+    Get your data in a tabular format like a `pandas.DataFrame`. More on [data requirements](/docs/library/overview#input-data). You can also download data from the Evidently Platform (like [pull tracing a dataset](/docs/platform/datasets_workflow)).
   </Step>
 
-  <Step title="Create a Dataset object" icon="asterisk">
-    You must create a Dataset object and set the `DataDefinition()`. This lets you specify column role / types. Data Definition is necessary for some evals. If empty, Evidently will try guessing the column types. [How to set Data Definition](/docs/library/data_definition).
+  <Step title="Create a Dataset object">
+    You must create a Dataset object and set the `DataDefinition()`. This lets you specify column role / types. If empty, Evidently will try guessing the column types. [How to set Data Definition](/docs/library/data_definition).
 
     ```python
     eval_data = Dataset.from_pandas(
@@ -28,8 +30,8 @@ This page shows the core evaluation workflow with the open-source Evidently libr
     ```
   </Step>
 
-  <Step title="(Optional) Add descriptors" icon="plus">
-    If you run evals on text data (text length, sentiment, LLM judges), add row-level `descriptors` to the Dataset.  [How to use Descriptors](/docs/library/descriptors).
+  <Step title="(Optional) Add descriptors">
+    If you run evals on text data, choose and compute row-level `descriptors` for the Dataset. [How to use Descriptors](/docs/library/descriptors).
 
     ```python
     eval_data.add_descriptors(descriptors=[
@@ -39,8 +41,8 @@ This page shows the core evaluation workflow with the open-source Evidently libr
     ```
   </Step>
 
-  <Step title="Configure Report" icon="asterisk">
-    To set up dataset-level evals (classification, data drift) and to summarize descriptors, create a `Report` with chosen `metrics`  or `presets`. How to [configure Reports](/docs/library/report).
+  <Step title="Configure Report">
+    To set up dataset-level evals (classification, data drift) or to summarize descriptors, create a `Report` with chosen `metrics`  or `presets`. How to [configure Reports](/docs/library/report).
 
     ```python
     report = Report([
@@ -49,7 +51,7 @@ This page shows the core evaluation workflow with the open-source Evidently libr
     ```
   </Step>
 
-  <Step title="(Optional) Add Test conditions" icon="plus">
+  <Step title="(Optional) Add Test conditions">
     You can set Pass/Fail conditions, like to check if text length in \< 100 symbols. How to [configure Tests](/docs/library/tests).
 
     ```python
@@ -60,11 +62,11 @@ This page shows the core evaluation workflow with the open-source Evidently libr
     ```
   </Step>
 
-  <Step title="(Optional). Add Tags and Timestamps" icon="plus">
+  <Step title="(Optional). Add Tags and Timestamps">
     You can add `tags` or `metadata` to identify specific evaluation runs or datasets, or override a `timestamp ` to associate an eval with a specific period. [How to add metadata](/docs/library/tags_metadata).
   </Step>
 
-  <Step title="Run the Report" icon="asterisk">
+  <Step title="Run the Report">
     Finally, you can `run`the Report on the `Dataset` (or two) to execute the eval.&#x20;
 
     ```python
@@ -72,7 +74,7 @@ This page shows the core evaluation workflow with the open-source Evidently libr
     ```
   </Step>
 
-  <Step title="Explore the results" icon="asterisk">
+  <Step title="Explore the results">
     * To upload to the Evidently Platform. [How to upload results](/docs/platform/evals_api).
 
     ```python
