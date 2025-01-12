@@ -8,13 +8,11 @@ noindex: "true"
 
 A monitoring Panel is an individual plot or counter on the Monitoring Dashboard. 
 
-You can add multiple Panels and organize them by **Tabs**. You can choose from Metric, Distribution, and Test Panels, and customize titles and legends.
+* You can add multiple Panels and organize them by **Tabs**. You can choose from Metric, Distribution, and Test Panels, and customize titles and legends.
 
-When adding a Panel, you point to the **source Metric or Test** and the value (`metric_result`) inside it. Evidently will pull selected value(s) from all Reports in the Projects and plot them on the Panel. 
+* When adding a Panel, you point to the **source Metric or Test** and the value (`metric_result`) inside it. Evidently will pull selected value(s) from all Reports in the Projects and plot them on the Panel. You can also navigate between Panels and source Reports / datasets by clicking on the specific value on the Panel.
 
-You can use **Tags** to filter data from specific snapshots. For example, you can plot the accuracy of Model A and Model B next to each other. To achieve this, [add relevant Tags](/docs/library/tags_metadata) to the Report.
-
-You can also navigate between Panels and source Reports: click on the specific value on the Panel and you'll be able to navigate to the corresponding Report and source dataset. This is useful for debugging.
+* You can use **Tags** to filter data from specific Reports. For example, you can plot the accuracy of Model A and Model B next to each other. To achieve this, [add relevant Tags](/docs/library/tags_metadata) to the Report.
 
 <Info>
   **How to add Panels**. This page explains the Panel types. Check the next section on [adding Panels](/docs/platform/dashboard_add_panels).
@@ -22,11 +20,11 @@ You can also navigate between Panels and source Reports: click on the specific v
 
 **Panel types.** There are 3 main panel types:
 
-* **Metric panels.** Let you plot individual values (metric results) computes inside Reports.
+* **Metric panels.** Let you plot individual values from inside Reports.
 
-* **Test panels**. Let you show Test outcomes over time based on pass/fail Test conditions.
+* **Test panels**. Let you show pass/fail Test outcomes in time.
 
-* **Distribution panels.**  Let you plot data from histograms to show distributions over time.
+* **Distribution panels.** Let you plot distributions over time.
 
 ## Metric Panels
 
@@ -36,69 +34,102 @@ For example, if you capture Data Summary Reports (include mean, max, min, etc., 
 
 ![](/images/dashboard/metric_panels.png)
 
-Panel time resolution depends on Report frequency. For instance, if you log Data Drift Reports daily, you can plot the share of drifting features with daily granularity. You can also open the source Report to see feature distributions on a specific day.
+**Panel time resolution** depends on Report frequency. For instance, if you log Data Drift Reports daily, you can plot the share of drifting features with daily granularity. You can also open the source Report to see feature distributions on a specific day.
 
-## Counter
+### Counter
 
 Class `DashboardPanelCounter`.
 
-| Panel Type                                                                       | Example                                              |
-| -------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| Shows a value with supporting text or text alone (perfect for dashboard titles). | ![](/images/dashboard/panel_counter_example-min.png) |
+Shows a value with supporting text or text alone. Perfect for dashboard titles.
 
-## Plot
+<Frame>
+  <img src="/images/dashboard/panel_counter_example-min.png" />
+</Frame>
+
+### Plot
 
 Class `DashboardPanelPlot`. Shows individual values as bar, line, scatter plot, or histogram.
 
-| Panel Type                                                                                  | Example                                               |
-| ------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| Line plot: `PlotType.LINE`. Shows values over time.                                         | ![](/images/dashboard//panel_line_plot_example.png)   |
-| Scatter plot: `PlotType.SCATTER`. Shows values over time.                                   | ![](/images/dashboard/panel_scatter_plot_example.png) |
-| Bar plot: `PlotType.BAR`. Shows values over time.                                           | ![](/images/dashboard/panel_bar_plot_example.png)     |
-| Histogram: `PlotType.HISTOGRAM`. Shows the frequency of individual values across snapshots. | ![](/images/dashboard/panel_hist_example.png)         |
+<CardGroup cols="2">
+  <Card title="Line chart" img="/images/dashboard//panel_line_plot_example.png">
+    `PlotType.LINE` shows values over time from multiple Reports.
+  </Card>
 
-# Test Panels
+  <Card title="Bar chart" img="/images/dashboard//panel_bar_plot_example.png">
+    `PlotType.BAR` shows values over time from multiple Report.
+  </Card>
 
-Test Panels show the Test results. 
+  <Card title="Scatter plot" img="/images/dashboard//panel_scatter_plot_example.png">
+    `PlotType.SCATTER` shows values over time from multiple Reports.
+  </Card>
+
+  <Card title="Histogram" img="/images/dashboard//panel_hist_example.png">
+    `PlotType.HISTOGRAM` shows the frequency of individual values across Reports.
+  </Card>
+</CardGroup>
+
+## Test Panels
+
+Test Panels show the Test results.
 
 As you run the same Tests repeatedly, you can visualize the pass/fail outcomes or result counts. You choose which Test results to include.
 
-![](/images/dashboard/monitoring/test_panels.png)
+![](/images/dashboard/test_panels.png)
 
-Test Panels only work with Test Suites: you must add Tests to the Metrics inside your Report to be able to render these panels. 
+Test Panels only work with Test Suites: you must add Tests to the Metrics inside your Report to be able to render these panels.
 
-## Test counter
+### Test counter
 
-Class `DashboardPanelTestSuiteCounter`
+Class `DashboardPanelTestSuiteCounter`. Shows a counter of Tests with specified status.
 
-| Panel Type                                     | Example                                                |
-| ---------------------------------------------- | ------------------------------------------------------ |
-| Shows a counter of Tests with selected status. | ![](/images/dashboard/panel_tests_counter_example.png) |
+<Frame>
+  <img src="/images/dashboard/panel_tests_counter_example.png" />
+</Frame>
 
-## Test plot
+### Test plot
 
 Class `DashboardPanelTestSuite`.
 
-| Panel Type                                                                                            | Example                                                         |
-| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| Detailed plot: `TestSuitePanelType.DETAILED`. Individual Test results are visible.                    | ![](/images/dashboard/panel_tests_detailed_hover_example.png)   |
-| Aggregated plot: `TestSuitePanelType.AGGREGATE`. Only the total number of Tests by status is visible. | ![](/images/dashboard/panel_tests_aggregated_hover_example.png) |
+<CardGroup cols="2">
+  <Card title="Detailed plot" img="/images/dashboard/panel_tests_detailed_hover_example.png">
+    `TestSuitePanelType.DETAILED`. Individual Test results are visible
+  </Card>
 
-# Distribution Panel
+  <Card title="Aggregated plot" img="/images/dashboard/panel_tests_aggregated_hover_example.png">
+    `TestSuitePanelType.AGGREGATE`. Only the total number of Tests by status is visible.
+  </Card>
+</CardGroup>
 
-Class `DashboardPanelDistribution`. Shows a distribution of values over time. For example, if you capture Text Evals or Data Summary that include histograms for categorical values, you can plot how the frequency of categories changes.
+## Distribution Panel
+
+Class `DashboardPanelDistribution`. Shows a distribution of values over time.
 
 ![](/images/dashboard//distribution_panels.png)
 
-| Panel Type                                                                                  | Example                                             |
-| ------------------------------------------------------------------------------------------- | --------------------------------------------------- |
-| Stacked bar chart: `HistBarMode.STACK`. Shows absolute counts.                              | ![](/images/dashboard/panel_dist_stacked_2-min.png) |
-| Grouped bar chart: `HistBarMode.GROUP`. Shows absolute counts.                              | ![](/images/dashboard/panel_dist_group_2-min.png)   |
-| Overlay bar chart: `HistBarMode.OVERLAY`. Shows absolute counts. Values overlay each other. | ![](/images/dashboard/panel_dist_overlay-min.png)   |
-| Stacked bar chart: `HistBarMode.RELATIVE`. Shows relative frequency (percentage).           | ![](/images/dashboard/panel_dist_relative-min.png)  |
+For example, if you capture Text Evals or Data Summary that include histograms for categorical values, you can plot how the frequency of categories changes.
 
-**What is the difference between a Distribution Panel and a Histogram Plot?** A Histogram shows the distribution of the selected values from all snapshots. Each source snapshot contains a **single value** (e.g., a "number of drifting features"). A Distribution Panel shows how a distribution changes over time. Each source snapshot contains a **histogram** (e.g. frequency of different categories).
+<CardGroup cols="2">
+  <Card title="Stacked" img="/images/dashboard/panel_dist_stacked_2-min.png">
+    Stacked bar chart `HistBarMode.STACK`. Shows **absolute** counts in single bar.
+  </Card>
 
-# What's next?
+  <Card title="Grouped" img="/images/dashboard/panel_dist_group_2-min.png">
+    Grouped bar chart `HistBarMode.GROUP`. Shows **absolute** counts in separate bars.
+  </Card>
+
+  <Card title="Overlay" img="/images/dashboard/panel_dist_overlay-min.png">
+    Overlay bar chart `HistBarMode.OVERLAY`. Shows overlaying **absolute** counts.
+  </Card>
+
+  <Card title="Relative" img="/images/dashboard/panel_dist_relative-min.png">
+    Relative bar chart `HistBarMode.RELATIVE`. Shows stacked **relative** frequency.
+  </Card>
+</CardGroup>
+
+<Info>
+  **What is the difference between a Distribution Panel and a Histogram Plot?** A Histogram shows the distribution of the selected values from all Reports. Each source Report contains a **single value** (e.g., a "mean value"). A Distribution Panel shows how a distribution changes over time. Each source Report contains a **histogram** (e.g. frequency of different categories).
+</Info>
+
+## What's next?
 
 How to add [monitoring Panels and Tabs](/docs/platform/dashboard_add_panels).
