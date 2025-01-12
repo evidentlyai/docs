@@ -143,7 +143,7 @@ eval_dataset.add_descriptors(descriptors=[
 
 ## Get a Report
 
-Once you added descriptors to the Dataset, you can summarize the results using Reports. This lets you get a summary score for all descriptors, visualize their distributions and run conditional tests.
+Once you computed descriptors, you can summarize the results using Reports. This lets you get stats for all descriptors, visualize their distributions and run conditional tests.
 
 ### Imports
 
@@ -177,7 +177,7 @@ my_eval
 
 ### Using Metrics
 
-The `TextEvals` Preset works by generating a `ValueStats` Metrics for each Descriptor. If you want more control or to use other Metrics available in Evidently, you can create a custom Report referencing descriptors just like any other column in the dataset.
+Under the hood, the `TextEvals` Preset generates a `ValueStats` Metrics for each Descriptor. To have more control or use other available Metrics, you can create a custom Report referencing descriptors just like any other column in the dataset.
 
 **Custom Report**. For example, you can visualize the mean values of descriptors:
 
@@ -191,7 +191,7 @@ my_custom_eval = custom_report.run(eval_dataset, None)
 my_custom_eval.json()
 ```
 
-**Drift detection**. You can also run more complex checks like drift detection, such as comparing the distribution of text length between two batches of data. (This requires two datasets).
+**Drift detection**. You can also run more complex checks, like comparing the distribution of text length between two batches of data. (This requires two datasets).
 
 ```python
 custom_report = Report([
