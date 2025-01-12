@@ -6,49 +6,18 @@ noindex: "true"
 
 For a general introduction, check [Core Concepts](/docs/library/overview).
 
+## Generate descriptors
 
-
-eval\_dataset = Dataset.from\_pandas(
-pd.DataFrame(data, columns=columns),
-data\_definition=schema,
-descriptors=\[
-Sentiment("answer", alias="Sentiment"),
-TextLength("answer", alias="Length"),
-IncludesWords("answer", words\_list=\['sorry', 'apologize'], alias="Denials"),
-]
-)
-
-## description: How to run evaluations for text data with Descriptors.
-
-A Descriptor is a row-level score evaluating a specific characteristic of a text data. A simple example is text length.
-
-Descriptors range from regular expressions and text statistics to ML- and LLM-based checks. For example, you can calculate the semantic similarity between two texts, or ask LLM to label responses as "relevant" or "not relevant".
-
-You can use Descriptors in two ways:
-
-* **In a Report**. This helps visualize and summarize the scores, like show text length across all texts.
-
-* **In a Test Suite**. This checks if conditions are met, like if all texts are within a certain length (True/False).
-
-[Overview of Reports, Tests and Descriptors](introduction.md)
-
-# Code examples
-
-# Imports
-
-After [installing Evidently](../installation/install-evidently.md), import the selected descriptors and the relevant components based on whether you want to generate Reports or run Tests.
+### Imports
 
 ```python
-from evidently import ColumnMapping
-from evidently.report import Report
-from evidently.test_suite import TestSuite
-from evidently.metric_preset import TextEvals
-from evidently.metrics import ColumnSummaryMetric, ColumnDriftMetric 
-from evidently.tests import TestColumnValueMin, TestColumnValueMean, TestCategoryShare, TestShareOfOutRangeValues
-from evidently.descriptors import Contains, TextLength, Sentiment
+from evidently.future.datasets import Dataset
+from evidently.future.datasets import DataDefinition
+from evidently.future.datasets import Descriptor
+from evidently.future.descriptors import *
 ```
 
-**Note**. For some Descriptors that use vocabulary-based checks (like `IncludesWords` or `OOV` for out-of-vocabulary words), you may need to download `nltk` dictionaries:
+**Note**. Some Descriptors that use vocabulary-based checks (like `OOVWordsPercentage()` for out-of-vocabulary words) require downloading `nltk` dictionaries:
 
 ```python
 nltk.download('words')
@@ -57,242 +26,220 @@ nltk.download('omw-1.4')
 nltk.download('vader_lexicon')
 ```
 
-# How it works
+### Basic flow
 
-Here is the general flow to run an evaluation:
+<Accordion title="Generate data" defaultOpen={false}>
+  Use the following code to generate toy data for this guide
 
-* **Input data**. Prepare the data as a Pandas DataFrame. Include at least one text column. This will be your `current_data` to run evals on. Optionally, prepare the `reference` dataset.
+  ```python
+  import pandas as pd
 
-* **Schema mapping**. Define your data schema using [Column Mapping](../input-data/column-mapping.md). Optional, but highly recommended.
+  data = [
+      ["What is the chemical symbol for gold?", "The chemical symbol for gold is Au."],
+      ["What is the capital of Japan?", "The capital of Japan is Tokyo."],
+      ["Tell me a joke.", "Why don't programmers like nature? It has too many bugs!"],
+      ["What is the boiling point of water?", "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit)."],
+      ["Who painted the Mona Lisa?", "Leonardo da Vinci painted the Mona Lisa."],
+      ["What’s the fastest animal on land?", "The cheetah is the fastest land animal, capable of running up to 75 miles per hour."],
+      ["Can you help me with my math homework?", "I'm sorry, but I can't assist with homework. You might want to consult your teacher for help."],
+      ["How many states are there in the USA?", "There are 50 states in the USA."],
+      ["What’s the primary function of the heart?", "The primary function of the heart is to pump blood throughout the body."],
+      ["Can you tell me the latest stock market trends?", "I'm sorry, but I can't provide real-time stock market trends. You might want to check a financial news website or consult a financial advisor."]
+  ]
 
-* **Define the Report or Test Suite**. Create a `Report` or a `TestSuite` object with the selected checks.
+  # Columns
+  columns = ["question", "answer"]
 
-* **Run the Report**. Run the Report on your `current_data`, passing the `column_mapping`. Optionally, pass the `reference_data`.
+  # Creating the DataFrame
+  df = pd.DataFrame(data, columns=columns)
+  ```
+</Accordion>
 
-* **Get the summary results**. Get a visual Report in Jupyter notebook, export the metrics, or upload it to Evidently Platform.
-
-* **Get the scored datasets**. To see row-level scores, export the Pandas DataFrame with added descriptors. (Or view this on Evidently Platform).
-
-**Available Descriptors**. See Descriptors in the [All Metrics](../reference/all-metrics.md) page.
-
-**Reports and Test Suites**. For basic API, read how to [run Reports](get-reports.md) and [Test Suites](run-tests.md).
-
-## Text Evals
-
-For most cases, we recommend using the `TextEvals` Preset. It provides an easy way to create a Report that summarizes Descriptor values for a specific column.
-
-**Basic example**. To evaluate the Sentiment and Text Length in symbols for the `response` column:
+If you have a dataframe `df` with text data, you can create a `Dataset`, set the [Data Definition](/docs/library/data_definition) and add descriptors for the "answer" column:
 
 ```python
-report = Report(metrics=[
-    TextEvals(column_name="response", descriptors=[
-        Sentiment(),
-        TextLength(),
-    ]),
+eval_dataset = Dataset.from_pandas(
+    pd.DataFrame(df),
+    data_definition=DataDefinition(
+        text_columns=["question", "answer"]),
+    descriptors=[
+        Sentiment("answer", alias="Sentiment"),
+        TextLength("answer", alias="Length"),
+        IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials"),
+    ]
+)
+```
+
+You can also add descriptors to the Dataset object later using `add_descriptors`. For example, first set the data schema:
+
+```python
+eval_dataset = Dataset.from_pandas(
+    pd.DataFrame(df),
+    data_definition=DataDefinition(text_columns=["question", "answer"]),
+)
+```
+
+Then, add the scores to this Dataset:
+
+```python
+eval_dataset.add_descriptors(descriptors=[
+    Sentiment("answer", alias="Sentiment"),
+    TextLength("answer", alias="Length"),
+    IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials"),
 ])
 ```
 
-Run the Report on your DataFrame `df`:
+You can view the Dataset with newly added descriptors as a pandas DataFrame:
 
 ```python
-report.run(reference_data=None, 
-           current_data=df)
+eval_dataset.as_dataframe()
 ```
 
-You can access the Report just like usual, and export the results as HTML, JSON, a Python dictionary, etc. To view the interactive Report directly in Jupyter Notebook or Colab:
+### Customization
+
+<Tip>
+  **All descriptors and parameters**. See a [reference table](/metrics/all_descriptors) with all descriptors and parameters.
+</Tip>
+
+**Alias**. It is best to add an `alias` to each Descriptor to make it easier to reference. This name shows up in visualizations and column headers. It’s especially handy if you’re using checks like regular expressions with word lists, where the auto-generated title could get very long.
 
 ```python
-report 
-```
-
-![](../.gitbook/assets/cloud/llm_report_preview-min.gif)
-
-You can add the Descriptors to your original dataset. To view the DataFrame:
-
-```
-report.datasets().current
-```
-
-![](../.gitbook/assets/reports/descriptors_export.png)
-
-To create a DataFrame:
-
-```
-df_with_scores = pd.DataFrame(report.datasets().current)
-```
-
-**How to get the outputs**. Check the details on all available [Output Formats](output_formats.md).
-
-**Display name**. It’s a good idea to add a `display_name` to each Descriptor. This name shows up in visualizations and column headers. It’s especially handy if you’re using checks like regular expressions with word lists, where the auto-generated title could get very long.
-
-```python
-report = Report(metrics=[
-    TextEvals(column_name="response", descriptors=[
-        Sentiment(display_name="Response sentiment"),
-        TextLength(display_name="Response length"),
-    ]),
+eval_dataset.add_descriptors(descriptors=[
+    WordCount("answer", alias="Words"),
 ])
 ```
 
-**Evaluations for multiple columns**. If you want to evaluate several columns, like "response" and "question", just list multiple Presets in the same Report and include the Descriptors you need for each one.
+**Descriptor parameters**. Some Descriptors have required parameters. For example, if you’re testing for competitor mentions using the `Contains` Descriptor, you must include the list of `items`:
 
 ```python
-report = Report(metrics=[
-    TextEvals(column_name="response", descriptors=[
-        Sentiment(),
-        TextLength(),
-    ]),
-    TextEvals(column_name="question", descriptors=[
-        Sentiment(),
-        TextLength(),
-    ])
+eval_dataset.add_descriptors(descriptors=[
+    Contains("answer", items=["AcmeCorp", "YetAnotherCorp"], alias="Competitors")
 ])
 ```
 
-**Descriptor parameters**. Some Descriptors have required parameters. For example, if you’re testing for competitor mentions using the `Contains` Descriptor, you must include the names in the `items` list:
+**Multi-column descriptors**. Some evals use more than one column. For example, to compare a new answer match against reference answer, or measure semantic similarity. In this case, pass both columns using parameters:
 
 ```python
-report = Report(metrics=[
-    TextEvals(column_name="response", descriptors=[
-        Contains(display_name="Competitor Mentions", 
-                items=["AcmeCorp", "YetAnotherCorp"]),
-    ]),
+eval_dataset.add_descriptors(descriptors=[
+    SemanticSimilarity(columns=["question", "answer"], alias="Semantic_Match")
 ])
 ```
 
-**Multi-column descriptors**. Some Descriptors like `SemanticSimilarity` require a second column. Pass it as a parameter:
+**LLM-as-a-judge**. There are also built-in descriptors that prompt an external LLM to return an evaluation score. You can add them like any other descriptor, but you must also provide an API key to use the corresponding LLM.
+
 
 ```python
-report = Report(metrics=[
-    TextEvals(column_name="question", descriptors=[
-        SemanticSimilarity(with_column="response")
-    ]),
+eval_dataset.add_descriptors(descriptors=[
+    DeclineLLMEval("answer", alias="Contains_Denial")
 ])
 ```
 
-Some Descriptors, like custom LLM judges, might require a more complex setup, but you can still include them in the Report just like any other Descriptor.
+<Note>
+  **Custom LLM judges**. Check a [separate guide](/metrics/customize_llm_judge) on how to use built-in LLM judges and create custom evaluators for your criteria.
+</Note>
 
-**Reference**. To see the Descriptor parameters, check the [All Metrics](../reference/all-metrics.md) page.
+<Note>
+  **Custom descriptors**. You can also implement custom programmatic evaluations as functions. Check a [separate guide](/metrics/customize_descriptor).
+</Note>
 
-**LLM-as-a-judge**. For a detailed guide on setting up LLM-based evals, check the guide to [LLM as a jugde](../customization/llm_as_a_judge.md).
+## Get a Report
 
-**Custom descriptors**. You can implement descriptors as Python functions. Check the [guide on custom descriptors](../customization/add-custom-descriptor.md).
+Once you added descriptors to the Dataset, you can summarize the results using Reports. This lets you get a summary score for all descriptors, visualize their distributions and run conditional tests.
 
-## Using Metrics
-
-The `TextEvals` Preset works by generating a `ColumnSummaryMetric` for each Descriptor you calculate. You can achieve the same results by explicitly creating this Metric for each Descriptor:
-
-```python
-report = Report(metrics=[
-    ColumnSummaryMetric(TextLength().on("response")),
-    ColumnSummaryMetric(Sentiment().on("response")),
-])
-```
-
-For two-column descriptor like `SemanticSimilarity()`, pass both columns as a list:
+### Imports
 
 ```python
-report = Report(metrics=[
-    ColumnSummaryMetric(column_name=SemanticSimilarity(with_column="question").on("response"))
-])
+from evidently.future.report import Report
+from evidently.future.presets import TextEvals
+from evidently.future.metrics import *
+from evidently.future.tests import *
 ```
 
-**Text Descriptor Drift detection**. Sometimes, you might want to use a different Metric, like `ColumnDriftMetric`. Here is how to do this:
+### Text Evals
+
+The easiest way to get the Report is through `TextEvals` Preset: it instantly summarizes all Descriptor values for a specific column.
+
+To configure the Report and run it for `eval_dataset`
 
 ```python
-report = Report(metrics=[
-   ColumnDriftMetric(column_name = TextLength().on("response")),
+report = Report([
+    TextEvals()
 ])
+my_eval = report.run(eval_dataset, None)
 ```
 
-In this case, you’ll need to pass both `reference` and `current` datasets. The Metric will compare the distribution of "response" Text Length in the two datasets and return a drift score.
-
-You can use other column-level Metrics this way:
+You can view the Report in Python, export the outputs (HTML, JSON, Python dictionary) or upload it to the Evidently platform. Check more in [output formats](/docs/library/output_formats).
 
 ```python
-report = Report(metrics=[
-    ColumnSummaryMetric(TextLength().on("response")),
-    ColumnDriftMetric(TextLength().on("response")),
-    ColumnCorrelationsMetric(TextLength().on("response")),
-    ColumnDistributionMetric(TextLength().on("response")),
-    ColumnValueRangeMetric(TextLength().on("response"), left=0, right=20)
-])
+my_eval
+# my_eval.json()
+# ws.add_report(project.id, my_eval, include_data=True)
 ```
 
-However, in most cases, it's better to first generate a DataFrame with the scores through `TextEvals`. You can then run evaluations on the new dataset by referencing the newly added column directly.
+### Using Metrics
 
-## Run Tests
+The `TextEvals` Preset works by generating a `ValueStats` Metrics for each Descriptor. If you want more control or to use other Metrics available in Evidently, you can create a custom Report referencing descriptors just like any other column in the dataset.
 
-You can also run Tests with text Descriptors to verify set conditions and return a Pass or Fail result.
-
-**Example 1**. To test that the average response sentiment is greater or equal (`gte`) to 0, and that the maximum text length is less than or equal (`lte`) to 200 characters:
+**Custom Report**. For example, you can visualize the mean values of descriptors:
 
 ```python
-test_suite = TestSuite(tests=[
-    TestColumnValueMean(column_name = Sentiment().on("response"), gte=0),
-    TestColumnValueMax(column_name = TextLength().on("response"), lte=200),
+custom_report = Report([
+    MeanValue(column="Length"),
+    MeanValue(column="Sentiment")
 ])
+
+my_custom_eval = custom_report.run(eval_dataset, None)
+my_custom_eval.json()
 ```
 
-**Example 2**. To test that the number of responses mentioning competitors is zero:
+**Drift detection**. You can also run more complex checks like drift detection, such as comparing the distribution of text length between two batches of data. (This requires two datasets).
 
 ```python
-test_suite = TestSuite(tests=[
-    TestCategoryCount(
-        column_name=Contains(
-            items=["AcmeCorp", "YetAnotherCorp"],
-            display_name="Competitor Mentions").
-        on("new_response"),
-        category=True,
-        eq=0),
+custom_report = Report([
+    ValueDrift(column="Length"),
 ])
+
+my_custom_eval = custom_report.run(eval_dataset, eval_dataset)
+my_custom_eval.json()
 ```
 
-**Example 3**. To test that Semantic similarity between two columns is greater or equal to 0.9:
+### Run Tests
+
+You can add test conditions to Metrics to obtain Pass/Fail results. For example:
+* Test that no response has a negative Sentiment (lower than 0).
+* Test that no response has a Length of over 150 symbols.
 
 ```python
-test_suite = TestSuite(tests=[
-    TestColumnValueMin(
-        column_name=SemanticSimilarity(
-        display_name="Response Similarity",
-        with_column="target_response").
-        on("new_response"),
-        gte=0.9),
+tests = Report([
+    MinValue(column="Sentiment", tests=[gte(0)]),
+    MaxValue(column="Length", tests=[lte(150)]),
 ])
+
+my_test_eval = tests.run(eval_dataset, None)
+my_test_eval
+# my_test_eval.json()
 ```
 
-![](../.gitbook/assets/tests/test_descriptor_example.png)
+This adds a Test Suite to the Report for clear pass/fail outcomes.
 
-**Available Tests**. You can use any column-level Tests with Descriptors. Here are a few particularly useful:
-
-For numerical Descriptors:
+You can use different Tests depending on the column you are Testing. For example, to check that the chatbot does not deny an answer, you can test `CategoryCount` (check how many `True` labels are in the column with the regex check).
 
 ```python
-test_suite = TestSuite(tests=[
-    TestValueRange(column_name = TextLength().on("response")),
-    TestNumberOfOutRangeValues(column_name = TextLength().on("response")),
-    TestShareOfOutRangeValues(column_name = TextLength().on("response")),
-    TestColumnValueMin(column_name = TextLength().on("response")),
-    TestColumnValueMax(column_name = TextLength().on("response")),
-    TestColumnValueMean(column_name = TextLength().on("response")), 
-    TestColumnValueMedian(column_name = TextLength().on("response")),
+from evidently.future.metrics.column_statistics import CategoryCount
+
+tests = Report([
+    CategoryCount(column="Denials", category=True, count_tests=[eq(0)])
 ])
+
+my_test_eval = tests.run(eval_dataset, None)
+my_test_eval
+# my_test_eval.json()
 ```
 
-In these examples, the Test conditions come from the `reference` dataset. You can also pass custom ones.
+<Note>
+  **Report and Tests API**. Check separate guides on [generating Reports](/docs/library/reports) and setting [Test conditions](/docs/library/tests).
+</Note>
 
-**Test conditions.** See the list of [All tests](../reference/all-tests.md) with defaults. Learn how to set [custom Test conditions](../tests-and-reports/run-tests.md).
-
-For categorical Descriptors, use `TestCategoryCount` or `TestCategoryShare` Tests.
-
-For example, to test if the share of responses that contain travel-related words is less than or equal to 20%:
-
-```python
-test_suite = TestSuite(tests=[
-    TestCategoryShare(
-        column_name=IncludesWords(words_list=['hotel', 'flight'], display_name="Travel Mentions").
-        on("new_response"),
-        category=True,
-        lte=0.2),
-])
-```
+<Note>
+  **List of all Metrics**. To find specific Metrics, check the [Reference table](/metrics/all_metrics). You can use any column-level Metrics for computed Descriptors, like `MeanValue`, `MeanValue`, `MaxValue`, `QuantileValue`, `OutRangeValueCount() for numerical and `CategoryCount` for categorical.
+</Note>
