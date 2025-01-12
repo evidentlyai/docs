@@ -18,7 +18,7 @@ This page shows the core evaluation workflow using the Evidently library and lin
   </Step>
 
   <Step title="Create a Dataset object">
-    You must create a Dataset object and set the `DataDefinition()`. This lets you specify column role / types. If empty, Evidently will try guessing the column types. [How to set Data Definition](/docs/library/data_definition).
+    Create a Dataset object and set the `DataDefinition()` to specify column role / types. If empty, Evidently will try guessing the column types. [How to set Data Definition](/docs/library/data_definition).
 
     ```python
     eval_data = Dataset.from_pandas(
@@ -29,7 +29,7 @@ This page shows the core evaluation workflow using the Evidently library and lin
   </Step>
 
   <Step title="(Optional) Add descriptors">
-    If you run evals on text data, choose and compute row-level `descriptors` for the Dataset. [How to use Descriptors](/docs/library/descriptors).
+    If you run evals on text data, choose and compute row-level `descriptors`. [How to use Descriptors](/docs/library/descriptors).
 
     ```python
     eval_data.add_descriptors(descriptors=[
@@ -61,7 +61,7 @@ This page shows the core evaluation workflow using the Evidently library and lin
   </Step>
 
   <Step title="(Optional). Add Tags and Timestamps">
-    You can add `tags` or `metadata` to identify specific evaluation runs or datasets, or override a `timestamp ` to associate an eval with a specific period. [How to add metadata](/docs/library/tags_metadata).
+    You can add `tags` or `metadata` to identify specific evaluation runs or datasets, or override the `timestamp ` to associate an eval with a specific period. [How to add metadata](/docs/library/tags_metadata).
   </Step>
 
   <Step title="Run the Report">
