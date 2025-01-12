@@ -55,7 +55,7 @@ nltk.download('vader_lexicon')
   ```
 </Accordion>
 
-If you have a dataframe `df` with text data, you can create a `Dataset`, set the [Data Definition](/docs/library/data_definition) and add descriptors for the "answer" column:
+**Add scores when creating Dataset**. If you have a dataframe `df` with text data, you can create a `Dataset`, set the [Data Definition](/docs/library/data_definition) and add descriptors for the "answer" column at once:
 
 ```python
 eval_dataset = Dataset.from_pandas(
@@ -70,7 +70,7 @@ eval_dataset = Dataset.from_pandas(
 )
 ```
 
-You can also add descriptors to the Dataset object later using `add_descriptors`. For example, first set the data schema:
+**Add scores to existing Dataset**. You can also add descriptors to the Dataset object later using `add_descriptors`. For example, first set the data schema:
 
 ```python
 eval_dataset = Dataset.from_pandas(
@@ -89,7 +89,7 @@ eval_dataset.add_descriptors(descriptors=[
 ])
 ```
 
-You can view the Dataset with newly added descriptors as a pandas DataFrame:
+**Export results**. You can get the Dataset with newly added descriptors as a DataFrame:
 
 ```python
 eval_dataset.as_dataframe()
@@ -109,7 +109,7 @@ eval_dataset.add_descriptors(descriptors=[
 ])
 ```
 
-**Descriptor parameters**. Some Descriptors have required parameters. For example, if you’re testing for competitor mentions using the `Contains` Descriptor, you must include the list of `items`:
+**Descriptor parameters**. Some Descriptors have required parameters. For example, if you’re testing for competitor mentions using the `Contains` Descriptor, add the list of `items`:
 
 ```python
 eval_dataset.add_descriptors(descriptors=[
@@ -126,7 +126,6 @@ eval_dataset.add_descriptors(descriptors=[
 ```
 
 **LLM-as-a-judge**. There are also built-in descriptors that prompt an external LLM to return an evaluation score. You can add them like any other descriptor, but you must also provide an API key to use the corresponding LLM.
-
 
 ```python
 eval_dataset.add_descriptors(descriptors=[
@@ -206,7 +205,9 @@ my_custom_eval.json()
 ### Run Tests
 
 You can add test conditions to Metrics to obtain Pass/Fail results. For example:
+
 * Test that no response has a negative Sentiment (lower than 0).
+
 * Test that no response has a Length of over 150 symbols.
 
 ```python
@@ -241,5 +242,5 @@ my_test_eval
 </Note>
 
 <Note>
-  **List of all Metrics**. To find specific Metrics, check the [Reference table](/metrics/all_metrics). You can use any column-level Metrics for computed Descriptors, like `MeanValue`, `MeanValue`, `MaxValue`, `QuantileValue`, `OutRangeValueCount() for numerical and `CategoryCount` for categorical.
+  **List of all Metrics**. To find specific Metrics, check the [Reference table](/metrics/all_metrics). You can use any column-level Metrics for computed Descriptors, like `MeanValue`, `MeanValue`, `MaxValue`, `QuantileValue`, `OutRangeValueCount() for numerical and `CategoryCount\` for categorical.
 </Note>
