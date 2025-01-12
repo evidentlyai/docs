@@ -1,41 +1,44 @@
 ---
 title: 'Dashboard tabs'
-description: 'Description of your new file.'
+description: 'Get a pre-built monitoring Dashboard using templates.'
 noindex: true
 ---
 
----
-description: Get a pre-built monitoring Dashboard using templates.
----   
-
 # Pre-built Tabs
 
-Dashboard templates is a Pro feature available in the Evidently Cloud and Enterprise. 
-
+<Check>
+  Dashboard templates is a Pro feature available in the Evidently Cloud and Enterprise.
+</Check>
 
 Template Tabs include a preset combination of monitoring Panels, so you don't have to add them one by one.
 
 To use a template:
-* Enter the "Edit" mode by clicking on the top right corner of the Dashboard. 
+
+* Enter the "Edit" mode by clicking on the top right corner of the Dashboard.
+
 * Click on the "Add tab" button.
+
 * Choose a template Tab in the dropdown.
 
-![](../.gitbook/assets/cloud/qs_add_data_quality_tab_2.gif)
+ADD GIF
 
 Optionally, give a custom name to the Tab.
 
-# Available Tabs
+## Available Tabs
 
 You have the following options:
 
-| Tab Template | Description | Data source |
-|---|---|---|
-| Descriptors | Shows the results of text evaluations over time. | `TextEvalPreset()`, or individual `ColumnSummaryMetric()` Metrics or Tests that use Descriptors. |
-| Columns | Plots column distributions over time for categorical and numerical columns. | `DataQualityPreset()` or `ColumnSummaryMetric()` for individual columns. |
-| Data Quality | Shows dataset quality metrics (e.g., missing values, duplicates, etc.) over time and results of Data Quality Tests. | For the Metric Panels: `DataQualityPreset()` or `DatasetSummaryMetric()`. For the Test Panel: any individual Tests from Data Quality or Data Integrity groups.|
-| Data Drift | Shows the share of drifting features over time and the results of Column Drift Tests. | For the Metric Panel: `DataDriftPreset()` or `DataDriftTestPreset()`. For the Test Panel: `DataDriftTestPreset()` or individual `TestColumnDrift()` Tests. |
+| Tab Template | Description                                                                                                         | Data source                                                                                                                                   |
+| ------------ | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Descriptors  | Shows the results of text evaluations over time.                                                                    | `TextEvals()`, or individual Metrics computed for text descriptors.                                                                           |
+| Columns      | Plots column distributions over time for categorical and numerical columns.                                         | `DataSumaryPreset()` or `ValueStats()` for individual columns.                                                                                |
+| Data Quality | Shows dataset quality metrics (e.g., missing values, duplicates, etc.) over time and results of Data Quality Tests. | For the Metric Panels: `DataSummaryPreset()` or `DatasetStats()`. For the Test Panel: any individual Tests added on dataset stats or quality. |
+| Data Drift   | Shows the share of drifting features over time and the results of Column Drift Tests.                               | For the Metric Panel: `DataDriftPreset()` or `ValueDrift()` metrics. For the Test Panel: enable Tests mode to the data drift metrics.         |
 
-# What’s next?
+Tabs rely on the presence of related data in the Project, so you must log corresponding Reports or Test Suites to populate the dashboard with data.
 
-* Understand available [monitoring Panels types](design_dashboard.md).
-* See how to [customize your Dashboard](design_dashboard_api.md).
+## What’s next?
+
+* Understand available [monitoring Panels types](/docs/platform/dashboard_panel_types.md).
+
+* See how to [customize your Dashboard](/docs/platform/dashboard_add_panels.md).
