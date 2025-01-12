@@ -4,7 +4,7 @@ description: 'End-to-end evaluation workflow.'
 noindex: true
 ---
 
-This page shows the core evaluation workflow with the open-source Evidently library. You can adapt it for many scenarios: from experiments and production monitoring, and across use cases: from data to LLM. 
+This page shows the core evaluation workflow with the open-source Evidently library at glance and links to guides on specific components. You can adapt this workflow for all evaluation scenarios (experiments, regression testing, etc.) and use cases: from data to LLM.
 
 <Tip>
   To log the evaluation results to the Evidently Platform, first connect to [Evidently Cloud](/docs/setup/cloud) or your [local workspace](/docs/setup/self-hosting) and [create a Project](/docs/platform/projects_manage). It's optional: you can also run evals locally.
@@ -13,120 +13,77 @@ This page shows the core evaluation workflow with the open-source Evidently libr
 ## Define and run the eval
 
 <Steps>
-  <Step title="Data Definition">
-    You run each evaluation on a Dataset.&#x20;
-
-    * Prepare your data as a Pandas DataFrame. You can prep your input data locally or load it from the Evidently Platform (for example, download a tracing dataset: check [Dataset API](/docs/platform/datasets_workflow).
-
-    * Create a Dataset object.
-
-    * Define the feature types is optional but mostly recommended.
-
-    * Defining data schema is necessary for some evals.
+  <Step title="Prepare the input data" icon="asterisk">
+    Get your data in a tabular format like a `pandas.DataFrame`. More on [data requirements](/docs/library/overview#input_data). You can also download data from the Evidently Platform (like [pull tracing a dataset](/docs/platform/datasets_workflow)).
   </Step>
 
-  <Step title="(Optonal). Select Descriptors">
-    If you run evaluation on text data, choose your descriptors.&#x20;
+  <Step title="Create a Dataset object" icon="asterisk">
+    You must create a Dataset object and set the `DataDefinition()`. This lets you specify column role / types. Data Definition is necessary for some evals. If empty, Evidently will try guessing the column types. [How to set Data Definition](/docs/library/data_definition).
+
+    ```python
+    eval_data = Dataset.from_pandas(
+        pd.DataFrame(source_df),
+        data_definition=DataDefinition()
+    )
+    ```
   </Step>
 
-  <Step title="Configure Report">
-    * Create a `Report` object with the chosen `metrics`  or `metric_presets`.
+  <Step title="(Optional) Add descriptors" icon="plus">
+    If you run evals on text data (text length, sentiment, LLM judges), add row-level `descriptors` to the Dataset.  [How to use Descriptors](/docs/library/descriptors).
 
-    * Optionally, pass custom parameters to a `Metric` to customize for Metric calculations.
+    ```python
+    eval_data.add_descriptors(descriptors=[
+        TextLength("Question", alias="Length"),
+        Sentiment("Answer", alias="Sentiment")
+    ])
+    ```
   </Step>
 
-  <Step title="(Optional). Add Test conditions">
-    Optionally, pass custom parameters to a `Metric` to add `Tests` to run conditional Pass/Fail checks.
+  <Step title="Configure Report" icon="asterisk">
+    To set up dataset-level evals (classification, data drift) and to summarize descriptors, create a `Report` with chosen `metrics`  or `presets`. How to [configure Reports](/docs/library/report).
+
+    ```python
+    report = Report([
+        DataSummaryPreset()
+    ])
+    ```
   </Step>
 
-  <Step title="(Optional). Add Tags ">
-    * Optional: add a `tags` or `metadata` to identify this specific evaluation run.
+  <Step title="(Optional) Add Test conditions" icon="plus">
+    You can set Pass/Fail conditions, like to check if text length in \< 100 symbols. How to [configure Tests](/docs/library/tests).
+
+    ```python
+    report = Report([
+        DataSummaryPreset(),
+        MaxValue(column="Length", tests=[lt(100)]),
+    ])
+    ```
   </Step>
 
-  <Step title="(Optional). Add Timestamp">
-    * Optional: and a custom `timestamp` to the current run.
+  <Step title="(Optional). Add Tags and Timestamps" icon="plus">
+    You can add `tags` or `metadata` to identify specific evaluation runs or datasets, or override a `timestamp ` to associate an eval with a specific period. [How to add metadata](/docs/library/tags_metadata).
   </Step>
 
-  <Step title="Run the Report">
-    * Execute the evaluation on your dataset.
+  <Step title="Run the Report" icon="asterisk">
+    Finally, you can `run`the Report on the `Dataset` (or two) to execute the eval.&#x20;
 
-    * Pass the `current` dataset you want to evaluate or profile. Optional (required for data distribution checks): pass the `reference` dataset.
+    ```python
+    my_eval = report.run(eval_data_1, None)
+    ```
+  </Step>
+
+  <Step title="Explore the results" icon="asterisk">
+    * To upload to the Evidently Platform. [How to upload results](/docs/platform/evals_api).
+
+    ```python
+    ws.add_report(project.id, my_eval, include_data=True)
+    ```
+
+    * To view locally. [All output formats](/docs/library/output_formats).
+
+    ```python
+    my_eval
+    ##my_eval.json()
+    ```
   </Step>
 </Steps>
-
-## Get the results
-
-After you compute the Report or Test Suite, use the `add_report` or `add_test_suite` methods to send them to a corresponding Project in your workspace.
-
-## Or Get the results&#x20;
-
-Choose how to get the outputs.&#x20;
-
-* **View the Report** in an interactive Python environment (Jupyter, Colab).
-
-* **Export** as JSON, Python dictionary, pandas DataFrame, or HTML file.
-
-* **Upload** to the Evidently Platform to store and track over time.
-
-##
-
-## Delete snapshots
-
-To delete snapshots in the Workspace `ws`, pass the Project ID and snapshot ID. You can see the snapshot ID on the Report or Test Suite page.
-
-Copy
-
-`ws.delete_snapshot(project_id, snapshot_id)`
-
-[](https://docs.evidentlyai.com/user-guide/evaluations/snapshots#examples)
-Examples
---------
-
-### [](https://docs.evidentlyai.com/user-guide/evaluations/snapshots#send-snapshots)&#xA;Send snapshots
-
-**Report**. To create and send a Report with data summaries for a single dataset `batch1` to the workspace `ws`:
-
-Copy
-
-`data_report = Report(`
-`      metrics=[`
-`          DataQualityPreset(),`
-`      ],`
-`   )`
-`data_report.run(reference_data=None, current_data=batch1)`
-`ws.add_report(project.id, data_report)`
-
-**Test Suite**. To create and send a Test Suite with data drift checks, passing current and reference data:
-
-Copy
-
-`drift_checks = TestSuite(tests=[`
-`  DataDriftTestPreset(),`
-`])`
-`drift_checks.run(reference_data=reference_batch, current_data=batch1)`
-`ws.add_test_suite(project.id, drift_checks)`
-
-**Send a snapshot**. The `add_report` or `add_test_suite` methods generate snapshots automatically. If you already have a snapshot (e.g., you previously saved it), you can load it load and send it to your Project:
-
-Copy
-
-`ws.add_snapshot(project.id, snapshot.load("data_drift_snapshot.json"))`
-
-**Snapshot size**. A single upload to Evidently Cloud should not exceed 50MB (Free plan) or 500MB (Pro plan). This limitation applies to the size of the JSON, not the dataset itself. Example: a data drift report for 50 columns and 10,000 rows of current and reference data results in a snapshot of approximately 1MB. (For 100 columns x 10,000 rows: \~ 3.5MB; for 100 columns x 100,000 rows: \~ 9MB). The size varies depending on the metrics or tests used.
-
-### [](https://docs.evidentlyai.com/user-guide/evaluations/snapshots#add-dataset)&#xA;Add dataset
-
-When you upload a Report or Test Suite, you can optionally include the Dataset you evaluated, together with added Descriptors (if any). This helps with row-level debugging and analysis.
-
-Use the `include_data` parameters (defaults to False):
-
-Copy
-
-`ws.add_report(project.id, data_report, include_data=True)`
-
-Once you upload the evaluation results as JSON `snapshots`, you can explore, compare, and track them on the Evidently Platform.
-
-To delete snapshots in the Workspace ws, pass the Project ID and snapshot ID. You can see the snapshot ID on the Report or Test Suite page.
-
-Copy
-ws.delete_snapshot(project_id, snapshot_id)

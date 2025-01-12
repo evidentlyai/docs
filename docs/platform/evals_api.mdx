@@ -19,29 +19,73 @@ noindex: true
         Test tabular data quality and data drift.
       </Card>
     </CardGroup>
+
+    You can choose to upload raw data only the evaluation results.
   </Step>
 
   <Step title="Explore the results">
-    Once you run the evaluation, you can use the Explore view to debug the indiviudal Results and compare the outcomes between runs.
-
-
-
-    Understand the [Explore view](/docs/platform/evals_explore).
+    Once you run the evaluation, you can use the Explore view to debug the individual Results and compare the outcomes between runs. Understand the [Explore view](/docs/platform/evals_explore).
   </Step>
 
-  <Step title="(Optional). Set up a Dashboard.">
-    Optionally, configure a Dashboard to track results over time. This helps you monitor metric changes across experiments to see your progress or results of ongoing safety Tests.
-
-
-
-    Check the docs on [Dashboard](/docs/platform/dashboard_overview).
+  <Step title="(Optional) Set up a Dashboard">
+    Optionally, configure a Dashboard to track results over time. This helps you monitor metric changes across experiments to see your progress or results of ongoing safety Tests. Check the docs on [Dashboard](/docs/platform/dashboard_overview).
   </Step>
 
-  <Step title="(Optional). Configure alerts">
-    Optionally, configure alerts on failed Tests.
-
-
-
-    Check the section on [Alerts](/docs/platform/alerts).
+  <Step title="(Optional) Configure alerts">
+    Optionally, configure alerts on failed Tests. Check the section on [Alerts](/docs/platform/alerts).
   </Step>
 </Steps>
+
+## Example
+
+A simple example of a single eval with dataset summary uploaded to a workspace:
+
+```
+eval_data = Dataset.from_pandas(
+    pd.DataFrame(source_df),
+    data_definition=DataDefinition()
+)
+
+report = Report([
+    DatasetStats()
+])
+
+my_eval = report.run(eval_data, None)
+ws.add_report(project.id, my_eval, include_data=False)
+```
+
+## Upload data
+
+<Info>
+  Raw data upload is available only for Evidently Cloud and Enterprise.
+</Info>
+
+When you upload a Report, you can decide to:
+
+* include only the resulting Metrics and a summary Report (with distribution summaries, etc.), or
+
+* also upload the raw Dataset you evaluated, together with added Descriptors (if any). This helps with row-level debugging and analysis.
+
+Use`include_data` (default `False`) to specify whether to include the data.
+
+```python
+ws.add_report(project.id, my_eval, include_data=False)
+```
+
+## Upload existing snapshots
+
+The `add_report` method save Reports in the correct JSON format (`snapshot`). If you already have a snapshot (e.g., you previously saved a Report as a snapshot locally), you can load it load and send it to your Project:
+
+```python
+ws.add_snapshot(project.id, snapshot.load("data_drift_snapshot.json"))
+```
+
+## Delete snapshots
+
+To delete individual snapshots in the Workspace `ws`, pass the Project ID and snapshot ID. You can see the snapshot ID on the Report page.&#x20;
+
+```python
+ws.delete_snapshot(project_id, snapshot_id)
+```
+
+You can also delete Reports from the UI.

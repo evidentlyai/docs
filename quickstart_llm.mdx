@@ -4,12 +4,16 @@ description: 'Evaluate text outputs in under 5 minutes'
 noindex: true
 mode: "wide"
 ---
+
 import CloudSignup from '/snippets/cloud_signup.mdx';
 import CreateProject from '/snippets/create_project.mdx';
 
+project = ws.create_project("My test project", ##org_id="YOUR_ORG_ID")
+project.description = "My project description"
+project.save()
+
 <Tabs>
   <Tab title="Evidently Cloud">
-
     You will run evals locally in Python and send results to Evidently Cloud for analysis and monitoring.
 
     Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
@@ -45,7 +49,7 @@ import CreateProject from '/snippets/create_project.mdx';
 
     ## 3. Create a Project
 
-        <CreateProject word="project" / > 
+    <CreateProject word="project" />
 
     ## 4. Import the toy dataset
 
@@ -71,26 +75,30 @@ import CreateProject from '/snippets/create_project.mdx';
     evaluation_dataset = pd.DataFrame(data, columns=columns)
     ```
 
-<Note>**Collecting live data**: you can also trace inputs and outputs from your LLM app, and download the dataset created from traces for evals. Check the [Tracing Quickstart](cloud_quickstart_tracing.md). </Note>
-  
+    <Note>**Collecting live data**: you can also trace inputs and outputs from your LLM app, and download the dataset created from traces for evals. Check the [Tracing Quickstart](cloud_quickstart_tracing.md). </Note>
+
     ## 5. Run your first eval
 
     Let's evaluate all "Answers" for:
+
     * Sentiment: from -1 for negative to 1 for positive.
-    * Text length: character count. 
-    * Denials: detect if the chatbot denied an answer. 
 
-The last eval uses LLM-as-a-judge with a template Evidently prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label with an explanation. 
+    * Text length: character count.
 
-<Note>No OpenAI key? We provide an alternative below.</Note>
+    * Denials: detect if the chatbot denied an answer.
 
-Set the OpenAI key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
+    The last eval uses LLM-as-a-judge with a template Evidently prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label with an explanation.
+
+    <Note>No OpenAI key? We provide an alternative below.</Note>
+
+    Set the OpenAI key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
 
     ```python
     ## import os
     ## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
     ```
-Run all the evals together:
+
+    Run all the evals together:
 
     ```python
     text_evals_report = Report(metrics=[
@@ -105,7 +113,7 @@ Run all the evals together:
     text_evals_report.run(reference_data=None, current_data=evaluation_dataset)
     ```
 
-**Alternative**. Run a deterministic eval instead of LLM judge: check if words "sorry" or "apologize" are present (True/False).
+    **Alternative**. Run a deterministic eval instead of LLM judge: check if words "sorry" or "apologize" are present (True/False).
 
     ```python
     text_evals_report = Report(metrics=[
