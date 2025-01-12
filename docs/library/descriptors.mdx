@@ -177,9 +177,9 @@ my_eval
 
 ### Using Metrics
 
-Under the hood, the `TextEvals` Preset generates a `ValueStats` Metrics for each Descriptor. To have more control or use other available Metrics, you can create a custom Report referencing descriptors just like any other column in the dataset.
+Under the hood, the `TextEvals` Preset generates `ValueStats` Metrics for each Descriptor. To have more control or use other available Metrics, you can create a custom Report referencing descriptors just like any other column in the dataset.
 
-**Custom Report**. For example, you can visualize the mean values of descriptors:
+**Custom Report**. For example, you can visualize only the mean values of descriptors:
 
 ```python
 custom_report = Report([
@@ -223,7 +223,7 @@ my_test_eval
 
 This adds a Test Suite to the Report for clear pass/fail outcomes.
 
-You can use different Tests depending on the column you are Testing. For example, to check that the chatbot does not deny an answer, you can test `CategoryCount` (check how many `True` labels are in the column with the regex check).
+You can use different Tests depending on the column type. For example, to check that the chatbot does not deny an answer, use `CategoryCount` and Test that there are no `True` labels in this column (meaning, no competitor mentions detected). 
 
 ```python
 from evidently.future.metrics.column_statistics import CategoryCount
