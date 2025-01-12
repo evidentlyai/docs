@@ -117,7 +117,7 @@ eval_dataset.add_descriptors(descriptors=[
 ])
 ```
 
-**Multi-column descriptors**. Some evals use more than one column. For example, to compare a new answer match against reference answer, or measure semantic similarity. In this case, pass both columns using parameters:
+**Multi-column descriptors**. Some evals use more than one column. For example, to match a new answer against reference, or measure semantic similarity. In this case, pass both columns using parameters:
 
 ```python
 eval_dataset.add_descriptors(descriptors=[
@@ -134,11 +134,11 @@ eval_dataset.add_descriptors(descriptors=[
 ```
 
 <Note>
-  **Custom LLM judges**. Check a [separate guide](/metrics/customize_llm_judge) on how to use built-in LLM judges and create custom evaluators for your criteria.
+  **Custom LLM evals**. Check the [LLM judge guide](/metrics/customize_llm_judge) on using built-in and custom LLM-based evaluators.
 </Note>
 
 <Note>
-  **Custom descriptors**. You can also implement custom programmatic evaluations as functions. Check a [separate guide](/metrics/customize_descriptor).
+  **Custom programmatic evals**. You can also add checks via [custom Python functions](/metrics/customize_descriptor).
 </Note>
 
 ## Get a Report
