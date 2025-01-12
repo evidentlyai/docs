@@ -1,5 +1,5 @@
 ---
-title: "Overview"
+title: "Introduction"
 description: "Core concepts and components of the Evidently Python library."
 noindex: "true"
 ---
@@ -196,29 +196,29 @@ There are [built-in Metrics](/metrics/all_metrics) that range from simple statis
 
 <Tabs>
   <Tab title="MeanValue">
-   `MeanValue` computes the mean of any column. [ADD IMG]
+    `MeanValue` computes the mean of any column. \[ADD IMG]
 
     ![](/images/concepts/overview_small_preset_cat_value_example.png)
   </Tab>
 
   <Tab title="ValueDrift">
-  `ValueDrift` evaluates data distribution drift for any column, target or prediction. You can set different drift detection methods as a parameter.
+    `ValueDrift` evaluates data distribution drift for any column, target or prediction. You can set different drift detection methods as a parameter.
   </Tab>
 
   <Tab title="Accuracy">
-  `Accuracy` computes classification accuracy.
+    `Accuracy` computes classification accuracy.
   </Tab>
 
   <Tab title="Missing Values">
-  `MissingValueCount` computes the share/count of missing values.
+    `MissingValueCount` computes the share/count of missing values.
   </Tab>
 
   <Tab title="Diversity">
-  `Diversity` computes the diversity of generated recommendations.
+    `Diversity` computes the diversity of generated recommendations.
   </Tab>
 
   <Tab title="MeanError">
-  `MeanError` computes mean error for regression tasks.
+    `MeanError` computes mean error for regression tasks.
   </Tab>
 </Tabs>
 
@@ -246,25 +246,25 @@ Metric Presets are pre-configured evaluation templates. They make it simple to c
 
 <Tabs>
   <Tab title="ValueStats">
-  `ValueStats` shows all relevant descriptive value statistics at once. The stats will be chosen based on the column or descriptor type (categorical, numerical, text).
+    `ValueStats` shows all relevant descriptive value statistics at once. The stats will be chosen based on the column or descriptor type (categorical, numerical, text).
 
     ![](/images/concepts/overview_small_preset_num_value_example-min.png)
   </Tab>
 
   <Tab title="DatasetStats">
-   `DatasetStats` give quick overview of all dataset-level stats.
+    `DatasetStats` give quick overview of all dataset-level stats.
   </Tab>
 
   <Tab title="Classification">
-   `ClassificationQuality` computes multiple classification quality metrics like Precision, Recall, Accuracy, ROC AUC, etc. together.
+    `ClassificationQuality` computes multiple classification quality metrics like Precision, Recall, Accuracy, ROC AUC, etc. together.
   </Tab>
 
   <Tab title="Regression">
-  `RegressionQuality` computes multiple regession quality metrics like MAE, ME, RMSE, etc.
+    `RegressionQuality` computes multiple regession quality metrics like MAE, ME, RMSE, etc.
   </Tab>
 
   <Tab title="Correlations">
-  `DatasetCorrelations` compute correlations between all columns in the dataset and show it on a heatmap.
+    `DatasetCorrelations` compute correlations between all columns in the dataset and show it on a heatmap.
   </Tab>
 </Tabs>
 
@@ -272,24 +272,24 @@ Metric Presets are pre-configured evaluation templates. They make it simple to c
 
 <Tabs>
   <Tab title="Data Drift">
-   `DataDriftPreset` identifies shifts in individual data distribution for all columns in the dataset and consolidates the results.
+    `DataDriftPreset` identifies shifts in individual data distribution for all columns in the dataset and consolidates the results.
     ![](/images/concepts/overview_drift_report-min.png)
   </Tab>
 
   <Tab title="Data Summary">
-  `DataSummaryPreset` summarizes all dataset columns, generating statistics and profiles for each.
+    `DataSummaryPreset` summarizes all dataset columns, generating statistics and profiles for each.
   </Tab>
 
   <Tab title="Classification">
-  `ClassificationPreset` breaks down classification metrics and includes debugging plots.
+    `ClassificationPreset` breaks down classification metrics and includes debugging plots.
   </Tab>
 
   <Tab title="RecSys">
-  `RecSysPreset` measures the performance of ranking or recommendation systems.
+    `RecSysPreset` measures the performance of ranking or recommendation systems.
   </Tab>
 
   <Tab title="Regression">
-  `RegressionPreset` returns multiple regession quality metrics like MAE, ME, RMSE, etc. with debugging plots.
+    `RegressionPreset` returns multiple regession quality metrics like MAE, ME, RMSE, etc. with debugging plots.
   </Tab>
 </Tabs>
 

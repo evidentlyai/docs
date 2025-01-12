@@ -1,28 +1,38 @@
 ---
-title: 'Descriptors'
-description: 'Description of your new file.'
-noindex: true
+title: "Descriptors"
+description: "How to run evaluations for text data."
+noindex: "true"
 ---
 
----
-description: How to run evaluations for text data with Descriptors. 
----
+For a general introduction, check [Core Concepts](/docs/library/overview).
 
-A Descriptor is a row-level score evaluating a specific characteristic of a text data. A simple example is text length. 
 
-Descriptors range from regular expressions and text statistics to ML- and LLM-based checks. For example, you can calculate the semantic similarity between two texts, or ask LLM to label responses as "relevant" or "not relevant". 
+
+eval\_dataset = Dataset.from\_pandas(
+pd.DataFrame(data, columns=columns),
+data\_definition=schema,
+descriptors=\[
+Sentiment("answer", alias="Sentiment"),
+TextLength("answer", alias="Length"),
+IncludesWords("answer", words\_list=\['sorry', 'apologize'], alias="Denials"),
+]
+)
+
+## description: How to run evaluations for text data with Descriptors.
+
+A Descriptor is a row-level score evaluating a specific characteristic of a text data. A simple example is text length.
+
+Descriptors range from regular expressions and text statistics to ML- and LLM-based checks. For example, you can calculate the semantic similarity between two texts, or ask LLM to label responses as "relevant" or "not relevant".
 
 You can use Descriptors in two ways:
-* **In a Report**. This helps visualize and summarize the scores, like show text length across all texts.
-* **In a Test Suite**. This checks if conditions are met, like if all texts are within a certain length (True/False).
 
+* **In a Report**. This helps visualize and summarize the scores, like show text length across all texts.
+
+* **In a Test Suite**. This checks if conditions are met, like if all texts are within a certain length (True/False).
 
 [Overview of Reports, Tests and Descriptors](introduction.md)
 
-
 # Code examples
-
-
 
 # Imports
 
@@ -52,19 +62,20 @@ nltk.download('vader_lexicon')
 Here is the general flow to run an evaluation:
 
 * **Input data**. Prepare the data as a Pandas DataFrame. Include at least one text column. This will be your `current_data` to run evals on. Optionally, prepare the `reference` dataset.
+
 * **Schema mapping**. Define your data schema using [Column Mapping](../input-data/column-mapping.md). Optional, but highly recommended.
+
 * **Define the Report or Test Suite**. Create a `Report` or a `TestSuite` object with the selected checks.
+
 * **Run the Report**. Run the Report on your `current_data`, passing the `column_mapping`. Optionally, pass the `reference_data`.
+
 * **Get the summary results**. Get a visual Report in Jupyter notebook, export the metrics, or upload it to Evidently Platform.
-* **Get the scored datasets**. To see row-level scores, export the Pandas DataFrame with added descriptors. (Or view this on Evidently Platform). 
 
+* **Get the scored datasets**. To see row-level scores, export the Pandas DataFrame with added descriptors. (Or view this on Evidently Platform).
 
-**Available Descriptors**. See Descriptors in the [All Metrics](../reference/all-metrics.md) page. 
-
-
+**Available Descriptors**. See Descriptors in the [All Metrics](../reference/all-metrics.md) page.
 
 **Reports and Test Suites**. For basic API, read how to [run Reports](get-reports.md) and [Test Suites](run-tests.md).
-
 
 ## Text Evals
 
@@ -110,9 +121,7 @@ To create a DataFrame:
 df_with_scores = pd.DataFrame(report.datasets().current)
 ```
 
-
 **How to get the outputs**. Check the details on all available [Output Formats](output_formats.md).
-
 
 **Display name**. It’s a good idea to add a `display_name` to each Descriptor. This name shows up in visualizations and column headers. It’s especially handy if you’re using checks like regular expressions with word lists, where the auto-generated title could get very long.
 
@@ -163,17 +172,11 @@ report = Report(metrics=[
 
 Some Descriptors, like custom LLM judges, might require a more complex setup, but you can still include them in the Report just like any other Descriptor.
 
-
 **Reference**. To see the Descriptor parameters, check the [All Metrics](../reference/all-metrics.md) page.
-
-
 
 **LLM-as-a-judge**. For a detailed guide on setting up LLM-based evals, check the guide to [LLM as a jugde](../customization/llm_as_a_judge.md).
 
-
-
 **Custom descriptors**. You can implement descriptors as Python functions. Check the [guide on custom descriptors](../customization/add-custom-descriptor.md).
-
 
 ## Using Metrics
 
@@ -204,7 +207,7 @@ report = Report(metrics=[
 
 In this case, you’ll need to pass both `reference` and `current` datasets. The Metric will compare the distribution of "response" Text Length in the two datasets and return a drift score.
 
-You can use other column-level Metrics this way: 
+You can use other column-level Metrics this way:
 
 ```python
 report = Report(metrics=[
@@ -218,7 +221,7 @@ report = Report(metrics=[
 
 However, in most cases, it's better to first generate a DataFrame with the scores through `TextEvals`. You can then run evaluations on the new dataset by referencing the newly added column directly.
 
-## Run Tests 
+## Run Tests
 
 You can also run Tests with text Descriptors to verify set conditions and return a Pass or Fail result.
 
@@ -278,11 +281,9 @@ test_suite = TestSuite(tests=[
 
 In these examples, the Test conditions come from the `reference` dataset. You can also pass custom ones.
 
-
 **Test conditions.** See the list of [All tests](../reference/all-tests.md) with defaults. Learn how to set [custom Test conditions](../tests-and-reports/run-tests.md).
 
-
-For categorical Descriptors, use `TestCategoryCount` or `TestCategoryShare` Tests. 
+For categorical Descriptors, use `TestCategoryCount` or `TestCategoryShare` Tests.
 
 For example, to test if the share of responses that contain travel-related words is less than or equal to 20%:
 
