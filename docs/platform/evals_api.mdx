@@ -14,7 +14,7 @@ This relies on the core evaluation API of the Evidently Python library. Check th
   You must first connect to [Evidently Cloud](/docs/setup/cloud) and [create a Project](/docs/platform/projects_manage).
 </Tip>
 
-To run a single eval with dataset summary uploaded to a workspace:
+To run a single eval with text evaluation results uploaded to a workspace:
 
 ```
 eval_data = Dataset.from_pandas(
@@ -23,11 +23,11 @@ eval_data = Dataset.from_pandas(
 )
 
 report = Report([
-    DatasetStats()
+    TextEvals()
 ])
 
 my_eval = report.run(eval_data, None)
-ws.add_report(project.id, my_eval, include_data=False)
+ws.add_report(project.id, my_eval, include_data=True)
 ```
 
 ## Workflow
