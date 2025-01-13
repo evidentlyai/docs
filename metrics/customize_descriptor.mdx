@@ -4,167 +4,129 @@ description: 'How to add a custom row-level text evaluator.'
 noindex: "true"
 ---
 
-Source: [https://github.com/evidentlyai/evidently/blob/feature/metrics-redesign/examples/cookbook/descriptors.ipynb](https://github.com/evidentlyai/evidently/blob/feature/metrics-redesign/examples/cookbook/descriptors.ipynb)
+**Pre-requisites**:
 
-Imports:
+* You know how to use built-in [descriptors](/docs/library/descriptors).
+
+To run a check not available in Evidently, you can implement it as a custom function. Use this for building your own programmatic evaluators.
+
+<Tip>
+  You can also customize existing evals with parameters, such as defining custom [LLM judges ](/metrics/customize_llm_judge) or using regex-based metrics like `Contains` for word lists. See [available descriptors](/metrics/all_descriptors).&#x20;
+</Tip>
+
+## Imports
 
 ```python
+import pandas as pd
 
 from evidently.future.datasets import Dataset
 from evidently.future.datasets import DataDefinition
 from evidently.future.datasets import DatasetColumn
 from evidently.future.datasets import Descriptor
+from evidently.future.descriptors import *
 ```
 
-Create:
+<Accordion title="Generate data" defaultOpen={false}>
+  To generate toy data and create a Dataset object:
+
+  ```python
+  data = [
+      ["Can fish fly?", "no", ""],
+      ["Is the sky blue?", "yes", "yes"],
+      ["Is milk liquid??", "yes", "yes"]
+  ]
+
+  columns = ["question", "target_answer", "answer"]
+
+  df = pd.DataFrame(data, columns=columns)
+
+  eval_df = Dataset.from_pandas(
+      pd.DataFrame(df),
+      data_definition=DataDefinition())
+  ```
+</Accordion>
+
+## Single column check
+
+You can define a `CustomColumnDescriptor` that can take any column from your dataset and evaluate each row. It will add a single column with numerical (`num`) scores or categorical (`cat`) labels.
+
+Implement it as a Python function that takes a Pandas Series as input and return a transformed Series. 
+
+For example, to check if the column is empty:
 
 ```python
-#a custom funtion to apply over a single column and return a single column
-def is_empty_string_callable(data: DatasetColumn) -> DatasetColumn:
-    return DatasetColumn(type="cat", 
-                         data=pd.Series(["EMPTY" if val == "" else "NON EMPTY" for val in data.data])
-                        )
+def is_empty(data: DatasetColumn) -> DatasetColumn:
+    return DatasetColumn(
+        type="cat",
+        data=pd.Series([
+            "EMPTY" if val == "" else "NON EMPTY"
+            for val in data.data]))
+```
 
-#a custom funtion to apply over multiple columns and return a single column
-def exact_match_callable(dataset: Dataset) -> DatasetColumn:
-    return DatasetColumn(type="cat",
-                         data=pd.Series(["MATCH" if val else "MISMATCH" for val in dataset.column("JsonMatchLHS").data == dataset.column("JsonMatchRHS").data])
-                        )
+To use this descriptor on your data:
 
-#a custom funtion to apply over multiple columns and return multiple columns
-def concat_question_answer_callable(dataset: Dataset) -> Union[DatasetColumn, Dict[str, DatasetColumn]]:
+```python
+eval_df.add_descriptors(descriptors=[
+    CustomColumnDescriptor("answer", is_empty, alias="is_empty"),
+])
+```
+
+Publish to a dataframe:
+
+```python
+eval_df.as_dataframe()
+```
+
+## Multi-column check
+
+You can alternatively define a `CustomDescriptor` that takes one or multiple named columns from your dataset and returns a single column. You can use it for pairwise evaluations.
+
+For example, to check exact match between `target_answer` and `answer` columns:
+
+```python
+def exact_match(dataset: Dataset) -> DatasetColumn:
+    return DatasetColumn(
+        type="cat",
+        data=pd.Series([
+            "MATCH" if val else "MISMATCH"
+            for val in dataset.column("target_answer").data
+            == dataset.column("answer").data]))
+```
+
+
+To use this descriptor on your data:
+
+```python
+eval_df.add_descriptors(descriptors=[
+    CustomDescriptor(exact_match, alias="exact"),
+])
+```
+
+## Multiple scores
+
+You can also use `CustomDescriptor` to run evals for multiple columns and return multiple scores. 
+
+For example, to reverse all words in `question` and `answer` columns:
+
+```python
+from typing import Union, Dict
+
+def reverse_text(dataset: Dataset) -> Union[DatasetColumn, Dict[str, DatasetColumn]]:
     return {
-        "reversed_question": DatasetColumn(type="cat", data=pd.Series([value[::-1] for value in dataset.column("Question").data])),
-        "reversed_answer": DatasetColumn(type="cat", data=pd.Series([value[::-1] for value in dataset.column("Answer").data])),
-           }
+        "reversed_question": DatasetColumn(
+            type="cat",
+            data=pd.Series([
+                value[::-1] for value in dataset.column("question").data])),
+        "reversed_answer": DatasetColumn(
+            type="cat",
+            data=pd.Series([
+                value[::-1] for value in dataset.column("answer").data]))}
 ```
 
-Use:
+To use this descriptor on your data:
 
 ```python
-custom_descriptors = Dataset.from_pandas(
-    pd.DataFrame(data),
-    data_definition=data_definition,
-    descriptors=[
-        CustomColumnDescriptor("Question", is_empty_string_callable, alias="is Question empty?"),
-        CustomDescriptor(exact_match_callable, alias="Match between JsonMatchLHS and JsonMatchRHS"),
-        CustomDescriptor(concat_question_answer_callable),
-    ],
-)
-```
-
-Export results as usual, for example, to a dataframe:
-
-```python
-custom_descriptors.as_dataframe()
-```
-
----
----
-description: How to add custom text descriptors.
----
-
-You can implement custom row-level evaluations for text data that you will later use just like any other descriptor across Metrics and Tests. You can implement descriptors that use a single column or two columns.
-
-Note that if you want to use LLM-based evaluations, you can write custom prompts using [LLM judge templates](llm_as_a_judge.md). 
-
-# Code example
-
-Refer to a How-to example:
-
-# Custom descriptors
-
-Imports: 
-
-```python
-from evidently.descriptors import CustomColumnEval, CustomPairColumnEval
-```
-
-## Single column descriptor 
-
-You can create a custom descriptor that will take a single column from your dataset and run a certain evaluation for each row.
-
-**Implement your evaluation as a Python function**. It will take a pandas Series as input and return a transformed Series. 
-
-Here, the `is_empty_string_callable` function takes a column of strings and returns an "EMPTY" or "NON EMPTY" outcome for each.
-
-```python
-def is_empty_string_callable(val1):
-    return pd.Series(["EMPTY" if val == "" else "NON EMPTY" for val in val1], index=val1.index)
-```
-
-**Create a custom descriptor**. Create an example of `CustomColumnEval` class to wrap the evaluation logic into an object that you can later use to process specific dataset input.
-
-```python
-empty_string = CustomColumnEval(
-    func=is_empty_string_callable,
-    feature_type="cat",
-    display_name="Empty response"
-)
-```
-
-Where:
-* `func: Callable[[pd.Series], pd.Series]` is a function that returns a transformed pandas Series.
-* `display_name: str` is the new descriptor's name that will appear in Reports and Test Suites.
-* `feature_type` is the type of descriptor that the function returns (`cat` for categorical, `num` for numerical)
-
-**Apply the new descriptor**. To create a Report with a new Descriptor, pass it as a `column_name` to the `ColumnSummaryMetric`. This will compute the new descriptor for all rows in the specified column and summarize its distribution:
-
-```python
-report = Report(metrics=[
-    ColumnSummaryMetric(column_name=empty_string.on("response")),
+eval_df.add_descriptors(descriptors=[
+    CustomDescriptor(reverse_text),
 ])
-```
-
-Run the Report on your `df` dataframe as usual:
-
-```python
-report.run(reference_data=None, 
-           current_data=df)
-```
-
-## Double column descriptor
-
-You can create a custom descriptor that will take two columns from your dataset and will run a certain evaluation for each row. (For example, for pairwise evaluators).
-
-**Implement your evaluation as a Python function**. Here, the `exact_match_callable` function takes two columns and checks whether each pair of values is the same, returning "MATCH" if they are equal and "MISMATCH" if they are not.
-
-```python
-def exact_match_callable(val1, val2):
-    return pd.Series(["MATCH" if val else "MISMATCH" for val in val1 == val2])
-```
-
-**Create a custom descriptor**. Create an example of the `CustomPairColumnEval` class to wrap the evaluation logic into an object that you can later use to process two named columns in a dataset.
-
-```python
-exact_match =  CustomPairColumnEval(
-    func=exact_match_callable,
-    first_column="response",
-    second_column="question",
-    feature_type="cat",
-    display_name="Exact match between response and question"
-)
-```
-
-Where:
-
-* `func: Callable[[pd.Series, pd.Series], pd.Series]` is a function that returns a transformed pandas Series after evaluating two columns.
-* `first_column: str` is the name of the first column to be passed into the function.
-* `second_column: str` is the name of the second column to be passed into the function.
-* `display_name: str` is the new descriptor's name that will appear in Reports and Test Suites.
-* `feature_type` is the type of descriptor that the function returns (`cat` for categorical, `num` for numerical).
-
-**Apply the new descriptor**. To create a Report with a new Descriptor, pass it as a `column_name` to the ColumnSummaryMetric. This will compute the new descriptor for all rows in the dataset and summarize its distribution:
-
-```python
-report = Report(metrics=[
-    ColumnSummaryMetric(column_name=exact_match.as_column())
-])
-```
-
-Run the Report on your `df` dataframe as usual:
-
-```python
-report.run(reference_data=None, 
-           current_data=df)
 ```
