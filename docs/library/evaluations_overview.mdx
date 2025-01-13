@@ -4,7 +4,7 @@ description: 'End-to-end evaluation workflow.'
 noindex: true
 ---
 
-This page shows the core evaluation workflow using the Evidently library and links to guides for each step.
+This page shows the core eval workflow with the Evidently library and links to guides.
 
 ## Define and run the eval
 
@@ -14,11 +14,11 @@ This page shows the core evaluation workflow using the Evidently library and lin
 
 <Steps>
   <Step title="Prepare the input data">
-    Get your data in a tabular format like a `pandas.DataFrame`. More on [data requirements](/docs/library/overview#input-data). You can also download data from the Evidently Platform (like [pull tracing a dataset](/docs/platform/datasets_workflow)).
+    Get your data in a table like a `pandas.DataFrame`. More on [data requirements](/docs/library/overview#input-data). You can also [load data](/docs/platform/datasets_workflow) from Evidently Platform, like tracing or synthetic datasets.
   </Step>
 
   <Step title="Create a Dataset object">
-    Create a Dataset object and set the `DataDefinition()` to specify column role / types. If empty, Evidently will try guessing the column types. [How to set Data Definition](/docs/library/data_definition).
+    Create a Dataset object with `DataDefinition()` that specifies column role and types. You can also use default type detection. [How to set Data Definition](/docs/library/data_definition).
 
     ```python
     eval_data = Dataset.from_pandas(
@@ -29,7 +29,7 @@ This page shows the core evaluation workflow using the Evidently library and lin
   </Step>
 
   <Step title="(Optional) Add descriptors">
-    If you run evals on text data, choose and compute row-level `descriptors`. [How to use Descriptors](/docs/library/descriptors).
+    For text evals, choose and compute row-level `descriptors`. [How to use Descriptors](/docs/library/descriptors).
 
     ```python
     eval_data.add_descriptors(descriptors=[
@@ -40,7 +40,7 @@ This page shows the core evaluation workflow using the Evidently library and lin
   </Step>
 
   <Step title="Configure Report">
-    To set up dataset-level evals (classification, data drift) or to summarize descriptors, create a `Report` with chosen `metrics`  or `presets`. How to [configure Reports](/docs/library/report).
+    For dataset-level evals (classification, data drift) or to summarize descriptors, create a `Report` with chosen `metrics`  or `presets`. How to [configure Reports](/docs/library/report).
 
     ```python
     report = Report([
@@ -50,7 +50,7 @@ This page shows the core evaluation workflow using the Evidently library and lin
   </Step>
 
   <Step title="(Optional) Add Test conditions">
-    You can set Pass/Fail conditions, like to check if text length in \< 100 symbols. How to [configure Tests](/docs/library/tests).
+    Add Pass/Fail conditions, like to check if text length in \< 100 symbols. How to [configure Tests](/docs/library/tests).
 
     ```python
     report = Report([
@@ -61,11 +61,11 @@ This page shows the core evaluation workflow using the Evidently library and lin
   </Step>
 
   <Step title="(Optional). Add Tags and Timestamps">
-    You can add `tags` or `metadata` to identify specific evaluation runs or datasets, or override the `timestamp ` to associate an eval with a specific period. [How to add metadata](/docs/library/tags_metadata).
+    Add `tags` or `metadata` to identify specific evaluation runs or datasets, or override the default `timestamp `. [How to add metadata](/docs/library/tags_metadata).
   </Step>
 
   <Step title="Run the Report">
-    Finally, you can `run`the Report on the `Dataset` (or two) to execute the eval.&#x20;
+    To execute the eval, `run`the Report on the `Dataset` (or two).
 
     ```python
     my_eval = report.run(eval_data_1, None)
