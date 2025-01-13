@@ -55,7 +55,7 @@ nltk.download('vader_lexicon')
   ```
 </Accordion>
 
-**Add scores when creating Dataset**. If you have a dataframe `df` with text data, you can create a `Dataset`, set the [Data Definition](/docs/library/data_definition) and add descriptors for the "answer" column at once:
+**Add scores when creating Dataset**. Create a `Dataset` from a dataframe `df` with text data, set the [Data Definition](/docs/library/data_definition) and add descriptors at once. Specify the column you are generating scores for:
 
 ```python
 eval_dataset = Dataset.from_pandas(

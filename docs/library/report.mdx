@@ -36,9 +36,9 @@ You can use Metric Presets, which are pre-built Reports that work out of the box
   **Available Presets**. Check available evals in the [Reference table](/metrics/all_metrics).
 </Tip>
 
-To generate a template Report, simply pass the selected Preset in the `metrics` list.
+To generate a template Report, simply pass the selected Preset in the `metrics` list. 
 
-**Data Summary**. To generate the Data Summary Report for a single dataset:
+**Single dataset**. To generate the Data Summary Report for a single dataset:
 
 ```python
 report = Report([
@@ -50,7 +50,7 @@ my_eval
 #my_eval.json
 ```
 
-**Data Drift**. To generate the Data Drift Report for two datasets (pass the second one as a reference):
+**Two datasets**. To generate the Data Drift Report that needs two datasets, pass the second one as a reference:
 
 ```python
 report = Report([
@@ -91,7 +91,7 @@ my_eval
 
 You can view the Report in Python, export the outputs (HTML, JSON, Python dictionary) or upload it to the Evidently platform. Check more in [output formats](/docs/library/output_formats).
 
-### Custom Report 
+### Custom Report
 
 <Tip>
   **Available Metrics and parameters**. Check available evals in the [Reference table](/metrics/all_metrics).
@@ -111,12 +111,12 @@ my_eval
 ```
 
 <Note>
-**Generating multiple column-level Metrics**: You can use a helper function to easily generate multiple column-level Metrics for a list of columns. See the page on [Metric Generator](/docs/library/metric_generator).
+  **Generating multiple column-level Metrics**: You can use a helper function to easily generate multiple column-level Metrics for a list of columns. See the page on [Metric Generator](/docs/library/metric_generator).
 </Note>
 
-**Metric Parameters**. Metrics can have optional or required parameters. 
+**Metric Parameters**. Metrics can have optional or required parameters.
 
-For example, the data drift detection algorithm automatically selects a method, but you can override this by specifying your preferred method (Optional). 
+For example, the data drift detection algorithm automatically selects a method, but you can override this by specifying your preferred method (Optional).
 
 ```python
 report = Report([
@@ -132,6 +132,6 @@ report = Report([
 ])
 ```
 
-### Tests 
+### Tests
 
 You can also add conditions to Metrics: check the [Tests guide](/docs/library/tests).

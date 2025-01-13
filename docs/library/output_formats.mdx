@@ -4,17 +4,13 @@ description: 'How to export the evaluation results.'
 noindex: true
 ---
 
+You can view or export evaluation results in multiple formats.
+
 ## Reports
-
-Pre-requisites:
-
-* You generate a Report using `run`
-
-You can view or export results from Evidently Reports in multiple formats.
 
 ### Log to Workspace
 
-You can save the evaluation result in Evidently Cloud or your local workspace.
+You can save the Report in Evidently Cloud or your local workspace.
 
 ```python
 ws.add_report(project.id, my_eval, include_data=False)
@@ -116,7 +112,7 @@ After you load the snapshot back, you can again view it in Python or export it t
 
 ## Descriptors
 
-If you generated text Descriptors during your evaluation, you can also publish the DataFrame with all generated descriptors added to each row of your original input data. 
+If you generated text Descriptors during your evaluation, you can also publish the DataFrame with all generated descriptors added to each row of your original input data.
 
 This export will work for the Dataset object:
 

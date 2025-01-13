@@ -6,43 +6,15 @@ noindex: true
 
 ![](/images/evals_flow_python.png)
 
+This relies on the core evaluation API of the Evidently Python library. Check the [detailed guide](/docs/library/evaluations_overview).
+
+## Simple Example
+
 <Tip>
-  You must first connect to [Evidently Cloud](/docs/setup/cloud) and [create a Project](/docs/platform/projects_manage).&#x20;
+  You must first connect to [Evidently Cloud](/docs/setup/cloud) and [create a Project](/docs/platform/projects_manage).
 </Tip>
 
-<Steps>
-  <Step title="Configure evaluations">
-    To run evals, use the basic flow of the Evidently evaluation library. For comparative evals, use Reports. For regression testing or other testing scenarios, add Tests conditions. Check the Quickstart examples or explore the [detailed guide.](/docs/library/evaluations_overview)
-
-    <CardGroup cols={2}>
-      <Card title="LLM quickstart" icon="comment-text" href="/quickstart_llm">
-        Evaluate the quality of text outputs.
-      </Card>
-
-      <Card title="ML quickstart" icon="table" href="/quickstart_ml">
-        Test tabular data quality and data drift.
-      </Card>
-    </CardGroup>
-
-    You can choose to upload raw data only the evaluation results.
-  </Step>
-
-  <Step title="Explore the results">
-    Once you run the evaluation, go to the Explore view inside your Project to debug the individual Results and compare the outcomes between runs. Understand the [Explore view](/docs/platform/evals_explore).
-  </Step>
-
-  <Step title="(Optional) Set up a Dashboard">
-    Optionally, configure a Dashboard to track results over time. This helps you monitor metric changes across experiments to see your progress or results of ongoing safety Tests. Check the docs on [Dashboard](/docs/platform/dashboard_overview).
-  </Step>
-
-  <Step title="(Optional) Configure alerts">
-    Optionally, configure alerts on failed Tests. Check the section on [Alerts](/docs/platform/alerts).
-  </Step>
-</Steps>
-
-## Example
-
-A simple example of a single eval with dataset summary uploaded to a workspace:
+To run a single eval with dataset summary uploaded to a workspace:
 
 ```
 eval_data = Dataset.from_pandas(
@@ -58,11 +30,37 @@ my_eval = report.run(eval_data, None)
 ws.add_report(project.id, my_eval, include_data=False)
 ```
 
-## Upload data
+## Workflow
 
-<Info>
+The complete workflow looks as the following.
+
+<Steps>
+  <Step title="Run a Report">
+    Configure the evals and run the Evidently Report with optional Test conditions.
+  </Step>
+
+  <Step title="Upload to the platform">
+    Upload the raw data or only the evaluation results.
+  </Step>
+
+  <Step title="Explore the results">
+    Go to the Explore view inside your Project to debug the results and compare the outcomes between runs. Understand the [Explore view](/docs/platform/evals_explore).
+  </Step>
+
+  <Step title="(Optional) Set up a Dashboard">
+    Set a Dashboard to track results over time. This helps you monitor metric changes across experiments or results of ongoing safety Tests. Check the docs on [Dashboard](/docs/platform/dashboard_overview).
+  </Step>
+
+  <Step title="(Optional) Configure alerts">
+    Optionally, configure alerts on failed Tests. Check the section on [Alerts](/docs/platform/alerts).
+  </Step>
+</Steps>
+
+## Uploading data
+
+<Check>
   Raw data upload is available only for Evidently Cloud and Enterprise.
-</Info>
+</Check>
 
 When you upload a Report, you can decide to:
 
