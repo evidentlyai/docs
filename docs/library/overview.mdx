@@ -63,9 +63,9 @@ That said, we recommend giving this a read once to understand the core library c
 
 # Core concepts
 
-## Input data
+## Dataset
 
-First, you need to get your data ready. For example, generate outputs from your ML or LLM system that you want to evaluate.
+First, you need to get your input data ready. For example, generate outputs from your ML or LLM system that you want to evaluate.
 
 * **Tabular data**. Prepare your data as a pandas DataFrame. All column names must be strings.
 
@@ -134,6 +134,8 @@ Here are a few examples.
   </Tab>
 </Tabs>
 
+Once you have the data, you must create a `Dataset` object.&#x20;
+
 **Data Definition**. Some evaluations require specific columns or data types present. For example, to evaluate classification quality, you need both predictions and actual labels. To specify where they are located in your table, you can map the data schema using [Data Definition](/docs/library/data_definition).
 
 **Two datasets**. Typically you run evaluations for a single dataset (`current` dataset). Optionally, you can include a second (`reference`) dataset). Both datasets must have identical structures.
@@ -160,6 +162,8 @@ When to use two datasets:
   If the computation takes too long, it’s often more efficient to use samples. For example, in data drift detection, you can apply random or stratified sampling.
 </Info>
 
+Once your `Dataset` is ready, you can run evaluations.
+
 ## Descriptors
 
 To evaluate text data and LLM outputs, you need `Descriptors`.
@@ -184,19 +188,65 @@ After you get the Descriptors, you can use them to compute Metrics and Tests.
 
 ## Reports and Metrics
 
-### What is a Metric?
+A **Report** lets you structure and run evaluations on the dataset level. You can generate Reports after computing descriptors, or on any existing dataset like a table with ML model logs.
 
-A `Metric` is a key building block for evaluations at the **dataset** or **column** level. Each Metric computes a single value and has an optional visual representation (or several to choose from).
+* Each Report computes and visualizes a set of **Metrics** and **Tests.**&#x20;
 
-**Using Metrics with Descriptors.** After computing row-level Descriptors, you can use Metrics to aggregate the results across the dataset. For instance, you can calculate the `ValueMean` for sentiment or similarity scores. Descriptors are treated like any other column.
+* Reports return scores on the **dataset-** and **column**-level.&#x20;
 
-**Using Metrics directly.** You can also compute Metrics directly on the data you have, like a table with ML model logs. You can use Metrics both to understand your data shape and to evaluate different aspects of AI quality like response accuracy.
+* You can also pass two datasets for a side-by-side comparison. 
 
-There are [built-in Metrics](/metrics/all_metrics) that range from simple statistics to complex algorithmic evals. Some examples:
+The easiest way to start is by using **Presets**.&#x20;
+
+### Presets
+
+Presets are pre-configured evaluation templates.&#x20;
+
+They help compute multiple related Metrics using a single line of code. Evidently has a number of **comprehensive Presets** ([see all](/metrics/all_presets)) for specific scenarios. They help both understand your data and to evaluate different aspects of AI quality. For example:
+
+<Tabs>
+  <Tab title="TextEvals">
+    `TextEvals` summarizes the scores from all text descriptors.
+    ![](/images/concepts/overview_drift_report-min.png)
+  </Tab>
+
+  <Tab title="Data Drift">
+    `DataDriftPreset` identifies shifts in individual data distribution for all columns in the dataset and consolidates the results.
+    ADD IMG
+  </Tab>
+
+  <Tab title="Data Summary">
+    `DataSummaryPreset` summarizes all dataset columns, generating statistics and profiles for each.
+
+    ![](/images/concepts/overview_small_preset_num_value_example-min.png)
+  </Tab>
+
+  <Tab title="Classification">
+    `ClassificationPreset` breaks down classification metrics and includes debugging plots.
+  </Tab>
+
+  <Tab title="RecSys">
+    `RecSysPreset` measures the performance of ranking or recommendation systems.
+  </Tab>
+
+  <Tab title="Regression">
+    `RegressionPreset` returns multiple regession quality metrics like MAE, ME, RMSE, etc. with debugging plots.
+  </Tab>
+</Tabs>
+
+### Metrics
+
+You can also create your own **custom Report** by listing individual Metrics to include.&#x20;
+
+* You can combine multiple individual Metrics and Presets in a Report. 
+
+* You can include both built-in Metrics and custom Metrics.
+
+A `Metric` is a key building block for evaluations. There are [built-in Metrics](/metrics/all_metrics) that range from simple statistics to complex algorithmic evals. Some examples:
 
 <Tabs>
   <Tab title="MeanValue">
-    `MeanValue` computes the mean of any column. \[ADD IMG]
+    `MeanValue` computes the mean of any column. You can use it to aggregate descriptor values (like to get a mean sentiment or similarity scores) or to analyze your input data.
 
     ![](/images/concepts/overview_small_preset_cat_value_example.png)
   </Tab>
@@ -222,33 +272,13 @@ There are [built-in Metrics](/metrics/all_metrics) that range from simple statis
   </Tab>
 </Tabs>
 
-### What is a Report?
-
-A **Report** is an object you create to structure and execute evaluations. You choose the Metrics, run the Report on your dataset, and get a visual summary or simply export the computation result.
-
-* You can combine multiple individual Metrics in a Report. 
-
-* You can also pass two datasets for a side-by-side comparison. 
-
-* You can include both built-in Metrics and custom Metrics.
-
-\[ADD IMG]
-
-![](/images/concepts/overview_small_preset_cat_value_compare_example.png)
-
-In many cases, it makes sense to start with **Presets** to simplify the initial setup.
-
-### Metric Presets
-
-Metric Presets are pre-configured evaluation templates. They make it simple to compute multiple related Metrics at once without lengthy setup. ([See all Presets](/metrics/all_presets)).
-
-**Small Presets**. Some Presets are “small” and simply compute and display a handful of Metrics on a single widget. Examples:&#x20;
+Each **Metric** computes a single value and has an optional visual representation (or several to choose from). For convenience, there are also **small Presets** that combine a handful of scores in a single widget. Examples:&#x20;
 
 <Tabs>
   <Tab title="ValueStats">
     `ValueStats` shows all relevant descriptive value statistics at once. The stats will be chosen based on the column or descriptor type (categorical, numerical, text).
 
-    ![](/images/concepts/overview_small_preset_num_value_example-min.png)
+    ![](/images/concepts/overview_small_preset_cat_value_compare_example.png)
   </Tab>
 
   <Tab title="DatasetStats">
@@ -268,38 +298,11 @@ Metric Presets are pre-configured evaluation templates. They make it simple to c
   </Tab>
 </Tabs>
 
-**Comprehensive Presets**. There are also large, more interactive Presets for specific scenarios, like running a set of checks for all columns in the dataset at once. For example:
-
-<Tabs>
-  <Tab title="Data Drift">
-    `DataDriftPreset` identifies shifts in individual data distribution for all columns in the dataset and consolidates the results.
-    ![](/images/concepts/overview_drift_report-min.png)
-  </Tab>
-
-  <Tab title="Data Summary">
-    `DataSummaryPreset` summarizes all dataset columns, generating statistics and profiles for each.
-  </Tab>
-
-  <Tab title="Classification">
-    `ClassificationPreset` breaks down classification metrics and includes debugging plots.
-  </Tab>
-
-  <Tab title="RecSys">
-    `RecSysPreset` measures the performance of ranking or recommendation systems.
-  </Tab>
-
-  <Tab title="Regression">
-    `RegressionPreset` returns multiple regession quality metrics like MAE, ME, RMSE, etc. with debugging plots.
-  </Tab>
-</Tabs>
-
-You can freely combine Presets and individual Metrics in a custom Report next to each other.
-
-Reports are great for analysis and debugging, or logging metrics. However, in many cases, you don’t want to review all the scores individually but rather confirm that nothing is off.
-
 ## Test Suites and Tests 
 
-### What is a Test?
+Reports are great for analysis and debugging, or logging metrics during monitoring. However, in many cases, you don’t want to review all the scores but run a **conditional check** to confirm that nothing is off.
+
+### Tests
 
 **Tests** let you validate your results against specific expectations. You create a Test by adding a **condition** parameter to a Metric. Each Test will calculate a given value, check it against the rule, and report a pass/fail result.&#x20;
 
