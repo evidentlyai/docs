@@ -97,7 +97,7 @@ You have multiple customization options.
 
 **Modify Report composition**. You can add other Metrics to the Report to get a more comprehensive evaluation. Here are some recommended options.
 
-* **Single out the Target/Prediction column.** If you want to evaluate drift in the Prediction column separately, you can add `ValueDrift("prediction"` to your Report so that you see the drift in this value in a separate widget.
+* **Single out the Target/Prediction column.** If you want to evaluate drift in the Prediction column separately, you can add `ValueDrift("prediction")` to your Report so that you see the drift in this value in a separate widget.
 
 * **Add data quality checks**. Add `DataSummaryPreset` to get descriptive statistics and run data quality Tests, like detecting missing values. Data drift checks drop the null values (and compares the distributions of non-empty features), so you may want to run such Tests separately.
 
