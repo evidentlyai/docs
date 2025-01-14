@@ -12,11 +12,9 @@ noindex: true
 
 A Dashboard provides a clear view of your AI application performance, whether over time or across multiple experiments and tests.
 
+Each Project has a Dashboard. It's empty at first. To populate it, you need to run an evaluation and save at least one Report to the Project. You can then plot values from individual Reports over time.
+
 ![](/images/dashboard_llm_light.png)
-
-Each Project has its own Dashboard. It's empty at first. To populate it, you need to run an evaluation and save at least one Report to the Project. You can then plot values from individual Reports over time.
-
-## When to use Dashboard?
 
 You can use the Dashboard to track live production quality or results from offline experiments.
 
@@ -28,11 +26,7 @@ The "Show in order" toggle lets you switch between two views:
 
 All Panels in a Dashboard reflect the date range set by the time range filter. You can zoom in on any time series visualization for detailed analysis.
 
-<Tip>
-  **From Dashboard to Data**. By clicking on any individual value on the Dashboard, you can open the associated Report and source Dataset for further debugging.
-</Tip>
-
-## What is a Panel?
+## Dashboard Panels
 
 A Panel is a visual element in the Dashboard that displays specific values or test results. Panels can be counters, line plots, bar plots, etc.
 
@@ -49,6 +43,12 @@ To create a Panel, you need to specify:
 * **Parameters** like type, size, and title.
 
 * **Tags** (optional). You can filter and visualize specific data subsets. To enable this, you must first add Tags (e.g. a model version) to Reports when you run an evaluation.
+
+## From Dashboard to Reports
+
+By clicking on any individual value on the Dashboard, you can open the associated Report and source Dataset for further debugging.
+
+![](/images/dashboard/dashboard_to_report.gif)
 
 ## Using Tabs
 
