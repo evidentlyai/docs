@@ -4,17 +4,26 @@ description: 'Overview of the Data Drift Preset.'
 noindex: "true"
 ---
 
-To run a Preset on your data:
+To run a Preset on your data, comparing `current` data to `ref` data:
 
 ```python
 report = Report(metrics=[
     DataDriftPreset(),
 ])
+
+my_eval = report.run(current, ref)
 ```
 
-To add Tests:
+To add Tests with explicit pass/fail for each column:
 
-\[ADD CODE]
+```python
+report = Report(metrics=[
+    DataDriftPreset(),
+],
+include_tests=True)
+
+my_eval = report.run(current, ref)
+```
 
 ## Overview
 

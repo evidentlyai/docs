@@ -144,6 +144,8 @@ You can also create a custom LLM evaluator using the provided **templates**:
 
 Evidently will then generate the complete evaluation prompt to send to the LLM together with the evaluation data.
 
+### Evaluate a single column
+
 **Binary classification template**. For example, to define the prompt for "conciseness" evaluation:
 
 ```python
@@ -201,25 +203,67 @@ Example output:
 
 ![](/images/examples/llm_judge_example_appropriate_question-min.png)
 
-(TBC) **Using two columns**. An evaluator can use multiple columns (for example, to assess response relevance to a question).
+### Evaluate multiple columns
 
-Pass the second column in `additional_columns` and mention this `{column_name}` inside your evaluation criteria.
+An evaluator can use multiple columns: for example, to assess if the response is grounded in context.&#x20;
+
+To implement this, mention the second `{column_name}` inside your evaluation criteria.
 
 ```python
-ADD EXAMPLE
+hallucination = BinaryClassificationPromptTemplate(
+        pre_messages=[("system", "You are a judge which evaluates correctness of responses by comparing them to the trusted information source.")],
+        criteria = """An hallucinated response is any response that
+        - Contradicts the information provided in the source.
+        - Adds any new information not provided in the source.
+        - Gives a response not based on the source, unless it's a refusal or a clarifying question.
+
+        A faithful response is the response that
+        - Correctly uses the information from the source, even if it only partially.
+        - A response that declines to answer.
+        - A response that asks a clarifying question.
+
+        Source:
+        =====
+        {context}
+        =====
+        """,
+        target_category="hallucinated",
+        non_target_category="faithful",
+        uncertainty="unknown",
+        include_reasoning=True,
+        )
 ```
 
-You do not need to include the primary column name in the evaluation prompt. It will be automatically passed to the template when you run the descriptor.
+You do not need to include the primary column name in the evaluation prompt, since it's already but of the template.
 
-## (TBC) Parameters
+When applying the descriptor, include the second column using the `additional_columns` parameter:
+
+```
+eval_df.add_descriptors(descriptors=[
+    LLMEval("response", template=hallucination, provider = "openai", model = "gpt-4o-mini", alias="appropriate_q", additional_columns={"context": "context"}),
+])
+```
+
+Get the results as usual:
+
+```python
+eval_df.as_dataframe()
+```
+
+Example output:
+
+![](/images/examples/llm_judge_example_hallucination-min.png)
+
+## Parameters
 
 ### LLMEval
 
-| Parameter  | Description                                        | Options                                                        |
-| ---------- | -------------------------------------------------- | -------------------------------------------------------------- |
-| `template` | Sets a specific template for evaluation.           | `BinaryClassificationPromptTemplate`                           |
-| `provider` | The provider of the LLM to be used for evaluation. | `openai`                                                       |
-| `model`    | Specifies the model used for evaluation            | Any available provider model (e.g., `gpt-3.5-turbo`, `gpt-4`)  |
+| Parameter            | Description                                                                                                                                                                                                                                 | Options                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `template`           | Sets a specific template for evaluation.                                                                                                                                                                                                    | `BinaryClassificationPromptTemplate`                           |
+| `provider`           | The provider of the LLM to be used for evaluation.                                                                                                                                                                                          | `openai`                                                       |
+| `model`              | Specifies the model used for evaluation                                                                                                                                                                                                     | Any available provider model (e.g., `gpt-3.5-turbo`, `gpt-4`)  |
+| `additional_columns` | A dictionary of additional columns present in your dataset to include in the evaluation prompt. <br /> <br /> Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`. | Custom dictionary (optional)                                   |
 
 ### BinaryClassificationPromptTemplate
 
@@ -231,7 +275,6 @@ You do not need to include the primary column name in the evaluation prompt. It 
 | `uncertainty`         | Category to return when the provided information is not sufficient to make a clear determination.                                                                                                                                                                                | `unknown` (Default), `target`, `non_target` |
 | `include_reasoning`   | Specifies whether to include the LLM-generated explanation of the result.                                                                                                                                                                                                        | `True` (Default), `False`                   |
 | `pre_messages`        | List of system messages that set context or instructions before the evaluation task. <br /> <br /> Use it to explain the evaluator role ("you are an expert..") or context ("your goal is to grade the work of an intern..").                                                    | Custom string (optional)                    |
-| `additional_columns`  | A dictionary of additional columns present in your dataset to include in the evaluation prompt. <br /> <br /> Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`.                                      | Custom dictionary (optional)                |
 
 <Accordion title="OpenAIPrompting descriptor" defaultOpen={false}>
   # OpenAIPrompting
