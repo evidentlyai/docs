@@ -1,33 +1,86 @@
 ---
 title: 'Regression'
-description: 'Overview of the Regression Quality Presets'
+description: 'Overview of the Regression Quality Preset'
 noindex: "true"
 ---
 
-### Regression Preset
+**Report.** To run a Preset on your data for a single current dataset:
 
-`RegressionPreset` evaluates the quality of a regression model. Prediction and target are required. Input features are optional.
+```python
+report = Report(metrics=[
+    RegressionPreset(),
+])
 
-**Composition**:
+my_eval = report.run(current, None)
+```
 
-* `RegressionQualityMetric()`
+**Test Suite**\*. To add pass/fail regression quality Tests, auto-generated from the reference dataset:
 
-* `RegressionPredictedVsActualScatter()`
+```python
+report = Report(metrics=[
+    RegressionPreset(),
+],
+include_tests=True)
 
-* `RegressionPredictedVsActualPlot()`
+my_eval = report.run(current, ref)
+```
 
-* `RegressionErrorPlot()`
+## Overview
 
-* `RegressionAbsPercentageErrorPlot()`
+The `RegressionPreset` allows you to evaluate and visualize the performance on regression tasks. You can run this Report either for a single dataset or compare it against a reference dataset (such as past performance, or a different model/prompt).
 
-* `RegressionErrorDistribution()`
+![](/images/metrics/preset_regression-min.png)
 
-* `RegressionErrorNormality()`
+The Report includes:
 
-* `RegressionTopErrorMetric()`
+* **Various metrics**: Mean Absolute Error (MAE), Mean Squared Error (MSE), Root Mean Squared Error (RMSE), etc.
 
-* `RegressionErrorBiasTable()` for all or specified `columns`
+* **Various visualizations:** Actual vs Predicted Plot, Error Distribution, Error Normality, etc.
 
-**Optional parameters**:
+Additionally, if you include feature columns, the Report will show Regression Quality by groups with the highest errors (over- and under-prediction). It displays the relationship between columns/features and the target, showing how the system performs on different data segments.
 
-* `columns`
+**Test Suite**. If you enable Tests, this will automatically run checks to assess if the model performance metrics are within bounds.
+
+![](/images/metrics/test_preset_regression-min.png)
+
+Tests are auto-generated:
+
+* **Based on reference dataset**. If the reference dataset is provided, conditions like expected prediction accuracy will be derived from it.
+
+Based on heuristics. If there is no reference, Evidently will create a dummy regression model as a baseline and run checks against it.
+
+<Info>
+  **How Tests work.** Read about [Tests](/docs/library/tests) and check defaults for each Test in the [reference table](/metrics/all_metrics).
+</Info>
+
+## Use case
+
+These Presets are useful in various scenarios:
+
+* **Model / system comparison**. Compare predictive system performance across different datasets, such as during A/B testing, when experimenting with model configurations and architectures, etc.
+
+* **Production monitoring**. You can run evaluations whenever you get actual values in production. Use this to communicate and visualize performance, decide on model updates / retraining, etc.
+
+* **Debugging**. If you notice a drop in performance, use the visual Report to check error distributions and explore model errors.
+
+## Data requirements
+
+**Target and prediction columns**. Required to calculate performance.
+
+**One or two datasets**. Pass two if you want a side-by-side comparison or to auto-generate test conditions.
+
+**Input features** (optional). Include if you want to explore underperforming segments.
+
+**Timestamp** (optional). If available, pass it to appear on some plots.
+
+<Info> **Data schema mapping**: Use the [data definition](/docs/library/data_definition) to map your input data. </Info>
+
+## Report Customization
+
+You can customize the Report in several ways:
+
+* **Change Test conditions**. To modify the auto-generated conditions, you can set yours: either a different condition relative to the reference or any custom conditions.
+
+* **Modify Report composition**. You can add additional metrics, such as column Correlations, Missing Values, or Data Drift. It's often useful to add ValueDrift("target") to evaluate if there is a statistical distribution shift in the model target (concept drift).
+
+<Info> **Creating a custom Report**. Check the documentation for creating a [custom Report](/docs/library/report) and modifying [Tests](/docs/library/tests) conditions. </Info>
