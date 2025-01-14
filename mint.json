@@ -131,7 +131,7 @@
           "pages": [
             "docs/platform/datasets_overview",
             "docs/platform/datasets_workflow",
-            "docs/platform/dataset_generate"
+            "docs/platform/datasets_generate"
           ]
         },
         {
