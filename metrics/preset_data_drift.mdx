@@ -4,7 +4,7 @@ description: 'Overview of the Data Drift Preset.'
 noindex: "true"
 ---
 
-To run a Preset on your data, comparing `current` data to `ref` data:
+**Report.** To run a Preset on your data, comparing `current` data to `ref` data:
 
 ```python
 report = Report(metrics=[
@@ -14,7 +14,7 @@ report = Report(metrics=[
 my_eval = report.run(current, ref)
 ```
 
-To add Tests with explicit pass/fail for each column:
+**Test Suite.** To add Tests with explicit pass/fail for each column:
 
 ```python
 report = Report(metrics=[
@@ -27,33 +27,33 @@ my_eval = report.run(current, ref)
 
 ## Overview
 
-`DataDriftPreset` lets you evaluate shift in data distribution between the two datasets to detect if there are significant changes.
+The`DataDriftPreset` lets you evaluate shift in data distribution between the two datasets to detect if there are significant changes.&#x20;
 
 ![](/images/metrics/preset_data_drift_2-min.png)
 
-* **Column drift.** Checks for shifts in each column. The drift detection method is chosen automatically based on the column type and number of observations.
+* **Column drift.** Checks for shifts in each column. The [drift detection method](/metrics/explainer_drift) is chosen automatically based on the column type and number of observations.
 
 * **Target / Prediction Drift**. If you dataset includes Prediction or Target value, it will be evaluated together with other columns.
 
 * **Overall dataset drift.** Returns the share of drifting columns in the Dataset. By default, Dataset Drift is detected if at least 50% of columns drift.
 
-<Info>
-  **Data Drift Explainer.** Check the [Data Drift Metrics](/metrics/explainer_drift) to understand how different methods work.
-</Info>
-
 The table shows the drifting columns first. You can also choose to sort the rows by the feature name or type, and open up individual columns to see distribution details.
 
 ![](/images/metrics/preset_data_drift-min.png)
 
-If you choose Tests, you will get an alternative Test Suite view.
+If you choose to enable Tests, you will get an additional Test Suite view:
 
-\[ADD IMG]
+![](/images/metrics/test_preset_data_drift-min.png)
+
+<Info>
+  **Data Drift Explainer.** Read about [Data Drift Methods](/metrics/explainer_drift) and default algorithm.
+</Info>
 
 ## Use case
 
 You can evaluate data drift in different scenarios.
 
-* **To monitor the ML model performance without ground truth.** When you do not have true labels or actuals, you can monitor the feature drift to check if the model still operates in a familiar environment. If you detect drift in features or prediction, you can trigger labelling and retraining, or decide to pause and switch to a different decision method.
+* **To monitor the ML model performance without ground truth.** When you do not have true labels or actuals, you can monitor the feature drift to check if the model still operates in a familiar environment. This is a proxy metric. If you detect drift in features or prediction, you can trigger labelling and retraining, or decide to pause and switch to a different decision method. 
 
 * **When you are debugging the ML model quality decay.** If you observe a drop in the model quality, you can evaluate Data Drift to explore the change in the feature patterns, e.g., to understand the change in the environment or discover the appearance of a new segment.
 
@@ -62,7 +62,7 @@ You can evaluate data drift in different scenarios.
 * **To decide on the model retraining.** Before feeding fresh data into the model, you might want to verify whether it even makes sense. If there is no data drift, the environment is stable, and retraining might not be necessary.
 
 <Info>
-  For conceptual explanation, read about [Data Drift](https://www.evidentlyai.com/ml-in-production/data-drift) and [Concept Drift](https://www.evidentlyai.com/ml-in-production/concept-drift). To build intuition about different drift detection methods, check these research blogs: [numerical](https://www.evidentlyai.com/blog/data-drift-detection-large-datasets) data, [embeddings](https://www.evidentlyai.com/blog/embedding-drift-detection).
+For conceptual explanation, read about [Data Drift](https://www.evidentlyai.com/ml-in-production/data-drift) and [Concept Drift](https://www.evidentlyai.com/ml-in-production/concept-drift). To build intuition about different drift detection methods, check these research blogs: [numerical](https://www.evidentlyai.com/blog/data-drift-detection-large-datasets) data, [embeddings](https://www.evidentlyai.com/blog/embedding-drift-detection).
 </Info>
 
 ## Data requirements
@@ -76,6 +76,8 @@ You can evaluate data drift in different scenarios.
 </Info>
 
 ## Report customization
+
+You have multiple customization options.
 
 **Select columns**. You can apply Drift Detection only to some columns in the Dataset, for example, only to the important features. Use the `columns` parameter.
 
@@ -93,10 +95,8 @@ You can evaluate data drift in different scenarios.
 
 * **Check for correlation changes**. You can also consider adding checks on changes in correlations between the features.
 
-* **Detect embedding drift**. To detect drift in embeddings data, use `EmbeddingDrift`.
+* **Detect embedding drift**. To detect drift in embeddings data, use `EmbeddingDrift` metric.
 
 <Info>
   **Creating a custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
 </Info>
-
-**\[ADD on feature importances]**
