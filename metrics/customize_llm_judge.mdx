@@ -8,7 +8,7 @@ noindex: "true"
 
 * You know how to use [descriptors](/docs/library/descriptors) to evaluate text data.
 
-LLM-based descriptors use an external LLM for evaluation. You can use built-in descriptors (with pre-written evaluation prompts) or customize one of our templates for your specific criteria.
+LLM-based descriptors use an external LLM for evaluation. You can use built-in evaluators (with pre-written prompts) or customize one of our templates for your specific criteria.
 
 ## Imports
 
@@ -61,9 +61,13 @@ from evidently.future.descriptors import LLMEval, ToxicityLLMEval, ContextQualit
   **Available descriptors**. Check all available built-in LLM evals in the [reference table](/metrics/all_descriptors#llm-based-evals).
 </Tip>
 
-You can choose from built-in LLM-based descriptors for popular criteria, like detecting if the text contains a refusal to answer. Each LLM-based descriptor will return a label, the reasoning for the decision, and an optional score.
+There are built-in evaluators for popular criteria, like detecting toxicity or if the text contains a refusal. These built-in descriptors:
 
-(TBC) Built-in descriptors default to using `gpt-4o-mini` model from OpenAI.
+* Default to binary classifiers.
+
+* Default to using `gpt-4o-mini` model from OpenAI.
+
+* Returns a label, the reasoning for the decision, and an optional score.
 
 **OpenAI key.** Add the token as the environment variable: [see docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).&#x20;
 
@@ -86,7 +90,9 @@ View the results as usual:
 eval_df.as_dataframe()
 ```
 
-**Run a multi-column eval.** Some descriptors like response relevance or completeness naturally require two columns. For example, to evaluate Context Quality (whether it contains enough information to answer the question), you must run this evaluation over your `context` column, and pass the `question` column as a parameter.
+**Run a multi-column eval.** Some descriptors like response relevance or completeness naturally require two columns.
+
+For example, to evaluate Context Quality ("does it have enough information to answer the question?"), you must run this evaluation over your `context` column, and pass the `question` column as a parameter.
 
 ```python
 eval_df.add_descriptors(descriptors=[
@@ -114,9 +120,17 @@ eval_df.add_descriptors(descriptors=[
 
 ## Custom LLM evals
 
-You can also create a custom LLM evaluator using the provided **templates**. You specify the parameters and evaluation criteria, and Evidently will generate the complete evaluation prompt to send to the LLM together with the evaluation data.
+You can also create a custom LLM evaluator using the provided **templates**:
 
-**Binary classification template**. Include the definition of your `criteria`, names of categories, etc. For example, to define the prompt for "conciseness" evaluation:
+* Choose a template.
+
+* Specify the evaluation criteria (grading logic and names of categories).
+
+* Run the descriptor specifying the model to use.
+
+Evidently will then generate the complete evaluation prompt to send to the LLM together with the evaluation data.
+
+**Binary classification template**. For example, to define the prompt for "conciseness" evaluation:
 
 ```python
 conciseness = BinaryClassificationPromptTemplate(
@@ -134,9 +148,9 @@ conciseness = BinaryClassificationPromptTemplate(
         )      
 ```
 
-You do not need to explicitly ask the LLM to classify your input into two classes, ask for reasoning, or format it specially. This is already part of the Evidently template.
+You do not need to explicitly ask the LLM to classify your input into two classes, ask for reasoning, or format the output. This is already part of the Evidently template.
 
-To apply this descriptor for your data, pass the template name to the `LLMEval` descriptor:
+To apply this descriptor for your data, pass the `template` name to the `LLMEval` descriptor:
 
 ```python
 eval_df.add_descriptors(descriptors=[
@@ -169,41 +183,37 @@ appropriate_scope = BinaryClassificationPromptTemplate(
         )
 ```
 
-(TBC) **Using two columns**. To create a custom evaluator that uses more than one column (similar to the Context Quality example above), pass the second column in the list of `additional_columns` and then reference this`{column_name}`the inside your evaluation criteria. This is useful for scenarios like classifying responses based on their faithfulness to the context, etc.
+(TBC) **Using two columns**. An evaluator can use multiple columns (for example, to assess response relevance to a question).
+
+Pass the second column in `additional_columns` and mention this `{column_name}` inside your evaluation criteria.
 
 ```python
 ADD EXAMPLE
 ```
 
-See the explanation of each parameter below.
-
-You do not need to explicitly include the name of your primary column in the evaluation prompt. Evidently will conside the column that you compute the descriptor and it will be automatically passed to the template.
-
-```
-ADD EXAMPLE
-```
+You do not need to include the primary column name in the evaluation prompt. It will be automatically passed to the template when you run the descriptor.
 
 ## (TBC) Parameters
 
 ### LLMEval
 
-| Parameter  | Description                                        | Options                                                            |
-| ---------- | -------------------------------------------------- | ------------------------------------------------------------------ |
-| `template` | Sets a specific template for evaluation.           | `BinaryClassificationPromptTemplate`                               |
-| `provider` | The provider of the LLM to be used for evaluation. | `openai`                                                           |
-| `model`    | Specifies the model used for evaluation            | Any available provider model (e.g., \`gpt-3.5-turbo\`, \`gpt-4\`)  |
+| Parameter  | Description                                        | Options                                                        |
+| ---------- | -------------------------------------------------- | -------------------------------------------------------------- |
+| `template` | Sets a specific template for evaluation.           | `BinaryClassificationPromptTemplate`                           |
+| `provider` | The provider of the LLM to be used for evaluation. | `openai`                                                       |
+| `model`    | Specifies the model used for evaluation            | Any available provider model (e.g., `gpt-3.5-turbo`, `gpt-4`)  |
 
 ### BinaryClassificationPromptTemplate
 
-| Parameter             | Description                                                                                                                                                                                                                                                                                                                   | Options                                     |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `criteria`            | Free-form text defining evaluation criteria.                                                                                                                                                                                                                                                                                  | Custom string (required)                    |
-| `target_category`     | Name of the target category you want to detect (e.g., you care about its precision/recall more than the other). <br /> <br /> Generally there is no difference which category you call "target": this has no impact on the evaluation itself. But this can be useful if you later run quality evaluations for your LLM judge. | Custom category (required)                  |
-| `non_target_category` | Name of the non-target category.                                                                                                                                                                                                                                                                                              | Custom category (required)                  |
-| `uncertainty`         | Category to return when the provided information is not sufficient to make a clear determination.                                                                                                                                                                                                                             | `unknown` (Default), `target`, `non_target` |
-| `include_reasoning`   | Specifies whether to include the LLM-generated explanation of the result.                                                                                                                                                                                                                                                     | `True` (Default), `False`                   |
-| `pre_messages`        | List of system messages that set context or instructions before the evaluation task. For example, you can explain the evaluator role ("you are an expert..") or context ("your goal is to grade the work of an intern..").                                                                                                    | Custom string (optional)                    |
-| `additional_columns`  | A dictionary of additional columns present in your dataset to include in the evaluation prompt. Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`.                                                                                                 | Custom dictionary (optional)                |
+| Parameter             | Description                                                                                                                                                                                                                                                                      | Options                                     |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `criteria`            | Free-form text defining evaluation criteria.                                                                                                                                                                                                                                     | Custom string (required)                    |
+| `target_category`     | Name of the target category you want to detect (e.g., you care about its precision/recall more than the other). <br /> <br /> The choice of "target" category has no impact on the evaluation itself. However, it can be useful for later quality evaluations of your LLM judge. | Custom category (required)                  |
+| `non_target_category` | Name of the non-target category.                                                                                                                                                                                                                                                 | Custom category (required)                  |
+| `uncertainty`         | Category to return when the provided information is not sufficient to make a clear determination.                                                                                                                                                                                | `unknown` (Default), `target`, `non_target` |
+| `include_reasoning`   | Specifies whether to include the LLM-generated explanation of the result.                                                                                                                                                                                                        | `True` (Default), `False`                   |
+| `pre_messages`        | List of system messages that set context or instructions before the evaluation task. <br /> <br /> Use it to explain the evaluator role ("you are an expert..") or context ("your goal is to grade the work of an intern..").                                                       | Custom string (optional)                    |
+| `additional_columns`  | A dictionary of additional columns present in your dataset to include in the evaluation prompt. <br /> <br /> Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`.                                                    | Custom dictionary (optional)                |
 
 <Accordion title="OpenAIPrompting descriptor" defaultOpen={false}>
   # OpenAIPrompting
