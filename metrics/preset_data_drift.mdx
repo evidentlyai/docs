@@ -67,11 +67,11 @@ You can evaluate data drift in different scenarios.
 
 ## Data requirements
 
-* **Input columns.** You can provide any input columns. They must be non-empty.
+* **Input columns**. You can provide any input columns. They must be non-empty.
 
-* **Two datasets.** You must always pass two datasets: the current dataset will be compared to the reference.
+* **Two datasets**. You must always pass two datasets: the current dataset will be compared to the reference.
 
-* **Column types.** The Preset evaluates drift for numerical, categorical, or text data. You can specify column types explicitly (recommended). Otherwise Evidently will auto-detect numerical and categorical features. You must always map text data.
+* **Set column types** (Optional). The Preset evaluates drift for numerical, categorical, or text data. You can specify column types explicitly (recommended). Otherwise Evidently will auto-detect numerical and categorical features. You must always map text data.
 
 <Info>
   **Data schema mapping**. Use the [data definition](/docs/library/data_definition) to map your input data.

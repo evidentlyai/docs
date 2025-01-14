@@ -51,7 +51,7 @@ If you choose to enable Tests, you will get an additional Test Suite view:
 
 ## Use case
 
-You can this Preset in different scenarios.
+You can use this Preset in different scenarios.
 
 * **Exploratory data analysis.** You can use the visual Report to explore your dataset at any point (during model training, after new batch of data arrives, during debugging etc.)
 
@@ -63,23 +63,15 @@ You can this Preset in different scenarios.
 
 ## Data requirements
 
-* **Input columns.** You can provide any input columns. They must be non-empty.
+* **Input columns**. You can provide any input columns. They must be non-empty.
 
-* **One or two datasets.** Pass a single dataset or two for comparison.&#x20;
+* **One or two datasets**. Pass a single dataset or two for comparison.&#x20;
 
-* **Column types.** The Preset evaluates numerical, categorical, text and datetime columns. You can specify column types explicitly (recommended). Otherwise Evidently will auto-detect numerical, categorical and datetime columns. You must always map text data.
+* **Set column types** (Optional) The Preset evaluates numerical, categorical, text and datetime columns. You can specify column types explicitly (recommended). Otherwise Evidently will auto-detect numerical, categorical and datetime columns. You must always map text data.
 
-*
+* **Timestamp** (Optional). If you have a datetime index and want to learn how columm value change with time, specify the `timestamp` column in data definition. 
 
-You might also need to specify additional column mapping:
-
-* If you have a **datetime** index column and want to learn how features change with time, specify the datetime column in the `column_mapping`.
-
-* If you have a **target** column and want to see features distribution by target, specify the target column in the `column_mapping`.
-
-* Specify the **task** if you want to explore interactions between the features and the target. This section looks slightly different for classification and regression tasks. By default, if the target has a numeric type and has >5 unique values, Evidently will treat it as a regression problem. Everything else is treated as a classification problem. If you want to explicitly define your task as `regression` or `classification`, you should set the `task` parameter in the `column_mapping` object.
-
-* If you have **text** features, you should specify it in the column mapping to generate descriptive statistics specific to text.
+* **Target** (Optional). If you have a target column and want to see feature distribution by target, specify the target column in data definition.
 
 <Info>
   **Data schema mapping**. Use the [data definition](/docs/library/data_definition) to map your input data.
@@ -89,29 +81,17 @@ You might also need to specify additional column mapping:
 
 You have multiple customization options.
 
-**Select columns**. You can apply Drift Detection only to some columns in the Dataset, for example, only to the important features. Use the `columns` parameter.
-
-**Change drift parameters.** You can modify how drift detection works:
-
-* **Change methods**. Evidently has a large number of drift detection methods (univariate and multivariate), including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc. You can also pick tests by column.
-
-* **Change thresholds**. You can specify different drift detection conditions on the dataset or column level.
-
-* **Implement a custom method**. You can implement a custom drift method as Python function.
-
-<Info>
-  **Drift detection parameters**. Learn available methods and parameters in [Drift Customization. ](/metrics/customize_data_drift).
-</Info>
+**Select columns**. You can get stats only for some columns in the Dataset. Use the `columns` parameter.
 
 **Modify Report composition**. You can add other Metrics to the Report to get a more comprehensive evaluation. Here are some recommended options.
 
-* **Single out the Target/Prediction column.** If you want to evaluate drift in the Prediction column separately, you can add `ValueDrift("prediction")` to your Report so that you see the drift in this value in a separate widget.
+* **Correlations.** Add correlations heatmap.
 
-* **Add data quality checks**. Add `DataSummaryPreset` to get descriptive stats and run Tests like detecting missing values. Data drift check drops nulls (and compares the distributions of non-empty features), so you may want to run these Tests separately.
+* **Missing values** Add missing values heatmap.
 
-* **Check for correlation changes**. You can also consider adding checks on changes in correlations between the features.
+* **Data drift**. Consider `DataDriftPreset` to evaluate the distribution shifts if you have two datasets.
 
-* **Detect embedding drift**. To detect drift in embeddings data, use `EmbeddingDrift` metric.
+**Customize Test conditions**. If you want to modify the auto-generated Test conditions, you can set yours: either a different condition relative to the reference or any custom conditions per each Test.  
 
 <Info>
   **Creating a custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
