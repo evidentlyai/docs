@@ -169,16 +169,13 @@ appropriate_scope = BinaryClassificationPromptTemplate(
         )
 ```
 
-(TBC) **Using two columns**. To create a custom evaluator that uses more than one column (similar to the Context Quality example above), pass the second column in the list of `additional_columns` and then reference the `{column} inside your evaluation criteria. This is useful for scenarios like classifying responses based on their faithfulness to the context, etc.
+(TBC) **Using two columns**. To create a custom evaluator that uses more than one column (similar to the Context Quality example above), pass the second column in the list of `additional_columns` and then reference this`{column_name}`the inside your evaluation criteria. This is useful for scenarios like classifying responses based on their faithfulness to the context, etc.
 
 ```python
 ADD EXAMPLE
 ```
 
 See the explanation of each parameter below.
-
-
-
 
 You do not need to explicitly include the name of your primary column in the evaluation prompt. Evidently will conside the column that you compute the descriptor and it will be automatically passed to the template.
 
@@ -190,146 +187,144 @@ ADD EXAMPLE
 
 ### LLMEval Parameters
 
-| Parameter   | Description                                                                                  |
-| ----------- | -------------------------------------------------------------------------------------------- |                   |
-| `template`  | Sets a specific template for evaluation. Available: `BinaryClassificationPromptTemplate`.  |
-| `provider`  | The provider of the LLM to be used for evaluation. Available: `openai`.                      |
-| `model`     | Specifies the model used for evaluation within the provider, e.g., `gpt-3.5-turbo`. |
+\| Parameter   | Description                                                                                  |
+\| ----------- | -------------------------------------------------------------------------------------------- |                   |
+\| `template`  | Sets a specific template for evaluation. Available: `BinaryClassificationPromptTemplate`.  |
+\| `provider`  | The provider of the LLM to be used for evaluation. Available: `openai`.                      |
+\| `model`     | Specifies the model used for evaluation within the provider, e.g., `gpt-3.5-turbo`. |
 
 ### BinaryClassificationPromptTemplate
 
-| Parameter             | Description                                                                                                                                                                                                                   |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `criteria`            | Free-form text defining evaluation criteria.                                                                                                                                                                                  |
-| `target_category`     | Name of the target category you want to detect (e.g. you care about the precision / recall for this category more than the other). There is no impact to the prompt or evaluation, but this can be useful if you later run quality evaluations for your LLM judge by comparing it to the ground truth labels.                                                                                                                      |
-| `non_target_category` | Name of the non-target category.                                                                                                                                                                                 |
-| `uncertainty`         | Category to return when the provided information is not sufficient to make a clear determination. Available: `unknown` (Default), `target`, `non_target`.                                                                     |
-| `include_reasoning`   | Specifies whether to include reasoning in the classification. Available: `True` (Default), `False`. It will be included with the result.                                                                                      |
-| `pre_messages`        | List of system messages that set context or instructions before the evaluation task. For example, you can explain the evaluator role ("you are an expert..") or context ("your goal is to grade the work of an intern..")     |
-| `additional_columns`  | A dictionary of additional columns present in your dataset to include in the evaluation prompt. Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`. |
+| Parameter             | Description                                                                                                                                                                                                                                                                                                   |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `criteria`            | Free-form text defining evaluation criteria.                                                                                                                                                                                                                                                                  |
+| `target_category`     | Name of the target category you want to detect (e.g. you care about the precision / recall for this category more than the other). There is no impact to the prompt or evaluation, but this can be useful if you later run quality evaluations for your LLM judge by comparing it to the ground truth labels. |
+| `non_target_category` | Name of the non-target category.                                                                                                                                                                                                                                                                              |
+| `uncertainty`         | Category to return when the provided information is not sufficient to make a clear determination. Available: `unknown` (Default), `target`, `non_target`.                                                                                                                                                     |
+| `include_reasoning`   | Specifies whether to include reasoning in the classification. Available: `True` (Default), `False`. It will be included with the result.                                                                                                                                                                      |
+| `pre_messages`        | List of system messages that set context or instructions before the evaluation task. For example, you can explain the evaluator role ("you are an expert..") or context ("your goal is to grade the work of an intern..")                                                                                     |
+| `additional_columns`  | A dictionary of additional columns present in your dataset to include in the evaluation prompt. Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`.                                                                                 |
 
 <Accordion title="OpenAIPrompting descriptor" defaultOpen={false}>
-  
-# OpenAIPrompting
+  # OpenAIPrompting
 
-There is an earlier implementation of this approach with `OpenAIPrompting` descriptor. See the documentation below.
+  There is an earlier implementation of this approach with `OpenAIPrompting` descriptor. See the documentation below.
 
-OpenAIPrompting Descriptor
+  OpenAIPrompting Descriptor
 
-To import the Descriptor:
+  To import the Descriptor:
 
-```python
-from evidently.descriptors import OpenAIPrompting
-```
+  ```python
+  from evidently.descriptors import OpenAIPrompting
+  ```
 
-Define a prompt. This is a simplified example:
+  Define a prompt. This is a simplified example:
 
-```python
-pii_prompt = """
-Please identify whether the below text contains personally identifiable information, such as name, address, date of birth, or other.
-Text: REPLACE 
-Use the following categories for PII identification:
-1 if text contains PII
-0 if text does not contain PII
-0 if the provided data is not sufficient to make a clear determination
-Return only one category.
-"""
-```
+  ```python
+  pii_prompt = """
+  Please identify whether the below text contains personally identifiable information, such as name, address, date of birth, or other.
+  Text: REPLACE 
+  Use the following categories for PII identification:
+  1 if text contains PII
+  0 if text does not contain PII
+  0 if the provided data is not sufficient to make a clear determination
+  Return only one category.
+  """
+  ```
 
-The prompt has a REPLACE placeholder that will be filled with the texts you want to evaluate. Evidently will take the content of each row in the selected column, insert into the placeholder position in a prompt and pass it to the LLM for scoring.
+  The prompt has a REPLACE placeholder that will be filled with the texts you want to evaluate. Evidently will take the content of each row in the selected column, insert into the placeholder position in a prompt and pass it to the LLM for scoring.
 
-To compute the score for the column `response` and get a summary Report:
+  To compute the score for the column `response` and get a summary Report:
 
-```python
-openai_prompting = Dataset.from_pandas(
-    pd.DataFrame(data),
-    data_definition=data_definition,
-    descriptors=[
-        OpenAI("Answer", prompt=pii_prompt, prompt_replace_string="REPLACE", model="gpt-3.5-turbo-instruct", 
-               feature_type="num", alias="PII for Answer (by gpt3.5)"),
-        
-    ]
-)
-```
+  ```python
+  openai_prompting = Dataset.from_pandas(
+      pd.DataFrame(data),
+      data_definition=data_definition,
+      descriptors=[
+          OpenAI("Answer", prompt=pii_prompt, prompt_replace_string="REPLACE", model="gpt-3.5-turbo-instruct", 
+                 feature_type="num", alias="PII for Answer (by gpt3.5)"),
+          
+      ]
+  )
+  ```
 
-View as usual:
+  View as usual:
 
-```
-openai_prompting.as_dataframe()
-```
+  ```
+  openai_prompting.as_dataframe()
+  ```
 
-## Descriptor parameters
+  ## Descriptor parameters
 
-* **`prompt: str`**
+  * **`prompt: str`**
 
-  * The text of the evaluation prompt that will be sent to the LLM.
+    * The text of the evaluation prompt that will be sent to the LLM.
 
-  * Include at least one placeholder string.
+    * Include at least one placeholder string.
 
-* **`prompt_replace_string: str`**
+  * **`prompt_replace_string: str`**
 
-  * A placeholder string within the prompt that will be replaced by the evaluated text.
+    * A placeholder string within the prompt that will be replaced by the evaluated text.
 
-  * The default string name is "REPLACE".
+    * The default string name is "REPLACE".
 
-* **`feature_type: str`**
+  * **`feature_type: str`**
 
-  * The type of Descriptor the prompt will return.
+    * The type of Descriptor the prompt will return.
 
-  * Available types: `num` (numerical) or `cat` (categorical).
+    * Available types: `num` (numerical) or `cat` (categorical).
 
-  * This affects the statistics and default visualizations.
+    * This affects the statistics and default visualizations.
 
-* **`context_replace_string: str`**
+  * **`context_replace_string: str`**
 
-  * An optional placeholder string within the prompt that will be replaced by the additional context.
+    * An optional placeholder string within the prompt that will be replaced by the additional context.
 
-  * The default string name is "CONTEXT".
+    * The default string name is "CONTEXT".
 
-* **`context: Optional[str]`**
+  * **`context: Optional[str]`**
 
-  * Additional context that will be added to the evaluation prompt, which **does not change** between evaluations.
+    * Additional context that will be added to the evaluation prompt, which **does not change** between evaluations.
 
-  * Examples: a reference document, a set of positive and negative examples, etc.
+    * Examples: a reference document, a set of positive and negative examples, etc.
 
-  * Pass this context as a string.
+    * Pass this context as a string.
 
-  * You cannot use `context` and `context_column` simultaneously.
+    * You cannot use `context` and `context_column` simultaneously.
 
-* **`context_column: Optional[str]`**
+  * **`context_column: Optional[str]`**
 
-  * Additional context that will be added to the evaluation prompt, which is **specific to each row**.
+    * Additional context that will be added to the evaluation prompt, which is **specific to each row**.
 
-  * Examples: a chunk of text retrieved from reference documents for a specific query.
+    * Examples: a chunk of text retrieved from reference documents for a specific query.
 
-  * Point to the column that contains the context.
+    * Point to the column that contains the context.
 
-  * You cannot use `context` and `context_column` simultaneously.
+    * You cannot use `context` and `context_column` simultaneously.
 
-* **`model: str`**
+  * **`model: str`**
 
-  * The name of the OpenAI model to be used for the LLM prompting, e.g., `gpt-3.5-turbo-instruct`.
+    * The name of the OpenAI model to be used for the LLM prompting, e.g., `gpt-3.5-turbo-instruct`.
 
-* **`openai_params: Optional[dict]`**
+  * **`openai_params: Optional[dict]`**
 
-  * A dictionary with additional parameters for the OpenAI API call.
+    * A dictionary with additional parameters for the OpenAI API call.
 
-  * Examples: temperature, max tokens, etc.
+    * Examples: temperature, max tokens, etc.
 
-  * Use parameters that OpenAI API accepts for a specific model.
+    * Use parameters that OpenAI API accepts for a specific model.
 
-* **`possible_values: Optional[List[str]]`**
+  * **`possible_values: Optional[List[str]]`**
 
-  * A list of possible values that the LLM can return.
+    * A list of possible values that the LLM can return.
 
-  * This helps validate the output from the LLM and ensure it matches the expected categories.
+    * This helps validate the output from the LLM and ensure it matches the expected categories.
 
-  * If the validation does not pass, you will get `None` as a response label.
+    * If the validation does not pass, you will get `None` as a response label.
 
-* **`alias: Optional[str]`**
+  * **`alias: Optional[str]`**
 
-  * A display name visible in Reports and as a column name in tabular export.
+    * A display name visible in Reports and as a column name in tabular export.
 
-  * Use it to name your Descriptor.
-
+    * Use it to name your Descriptor.
 </Accordion>
