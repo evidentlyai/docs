@@ -92,7 +92,7 @@ eval_df.add_descriptors(descriptors=[
 
 View the results as usual:
 
-```
+```python
 eval_df.as_dataframe()
 ```
 
@@ -256,7 +256,7 @@ hallucination = BinaryClassificationPromptTemplate(
 
 When applying the descriptor, include the second column using the `additional_columns` parameter:
 
-```
+```python
 eval_df.add_descriptors(descriptors=[
     LLMEval("response", 
             template=hallucination, 
