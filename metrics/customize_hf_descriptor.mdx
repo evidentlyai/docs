@@ -4,81 +4,123 @@ description: 'How to use models from HuggingFace as evaluators.'
 noindex: "true"
 ---
 
-Coming soon pending API update.
-
-***
-
-## description: How to use models available on HuggingFace as text Descriptors.
-
 **Pre-requisites**:
 
-* You know how to generate Reports or Test Suites for text data using Descriptors.
+* You know how to use [descriptors](/docs/library/descriptors) to evaluate text data.
 
-* You know how to pass custom parameters for Reports or Test Suites.
+You can score your text using ML models from HuggingFace. This lets you apply any criteria from the source model, e.g. classify texts by emotion. There are:
 
-* You know to specify text data in column mapping.
+* Ready-to-use descriptors that wrap a specific model;
 
-You can use an external machine learning model to score text data. This method lets you evaluate texts based on any criteria from the source model, e.g. classify it into a set number of labels.
+* A general interface to call other suitable models you select
 
-The model you use must return a numerical score or a category for each text in a column. You will then be able to view scores, analyze their distribution or run conditional tests through the usual Descriptor interface.
-
-Evidently supports using HuggingFace models: use the general `HuggingFaceModel()` descriptor to select models on your own or simplified interfaces like `HuggingFaceToxicityModel()`.
-
-# Code example
-
-You can refer to an end-to-end example with different Descriptors:
-
-To import the Descriptor:
+## Imports
 
 ```python
-from evidently.descriptors import HuggingFaceModel, HuggingFaceToxicityModel
+from evidently.future.datasets import Descriptor
+from evidently.future.descriptors import HuggingFace, HuggingFaceToxicity
 ```
 
-To get a Report with a Toxicity score for the `response` column:
+<Accordion title="Toy data to run the example" defaultOpen={false}>
+  To generate toy data and create a Dataset object:
+
+  ```python
+  import pandas as pd
+
+  from evidently.future.datasets import Dataset
+  from evidently.future.datasets import DataDefinition
+
+  data = [
+      ["Why is the sky blue?", 
+       "The sky is blue because molecules in the air scatter blue light from the sun more than they scatter red light.", 
+       "because air scatters blue light more"],
+      ["How do airplanes stay in the air?", 
+       "Airplanes stay in the air because their wings create lift by forcing air to move faster over the top of the wing than underneath, which creates lower pressure on top.", 
+       "because wings create lift"],
+      ["Why do we have seasons?", 
+       "We have seasons because the Earth is tilted on its axis, which causes different parts of the Earth to receive more or less sunlight throughout the year.", 
+       "because Earth is tilted"],
+      ["How do magnets work?", 
+       "Magnets work because they have a magnetic field that can attract or repel certain metals, like iron, due to the alignment of their atomic particles.", 
+       "because of magnetic fields"],
+      ["Why does the moon change shape?", 
+       "The moon changes shape, or goes through phases, because we see different portions of its illuminated half as it orbits the Earth.", 
+       "because it rotates"],
+      ["What movie should I watch tonight?", 
+       "A movie is a motion picture created to entertain, educate, or inform viewers through a combination of storytelling, visuals, and sound.", 
+       "watch a movie that suits your mood"]
+  ]
+
+  columns = ["question", "context", "response"]
+
+  df = pd.DataFrame(data, columns=columns)
+
+  eval_df = Dataset.from_pandas(
+    pd.DataFrame(df),
+    data_definition=DataDefinition())
+
+  ```
+</Accordion>
+
+## Built-in ML evals
+
+<Tip>
+  **Available descriptors**. Check all available built-in LLM evals in the [reference table](/metrics/all_descriptors#ml-based-evals).
+</Tip>
+
+There are built-in evaluators for some models. You can call them like any other descriptor:
 
 ```python
-report = Report(metrics=[
-    TextEvals(column_name="response", descriptors=[
-        HuggingFaceToxicityModel(toxic_label="hate"),
-    ])
+eval_df.add_descriptors(descriptors=[
+    HuggingFaceToxicity("question", toxic_label="hate", alias="Toxicity") 
 ])
 ```
 
-To get a Report with with several different scores using the general `HuggingFaceModel()` descriptor:
+## Custom ML evals
+
+Alternatively, use the general `HuggingFace()` descriptor to call a specific named model. The model you use must return a numerical score or a category for each text in a column.
+
+For example,
 
 ```python
-report = Report(metrics=[
-    TextEvals(column_name="response", descriptors=[
-        HuggingFaceModel(model="DaNLP/da-electra-hatespeech-detection", display_name="Response Toxicity"),
-        HuggingFaceModel(model="SamLowe/roberta-base-go_emotions", params={"label": "disappointment"}, 
-                         display_name="Disappointments in Response"), 
-        HuggingFaceModel(model="SamLowe/roberta-base-go_emotions", params={"label": "optimism"}, 
-                         display_name="Optimism in Response"),     
-    ])
+eval_df.add_descriptors(descriptors=[
+   HuggingFace("question",
+       model="SamLowe/roberta-base-go_emotions", 
+       params={"label": "curiosity"},
+       alias="Curiousity"
+   )
 ])
 ```
 
-You can do the same for Test Suites.
+Call the result as usual:
 
-**Which descriptors are there?** See the list of available built-in descriptors in the [All Metrics](../reference/all-metrics.md) page.
+```python
+eval_df.as_dataframe()
+```
 
+Example output:
 
-# Sample models
+![](/images/examples/hf_descriptor_example_toxicity-min.png)
 
-Here are some example models you can call using the `HuggingFaceModel()` descriptor.
+### Sample models
 
-| Model | Parameters |                                                                                                              
-|----|----|
+Here are some example models you can call using the `HuggingFace()` descriptor.
 
-| **Emotion classification** <br /> `SamLowe/roberta-base-go_emotions` <ul><li> Scores texts by 28 emotions. </li><li> Returns the predicted probability for the chosen emotion label. </li><li> Scale: 0 to 1. </li><li> `toxic_label="hate"` (default) </li></ul> **Example use**:<br /> `HuggingFaceModel(model="SamLowe/roberta-base-go_emotions", params={"label": "disappointment"})` <br /><br /> **Source**: [HuggingFace Model](https://huggingface.co/SamLowe/roberta-base-go_emotions) | **Required**:<ul><li> `params={"label":"label"}`</li></ul>**Available labels**:<ul><li>admiration</li><li>amusement</li><li>anger</li><li>annoyance</li><li>approval</li><li>caring</li><li>confusion</li><li>curiosity</li><li>desire</li><li>disappointment</li><li>disapproval</li><li>disgust</li><li>embarrassment</li><li>excitement</li><li>fear</li><li>gratitude</li><li>grief</li><li>joy</li><li>love</li><li>nervousness</li><li>optimism</li><li>pride</li><li>realization</li><li>relief</li><li>remorse</li><li>sadness</li><li>surprise</li><li>neutral</li></ul>**Optional**:<ul><li>`display_name="display name"`</li></ul> |
-| **Toxicity detection** <br />`facebook/roberta-hate-speech-dynabench-r4-target` <ul><li> Detects hate speech. </li><li> Returns predicted probability for the “hate” label. </li><li> Scale: 0 to 1. </li></ul> **Example use**:<br /> `HuggingFaceModel(model="facebook/roberta-hate-speech-dynabench-r4-target", display_name="Toxicity")` <br /><br /> **Source**: [HuggingFace Model](https://huggingface.co/facebook/roberta-hate-speech-dynabench-r4-target) | **Optional**: <ul><li>`toxic_label="hate"` (default)</li><li> `display_name="display name"`</li></ul> |
-| **Zero-shot classification** <br />`MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli` <ul><li>A natural language inference model. </li><li>Use it for zero-shot classification by user-provided topics.</li><li> List candidate topics as `labels`. You can provide one or several topics. </li><li> You can set a classification threshold: if the predicted probability is below, an "unknown" label will be assigned. </li><li> Returns a label. </li></ul> **Example use**: <br />`HuggingFaceModel(model="MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli", params={"labels": ["HR", "finance"], "threshold":0.5}, display_name="Topic")` <br /><br /> **Source**: [HuggingFace Model](https://huggingface.co/MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli) | **Required**: <ul><li>`params={"labels": ["label"]}`</li></ul> **Optional**:<ul><li> `params={"score_threshold": 0.7}` (default: 0.5)</li><li> `display_name="display name"`</li></ul> |
-| **GPT-2 text detection** <br />`openai-community/roberta-base-openai-detector` <ul><li> Predicts if a text is Real or Fake (generated by a GPT-2 model). </li><li> You can set a classification threshold: if the predicted probability is below, an "unknown" label will be assigned. </li><li> Note that it is not usable as a detector for more advanced models like ChatGPT.  </li><li> Returns a label. </li></ul>  **Example use**:<br /> `HuggingFaceModel(model="openai-community/roberta-base-openai-detector", params={"score_threshold": 0.7})` <br /><br /> **Source**: [HuggingFace Model](https://huggingface.co/openai-community/roberta-base-openai-detector) | **Optional**:<ul><li>`params={"score_threshold": 0.7}` (default: 0.5)</li><li> `display_name="display name"`</li></ul> |
+| Model                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Parameters                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Emotion classification** <br /> `SamLowe/roberta-base-go_emotions` <ul><li> Scores texts by 28 emotions. </li><li> Returns the predicted probability for the chosen emotion label. </li><li> Scale: 0 to 1. </li><li> `toxic_label="hate"` (default) </li></ul> **Example use**:<br /> `HuggingFaceModel(model="SamLowe/roberta-base-go_emotions", params={"label": "disappointment"})` <br /><br /> **Source**: [HuggingFace Model](https://huggingface.co/SamLowe/roberta-base-go_emotions)                                                                                                                                                                                                                                                                                               | **Required**:<ul><li> `params={"label":"label"}`</li></ul>**Available labels**:<ul><li>admiration</li><li>amusement</li><li>anger</li><li>annoyance</li><li>approval</li><li>caring</li><li>confusion</li><li>curiosity</li><li>desire</li><li>disappointment</li><li>disapproval</li><li>disgust</li><li>embarrassment</li><li>excitement</li><li>fear</li><li>gratitude</li><li>grief</li><li>joy</li><li>love</li><li>nervousness</li><li>optimism</li><li>pride</li><li>realization</li><li>relief</li><li>remorse</li><li>sadness</li><li>surprise</li><li>neutral</li></ul>**Optional**:<ul><li>`display_name="display name"`</li></ul> |
+| **Toxicity detection** <br />`facebook/roberta-hate-speech-dynabench-r4-target` <ul><li> Detects hate speech. </li><li> Returns predicted probability for the “hate” label. </li><li> Scale: 0 to 1. </li></ul> **Example use**:<br /> `HuggingFaceModel(model="facebook/roberta-hate-speech-dynabench-r4-target", alias="Toxicity")` <br /><br /> **Source**: [HuggingFace Model](https://huggingface.co/facebook/roberta-hate-speech-dynabench-r4-target)                                                                                                                                                                                                                                                                                                                            | **Optional**: <ul><li>`toxic_label="hate"` (default)</li><li> `display_name="display name"`</li></ul>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| **Zero-shot classification** <br />`MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli` <ul><li>A natural language inference model. </li><li>Use it for zero-shot classification by user-provided topics.</li><li> List candidate topics as `labels`. You can provide one or several topics. </li><li> You can set a classification threshold: if the predicted probability is below, an "unknown" label will be assigned. </li><li> Returns a label. </li></ul> **Example use**: <br />`HuggingFaceModel(model="MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli", params={"labels": ["HR", "finance"], "threshold":0.5}, display_name="Topic")` <br /><br /> **Source**: [HuggingFace Model](https://huggingface.co/MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli) | **Required**: <ul><li>`params={"labels": ["label"]}`</li></ul> **Optional**:<ul><li> `params={"score_threshold": 0.7}` (default: 0.5)</li><li> `alias="display name"`</li></ul>                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| **GPT-2 text detection** <br />`openai-community/roberta-base-openai-detector` <ul><li> Predicts if a text is Real or Fake (generated by a GPT-2 model). </li><li> You can set a classification threshold: if the predicted probability is below, an "unknown" label will be assigned. </li><li> Note that it is not usable as a detector for more advanced models like ChatGPT.  </li><li> Returns a label. </li></ul>  **Example use**:<br /> `HuggingFaceModel(model="openai-community/roberta-base-openai-detector", params={"score_threshold": 0.7})` <br /><br /> **Source**: [HuggingFace Model](https://huggingface.co/openai-community/roberta-base-openai-detector)                                                                                                                 | **Optional**:<ul><li>`params={"score_threshold": 0.7}` (default: 0.5)</li><li> `alias="display name"`</li></ul>     |
 
 This list is not exhaustive, and the Descriptor may support other models published on Hugging Face. The implemented interface generally works for models that:
+
 * Output a single number (e.g., predicted score for a label) or a label, **not** an array of values.
+
 * Can process raw text input directly.
+
 * Name labels using `label` or `labels` fields.
+
 * Use methods named `predict` or `predict_proba` for scoring.
 
 However, since each model is implemented differently, we cannot provide a complete list of models with a compatible interface. We suggest testing the implementation on your own using trial and error. If you discover useful models, feel free to share them with the community in Discord. You can also open an issue on GitHub to request support for a specific model.

@@ -8,13 +8,15 @@ noindex: "true"
 
 * You know how to use [descriptors](/docs/library/descriptors) to evaluate text data.
 
-LLM-based descriptors use an external LLM for evaluation. You can use built-in evaluators (with pre-written prompts) or customize one of our templates for your specific criteria.
+LLM-based descriptors use an external LLM for evaluation. You can:
+
+* use built-in evaluators (with pre-written prompts),
+
+* run evals for custom criteria you configure.
 
 ## Imports
 
 ```python
-import pandas as pd
-
 from evidently.future.datasets import Descriptor
 from evidently.features.llm_judge import BinaryClassificationPromptTemplate
 from evidently.future.descriptors import LLMEval, ToxicityLLMEval, ContextQualityLLMEval, DeclineLLMEval
@@ -24,6 +26,7 @@ from evidently.future.descriptors import LLMEval, ToxicityLLMEval, ContextQualit
   To generate toy data and create a Dataset object:
 
   ```python
+  import pandas as pd
   from evidently.future.datasets import Dataset
   from evidently.future.datasets import DataDefinition
 
@@ -51,6 +54,10 @@ from evidently.future.descriptors import LLMEval, ToxicityLLMEval, ContextQualit
   columns = ["question", "context", "response"]
 
   df = pd.DataFrame(data, columns=columns)
+
+  eval_df = Dataset.from_pandas(
+    pd.DataFrame(df),
+    data_definition=DataDefinition())
 
   ```
 </Accordion>
