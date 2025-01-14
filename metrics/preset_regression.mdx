@@ -65,15 +65,17 @@ These Presets are useful in various scenarios:
 
 ## Data requirements
 
-**Target and prediction columns**. Required to calculate performance.
+* **Target and prediction columns**. Required to calculate performance.
 
-**One or two datasets**. Pass two if you want a side-by-side comparison or to auto-generate test conditions.
+* **One or two datasets**. Pass two if you want a side-by-side comparison or to auto-generate test conditions.
 
-**Input features** (optional). Include if you want to explore underperforming segments.
+* **Input features** (optional). Include if you want to explore underperforming segments.
 
-**Timestamp** (optional). If available, pass it to appear on some plots.
+* **Timestamp** (optional). If available, pass it to appear on some plots.
 
-<Info> **Data schema mapping**: Use the [data definition](/docs/library/data_definition) to map your input data. </Info>
+<Info> 
+**Data schema mapping**: Use the [data definition](/docs/library/data_definition) to map your input data. 
+</Info>
 
 ## Report Customization
 
@@ -83,4 +85,6 @@ You can customize the Report in several ways:
 
 * **Modify Report composition**. You can add additional metrics, such as column Correlations, Missing Values, or Data Drift. It's often useful to add ValueDrift("target") to evaluate if there is a statistical distribution shift in the model target (concept drift).
 
-<Info> **Creating a custom Report**. Check the documentation for creating a [custom Report](/docs/library/report) and modifying [Tests](/docs/library/tests) conditions. </Info>
+<Info> 
+**Creating a custom Report**. Check the documentation for creating a [custom Report](/docs/library/report) and modifying [Tests](/docs/library/tests) conditions. 
+</Info>
