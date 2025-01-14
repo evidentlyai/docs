@@ -47,9 +47,11 @@ from evidently.future.datasets import Descriptor
 
 ## Single column check
 
-You can define a `CustomColumnDescriptor` that can take any column from your dataset and evaluate each row. It will add a single column with numerical (`num`) scores or categorical (`cat`) labels. Implement it as a Python function that takes a Pandas Series as input and return a transformed Series.
+You can define a `CustomColumnDescriptor` that will:
+* take any column from your dataset to evaluate each value inside it
+* return a single column with numerical (`num`) scores or categorical (`cat`) labels. 
 
-For example, to check if the column is empty:
+Implement it as a Python function that takes a Pandas Series as input and return a transformed Series. For example, to check if the column is empty:
 
 ```python
 def is_empty(data: DatasetColumn) -> DatasetColumn:
@@ -76,9 +78,11 @@ eval_df.as_dataframe()
 
 ## Multi-column check
 
-You can alternatively define a `CustomDescriptor` that takes one or multiple named columns from your dataset and returns a single column. You can use it for pairwise evaluations.
+You can alternatively define a `CustomDescriptor` that:
+* Takes one or many named columns from your dataset, 
+* Returns one or many transformed columns.
 
-For example, to check exact match between `target_answer` and `answer` columns:
+**Pairwise evaluation**. For example, to check exact match between `target_answer` and `answer` columns, and return a label:
 
 ```python
 def exact_match(dataset: Dataset) -> DatasetColumn:
@@ -98,9 +102,7 @@ eval_df.add_descriptors(descriptors=[
 ])
 ```
 
-## Multiple scores
-
-You can also use `CustomDescriptor` to run evals for multiple columns and return multiple scores.
+**Multiple scores**. You can also use `CustomDescriptor` to run evals for multiple columns and return multiple scores.
 
 For example, to reverse all words in `question` and `answer` columns:
 
