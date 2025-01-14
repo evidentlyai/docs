@@ -53,7 +53,7 @@ If you choose to enable Tests, you will get an additional Test Suite view:
 
 You can evaluate data drift in different scenarios.
 
-* **To monitor the ML model performance without ground truth.** When you do not have true labels or actuals, you can monitor the feature drift to check if the model still operates in a familiar environment. This is a proxy metric. If you detect drift in features or prediction, you can trigger labelling and retraining, or decide to pause and switch to a different decision method. 
+* **To monitor the ML model performance without ground truth.** When you do not have true labels or actuals, you can monitor the feature drift to check if the model still operates in a familiar environment. This is a proxy metric. If you detect drift in features or prediction, you can trigger labelling and retraining, or decide to pause and switch to a different decision method.
 
 * **When you are debugging the ML model quality decay.** If you observe a drop in the model quality, you can evaluate Data Drift to explore the change in the feature patterns, e.g., to understand the change in the environment or discover the appearance of a new segment.
 
@@ -62,7 +62,7 @@ You can evaluate data drift in different scenarios.
 * **To decide on the model retraining.** Before feeding fresh data into the model, you might want to verify whether it even makes sense. If there is no data drift, the environment is stable, and retraining might not be necessary.
 
 <Info>
-For conceptual explanation, read about [Data Drift](https://www.evidentlyai.com/ml-in-production/data-drift) and [Concept Drift](https://www.evidentlyai.com/ml-in-production/concept-drift). To build intuition about different drift detection methods, check these research blogs: [numerical](https://www.evidentlyai.com/blog/data-drift-detection-large-datasets) data, [embeddings](https://www.evidentlyai.com/blog/embedding-drift-detection).
+  For conceptual explanation, read about [Data Drift](https://www.evidentlyai.com/ml-in-production/data-drift) and [Concept Drift](https://www.evidentlyai.com/ml-in-production/concept-drift). To build intuition about different drift detection methods, check these research blogs: [numerical](https://www.evidentlyai.com/blog/data-drift-detection-large-datasets) data, [embeddings](https://www.evidentlyai.com/blog/embedding-drift-detection).
 </Info>
 
 ## Data requirements
@@ -81,13 +81,17 @@ You have multiple customization options.
 
 **Select columns**. You can apply Drift Detection only to some columns in the Dataset, for example, only to the important features. Use the `columns` parameter.
 
-**Change drift parameters.** Evidently has a large number of drift detection methods (univariate and multivariate), including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc. You can specify them or change the overall drift detection conditions. You can also pick tests by column or implement a custom drift method.
+**Change drift parameters.** You can modify how drift detection works:
+
+* Change methods. Evidently has a large number of drift detection methods (univariate and multivariate), including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc. You can also pick tests by column.
+* Change thresholds. You can specify different drift detection conditions on the dataset or column level.
+* Implement a custom method. You can implement a custom drift method as Python function.
 
 <Info>
-  **Drift detection parameters**. Learn available methods and parameters in [Drift Customization. ](/docs/metrics/customize_data_drift).
+  **Drift detection parameters**. Learn available methods and parameters in [Drift Customization. ](/metrics/customize_data_drift).
 </Info>
 
-**Modify Report**. You can add other Metrics to the Report to get a more comprehensive evaluation. Here are some recommended options.
+**Modify Report composition**. You can add other Metrics to the Report to get a more comprehensive evaluation. Here are some recommended options.
 
 * **Single out the Target/Prediction column.** If you want to evaluate drift in the Prediction column separately, you can add `ValueDrift("prediction"` to your Report so that you see the drift in this value in a separate widget.
 
