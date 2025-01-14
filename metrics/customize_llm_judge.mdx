@@ -90,6 +90,10 @@ View the results as usual:
 eval_df.as_dataframe()
 ```
 
+Example output:
+
+![](/images/examples/llm_judge_example_toxicity-min.png)
+
 **Run a multi-column eval.** Some descriptors like response relevance or completeness naturally require two columns.
 
 For example, to evaluate Context Quality ("does it have enough information to answer the question?"), you must run this evaluation over your `context` column, and pass the `question` column as a parameter.
@@ -99,6 +103,10 @@ eval_df.add_descriptors(descriptors=[
     ContextQualityLLMEval("context", alias="good_context", question="question"),
 ])
 ```
+
+Example output:
+
+![](/images/examples/llm_judge_example_context_quality-min.png)
 
 (TBC) **Parametrize evaluators**. You can switch the output format from `category` to `score` (0 to 1) or exclude the reasoning:
 
@@ -183,6 +191,10 @@ appropriate_scope = BinaryClassificationPromptTemplate(
         )
 ```
 
+Example output:
+
+![](/images/examples/llm_judge_example_appropriate_question-min.png)
+
 (TBC) **Using two columns**. An evaluator can use multiple columns (for example, to assess response relevance to a question).
 
 Pass the second column in `additional_columns` and mention this `{column_name}` inside your evaluation criteria.
@@ -212,8 +224,8 @@ You do not need to include the primary column name in the evaluation prompt. It 
 | `non_target_category` | Name of the non-target category.                                                                                                                                                                                                                                                 | Custom category (required)                  |
 | `uncertainty`         | Category to return when the provided information is not sufficient to make a clear determination.                                                                                                                                                                                | `unknown` (Default), `target`, `non_target` |
 | `include_reasoning`   | Specifies whether to include the LLM-generated explanation of the result.                                                                                                                                                                                                        | `True` (Default), `False`                   |
-| `pre_messages`        | List of system messages that set context or instructions before the evaluation task. <br /> <br /> Use it to explain the evaluator role ("you are an expert..") or context ("your goal is to grade the work of an intern..").                                                       | Custom string (optional)                    |
-| `additional_columns`  | A dictionary of additional columns present in your dataset to include in the evaluation prompt. <br /> <br /> Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`.                                                    | Custom dictionary (optional)                |
+| `pre_messages`        | List of system messages that set context or instructions before the evaluation task. <br /> <br /> Use it to explain the evaluator role ("you are an expert..") or context ("your goal is to grade the work of an intern..").                                                    | Custom string (optional)                    |
+| `additional_columns`  | A dictionary of additional columns present in your dataset to include in the evaluation prompt. <br /> <br /> Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`.                                      | Custom dictionary (optional)                |
 
 <Accordion title="OpenAIPrompting descriptor" defaultOpen={false}>
   # OpenAIPrompting
