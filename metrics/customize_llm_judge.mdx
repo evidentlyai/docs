@@ -184,7 +184,7 @@ Publish results as usual:
 eval_df.as_dataframe()
 ```
 
-This template is very flexible. For example, you can use to decide if the question is appropriate to the scope of your LLM application. A simplified example:
+**Another example**. This template is very flexible. For instance, you can use to decide if the question is appropriate to the scope of your LLM application. A simplified prompt:
 
 ```python
 appropriate_scope = BinaryClassificationPromptTemplate(
@@ -204,6 +204,7 @@ appropriate_scope = BinaryClassificationPromptTemplate(
 ```
 
 Apply the template:
+
 ```python
 eval_df.add_descriptors(descriptors=[
     LLMEval("question", 
@@ -220,9 +221,13 @@ Example output:
 
 ### Evaluate multiple columns
 
-An evaluator can use multiple columns: for example, to assess if the response is grounded in context. 
-* To implement this, mention the second `{column_name}` inside your evaluation criteria.
-* You do **not** need to include the primary column name in the evaluation prompt, since it's already but of the template.
+An evaluator can use multiple columns. For example, to assess if the response is grounded in context. To implement this:
+
+* Mention the second `{column_name}` inside your evaluation `criteria.`
+
+* Note: you do **not** need to include the primary column name in the evaluation prompt, since it's already part of the template.
+
+**Example**. To evaluate if the response is faithful to the context:
 
 ```python
 hallucination = BinaryClassificationPromptTemplate(
