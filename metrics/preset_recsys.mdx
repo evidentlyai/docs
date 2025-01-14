@@ -4,25 +4,30 @@ description: "Overview of the Recommender Systems Preset"
 noindex: "true"
 ---
 
-To run a Preset on your data:
+<Warning>
+  This Preset is **coming very soon** to the new Evidently API! Check the old docs for now.
+</Warning>
+
+**Report.** To run a Preset on your data for a single current dataset for top-k recommendations:
 
 ```python
 report = Report(metrics=[
-    RecsysPreset(k=5),
+    RecSysPreset(k=5),
 ])
-column_mapping = ColumnMapping(recommendations_type='rank', target='rating', prediction='rank', item_id='title', user_id='user_id')
-report.run(
-    reference_data=reference,
-    current_data=current,
-    column_mapping=column_mapping,
-    additional_data={'current_train_data': train_data}
-  )
-report
+
+my_eval = report.run(current, None)
 ```
 
-To add Tests
+**Test Suite**. To add pass/fail ranking quality Tests, auto-generated from the `ref` dataset:
 
-\[ADD CODE]
+```python
+report = Report(metrics=[
+    RecSysPreset(k=5),
+],
+include_tests=True)
+
+my_eval = report.run(current, ref)
+```
 
 ## Overview
 
@@ -30,19 +35,25 @@ To add Tests
 
 ![](/images/metrics/preset_recsys-min.png)
 
-It includes 10+ metrics like NDCG at K, MAP at K, HitRate, diversity, serendipity, etc.
-
-<Info>
-  **Preset composition.** Verify the exact Preset composition at the [All Metrics reference page](/metrics/all_metrics).
-</Info>
+It includes 10+ metrics like NDCG at K, MAP at K, HitRate, diversity, serendipity, etc. Metric selection depends on the provided data since some of the Metrics require additional dataset (training data) or item / user features.
 
 <Info>
   **Metric explainers.** Check the [Ranking and RecSys Metrics](/metrics/explainer_recsys) to see how each Metric works.
 </Info>
 
+**Test Suite**. If you enable Tests, this will automatically run checks to assess if the model performance metrics are within bounds.
+
+![](/images/metrics/test_preset_recsys-min.png)
+
+Tests are auto-generated **based on reference dataset**. If the reference dataset is provided, conditions like expected ranking accuracy will be derived from it.
+
+<Info>
+  **How Tests work.** Read about [Tests](/docs/library/tests) and check defaults for each Test in the [reference table](/metrics/all_metrics).
+</Info>
+
 ## Use case
 
-When to use the Preset:
+These Presets are useful in various scenarios:
 
 * **Experimental evaluations** as you iterate on building your recommender system.
 
@@ -50,9 +61,9 @@ When to use the Preset:
 
 * **Production monitoring** checks after you acquire ground truth labels.&#x20;
 
-## Data requirements
+* **Debugging**. If you notice a drop in performance, use the visual Report to understand changes.
 
-You must provide the following inputs:
+## Data requirements
 
 * **Prediction.** Recommended items with rank or score.
 
@@ -62,22 +73,20 @@ You must provide the following inputs:
 
 * (Optional) **Training data**. For some diversity metrics.
 
-* (Optional) **Reference dataset**. To get a side-by-side comparison.
+* (Optional) **Reference dataset**. To get a side-by-side comparison or auto-generate test conditions.
 
 <Info>
-  **Data schema mapping**. Use the [data definition](/docs/library/data_definition) to map your input data.
+  **Data schema mapping.** Use the [data definition](/docs/library/data_definition) to map your input data.
 </Info>
 
-## Report customization
+## Report Customization
 
-**Metrics**. If you want to change the Metric composition, create a custom Report by simply listing the individual Metrics. You can also add custom Metrics.
+You can customize the Report in several ways:
 
-<Info>
-  **Creating a custom Report**. Check how to create a [Report](/docs/library/report).
-</Info>
+* **Change Test conditions**. To modify the auto-generated conditions, you can set yours: either a different condition relative to the reference or any custom conditions.
 
-**Test conditions.**  When you enable Tests and provide a reference dataset, Evidently uses the default Test conditions based on heuristics and learned reference values. If you want to set your own pass/fail conditions, create a custom Report and add conditions to the individual Metrics.
+* **Modify Report composition**. You can add additional metrics, such as compute Data Drift for user or item feature distributions, or to evaluate prediction drift.
 
 <Info>
-  **Adding Test conditions**. Check how to specify [Tests](/docs/library/tests) for your Report.
+  **Custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
 </Info>

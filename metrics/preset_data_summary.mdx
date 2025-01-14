@@ -35,7 +35,7 @@ The`DataSummaryPreset` lets you visualize key descriptive statistics for the dat
 
 * **Column stats**. Shows relevant statistics and visualizes distribution for each column. The stats are different based on the column type (numerical, categorical, text, datetime).
 
-If you choose to enable Tests, you will get an additional Test Suite view:
+**Test suite**. If you choose to enable Tests, you will get an additional Test Suite view:
 
 ![](/images/metrics/test_preset_dataset_summary-min.png)
 
@@ -53,9 +53,9 @@ Tests are auto-generated:
 
 You can use this Preset in different scenarios.
 
-* **Exploratory data analysis.** You can use the visual Report to explore your dataset at any point (during model training, after new batch of data arrives, during debugging etc.)
+* **Exploratory data analysis.** Use the visual Report to explore your dataset at any point (during model training, after new batch of data arrives, during debugging etc.)
 
-* **Dataset comparison.** You can use the Report to compare two datasets to confirm similarities or understand the differences. For example, compare training and test dataset, subgroups in the same dataset, or current production data against training.
+* **Dataset comparison.** Compare any datasets to understand the differences: training and test dataset, subgroups in the same dataset, current production data against training, etc..
 
 * **Data quality tests in production.** By enabling Tests, you can check the quality and stability of the input data before you generate the predictions, every time you perform a certain transformation, add a new data source, etc.
 
@@ -87,12 +87,12 @@ You have multiple customization options.
 
 * **Correlations.** Add correlations heatmap.
 
-* **Missing values** Add missing values heatmap.
+* **Missing values.** Add missing values heatmap.
 
-* **Data drift**. Consider `DataDriftPreset` to evaluate the distribution shifts if you have two datasets.
+* **Data drift**. Evaluate the distribution shifts if you have two datasets.
 
 **Customize Test conditions**. To modify the auto-generated Test conditions, you can set yours: either a different condition relative to the reference or any custom conditions per each Test.
 
 <Info>
-  **Creating a custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
+  **Custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
 </Info>
