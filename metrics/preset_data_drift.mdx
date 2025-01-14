@@ -69,10 +69,12 @@ You can evaluate data drift in different scenarios.
 
 * **Input columns.** You can provide any input columns. They must be non-empty.
 
-* **Column types.** The Preset can evaluate drift for numerical, categorical or text data. You can explicitly specify each column type. Otherwise, Evidently will try to identify the numerical and categorical features automatically. It is recommended to use data definition to avoid errors. If you have text data, you must always map it.
+* **Two datasets.** You must always pass two datasets: the current dataset will be compared to the reference. 
+
+* **Column types.** The Preset evaluates drift for numerical, categorical, or text data. You can specify column types explicitly (recommended). Otherwise Evidently will auto-detect numerical and categorical features. You must always map text data. 
 
 <Info>
-  **Data schema mapping**. Use the [data definition](/docs/library/data_definition) to map your input data.
+**Data schema mapping**. Use the [data definition](/docs/library/data_definition) to map your input data.
 </Info>
 
 ## Report customization
@@ -84,7 +86,9 @@ You have multiple customization options.
 **Change drift parameters.** You can modify how drift detection works:
 
 * Change methods. Evidently has a large number of drift detection methods (univariate and multivariate), including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc. You can also pick tests by column.
+
 * Change thresholds. You can specify different drift detection conditions on the dataset or column level.
+
 * Implement a custom method. You can implement a custom drift method as Python function.
 
 <Info>
