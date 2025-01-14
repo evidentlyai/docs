@@ -39,14 +39,14 @@ If you choose to enable Tests, you will get an additional Test Suite view:
 
 ![](/images/metrics/test_preset_dataset_summary-min.png)
 
-* Tests are auto-generated:
+Tests are auto-generated:
 
-  * **Based on reference dataset.** If the reference dataset is provided, conditions like min-max feature ranges are derived directly from it.
+* **Based on reference dataset.** If the reference dataset is provided, conditions like min-max feature ranges are derived directly from it.
 
-  * **Based on heuristics.** If there is no reference, some Tests will run with heuristics (like expect no missing values).
+* **Based on heuristics.** If there is no reference, some Tests will run with heuristics (like expect no missing values).
 
 <Info>
-  **How Tests work.** Read about [Tests](/docs/library/tests) and check defaults for each Tests in the [reference table.](/metrics/all_metrics)
+  **How Tests work.** Read about [Tests](/docs/library/tests) and check defaults for each Test in the [reference table.](/metrics/all_metrics)
 </Info>
 
 ## Use case
@@ -65,11 +65,11 @@ You can use this Preset in different scenarios.
 
 * **Input columns**. You can provide any input columns. They must be non-empty.
 
-* **One or two datasets**. Pass a single dataset or two for comparison.&#x20;
+* **One or two datasets**. Pass a single dataset or two for comparison, or to auto-generate test conditions.
 
 * **Set column types** (Optional) The Preset evaluates numerical, categorical, text and datetime columns. You can specify column types explicitly (recommended). Otherwise Evidently will auto-detect numerical, categorical and datetime columns. You must always map text data.
 
-* **Timestamp** (Optional). If you have a datetime index and want to learn how columm value change with time, specify the `timestamp` column in data definition. 
+* **Timestamp** (Optional). If you have a datetime index and want to learn how columm value change with time, specify the `timestamp` column in data definition.
 
 * **Target** (Optional). If you have a target column and want to see feature distribution by target, specify the target column in data definition.
 
@@ -91,7 +91,7 @@ You have multiple customization options.
 
 * **Data drift**. Consider `DataDriftPreset` to evaluate the distribution shifts if you have two datasets.
 
-**Customize Test conditions**. If you want to modify the auto-generated Test conditions, you can set yours: either a different condition relative to the reference or any custom conditions per each Test.  
+**Customize Test conditions**. If you want to modify the auto-generated Test conditions, you can set yours: either a different condition relative to the reference or any custom conditions per each Test.
 
 <Info>
   **Creating a custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
