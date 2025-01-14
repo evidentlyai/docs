@@ -170,8 +170,12 @@ To apply this descriptor for your data, pass the `template` name to the `LLMEval
 
 ```python
 eval_df.add_descriptors(descriptors=[
-    LLMEval("response", template=conciseness, provider = "openai", model = "gpt-4o-mini", alias="Conciseness"),
-])
+    LLMEval("response", 
+            template=conciseness, 
+            provider = "openai", 
+            model = "gpt-4o-mini", 
+            alias="Conciseness"),
+    ])
 ```
 
 Publish results as usual:
@@ -199,15 +203,26 @@ appropriate_scope = BinaryClassificationPromptTemplate(
         )
 ```
 
+Apply the template:
+```python
+eval_df.add_descriptors(descriptors=[
+    LLMEval("question", 
+            template=appropriate_scope, 
+            provider = "openai", 
+            model = "gpt-4o-mini", 
+            alias="appropriate_q"),
+    ])
+```
+
 Example output:
 
 ![](/images/examples/llm_judge_example_appropriate_question-min.png)
 
 ### Evaluate multiple columns
 
-An evaluator can use multiple columns: for example, to assess if the response is grounded in context.&#x20;
-
-To implement this, mention the second `{column_name}` inside your evaluation criteria.
+An evaluator can use multiple columns: for example, to assess if the response is grounded in context. 
+* To implement this, mention the second `{column_name}` inside your evaluation criteria.
+* You do **not** need to include the primary column name in the evaluation prompt, since it's already but of the template.
 
 ```python
 hallucination = BinaryClassificationPromptTemplate(
@@ -234,13 +249,16 @@ hallucination = BinaryClassificationPromptTemplate(
         )
 ```
 
-You do not need to include the primary column name in the evaluation prompt, since it's already but of the template.
-
 When applying the descriptor, include the second column using the `additional_columns` parameter:
 
 ```
 eval_df.add_descriptors(descriptors=[
-    LLMEval("response", template=hallucination, provider = "openai", model = "gpt-4o-mini", alias="appropriate_q", additional_columns={"context": "context"}),
+    LLMEval("response", 
+            template=hallucination, 
+            provider = "openai", 
+            model = "gpt-4o-mini", 
+            alias="hallucination", 
+            additional_columns={"context": "context"}),
 ])
 ```
 
