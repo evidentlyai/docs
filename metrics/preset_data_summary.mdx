@@ -4,20 +4,115 @@ description: 'Overview of the Data Summary Preset.'
 noindex: "true"
 ---
 
-Presets use the default parameters for each Metric. 
+**Report.** To run a Preset on your data for a single `current` dataset:
 
-### Data Quality Preset
+```python
+report = Report(metrics=[
+    DataSummaryPreset(),
+])
 
-`DataQualityPreset` captures column and dataset summaries. Input columns are required. Prediction and target are optional.
+my_eval = report.run(current, None)
+```
 
-**Composition**:
+**Test Suite.** To add pass/fail data quality Tests, auto-generated from `ref` dataset:
 
-* `DatasetSummaryMetric()`
+```python
+report = Report(metrics=[
+    DataSummaryPreset(),
+],
+include_tests=True)
 
-* `ColumnSummaryMetric()` for `all` or specified `columns`
+my_eval = report.run(current, ref)
+```
 
-* `DatasetMissingValuesMetric()`
+## Overview
 
-**Optional parameters**:
+The`DataSummaryPreset` lets you visualize key descriptive statistics for the dataset and each column in it. If you pass two datasets, you'll get a side-by-side comparison.
 
-* `columns`
+![](/images/metrics/preset_dataset_summary-min.png)
+
+* **Dataset stats.** Shows stats like number of rows/columns, empty columns/rows, etc.
+
+* **Column stats**. Shows relevant statistics and visualizes distribution for each column. The stats are different based on the column type (numerical, categorical, text, datetime).
+
+If you choose to enable Tests, you will get an additional Test Suite view:
+
+![](/images/metrics/test_preset_dataset_summary-min.png)
+
+* Tests are auto-generated:
+
+  * **Based on reference dataset.** If the reference dataset is provided, conditions like min-max feature ranges are derived directly from it.
+
+  * **Based on heuristics.** If there is no reference, some Tests will run with heuristics (like expect no missing values).
+
+<Info>
+  **How Tests work.** Read about [Tests](/docs/library/tests) and check defaults for each Tests in the [reference table.](/metrics/all_metrics)
+</Info>
+
+## Use case
+
+You can this Preset in different scenarios.
+
+* **Exploratory data analysis.** You can use the visual Report to explore your dataset at any point (during model training, after new batch of data arrives, during debugging etc.)
+
+* **Dataset comparison.** You can use the Report to compare two datasets to confirm similarities or understand the differences. For example, compare training and test dataset, subgroups in the same dataset, or current production data against training.
+
+* **Data quality tests in production.** By enabling Tests, you can check the quality and stability of the input data before you generate the predictions, every time you perform a certain transformation, add a new data source, etc.
+
+* **Data profiling in production.** You can use this preset during monitoring to capture the shape of the production data for future analysis and visualization.
+
+## Data requirements
+
+* **Input columns.** You can provide any input columns. They must be non-empty.
+
+* **One or two datasets.** Pass a single dataset or two for comparison.&#x20;
+
+* **Column types.** The Preset evaluates numerical, categorical, text and datetime columns. You can specify column types explicitly (recommended). Otherwise Evidently will auto-detect numerical, categorical and datetime columns. You must always map text data.
+
+*
+
+You might also need to specify additional column mapping:
+
+* If you have a **datetime** index column and want to learn how features change with time, specify the datetime column in the `column_mapping`.
+
+* If you have a **target** column and want to see features distribution by target, specify the target column in the `column_mapping`.
+
+* Specify the **task** if you want to explore interactions between the features and the target. This section looks slightly different for classification and regression tasks. By default, if the target has a numeric type and has >5 unique values, Evidently will treat it as a regression problem. Everything else is treated as a classification problem. If you want to explicitly define your task as `regression` or `classification`, you should set the `task` parameter in the `column_mapping` object.
+
+* If you have **text** features, you should specify it in the column mapping to generate descriptive statistics specific to text.
+
+<Info>
+  **Data schema mapping**. Use the [data definition](/docs/library/data_definition) to map your input data.
+</Info>
+
+## Report customization
+
+You have multiple customization options.
+
+**Select columns**. You can apply Drift Detection only to some columns in the Dataset, for example, only to the important features. Use the `columns` parameter.
+
+**Change drift parameters.** You can modify how drift detection works:
+
+* **Change methods**. Evidently has a large number of drift detection methods (univariate and multivariate), including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc. You can also pick tests by column.
+
+* **Change thresholds**. You can specify different drift detection conditions on the dataset or column level.
+
+* **Implement a custom method**. You can implement a custom drift method as Python function.
+
+<Info>
+  **Drift detection parameters**. Learn available methods and parameters in [Drift Customization. ](/metrics/customize_data_drift).
+</Info>
+
+**Modify Report composition**. You can add other Metrics to the Report to get a more comprehensive evaluation. Here are some recommended options.
+
+* **Single out the Target/Prediction column.** If you want to evaluate drift in the Prediction column separately, you can add `ValueDrift("prediction")` to your Report so that you see the drift in this value in a separate widget.
+
+* **Add data quality checks**. Add `DataSummaryPreset` to get descriptive stats and run Tests like detecting missing values. Data drift check drops nulls (and compares the distributions of non-empty features), so you may want to run these Tests separately.
+
+* **Check for correlation changes**. You can also consider adding checks on changes in correlations between the features.
+
+* **Detect embedding drift**. To detect drift in embeddings data, use `EmbeddingDrift` metric.
+
+<Info>
+  **Creating a custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
+</Info>
