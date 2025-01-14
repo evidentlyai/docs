@@ -4,28 +4,83 @@ description: 'Overview of the Text Evals Preset.'
 noindex: "true"
 ---
 
-### Text Evals
+**Report.** To run a Preset on your data for a single `current` dataset:
 
-`TextEvals()` provides a simplified interface to list `Descriptors` for a given text column. It returns a summary of evaluation results.
+```python
+report = Report(metrics=[
+    TextEvals(),
+])
 
-**Composition**:
+my_eval = report.run(current, None)
+```
 
-* `ColumnSummaryMetric()` for text descriptors for the specified text column:
+**Test Suite.** To add pass/fail data quality Tests, auto-generated from `ref` dataset:
 
-  * `Sentiment()`
+```python
+report = Report(metrics=[
+    TextEvals(),
+],
+include_tests=True)
 
-  * `SentenceCount()`
+my_eval = report.run(current, ref)
+```
 
-  * `OOV()`
+## Overview
 
-  * `TextLength()`
+The `TextEvals` is a utility Preset that lets you immediately summarize the results of all descriptors (output-level text evaluations) that you computed on your dataset.
 
-  * `NonLetterCharacterPercentage()`
+It lets you visually explore distributions and capture all relevant statistics at once: they will vary based on descriptor type. If you pass two datasets, you'll get a side-by-side comparison.
 
-**Required parameters**:
+<Info>
+  **How text and LLM evaluations work.** Read about [Descriptors](/docs/library/descriptors), or try a [Quickstart](/quickstart_llm).
+</Info>
 
-* `column_name`
+![](/images/metrics/preset_text_evals-min.gif)
 
-**Optional parameters**:
+**Test Suite**. If you choose to enable Tests, you will get an additional Test Suite view.
 
-* `descriptors` list
+* **Based on reference dataset.** If the reference dataset is provided, conditions like expected descriptor values are derived directly from it.
+
+* **Based on heuristics.** If there is no reference, some Tests will run with heuristics (like expect no missing values).&#x20;
+
+<Info>
+  **How Tests work.** Read about [Tests](/docs/library/tests) and check defaults for each Test in the [reference table.](/metrics/all_metrics)
+</Info>
+
+## Use case
+
+You can use this Preset in different scenarios.
+
+* **LLM experiments.** You can use the visual Report to explore your evaluation results as you experiment on prompts, model version, etc. and compare different runs between them.
+
+* **LLM observability.** You can use the Report to run evaluations on your production data and capture the resulting statistics to track them over time.
+
+## Data requirements
+
+* **Input dataset with descriptors**. To run this Report, you must first compute `descriptors` and add them to your Dataset. Check [how](/docs/library/descriptors).
+
+* **One or two datasets**. Pass a single dataset or two for comparison or to auto-generate test conditions.
+
+* **Timestamp** (Optional). If you have a DateTime index and want to learn how descriptor values change with time, specify the `timestamp` column in data definition. This is useful if you run the Report over a large period.
+
+<Info>
+  **Data schema mapping**. Use the [data definition](/docs/library/data_definition) to map your input data.
+</Info>
+
+## Report customization
+
+You have multiple customization options.
+
+**Select descriptors**. You can get stats only for some descriptors in the Dataset. Use the `columns` parameter.
+
+**Customize or set Test conditions**. You can add your own Test conditions, for example, to get a fail if texts are out of the specified Length Range. Check a [Quickstart example](/quickstart_llm).
+
+**Modify Report composition**. You can add other Metrics to the Report to get a more comprehensive evaluation. For example:
+
+* **Correlations.** Add correlations heatmap to see if some descriptor values are connected to others (for example, if certain metrics are always aligned, you may not need them both). You can also notice patterns like whether descriptor values are connected with any metadata present in the Dataset, like the model type used.
+
+* **Data drift**. You can compute data drift to compare descriptor distributions between two datasets.
+
+<Info>
+  **Creating a custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
+</Info>
