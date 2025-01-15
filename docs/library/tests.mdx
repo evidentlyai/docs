@@ -78,9 +78,9 @@ In this case, the missing values Test simply expects 0% missing values. Similarl
 
 Presets are great for a start or quick sanity checks, but often you'd want to select specific Tests. For example, instead of running checks on all value statistics, validate only mean or max.
 
-You can pick such individual Tests, while still using default conditions.
+You can pick the Tests while still using default conditions.
 
-**Select Tests**. Add the individual Metrics to the Report, and choose the the `include_Tests` option:
+**Select Tests**. List the individual Metrics, and choose the the `include_Tests` option:
 
 ```Python
 report = Report([
@@ -118,7 +118,8 @@ report = Report([
     MinValue(column="Age", tests=[gte(18)]),
 ])
 ```
-Note that we don't need to use `include_tests` when setting Test manually. (It defaults to False).
+
+Note that you don't need to use `include_tests` when setting Tests manually.
 
 #### Parameters
 
@@ -135,9 +136,7 @@ Here are the conditions you can set:
 | `is_in: list`  | `test_result ==` one of the values                | `MinValue(column="Age", tests=[is_in([18, 21, 30])])`  |
 | `not_in: list` | `test_result !=` any of the values                | `MinValue(column="Age", tests=[not_in([16, 17, 18])])` |
 
-**Additional parameters**. Some Metrics need extra parameters. For example, to check for values outside fixed range, you must set this range:
-
-To test that no value is out of 18-80 range:
+**Additional parameters**. Some Metrics need extra parameters. For example, to check for values outside fixed range, you must set this range. To test that no value is out of 18-80 range:
 
 ```python
 report = Report([
@@ -149,7 +148,7 @@ report = Report([
   **How to check available parameters?** Consult the [All Metrics](/metrics/all_metrics) reference table.
 </Info>
 
-**Combine custom and default conditions**. You can use both default and custom conditions by setting `include_tests=True` and adding custom conditions where needed. 
+**Combine custom and default conditions**. You can use both default and custom conditions across the Report by setting `include_tests=True` and adding custom conditions where needed. 
 
 ```Python
 report = Report([
@@ -159,9 +158,9 @@ report = Report([
 include_tests=True) 
 ```
 
-Your custom conditions override the defaults for those specific Tests.
+Your custom conditions override the defaults for those specific Tests where you add them.
 
-**Multiple conditions**. You can ddd multiple conditions to the same Metric:
+**Multiple conditions**. You can add multiple checks to the same Metric at once:
 
 ```python
 report = Report([
@@ -169,7 +168,7 @@ report = Report([
 ])
 ```
 
-This creates two different Tests for the Min value.
+This creates two separate Tests for the Min value.
 
 **Testing count vs. share**. Some Metrics like `MissingValueCount` or `CategoryCount` return both absolute counts and percentage. The default `tests` parameter lets you set condition against the absolute value. To test the relative value, use `share_tests` parameter.
 
@@ -189,12 +188,11 @@ report = Report([
 ])
 ```
 
-**Testing against reference**. If you pass a reference dataset, you can set conditions relative to the reference values.
-
-For example, to Test that the number of rows in the current dataset is equal to or up to 10% greater than in reference:
+**Testing against reference**. If you pass a reference dataset, you can set conditions relative to the reference values. For example, to Test that the number of rows in the current dataset is equal to or up to 10% greater than in reference:
 
 ```python
 from evidently.future.metric_types import Reference
+
 report = Report([
    RowCount(tests=[gte(Reference(relative=0.1))]),
 ])
@@ -209,11 +207,11 @@ report = Report([
 ])
 ```
 
-This will check that the the number of rows is equal to or at most 5 rows greater than in the reference.
+This checks that the the number of rows is equal to reference or at most 5 rows greater.
 
 ## Set Test criticality
 
-By default, failed Tests return Fail. To get a Warning instead, set `is_critical=False`. For example: 
+By default, failed Tests return Fail. To get a Warning instead, set `is_critical=False`: 
 
 ```python
 report = Report([
