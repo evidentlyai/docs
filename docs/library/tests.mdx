@@ -11,7 +11,7 @@ Tests let you validate specific conditions and get Pass/Fail results. Tests are 
 * You know how to [generate Reports and select Metrics](/docs/library/report).
 
 <Note>
-For a quick end-to-end example of generating Tests, Check the Quickstart [for ML](/quickstart_ml) or [LLM](/quickstart_llm).
+For a quick end-to-end example of generating Tests, сheck the Quickstart [for ML](/quickstart_ml) or [LLM](/quickstart_llm).
 </Note>
 
 ## Imports
@@ -25,7 +25,7 @@ from evidently.future.presets import *
 from evidently.future.tests import *
 ```
 
-## How to run Tests
+## Auto-generated conditions
 
 There are 3 ways to run conditional checks:
 
@@ -35,11 +35,13 @@ There are 3 ways to run conditional checks:
 
 * **Custom Tests**. Choose all Tests and set conditions manually.
 
-You configure Tests through parameters on the Report or Metric level. Evidently has very flexible API, so you can formulate nuanced conditions and easily setup as many Tests as needed.
+Let's first cover the automatic Tests.
 
 ### Test Presets
 
-Test Presets automatically generate a set of Tests to evaluate your data or AI system. Each Report Preset has this option. Enable it by setting `include_tests=True`. (Default: False).
+Test Presets automatically generate a set of Tests to evaluate your data or AI system. Each Report Preset has this option. 
+
+Enable it by setting `include_tests=True` on the Report level. (Default: False).
 
 ```python
 report = Report([
@@ -104,9 +106,11 @@ include_tests=True)
 
 This Report will include only the Test for `MinValue()` with auto-generated conditions.
 
-### Custom Test conditions
+## Custom Test conditions
 
-You can define specific pass/fail conditions for each Test. For example, set minimum expected precision or share of a certain category. Tests fail when conditions aren't met.
+You can define specific pass/fail conditions for each Test. 
+
+For example, set minimum expected precision or share of a certain category. Tests fail when conditions aren't met.
 
 **Setting conditions**. For each Metric you want to validate, define a list of `tests` and set expected behavior using parameters like `gt` (greater than), `lt` (less than), `eq` (equal).
 
@@ -121,7 +125,7 @@ report = Report([
 
 Note that you don't need to use `include_tests` when setting Tests manually.
 
-#### Parameters
+### Parameters
 
 Here are the conditions you can set:
 
@@ -209,7 +213,7 @@ report = Report([
 
 This checks that the the number of rows is equal to reference or at most 5 rows greater.
 
-## Set Test criticality
+### Set Test criticality
 
 By default, failed Tests return Fail. To get a Warning instead, set `is_critical=False`: 
 
