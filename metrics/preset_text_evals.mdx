@@ -53,9 +53,9 @@ It lets you visually explore distributions and capture all relevant statistics a
 
 You can use this Preset in different scenarios.
 
-* **LLM experiments.** You can use the visual Report to explore your evaluation results as you experiment on prompts, model version, etc. and compare different runs between them.
+* **LLM experiments.** Get a visual Report to explore your evaluation results as you experiment on prompts, model version, etc. and compare different runs between them.
 
-* **LLM observability.** You can use the Report to run evaluations on your production data and capture the resulting statistics to track them over time.
+* **LLM observability.** Run evaluations on your production data and capture the resulting statistics to track them over time.
 
 ## Data requirements
 
@@ -73,15 +73,15 @@ You can use this Preset in different scenarios.
 
 You have multiple customization options.
 
-**Select descriptors**. You can get stats only for some descriptors in the Dataset. Use the `columns` parameter.
+**Select descriptors**. Get stats only for some descriptors in the Dataset. Use the `columns` parameter.
 
-**Customize or set Test conditions**. You can add your own Test conditions, for example, to get a fail if texts are out of the specified Length Range. Check a [Quickstart example](/quickstart_llm).
+**Customize or set Test conditions**. Add your own Test conditions, for example, to get a fail if texts are out of the specified Length Range. Check a [Quickstart example](/quickstart_llm).
 
-**Modify Report composition**. You can add other Metrics to the Report to get a more comprehensive evaluation. For example:
+**Modify Report composition**. Add other Metrics to the Report to get a more comprehensive evaluation. For example:
 
 * **Correlations.** Add correlations heatmap to see if some descriptor values are connected to others (for example, if certain metrics are always aligned, you may not need them both). You can also notice patterns like whether descriptor values are connected with any metadata present in the Dataset, like the model type used.
 
-* **Data drift**. You can compute data drift to compare descriptor distributions between two datasets.
+* **Data drift**. Compute data drift to compare descriptor distributions between two datasets.
 
 <Info>
   **Custom Report**. Check how to create a [Report](/docs/library/report) and add [Tests](/docs/library/tests) conditions.
