@@ -4,19 +4,19 @@ description: 'How to run conditional checks.'
 noindex: true
 ---
 
-For a general introduction, check [Core Concepts](/docs/library/overview).
+Tests let you validate specific conditions and get Pass/Fail results. Tests are an add-on to the Report and appear in a separate tab.
 
 **Pre-requisites**:
 
 * You know how to [generate Reports and select Metrics](/docs/library/report).
 
-## Example
-
-Check the Quickstart [for ML](/quickstart_ml) or [LLM](/quickstart_llm) for a simple example of running Tests.
+<Note>
+For a quick end-to-end example of generating Tests, Check the Quickstart [for ML](/quickstart_ml) or [LLM](/quickstart_llm).
+</Note>
 
 ## Imports
 
-In addition to Metrics or Presets, also import `tests`.
+To use Tests, import the following modules:
 
 ```python
 from evidently.future.report import Report
@@ -25,23 +25,21 @@ from evidently.future.presets import *
 from evidently.future.tests import *
 ```
 
-## Running Tests
+## How to run Tests
 
-You add Tests by configuring additional parameters on the Report or Metrics level. There are 3 ways to run Tests:
+There are 3 ways to run conditional checks:
 
 * **Tests Presets**. Get a suite of pre-selected Tests with auto-generated conditions. No setup required.
 
-* **Individual Test with defaults**. You can pick Tests one by one, but auto-generate conditions.
+* **Tests with defaults**. Pick Tests one by one, but auto-generate conditions.
 
-* **Fully custom**. You can choose Tests and set conditions manually.
+* **Custom Tests**. Choose all Tests and set conditions manually.
 
-Evidently has very flexible API, which makes it easy to formulate nuanced conditions and run Tests for lots of columns at once.
+You configure Tests through parameters on the Report or Metric level. Evidently has very flexible API, so you can formulate nuanced conditions and easily setup as many Tests as needed.
 
-## Test Presets
+### Test Presets
 
-Test Presets are pre-built Test Suites that generate Tests for a specific aspect of the data or AI system performance.
-
-You call a Test Preset by enabling `include_tests=True` Report option. This will generate a set of associated Tests:
+Test Presets automatically generate a set of Tests to evaluate your data or AI system. Each Report Preset has this option. Enable it by setting `include_tests=True`. (Default: False).
 
 ```python
 report = Report([
@@ -50,35 +48,39 @@ report = Report([
 include_tests=True)
 ```
 
-For example, while `DataSummaryPreset()` itself shows descriptive stats of the data, the associated Test Suite will run multiple checks on data quality and expected feature stats for all metrics inside the preset.
+For example, while the `DataSummaryPreset()` Report simply shows descriptive stats of your data, adding the Tests will additionally run multiple checks on data quality and expected column statistics.
 
-**Based on reference**. Provide the reference Daatset as you run the Report:
+The automatic Test conditions can either
+* be derived from a reference dataset, or
+* use built-in heuristics.
 
-```Python
-my_eval = report.run(eval_data_1, eval_data_2)
-```
-
-In this case, Evidently will derive conditions from this reference. For example, it will derive the reference share of missing values in each column and Test that the current share of missing values is within +/-10% of that. 10% is an encoded heuristic.
-
-**Based on heuristics**. Without a reference, Evidently uses direct heuristics.
+**Using reference**. When you provide a reference dataset, Tests compare the new data against it:
 
 ```Python
-my_eval = report.run(eval_data_1, None)
+my_eval = report.run(eval_data_1, eval_data_2) # eval_data_2 is reference
 ```
 
-In this case, Test on share of missing values will assume that it should be 0. This is a fixed heuristic. Similarly, Test on `Accuracy()` inside the `ClassificationPreset` will fail if the model performs worse than a dummy model created by Evidently. When it's not practical, some checks (like check on min/max/mean value) don't have an heuristics-based condition.
+For example, the check on missing values will validate if the current share of missing values is within +/-10% of the reference.
 
-By selecting specific columns for the Preset, you reduce the number of generated column-level Tests.
+**Using heuristics**. Without reference, Tests use predefined rules:
+
+```Python
+my_eval = report.run(eval_data_1, None) # no reference data
+```
+
+In this case, the missing values Test simply expects 0% missing values. Similarly, classification accuracy Test will compare the performance against a dummy model, etc. Some metrics (like min/max/mean values) don't have default heuristics.
 
 <Info>
   **How to check Test defaults?** Consult the [All Metrics](/metrics/all_metrics) reference table.
 </Info>
 
-## Individual Tests with defaults
+### Individual Tests with defaults
 
-Presets are great for a start or quick sanity checks, but in most cases you'd want to select specific Tests to run to minimize their overall number. You can still use the default Test conditions.
+Presets are great for a start or quick sanity checks, but often you'd want to select specific Tests. For example, instead of running checks on all value statistics, validate only mean or max.
 
-**Select Tests**. Simply pass the Metrics to the Report and choose the include Tests option for the Report to enable Tests for these Metrics.
+You can pick such individual Tests, while still using default conditions.
+
+**Select Tests**. Add the individual Metrics to the Report, and choose the the `include_Tests` option:
 
 ```Python
 report = Report([
@@ -88,9 +90,9 @@ report = Report([
 include_tests=True)
 ```
 
-If you run this Report passing two datasets, it will derive Test conditions from reference. If you pass only one, it will use heuristics.
+The Report will use reference conditions with two datasets, or heuristics with one dataset.
 
-**Exclude some Tests**. If you want to exclude generating the Test for some Metrics / Presets, use the `tests` parameter and keep it as None or empty.
+**Exclude some Tests**. To prevent Test generation for certain Metrics/Presets, set the list of `tests` to `None` or leave empty:
 
 ```Python
 report = Report([
@@ -100,15 +102,15 @@ report = Report([
 include_tests=True)
 ```
 
-This will only generate the Test on `MinValue()`.
+This Report will include only the Test for `MinValue()` with auto-generated conditions.
 
-## Custom Test conditions
+### Custom Test conditions
 
-You can also define when exactly a Test should pass or fail. For example, set a lower boundary for the expected model precision, or share of drift columns. If the condition is violated, the Test fails.
+You can define specific pass/fail conditions for each Test. For example, set minimum expected precision or share of a certain category. Tests fail when conditions aren't met.
 
-Use parameters like `gt` (greater than), `lt` (less than), `eq` (equal), etc. to set the expected behavior.
+**Setting conditions**. For each Metric you want to validate, define a list of `tests` and set expected behavior using parameters like `gt` (greater than), `lt` (less than), `eq` (equal).
 
-**Custom conditions**. For example, to test that there are no missing values in column "Age" and minimal value is greater or equal to 18:
+For example, to verify that there are no missing values and no values below 18 in the "Age" column:
 
 ```Python
 report = Report([
@@ -116,10 +118,11 @@ report = Report([
     MinValue(column="Age", tests=[gte(18)]),
 ])
 ```
+Note that we don't need to use `include_tests` when setting Test manually. (It defaults to False).
 
-Notice that in this case we do not pass `include_tests` since (it defaults to `False`) since we set all Tests manually.
+#### Parameters
 
-Here are conditions you can set:
+Here are the conditions you can set:
 
 | Condition      | Explanation                                       | Example                                                |
 | -------------- | ------------------------------------------------- | ------------------------------------------------------ |
@@ -132,18 +135,21 @@ Here are conditions you can set:
 | `is_in: list`  | `test_result ==` one of the values                | `MinValue(column="Age", tests=[is_in([18, 21, 30])])`  |
 | `not_in: list` | `test_result !=` any of the values                | `MinValue(column="Age", tests=[not_in([16, 17, 18])])` |
 
+**Additional parameters**. Some Metrics need extra parameters. For example, to check for values outside fixed range, you must set this range:
 
-**Additional parameters**. Some Metrics require additional parameters. This helps simplify setting nuanced conditions. 
+To test that no value is out of 18-80 range:
 
-For example, to check there there are no value out of 18-80 range:
-
-```
+```python
 report = Report([
     OutRangeValueCount(column="Age", left=18, right=80, tests=[eq(0)]),
 ])  
 ```
 
-**Combine custom and default conditions**. You can also use defaults for some Tests and set custom conditions for others. Set `include_tests` as True and add custom conditions where you want:
+<Info>
+  **How to check available parameters?** Consult the [All Metrics](/metrics/all_metrics) reference table.
+</Info>
+
+**Combine custom and default conditions**. You can use both default and custom conditions by setting `include_tests=True` and adding custom conditions where needed. 
 
 ```Python
 report = Report([
@@ -153,74 +159,71 @@ report = Report([
 include_tests=True) 
 ```
 
-This will override default conditions for the Tests where you added yours.
+Your custom conditions override the defaults for those specific Tests.
 
-**Multiple conditions**. You can simultaneoulsy add multiple conditions to the same Metric. For example:
+**Multiple conditions**. You can ddd multiple conditions to the same Metric:
 
-```
+```python
 report = Report([
     MinValue(column="Age", tests=[gte(17), lte(19)]),
 ])
 ```
 
-This will generate two Tests for the same value. 
+This creates two different Tests for the Min value.
 
-**Share Tests**. Most of the Metrics expect `tests` parameters to define a condition. However, some Metrics return two metric results: `count` and `share`. For example, the `MissingValueCount` or `CategoryCount` return both absolute value and share. If you want to Test share, you must use `share_tests` instead.
+**Testing count vs. share**. Some Metrics like `MissingValueCount` or `CategoryCount` return both absolute counts and percentage. The default `tests` parameter lets you set condition against the absolute value. To test the relative value, use `share_tests` parameter.
 
-For example, you can check if there are less than 5 missing values (absolute value):
+To test for fewer than 5 missing values (absolute):
 
-```
+```python
 report = Report([
-    MissingValueCount(column="Age", count_tests=[lte(5)]), #replace for tests
+    MissingValueCount(column="Age", tests=[lte(5)])
 ])
 ```
 
-Or less than 10% missing values (relative):
+To test for less than 10% missing values (relative):
 
-```
+```python
 report = Report([
     MissingValueCount(column="Age", share_tests=[lte(0.1)]),
 ])
 ```
 
-**Set custom conditions relative to reference**. You can also set custom conditions by specifying relative or absolute difference to the reference value. This requires you to provide the reference dataset.
+**Testing against reference**. If you pass a reference dataset, you can set conditions relative to the reference values.
 
-For example, to check that the number of rows in the new dataset is equal or greater by up to 10% from the referene.
+For example, to Test that the number of rows in the current dataset is equal to or up to 10% greater than in reference:
 
-```
+```python
 from evidently.future.metric_types import Reference
 report = Report([
    RowCount(tests=[gte(Reference(relative=0.1))]),
 ])
-
 my_eval = report.run(eval_data_1, eval_data_2)
 ```
 
-You can also set absolute conditions in relation to the reference. This will check that 
+You can also define the absolute difference from reference:
 
-```
+```python
 report = Report([
    RowCount(tests=[gte(Reference(absolute=5))]),
 ])
 ```
 
-**(TBC) Custom conditions relative to a value**.
+This will check that the the number of rows is equal to or at most 5 rows greater than in the reference.
 
+## Set Test criticality
 
-## Test criticality
+By default, failed Tests return Fail. To get a Warning instead, set `is_critical=False`. For example: 
 
-By default, all Tests will return a `Fail` if the Test condition is not fulfilled. If you want to get a `Warning` instead, use the `is_critical` parameter and set it to `False`. 
-
-For example: 
-
-```
+```python
 report = Report([
     MissingValueCount(column="Age", share_tests=[eq(0, is_critical=False)]),
 ])
 ```
-Failed Tests will be labeled as Warning and not trigger alerts (if alerts are enabled on failed Tests).
 
-You can use this to set "layered" conditions. For example, if the share of missing values is non-zero, you get a Warning. If it's higher than 10%, get an Alert.
+This helps manage alert fatigue and prioritize Tests. If you [set alerts](/docs/platform/alerts) on failed Tests, the "Warning" result won't trigger an alert. Warnings are labeled yellow.
+
+You can also use this to set "layered" conditions. For example, get a Warning for any missing values, Fail if over 10%:
 
 ```python
 report = Report([
@@ -232,4 +235,3 @@ report = Report([
 my_eval = report.run(eval_data_1, None)
 my_eval
 ```
-
