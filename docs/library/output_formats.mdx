@@ -4,11 +4,13 @@ description: 'How to export the evaluation results.'
 noindex: true
 ---
 
-You can view or export evaluation results in multiple formats.
+You can view or export Reports in multiple formats.
 
-## Reports
+**Pre-requisites**:
 
-### Log to Workspace
+* You know how to [generate Reports](/docs/library/report).
+
+## Log to Workspace
 
 You can save the Report in Evidently Cloud or your local workspace.
 
@@ -20,7 +22,7 @@ ws.add_report(project.id, my_eval, include_data=False)
   **Uploading evals**. Check Quickstart examples [for ML](/quickstart_ml) or [for LLM](/quickstart_llm) for a full workflow.
 </Info>
 
-### View in Jupyter notebook
+## View in Jupyter notebook
 
 You can directly render the visual summary of evaluation results in interactive Python environments like Jupyter notebook or Colab.
 
@@ -32,7 +34,7 @@ my_report
 
 This will render the HTML object directly in the notebook cell.
 
-### HTML
+## HTML
 
 You can also save this interactive visual Report as an HTML file to open in a browser:
 
@@ -42,7 +44,7 @@ my_report.save_html(“file.html”)
 
 This option is useful for sharing Reports with others or if you're working in a Python environment that doesn’t display interactive visuals.
 
-### JSON
+## JSON
 
 You can get the results of the calculation as a JSON. It is useful for storing and exporting results elsewhere.
 
@@ -58,7 +60,7 @@ To save the JSON as a separate file:
 my_report.save_json("file.json")
 ```
 
-### Python dictionary
+## Python dictionary
 
 You can get the output as a Python dictionary. This format is convenient for automated evaluations in data or ML pipelines, allowing you to transform the output or extract specific values.
 
@@ -68,7 +70,7 @@ To get the dictionary:
 my_report.dict()
 ```
 
-### Dataframe (TBC)
+## Dataframe (TBC)
 
 You can get the Report results in a tabular format as a DataFrame.
 
@@ -86,7 +88,11 @@ my_report.as_dataframe()
 
 This will return all relevant values that are computed inside the Metric as the metric result.
 
-### Evidently snapshot (TBC)
+<Note>
+**Get the full dataset**. You can also get a full original dataset with new row-level scores, like output-level text evaluations you compute. Check the guide on [descriptors](/docs/library/descriptors) for details.
+</Note>
+
+## Evidently snapshot (TBC)
 
 You can also save the output of a Report as an Evidently JSON `snapshot`.
 
@@ -109,19 +115,3 @@ loaded_report = Report.load('snapshot.json')
 ```
 
 After you load the snapshot back, you can again view it in Python or export it to other formats.
-
-## Descriptors
-
-If you generated text Descriptors during your evaluation, you can also publish the DataFrame with all generated descriptors added to each row of your original input data.
-
-This export will work for the Dataset object:
-
-```python
-eval_dataset.as_dataframe()
-```
-
-This returns the complete original dataset with new scores.
-
-<Note>
-  **Getting descriptors**. Check the [complete guide](/docs/library/descriptors).
-</Note>
