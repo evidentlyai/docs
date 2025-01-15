@@ -4,21 +4,28 @@ description: 'How to map the input data.'
 noindex: true
 ---
 
-To run evaluations, you must create a `Dataset` object that Evidently can work with. Every `Dataset` must have `DataDefinition`. This lets you specify
-* column types (e.g. categorical, numerical, text, embeddings)
-* column roles (e.g. prediction, target, LLM output, etc.)
+To run evaluations, you must create a `Dataset` object that Evidently can work with. Every `Dataset` must have `DataDefinition`. This lets you specify:
 
-You only need to map columns that will be used in your evaluations. This lets Evidently correctly map the data schema and know how to process the inputs. Some types of evaluations require certain columns present and will they fail otherwise. 
+* column **types** (e.g. categorical, numerical, text, embeddings)
 
-You can specify `DataDefinition` in Python prior to generating a Report or map the columns visually when working in the Evidently platform.
+* column **roles** (e.g. prediction, target, LLM output, etc.)
 
-## Automated detection
+You only need to map columns that will be used in your evaluations. This lets Evidently correctly process the data schema and know how to treat specific columns when computing the Metrics you later select. Some types of evaluations require certain columns present and will they fail otherwise.
 
-Data Definition is always required. However, you can leave the data definition empty if:
-* you run evals that only expect data columns (and do not expect them to have a certain role) like data summary or data drift detection
-* your column names match the expected column role as per data definition (for example, you target column in called "target")
+You can specify the `DataDefinition` in Python prior to generating a Report or map the columns visually when working in the Evidently platform. In some cases, you can use **automated data definition.**&#x20;
 
-Leave the data definition empty and rely on automated feature type detection.
+## Imports
+
+```python
+from evidently.future.datasets import Dataset
+from evidently.future.datasets import DataDefinition
+```
+
+## Basic flow
+
+If your have your data in a pandas.DataFrame `source_df ` create a`Dataset` from pandas and specify the `data_definition`
+
+With **automated** column type recognition:
 
 ```python
 eval_data = Dataset.from_pandas(
@@ -26,6 +33,44 @@ eval_data = Dataset.from_pandas(
     data_definition=DataDefinition()
 )
 ```
+
+With **user-defined** column types:
+
+```python
+definition = DataDefinition(
+    text_columns=["Latest_Review"],
+    numerical_columns=["Age", "Salary"],
+    categorical_columns=["Department"],
+    datetime_columns=["Joining_Date"]
+    )
+    
+eval_data = Dataset.from_pandas(
+    pd.DataFrame(source_df),
+    data_definition=definition
+)
+```
+
+You can map column roles similarly: see examples below based on the use case.&#x20;
+
+<Info>
+  Once you have the **Dataset** ready, you can add [text Descriptors ](/docs/library/descriptors)and/or [get Reports](/docs/library/report).
+</Info>
+
+## Column types
+
+
+
+
+
+Automated detection
+
+Data Definition is always required. However, you can leave the data definition empty if:
+
+* you run evals that only expect data columns (and do not expect them to have a certain role) like data summary or data drift detection
+
+* your column names match the expected column role as per data definition (for example, you target column in called "target")
+
+Leave the data definition empty and rely on automated feature type detection.
 
 If the `DataDefinition` is not specified or set as `None`, Evidently will use the default mapping strategy, trying to match the columns automatically.
 
@@ -49,7 +94,6 @@ If the `DataDefinition` is not specified or set as `None`, Evidently will use th
 
 ADD FOR LLM
 
-
 ## Manual configuration
 
 In other scenarios you can set the manual data definition:
@@ -62,20 +106,15 @@ eval_dataset = Dataset.from_pandas(
     data_definition=schema
 ```
 
-
 ## Descriptrors
 
 When you generate descriptors they are automatically tagged as descriptors.
 
 Column mapping helps map your input data schema or specify column types. For example, to run evaluation on text data, you must specify which columns in your dataset contain texts. This allows Evidently to process the input data correctly.
 
-
-
-
 # Which columns do you need?
 
 To run certain types of evaluations, you must include specific columns or provide a reference dataset. For example, to run text evaluations, you must have at least one column labeled as text. To run data drift checks, you always need a reference dataset.
-
 
 **It's best always to use column mapping**. Without it, Evidently will apply its own heuristics to map the input data automatically. To avoid errors, it's safer to set the column mapping manually.
 
