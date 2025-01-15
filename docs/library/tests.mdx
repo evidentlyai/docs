@@ -8,293 +8,228 @@ For a general introduction, check [Core Concepts](/docs/library/overview).
 
 **Pre-requisites**:
 
-* You know how to [generate Reports](/docs/library/report).
+* You know how to [generate Reports and select Metrics](/docs/library/report).
 
-## Using Tests
+## Example
 
-Check the Quickstart [for ML](/quickstart_ml) or [LLM](/quickstart_llm) for a simple example.
+Check the Quickstart [for ML](/quickstart_ml) or [LLM](/quickstart_llm) for a simple example of running Tests.
 
-### Imports
+## Imports
 
-Pick the required Metrics and Presets you plan to use.
+In addition to Metrics or Presets, also import `tests`.
 
 ```python
 from evidently.future.report import Report
 from evidently.future.metrics import *
 from evidently.future.presets import *
+from evidently.future.tests import *
 ```
 
-You can use Metric Presets, which are pre-built Reports that work out of the box, or create a custom Report selecting Metrics one by one.
+## Running Tests
 
-***
+You add Tests by configuring additional parameters on the Report or Metrics level. There are 3 ways to run Tests:
 
-## description: How to run Test Suites using Evidently Python library.
+* **Tests Presets**. Get a suite of pre-selected Tests with auto-generated conditions. No setup required.
 
-# Code examples
+* **Individual Test with defaults**. You can pick Tests one by one, but auto-generate conditions.
 
-Check the [sample notebooks](../examples/examples.md) for examples of how to generate Test Suites.
+* **Fully custom**. You can choose Tests and set conditions manually.
 
-# Imports
+Evidently has very flexible API, which makes it easy to formulate nuanced conditions and run Tests for lots of columns at once.
 
-After [installing Evidently](../installation/install-evidently.md), import the `TestSuite` component and the necessary `test_presets` or `tests` you plan to use:
+## Test Presets
+
+Test Presets are pre-built Test Suites that generate Tests for a specific aspect of the data or AI system performance.
+
+You call a Test Preset by enabling `include_tests=True` Report option. This will generate a set of associated Tests:
 
 ```python
-from evidently.test_suite import TestSuite
-from evidently.test_preset import DataQualityTestPreset, DataStabilityTestPreset
-from evidently.tests import *
+report = Report([
+    DataSummaryPreset(),
+],
+include_tests=True)
 ```
 
-# How it works
+For example, while `DataSummaryPreset()` itself shows descriptive stats of the data, the associated Test Suite will run multiple checks on data quality and expected feature stats for all metrics inside the preset.
 
-Here is the general flow.
+**Based on reference**. Provide the reference Daatset as you run the Report:
 
-* **Input data**. Prepare data as a Pandas DataFrame. This will be your `current` data to test. You may also pass a `reference` dataset to generate Test conditions from this reference or run data distribution Tests. Check the [input data requirements](../input-data/data-requirements.md).
-
-* **Schema mapping**. Define your data schema using [Column Mapping](../input-data/column-mapping.md). Optional, but highly recommended.
-
-* **Define the Test Suite**. Create a `TestSuite` object and pass the selected `tests`.
-
-* **Set the parameters**. Optionally, specify Test conditions and mark certain Tests as non-critical.
-
-* **Run the Test Suite**. Execute the Test Suite on your `current_data`. If applicable, pass the `reference_data` and `column_mapping`.
-
-* **Get the results**. View the results in Jupyter notebook, export the summary, or send to the Evidently Platform.
-
-You can use Test Presets or create your Test Suite.
-
-# Test Presets
-
-Test Presets are pre-built Test Suites that generate Tests for a specific aspect of the data or model performance.
-
-Evidently also automatically generates Test conditions in two ways:
-
-* **Based on the reference dataset**. If you provide a `reference`, Evidently derives conditions from it. For example, the `TestShareOfOutRangeValues` will fail if over 10% of `current` values fall outside the min-max range seen in the reference. 10% is an encoded heuristic.
-
-* **Based on heuristics**. Without a reference, Evidently uses heuristics. For example, `TestAccuracyScore()` fails if the model performs worse than a dummy model created by Evidently. Data quality Tests like `TestNumberOfEmptyRows()` or `TestNumberOfMissingValues()` assume both should be zero.
-
-**Reference**: Check the default Test conditions in the [All tests](../reference/all-tests.md) table.
-
-**Example 1**. To apply the `DataQualityTestPreset` to a single `curr` dataset, with conditions generated based on heuristics:
-
-```python
-data_quality = TestSuite(tests=[
-    DataQualityTestPreset(),
-])
-
-data_quality.run(reference_data=None, 
-                   current_data=curr)
+```Python
+my_eval = report.run(eval_data_1, eval_data_2)
 ```
 
-**Available Test Presets**. There are others: for example, `DataStabilityTestPreset`, `DataDriftTestPreset` or `RegressionTestPreset`. See all [Presets](../presets/all-presets.md). For interactive preview, check [example notebooks](../examples/examples.md).
+In this case, Evidently will derive conditions from this reference. For example, it will derive the reference share of missing values in each column and Test that the current share of missing values is within +/-10% of that. 10% is an encoded heuristic.
 
-To get the visual report with Test results, call the object in Jupyter notebook or Colab:
+**Based on heuristics**. Without a reference, Evidently uses direct heuristics.
 
-```python
-data_quality
+```Python
+my_eval = report.run(eval_data_1, None)
 ```
 
-To get the Test results summary, generate a Python dictionary:
+In this case, Test on share of missing values will assume that it should be 0. This is a fixed heuristic. Similarly, Test on `Accuracy()` inside the `ClassificationPreset` will fail if the model performs worse than a dummy model created by Evidently. When it's not practical, some checks (like check on min/max/mean value) don't have an heuristics-based condition.
 
-```python
-data_quality.as_dict()
+By selecting specific columns for the Preset, you reduce the number of generated column-level Tests.
+
+<Info>
+  **How to check Test defaults?** Consult the [All Metrics](/metrics/all_metrics) reference table.
+</Info>
+
+## Individual Tests with defaults
+
+Presets are great for a start or quick sanity checks, but in most cases you'd want to select specific Tests to run to minimize their overall number. You can still use the default Test conditions.
+
+**Select Tests**. Simply pass the Metrics to the Report and choose the include Tests option for the Report to enable Tests for these Metrics.
+
+```Python
+report = Report([
+    MissingValueCount(column="Age"),
+    MinValue(column="Age"),
+], 
+include_tests=True)
 ```
 
-**There are more output formats!** You can also export the results in formats like HTML, JSON, dataframe, and more. Refer to the [Output Formats](output_formats.md) for details.
+If you run this Report passing two datasets, it will derive Test conditions from reference. If you pass only one, it will use heuristics.
 
-**Example 2**. To apply the `DataStabilityTestPreset`, with conditions generated from reference, pass the `reference_data`:
+**Exclude some Tests**. If you want to exclude generating the Test for some Metrics / Presets, use the `tests` parameter and keep it as None or empty.
 
-```python
-data_stability = TestSuite(tests=[
-    DataStabilityTestPreset(),
-])
-
-data_stability.run(reference_data=ref, 
-                   current_data=curr)
+```Python
+report = Report([
+    MissingValueCount(column="Age", tests=[]),
+    MinValue(column="Age"),
+], 
+include_tests=True)
 ```
 
-**Example 3**. To apply the `NoTargetPerformanceTestPreset` with additional parameters:
+This will only generate the Test on `MinValue()`.
 
-```python
-no_target_performance = TestSuite(tests=[
-    NoTargetPerformanceTestPreset(columns=['education-num', 'hours-per-week'], 
-                                  cat_stattest=ks, 
-                                  cat_statest_threshold=0.05),
+## Custom Test conditions
+
+You can also define when exactly a Test should pass or fail. For example, set a lower boundary for the expected model precision, or share of drift columns. If the condition is violated, the Test fails.
+
+Use parameters like `gt` (greater than), `lt` (less than), `eq` (equal), etc. to set the expected behavior.
+
+**Custom conditions**. For example, to test that there are no missing values in column "Age" and minimal value is greater or equal to 18:
+
+```Python
+report = Report([
+    MissingValueCount(column="Age", tests=[eq(0)]),
+    MinValue(column="Age", tests=[gte(18)]),
 ])
 ```
 
-By selecting specific columns for the Preset, you reduce the number of generated column-level Tests. When you specify the data drift detection method and threshold, it will override the defaults.
+Notice that in this case we do not pass `include_tests` since (it defaults to `False`) since we set all Tests manually.
 
-Refer to the [All tests](../reference/all-tests.md) table to see available parameters and defaults for each Test and Test Preset.
+Here are conditions you can set:
 
-# Custom Test Suite
+| Condition      | Explanation                                       | Example                                                |
+| -------------- | ------------------------------------------------- | ------------------------------------------------------ |
+| `eq(val)`      | equal to <br /> `test_result == val` <br /><br /> Accepts `epsilon` parameter to set a fuzzy +/- range. Useful for float values.             | `MinValue(column="Age", tests=[eq(18)])` <br /> `MinValue(column="Score", tests=[eq(1, epsilon=0.01])`      )           |
+| `not_eq(val)`  | not equal <br /> `test_result != val`             | `MinValue(column="Age", tests=[not_eq(18)])`           |
+| `gt(val)`      | greater than  <br /> `test_result > val`          | `MinValue(column="Age", tests=[gt(18)])`               |
+| `gte(val)`     | greater than or equal <br /> `test_result >= val` | `MinValue(column="Age", tests=[gte(18)])`              |
+| `lt(val)`      | less than <br /> `test_result < val`              | `MinValue(column="Age", tests=[lt(18)])`               |
+| `lte(val)`     | less than or equal <br /> `test_result <= val`    | `MinValue(column="Age", tests=[lte(18)])`              |
+| `is_in: list`  | `test_result ==` one of the values                | `MinValue(column="Age", tests=[is_in([18, 21, 30])])`  |
+| `not_in: list` | `test_result !=` any of the values                | `MinValue(column="Age", tests=[not_in([16, 17, 18])])` |
 
-You can use Presets as a starting point, but eventually, you'll want to design a Test Suite to pick specific Tests and set conditions more precisely. Here’s how:
 
-* **Choose individual Tests**. Select the Tests you want to include in your Test Suite.
+**Additional parameters**. Some Metrics require additional parameters. This helps simplify setting nuanced conditions. 
 
-* **Pass Test parameters**. Set custom parameters for applicable Tests. (Optional).
+For example, to check there there are no value out of 18-80 range:
 
-* **Set custom conditions**. Define when Tests should pass or fail. (Optional).
+```
+report = Report([
+    OutRangeValueCount(column="Age", left=18, right=80, tests=[eq(0)]),
+])  
+```
 
-* **Mark Test criticality**. Mark non-critical Tests to give a Warning instead of Fail. (Optional).
+**Combine custom and default conditions**. You can also use defaults for some Tests and set custom conditions for others. Set `include_tests` as True and add custom conditions where you want:
 
-## 1. Choose tests
+```Python
+report = Report([
+    RowCount(tests=[gt(10)]),
+    MissingValueCount(column="Age"),
+],
+include_tests=True) 
+```
 
-First, decide which Tests to include. Tests can be either dataset-level or column-level.
+This will override default conditions for the Tests where you added yours.
 
-**Reference**: see [All tests](../reference/all-tests.md) table. To see interactive examples, refer to the [Example notebooks](../examples/examples.md).
+**Multiple conditions**. You can simultaneoulsy add multiple conditions to the same Metric. For example:
 
-**Row-level evaluations**: To Test row-level scores for text data, read more about [Text Descriptors](text-descriptors.md).
-
-**Dataset-level Tests**. Some Tests apply to the entire dataset, such as checking the share of drifting features or accuracy. To add them to a Test Suite, create a `TestSuite` object and list the `tests` one by one:
-
-```python
-data_drift_suite = TestSuite(tests=[
-    TestShareOfDriftedColumns(),
-    TestNumberOfEmptyRows(),
+```
+report = Report([
+    MinValue(column="Age", tests=[gte(17), lte(19)]),
 ])
 ```
 
-**Column-level Tests**. Some Tests focus on individual columns, like checking if a specific column's values stay within a range. To include column-level Tests, pass the name of the column to each Test:
+This will generate two Tests for the same value. 
 
-```python
-feature_suite = TestSuite(tests=[
-    TestColumnShareOfMissingValues(column_name='hours-per-week'),
-    TestColumnDrift(column_name='education'),
-    TestMeanInNSigmas(column_name='hours-per-week')
+**Share Tests**. Most of the Metrics expect `tests` parameters to define a condition. However, some Metrics return two metric results: `count` and `share`. For example, the `MissingValueCount` or `CategoryCount` return both absolute value and share. If you want to Test share, you must use `share_tests` instead.
+
+For example, you can check if there are less than 5 missing values (absolute value):
+
+```
+report = Report([
+    MissingValueCount(column="Age", count_tests=[lte(5)]), #replace for tests
 ])
 ```
 
-**Generating many column-level Tests**: To simplify listing many Tests at once, use the [generator helper function](test-metric-generator.md).
+Or less than 10% missing values (relative):
 
-**Combining Tests**. You can combine column-level and dataset-level Tests in a single Test Suite. You can also include Presets and individual Tests together.
-
-```python
-my_data_quality_tests = TestSuite(tests=[
-    DataQualityTestPreset(),
-    TestColumnAllConstantValues(column_name='education'),
-    TestNumberOfDriftedColumns()
+```
+report = Report([
+    MissingValueCount(column="Age", share_tests=[lte(0.1)]),
 ])
 ```
 
-## 2. Set Test parameters
+**Set custom conditions relative to reference**. You can also set custom conditions by specifying relative or absolute difference to the reference value. This requires you to provide the reference dataset.
 
-Tests can have optional or required parameters.
+For example, to check that the number of rows in the new dataset is equal or greater by up to 10% from the referene.
 
-**Example 1**. To test a quantile value, you need to specify the quantile (Required parameter):
+```
+from evidently.future.metric_types import Reference
+report = Report([
+   RowCount(tests=[gte(Reference(relative=0.1))]),
+])
 
-```python
-column_tests_suite = TestSuite(tests=[
-    TestColumnQuantile(column_name='mean perimeter', quantile=0.25),
+my_eval = report.run(eval_data_1, eval_data_2)
+```
+
+You can also set absolute conditions in relation to the reference. This will check that 
+
+```
+report = Report([
+   RowCount(tests=[gte(Reference(absolute=5))]),
 ])
 ```
 
-**Example 2:** To override the default drift detection method, pass the chosen statistical method (Optional), or modify the Mean Value Test to use 3 sigmas:
+**(TBC) Custom conditions relative to a value**.
 
-```python
-dataset_suite = TestSuite(tests=[
-    TestShareOfDriftedColumns(stattest=psi),
-    TestMeanInNSigmas(column_name='hours-per-week', n_sigmas=3),
+
+## Test criticality
+
+By default, all Tests will return a `Fail` if the Test condition is not fulfilled. If you want to get a `Warning` instead, use the `is_critical` parameter and set it to `False`. 
+
+For example: 
+
+```
+report = Report([
+    MissingValueCount(column="Age", share_tests=[eq(0, is_critical=False)]),
 ])
 ```
+Failed Tests will be labeled as Warning and not trigger alerts (if alerts are enabled on failed Tests).
 
-**Example 3:** To change the decision threshold for probabilistic classification to 0.8:
+You can use this to set "layered" conditions. For example, if the share of missing values is non-zero, you get a Warning. If it's higher than 10%, get an Alert.
 
 ```python
-model_tests = TestSuite(tests=[
-    TestPrecisionScore(probas_threshold=0.8),
-    TestRecallScore(probas_threshold=0.8)
+report = Report([
+    MissingValueCount(column="Age", 
+                      share_tests=[eq(0, is_critical=False), 
+                                   lte(0.1, is_critical=True)]),
 ])
+
+my_eval = report.run(eval_data_1, None)
+my_eval
 ```
 
-**Reference**: you can browse available Test parameters and defaults in the [All tests](../reference/all-tests.md) table.
-
-## 3. Set Test conditions
-
-You can set up your Test conditions in two ways:
-
-* **Automatic**. If you don’t specify individual conditions, the defaults (reference or heuristic-based) will apply, just like in Test Presets.
-
-* **Manual**. You can define when exactly a Test should pass or fail. For example, set a lower boundary for the expected model precision. If the condition is violated, the Test fails.
-
-You can mix both approaches in the same Test Suite, where some Tests run with defaults and others with custom conditions.
-
-Use the following parameters to set Test conditions:
-
-| Condition      | Explanation                                       | Usage Example                                |
-| -------------- | ------------------------------------------------- | -------------------------------------------- |
-| `eq: val`      | equal <br /> `test_result == val`                 | `TestColumnValueMin("col", eq=5)`            |
-| `not_eq: val`  | not equal <br /> `test_result != val`             | `TestColumnValueMin("col", not_eq=0)`        |
-| `gt: val`      | greater than  <br /> `test_result > val`          | `TestColumnValueMin("col", gt=5)`            |
-| `gte: val`     | greater than or equal <br /> `test_result >= val` | `TestColumnValueMin("col", gte=5)`           |
-| `lt: val`      | less than <br /> `test_result < val`              | `TestColumnValueMin("col", lt=5)`            |
-| `lte: val`     | less than or equal <br /> `test_result <= val`    | `TestColumnValueMin("col", lte=5)`           |
-| `is_in: list`  | `test_result ==` one of the values                | `TestColumnValueMin("col", is_in=[3,5,7])`   |
-| `not_in: list` | `test_result !=` any of the values                | `TestColumnValueMin("col", not_in=[-1,0,1])` |
-
-**Example 1**. To Test that no values are out of range, and less than (`lt`) 20% of values are missing:
-
-```python
-feature_level_tests = TestSuite(tests=[
-TestShareOfOutRangeValues(column_name='hours-per-week', eq=0),
-TestColumnShareOfMissingValues(column_name='education', lt=0.2),
-])
-```
-
-**Example 2**. You can specify both the Test condition and parameters together.
-
-In the example above, Evidently automatically derives the feature range from the reference. You can also manually set the range (e.g., between 2 and 10). The Test fails if any value is out of this range:
-
-```python
-feature_level_tests = TestSuite(tests=[
-TestShareOfOutRangeValues(column_name='hours-per-week', left=2, right=10, eq=0),
-])
-```
-
-**Example 3**. To Test that the precision and recall is over 90%, with a set decision for the classification model:
-
-```python
-model_tests = TestSuite(tests=[
-    TestPrecisionScore(probas_threshold=0.8, gt=0.9),
-    TestRecallScore(probas_threshold=0.8, gt=0.9)
-])
-```
-
-### Custom conditions with Approx
-
-If you want to set an upper and/or lower limit to the value, you can use **approx** instead of calculating the value itself. You can set the relative or absolute range.
-
-```python
-approx(value, relative=None, absolute=None)
-```
-
-To use `approx`, first import this component:
-
-```python
-from evidently.tests.utils import approx
-```
-
-**Example 1**. Here is how you can set the upper boundary as 5+10%:
-
-```python
-lte=approx(5, relative=0.1)
-```
-
-**Example 2**. Here is how you can set the boundary as 5 +/-10%:
-
-```python
-eq=approx(5, relative=0.1)
-```
-
-## 4. Set Test criticality
-
-By default, all Tests will return a `Fail` if the Test condition is not fulfilled. If you want to get a `Warning` instead, use the `is_critical` parameter and set it to `False`. Example:
-
-```python
-data_integrity_column_tests = TestSuite(tests=[
-    TestColumnAllConstantValues(column_name='education', is_critical=False),
-    TestColumnAllUniqueValues(column_name='education', is_critical=False),
-])
-```
-
-Notebook example on setting Test criticality:

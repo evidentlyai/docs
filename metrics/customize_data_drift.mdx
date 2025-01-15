@@ -5,6 +5,45 @@ noindex: "true"
 ---
 
 
+```
+from scipy.stats import anderson_ksamp
+from evidently.calculations.stattests import register_stattest
+from evidently.calculations.stattests import StatTest
+
+from evidently.future.report import Report
+
+from evidently.future.metrics import DriftedColumnsCount
+from evidently.future.metrics import ValueDrift
+
+
+def _addd(
+    reference_data: pd.Series,
+    current_data: pd.Series,
+    feature_type: ColumnType,
+    threshold: float,
+):
+    p_value = anderson_ksamp([reference_data.values, current_data.values])[2]
+    return p_value, p_value < threshold
+
+
+adt = StatTest(
+    name="adt",
+    display_name="Anderson-Darling",
+    allowed_feature_types=[ColumnType.Numerical],
+    default_threshold=0.1,
+)
+
+register_stattest(adt, default_impl=_addd)
+
+
+report = Report([
+    ValueDrift(column="column_1"),
+    ValueDrift(column="column_1", method="adt"),
+])
+
+snapshot = report.run(dataset, dataset)
+snapshot
+```
 ---
 description: How to implement a new drift detection method. 
 ---

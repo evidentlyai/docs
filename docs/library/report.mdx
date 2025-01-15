@@ -14,11 +14,11 @@ For a general introduction, check [Core Concepts](/docs/library/overview).
 
 * (Optional) for text data, you added Descriptors.
 
-## Generate Reports
+## Example
 
-Check the Quickstart [for ML](/quickstart_ml) or [LLM](/quickstart_llm) for a simple example.
+Check the Quickstart [for ML](/quickstart_ml) or [LLM](/quickstart_llm) for a simple example of generating Reports.
 
-### Imports
+## Imports
 
 Pick the required Metrics and Presets you plan to use.
 
@@ -30,13 +30,13 @@ from evidently.future.presets import *
 
 You can use Metric Presets, which are pre-built Reports that work out of the box, or create a custom Report selecting Metrics one by one.
 
-### Use Presets
+## Use Presets
 
 <Tip>
   **Available Presets**. Check available evals in the [Reference table](/metrics/all_metrics).
 </Tip>
 
-To generate a template Report, simply pass the selected Preset in the `metrics` list.
+To generate a template Report, simply pass the selected Preset to the Report.
 
 **Single dataset**. To generate the Data Summary Report for a single dataset:
 
@@ -50,7 +50,7 @@ my_eval
 #my_eval.json
 ```
 
-**Two datasets**. To generate the Data Drift Report that needs two datasets, pass the second one as a reference:
+**Two datasets**. To generate the Data Drift Report that needs two datasets, pass the second one as a reference when you `run` it:
 
 ```python
 report = Report([
@@ -64,7 +64,7 @@ my_eval
 
 If nothing else is specified, the Report will run with the default parameters for all columns in the dataset. You can also pass custom parameters to some Presets.
 
-**Combine Presets**. You can also include multiple Presets in the same Report.
+**Combine Presets**. You can also include multiple Presets in the same Report. List the m one by one.
 
 ```python
 report = Report([
@@ -91,13 +91,13 @@ my_eval
 
 You can view the Report in Python, export the outputs (HTML, JSON, Python dictionary) or upload it to the Evidently platform. Check more in [output formats](/docs/library/output_formats).
 
-### Custom Report
+## Custom Report
 
 <Tip>
   **Available Metrics and parameters**. Check available evals in the [Reference table](/metrics/all_metrics).
 </Tip>
 
-**Custom Report**. To create a custom Report, simply list the `metrics` one by one. You can combine both dataset-level and column-level Metrics, and combine Reports and Metrics in one Report. When you use a column-level Metric, you must specify the column it refers to.
+**Custom Report**. To create a custom Report, simply list the Metics one by one. You can combine both dataset-level and column-level Metrics, and combine Reports and Metrics in one Report. When you use a column-level Metric, you must specify the column it refers to.
 
 ```python
 report = Report([
@@ -132,6 +132,6 @@ report = Report([
 ])
 ```
 
-### Tests
+## Tests
 
 You can also add conditions to Metrics: check the [Tests guide](/docs/library/tests).
