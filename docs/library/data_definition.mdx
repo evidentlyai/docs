@@ -4,28 +4,40 @@ description: 'How to map the input data.'
 noindex: true
 ---
 
-To run evaluations, you must create a `Dataset` object that Evidently can work with. Every `Dataset` must have `DataDefinition`. This lets you specify:
+To run evaluations, you must create a `Dataset` object with a `DataDefinition`, which maps:
 
-* column **types** (e.g. categorical, numerical, text, embeddings)
+* **Column types** (e.g., categorical, numerical, text, embeddings).
 
-* column **roles** (e.g. prediction, target, LLM output, etc.)
+* **Column roles** (e.g., prediction, target, LLM output, etc.).
 
-You only need to map columns that will be used in your evaluations. This lets Evidently correctly process the data schema and know how to treat specific columns when computing the Metrics you later select. Some types of evaluations require certain columns present and will they fail otherwise.
+This help Evidently process the data correctly and treat columns appropriately when computing the Metrics. Some evaluations require certain columns, and they will fail if these are missing.
 
-You can specify the `DataDefinition` in Python prior to generating a Report or map the columns visually when working in the Evidently platform. In some cases, you can use **automated data definition.**&#x20;
+You can define the `DataDefinition` in Python before generating a Report or map the columns visually in the Evidently platform. **Automated data definition** is also available in some cases.
 
-## Imports
+<Info>
+  You can check data requirements for specific Metrics in the [Reference table](/metrics/all_metrics).
+</Info>
+
+Once you have a Dataset with&#x20;
+
+## Basic flow
+
+Imports:
 
 ```python
 from evidently.future.datasets import Dataset
 from evidently.future.datasets import DataDefinition
 ```
 
-## Basic flow
+Steps to take:
 
-If your have your data in a pandas.DataFrame `source_df ` create a`Dataset` from pandas and specify the `data_definition`
+* **Prepare your data.** Use a `pandas.DataFrame` (or two).
 
-With **automated** column type recognition:
+* **Create a Dataset object.** Use `Dataset.from_pandas`.
+
+* **Pass the `data_definition`.** Ensure it includes the necessary details.
+
+To use automated recognition, simply pass an empty `DataDefinition()`object:
 
 ```python
 eval_data = Dataset.from_pandas(
@@ -34,7 +46,29 @@ eval_data = Dataset.from_pandas(
 )
 ```
 
-With **user-defined** column types:
+**Two datasets.** If you have two datasets (like a second reference dataset for data drift detection), you need two Dataset objects. They must identical data definition.
+
+**Automated data definition.**  If the `DataDefinition` is not specified or set as `None`, Evidently will use the default mapping strategy, trying to match the columns:
+
+* Based on their type (numerical or categorical),
+
+* Based on their name if it matches a known role (for example, a target column is called "target").
+
+**Manual data definition.** While automated definition often works, it's best to map columns manually to avoid errors. 
+* Manually mapping columns avoids errors, like numerical columns with few unique values being mistaken for categorical.
+* Additionally, mapping is always required for certain evals like text column or embedding column mapping for drift detection.
+
+There are many available mapping options. However, you only need to use those that apply to your evaluation scenario. For example, you don't need role mapping to run data quality checks. If you don't map certain columns, they will be ignored.&#x20;
+
+<Info>
+  Once you have the **Dataset** ready, you can add [text Descriptors ](/docs/library/descriptors)and/or [get Reports](/docs/library/report).
+</Info>
+
+## Column types
+
+Mapping column types helps process inputs for data quality and data drift analysis: to generate correct statistics, visualizations and types of tests.&#x20;
+
+Example mapping:
 
 ```python
 definition = DataDefinition(
@@ -50,201 +84,71 @@ eval_data = Dataset.from_pandas(
 )
 ```
 
-You can map column roles similarly: see examples below based on the use case.&#x20;
+| Parameter            | Description                                                                 | Automated mapping                                 |
+| -------------------- | --------------------------------------------------------------------------- | ------------------------------------------------- |
+| numerical\_columns   | \* All columns with numeric types (np.number) will be treated as Numerical. | All columns with numeric types (np.number)        |
+| datetime\_columns    |                                                                             | All columns with DateTime format.  (np.datetime64)  |
+| categorical\_columns |                                                                             | All other columns will be treated as Categorical. |
+| text\_columns        |                                                                             | N/A, require mapping                              |
+| embeddings (TBC)     |                                                                             | N/A, require mapping                              |
 
-<Info>
-  Once you have the **Dataset** ready, you can add [text Descriptors ](/docs/library/descriptors)and/or [get Reports](/docs/library/report).
-</Info>
-
-## Column types
-
-
-
-
-
-Automated detection
-
-Data Definition is always required. However, you can leave the data definition empty if:
-
-* you run evals that only expect data columns (and do not expect them to have a certain role) like data summary or data drift detection
-
-* your column names match the expected column role as per data definition (for example, you target column in called "target")
-
-Leave the data definition empty and rely on automated feature type detection.
-
-If the `DataDefinition` is not specified or set as `None`, Evidently will use the default mapping strategy, trying to match the columns automatically.
-
-**Column types**:
-
-* All columns with numeric types (np.number) will be treated as Numerical.
-
-* All columns with DateTime format (np.datetime64) will be treated as DateTime.
-
-* All other columns will be treated as Categorical.
-
-**Dataset structure**:
-
-* The column named **"id"**  will be treated as an ID column.
-
-* The column named **"datetime"** will be treated as a DateTime column.
-
-* The column named **"target"** will be treated as a target column with a true label or value.
-
-* The column named **"prediction"** will be treated as a model prediction.
-
-ADD FOR LLM
-
-## Manual configuration
-
-In other scenarios you can set the manual data definition:
+**Embedding columns** (TBC). To specify which columns in your dataset contain embeddings (to use embeddings-specific data drift detection methods), pass a dictionary where keys are embedding names and values are lists of columns.
 
 ```python
-schema=DataDefinition(text_columns=["question", "answer"])
-
-eval_dataset = Dataset.from_pandas(
-    pd.DataFrame(source_df),
-    data_definition=schema
+embeddings = {'small_subset': embeddings_data.columns[:10]} #TBC
 ```
+**Text columns**. While you don't need to map text columns to compute decscriptors, it's useful for the following analysis. This ensures relevant stats are computed for text column and they are exlcuded from Tests and Metrics where they don’t apply. If you don’t map text columns, they’ll be treated as categorical, potentially leading to irrelevant evaluations like raw text distribution histograms.
 
-## Descriptrors
+**DateTime columns.** DateTime columns will be ignored in data drift calculation and get appropriate stats and different visualizations for DateTime column in value stats.
 
-When you generate descriptors they are automatically tagged as descriptors.
+## Column roles
 
-Column mapping helps map your input data schema or specify column types. For example, to run evaluation on text data, you must specify which columns in your dataset contain texts. This allows Evidently to process the input data correctly.
+### General
 
-# Which columns do you need?
+If you have a timestamp or ID column, it's always a good idea to map them. It serves as the index for certain plots, giving you richer visualizations in your Reports. Mapping the "Timestamp" and "ID" columns also excludes them from analyses like data drift detection, where it wouldn't add any value.
 
-To run certain types of evaluations, you must include specific columns or provide a reference dataset. For example, to run text evaluations, you must have at least one column labeled as text. To run data drift checks, you always need a reference dataset.
 
-**It's best always to use column mapping**. Without it, Evidently will apply its own heuristics to map the input data automatically. To avoid errors, it's safer to set the column mapping manually.
+Parameter            | Description   | Automated mapping   |
+| -------------------- | --------| ----------- |
+| id_column | id column  |  column named "id" column" |
+| timestamp  |      timestamp column (used as axis in some plots instead of index), only one column can be a timestamp       | column named "timestamp"
 
-# Code example
+Difference between timestamp and datetime. Datetime is a column types, timestamp is a role. It often represents the time when a data row was recorded.Use it if you want to see it as index on the plots.  There can only be one timestamp, but many dateteim columns.  A DateTime type is any time-related column in your dataset:  for example, conversation start / end, features like "date of last contact", etc.) 
 
-Notebook example on specifying column mapping:
 
-**Imports**. Imports to use column mapping:
+### LLM evals
 
-```python
-from evidently import ColumnMapping
-```
+add here on input, target_output
 
-**Basic API**. Once you create a `ColumnMapping` object, you pass it along with the data when computing the [Report or Test Suite](../tests-and-reports/introduction.md). For example:
+descriptors auto-mapped but you can map directly too
+\When you generate descriptors they are automatically tagged as descriptors.
 
-```python
-column_mapping = ColumnMapping()
 
-column_mapping.target = 'target'
-column_mapping.prediction = 'prediction'
-column_mapping.numerical_features = numerical_features
-column_mapping.categorical_features = categorical_features
+### Regression
 
-report = Report(metrics=[
-    RegressionPreset(),
-])
+If you have a dataset with ML inferences, it's necessary to map where Predictions and Actuals are to compute the regression quality metrics. 
 
-report.run(reference_data=ref,
-           current_data=cur,
-           column_mapping=column_mapping)
+show example, defaults
 
-report
-```
+### Classification
 
-# Column mapping
+If you have a dataset with ML inferences, it's necessary to map where Predictions and Ground Truth are to compute the quality metrics. 
 
-## DateTime and ID
 
-To map columns containing DateTime and ID:
+show example, defaults
 
-```python
-column_mapping.datetime = 'date' #'date' is the name of the column with datetime
-column_mapping.id = None #there is no ID column in the dataset
-```
+### Ranking
 
-**Why map them:** A "DateTime" column serves as the index for certain plots, giving you richer visualizations in your Reports. If you have a timestamp column, it's always a good idea to map it. Mapping the "Datetime" and "ID" columns also excludes them from analyses like data drift detection, where it wouldn't add any value.
+show example, defaults
 
-## Target and Prediction
+additional dataset 
 
-To map columns containing Target and Prediction:
 
-```python
-column_mapping.target = 'y' 
-column_mapping.prediction = 'pred' 
-```
 
-This matches regression or simple classification tasks. For more complex cases, check detailed instructions on how to map inputs for [classification](classification_data.md) and [ranking and recommendations](recsys_data.md).
 
-**Why map them:** If you have a dataset with ML inferences, it's necessary to map where Predictions and Ground Truth are to compute the quality metrics. You also need to map the Target and/or Prediction to generate the Target Drift Preset.
 
-## Categorical and numerical columns
 
-To split the columns into numerical and categorical types, pass them as lists:
-
-```python
-column_mapping.numerical_features = ['temp', 'atemp', 'humidity'] 
-column_mapping.categorical_features = ['season', 'holiday'] 
-```
-
-**Why map them:** Column types impact evaluations. For example, the data [drift algorithm](../reference/data-drift-algorithm.md) selects statistical tests based on column type, or `ColumnSummaryMetric` visualizations change with feature type. Manually mapping columns avoids errors, like numerical columns with few unique values being mistaken for categorical.
-
-## Text data
-
-To specify columns that contain text data:
-
-```python
-column_mapping.text_features = ['email_subject', 'email_body']
-```
-
-**Why map them:** Always map text columns to enable text-specific evaluations. This also ensures text columns are excluded from Tests and Metrics where they don’t apply. If you don’t map text columns, they’ll be treated as categorical, potentially leading to irrelevant evaluations like raw text distribution histograms.
-
-## Embeddings features
-
-To specify which columns in your dataset contain embeddings, pass a dictionary where keys are embedding names and values are lists of columns.
-
-Here is an example of how you point to the defined list of columns that contain embeddings:
-
-```python
-column_mapping = ColumnMapping()
-column_mapping.embeddings = {'small_subset': embeddings_data.columns[:10]}
-```
-
-**Why map them:** To apply embeddings-specific data drift detection methods.
-
-## DateTime features
-
-You might have temporal features in your dataset. For example, “date of the last contact.”
-
-To map them, pass them as a list:
-
-```python
-column_mapping.datetime_features = ['last_call_date', 'join_date'] 
-```
-
-**What is the difference between DateTime features and DateTime?** DateTime is a single timestamp column. It often represents the time when a data row was recorded. Use it if you want to see it as index on the plots. A DateTime feature is any time-related column in your dataset, such as input features in a ML model.
-
-**Why map them:** DateTime feature will be ignored in data drift calculation. Evidently will also calculate appropriate stats and different visualizations for DateTime features in the `ColumnSummaryMetric`.
-
-## Task parameter for target function
-
-It’s often important to specify whether your Target column is continuous or discrete. This impacts Data Quality, Data Drift, and Target Drift evaluations for the Target column.
-
-To define it explicitly, specify the task parameter:
-
-```python
-column_mapping.target = 'y'
-column_mapping.task = 'regression'
-```
-
-It accepts the following values:
-
-* `regression`
-
-* `classification`
-
-* `recsys` (for ranking and recommenders)
-
-**Default**: If you don't specify the task, Evidently will use a simple strategy: if the target has a numeric type and the number of unique values > 5: task == ‘regression.’ In all other cases, the task == ‘classification’.
-
-**Why map it:** Classes encoded as numbers may sometimes look like continuous targets. Explicitly specifying the target type ensures the right visualizations and statistical tests for the target (prediction) are selected.
+#---
 
 description: How to define the data schema for ranking and recommendations.
 
