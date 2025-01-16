@@ -8,7 +8,7 @@ To run evaluations, you must create a `Dataset` object with a `DataDefinition`, 
 
 * **Column types** (e.g., categorical, numerical, text, embeddings).
 
-* **Column roles** (e.g., prediction, target, LLM output, etc.).
+* **Column roles** (e.g., id, prediction, target, LLM output, etc.).
 
 This helps Evidently process the data correctly. Some evaluations require certain columns, and will fail if these are missing.
 
@@ -33,7 +33,9 @@ from evidently.future.datasets import DataDefinition
 
 * Create an Evidently Dataset object using `Dataset.from_pandas`.
 
-* Pass the corresponding `data_definition`. For automated mapping, pass an empty `DataDefinition()`object:
+* Pass the corresponding `data_definition`.
+
+For automated mapping, pass an empty `DataDefinition()`object:
 
 ```python
 eval_data = Dataset.from_pandas(
@@ -42,7 +44,11 @@ eval_data = Dataset.from_pandas(
 )
 ```
 
-**Two datasets.** If you're using two datasets (like current and reference for drift detection), create a Dataset object for each. They must have identical data definition.
+<Info>
+  Once you created the **Dataset**, you can add [text Descriptors ](/docs/library/descriptors) and/or [get Reports](/docs/library/report).
+</Info>
+
+**Two datasets.** If you have two datasets (like current and reference for drift detection), create a Dataset object for each. They must have identical data definition.
 
 **Automated data definition.**  If the data definition is not specified, Evidently tries to map columns:
 
@@ -50,33 +56,15 @@ eval_data = Dataset.from_pandas(
 
 * By matching column names to known roles (e.g., a column "target" treated as the target).
 
-**Manual data definition.** While automation works in many cases, manual mapping is more accurate. It helps avoid mistakes like misclassifying numerical columns with few unique values as categorical. Some evaluations, like text or embedding drift detection require explicit mapping.
+**Manual data definition.** While automation works in many cases, manual mapping is more accurate. It helps avoid mistakes like misclassifying numerical columns with few unique values as categorical. Some evaluations, like text or embedding drift also require explicit mapping.
 
-<Info>
-  Once you have the **Dataset** ready, you can add [text Descriptors ](/docs/library/descriptors)and/or [get Reports](/docs/library/report).
-</Info>
-
-You can explore different mapping options below. Note that you only need to use those relevant to your evals. For example, you don’t need roles like target/prediction to run data quality checks.
+<Note>
+This page shows all mapping options. Note that you **only need to use the relevant ones**. For example, you don’t need columns like target/prediction to run data quality checks.
+</Note>
 
 ## Column types
 
-**Why map column types**. This ensures accurate data processing for:
-
-* Statistical analysis. Descriptive stats adjust based on column type.
-
-* Choice of visualizations. This also prevents unsuitable plots (e.g., text columns treated as categorical may get a raw text distribution histogram).
-
-* Data drift analysis. Drift detection methods vary by column type.
-
-* Automated tests choice. Preset composition is mapped to column types.
-
-<Note>
-  If you have **text data**, you can [generate descriptors](/docs/library/descriptors) without explicit mapping. However, mapping is recommended since you may later generate dataset-level Reports, like to get a Data Summary.
-</Note>
-
-### Examples
-
-**Tabular or text data**. Example mapping:
+**Tabular or text data**. Map the columns you have in the dataset:
 
 ```python
 definition = DataDefinition(
@@ -92,15 +80,19 @@ eval_data = Dataset.from_pandas(
 )
 ```
 
-(TBC). **Embeddings** Example mapping:
+<Info>
+For **LLM evals**, you can [generate text descriptors](/docs/library/descriptors) without explicitly mapping text columns. But it's often a good idea to map them, since you may later run dataset-level Reports, like to get a Data Summary.
+</Info>
+
+<Info>
+If you map column types and **exclude** certain columns, they’ll be ignored in all evaluations.
+</Info>
+
+(TBC). **Embeddings** If you have columns that contain embbeddings
 
 ```python
 embeddings = {'small_subset': embeddings_data.columns[:10]} #TBC
 ```
-
-<Info>
-  If you map column types and exclude certain columns, they’ll be ignored in all evaluations.
-</Info>
 
 ### Options
 
@@ -114,11 +106,19 @@ Available types and how automated mapping works.
 | `text_columns`        | <ul><li>Text columns.</li><li>Mapping **required** for text data drift detection.</li></ul>                                                                                                             | No automated mapping.                               |
 | `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li> Pass a dictionary where keys are embedding names and values are lists of columns.</li><li>Mapping **required** for embedding drift detection.</li></ul> | No automated mapping.                               |
 
-## Column roles
 
-Depending on the use case and type of analysis to run, you may need to map specific column roles.
+**Why map column types**. This ensures accurate data processing for:
 
-### General
+* Statistical analysis. Descriptive stats adjust based on column type.
+
+* Choice of visualizations. This also prevents unsuitable plots (e.g., text columns treated as categorical may get a raw text distribution histogram).
+
+* Data drift analysis. Drift detection methods vary by column type.
+
+* Automated tests choice. Preset composition is mapped to column types.
+
+
+## ID and timestamp
 
 If you have a timestamp or ID column, it's always a good idea to identify them.
 
@@ -135,7 +135,7 @@ If you have a timestamp or ID column, it's always a good idea to identify them.
   * **Timestamp** is a role. You can have a single timestamp column. It often represents the time when a data input was recorded. Use it if you want to see it as index on the plots.
 </Info>
 
-### LLM evals
+## LLM evals
 
 When you generate [text descriptors](/docs/library/descriptors) and add them to the dataset, they are automatically mapped as `descriptors` in Data Definition. This means they will be included in the `TextEvals` [preset](/metrics/preset_text_evals) or treated as descriptor when you plot them on the dashboard.
 
@@ -148,7 +148,7 @@ definition = DataDefinition(
     )
 ```
 
-### Regression
+## Regression
 
 To run regression quality checks, you must map the columns with:
 * Target: actual values.
@@ -171,7 +171,7 @@ Defaults:
     prediction: str = "prediction"
 ```    
 
-### Classification
+## Classification
 
 To run classification checks, you must map the columns with:
 * Target: true label.
@@ -179,7 +179,7 @@ To run classification checks, you must map the columns with:
 
 There two different mapping options, for binary and multi-class classification. You can also have several classification results in the dataset. (Pass the mappings in a list). 
 
-#### Multiclass
+### Multiclass
 
 Example mapping:
 
@@ -198,7 +198,7 @@ Available options and defaults:
     labels: Optional[Dict[Label, str]] = None
 ```
 
-#### Binary
+### Binary
 
 Example mapping:
 
@@ -218,9 +218,9 @@ Available options and defaults:
     labels: Optional[Dict[Label, str]] = None
 ```
 
-### Ranking
+## Ranking
 
-#### RecSys 
+### RecSys 
 
 To evaluate recommender systems performance, you must map the columns with:
 * Prediction: this could be predicted score or rank.
