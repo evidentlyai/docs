@@ -109,13 +109,6 @@ Explicit mapping helps avoid mistakes like misclassifying numerical columns with
 If you map column types and **exclude** certain columns, they’ll be ignored in all evaluations.
 </Info>
 
-### Embeddings 
-
-(TBC). If you have columns that contain embbeddings, pass a dictionary where the key is an embedding name and values are a list of columns.
-
-```python
-embeddings = {'small_subset': embeddings_data.columns[:10]} #TBC
-```
 
 ### Defaults
 
@@ -127,7 +120,7 @@ If you do not pass explicit mapping, the following defaults apply:
 | `datetime_columns`    | <ul><li>Columns with datetime values.</li><li>Ignored in data drift calculations.</li></ul>                                                                                                             | All columns with DateTime format (`np.datetime64`). |
 | `categorical_columns` | <ul><li>Columns with categorical values.</li></ul>                                                                                                                                                      | All non-numeric/non-datetime columns.               |
 | `text_columns`        | <ul><li>Text columns.</li><li>Mapping **required** for text data drift detection.</li></ul>                                                                                                             | No automated mapping.                               |
-| `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li>Mapping **required** for embedding drift detection.</li></ul> | No automated mapping.                               |
+                        |
 
 
 ## ID and timestamp
@@ -139,6 +132,7 @@ definition = DataDefinition(
     id_column="Id",
     timestamp="Date"
     )
+```
 
 | **Column role** | **Description**                                                                                      | **Automated mapping**          |
 | --------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------ |

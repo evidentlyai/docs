@@ -4,6 +4,15 @@ description: 'Description of your new file.'
 noindex: true
 ---
 
+### Embeddings 
+
+(TBC). If you have columns that contain embbeddings, pass a dictionary where the key is an embedding name and values are a list of columns.
+
+```python
+embeddings = {'small_subset': embeddings_data.columns[:10]} #TBC
+```
+| `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li>Mapping **required** for embedding drift detection.</li></ul> | No automated mapping.       
+
 ### Ranking
 
 
