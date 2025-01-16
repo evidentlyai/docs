@@ -10,12 +10,12 @@ To run evaluations, you must create a `Dataset` object with a `DataDefinition`, 
 
 * **Column roles** (e.g., prediction, target, LLM output, etc.).
 
-This help Evidently process the data correctly and treat columns appropriately when computing the Metrics. Some evaluations require certain columns, and they will fail if these are missing.
+This helps Evidently process the data correctly. Some evaluations require certain columns, and will fail if these are missing.
 
-You can define the `DataDefinition` in Python before generating a Report or map the columns visually in the Evidently platform. **Automated data definition** is also available in some cases.
+You can create a `DataDefinition` in Python before generating a Report or map the columns visually in the Evidently platform. **Automated data definition** is also available in some cases.
 
 <Info>
-  You can check data requirements for specific Metrics in the [Reference table](/metrics/all_metrics).
+Check data requirements for specific Metrics in the [Reference table](/metrics/all_metrics).
 </Info>
 
 ## Basic flow
@@ -27,15 +27,13 @@ from evidently.future.datasets import Dataset
 from evidently.future.datasets import DataDefinition
 ```
 
-Steps to take:
+To create a Dataset:
 
-* Prepare your data as a pandas.DataFrame (or two).
+* Prepare your data as a pandas.DataFrame.
 
 * Create an Evidently Dataset object using `Dataset.from_pandas`.
 
-* Pass the `data_definition`, including the necessary details.
-
-To use automated mapping, pass an empty `DataDefinition()`object:
+* Pass the corresponding `data_definition`. For automated mapping, pass an empty `DataDefinition()`object:
 
 ```python
 eval_data = Dataset.from_pandas(
@@ -46,15 +44,15 @@ eval_data = Dataset.from_pandas(
 
 **Two datasets.** If you're using two datasets (like current and reference for drift detection), create a Dataset object for each. They must have identical data definition.
 
-**Automated data definition.**  If DataDefinition is not specified, Evidently will try to map columns automatically:
+**Automated data definition.**  If the data definition is not specified, Evidently tries to map columns:
 
 * Based on type (numerical, categorical).
 
-* By matching column names to known roles (e.g., a column named "target" will be treated as the target).
+* By matching column names to known roles (e.g., a column "target" treated as the target).
 
-**Manual data definition.** While automation works in many cases, manual mapping is more accurate. It helps avoid mistakes like misclassifying numerical columns with few unique values as categorical. For some evaluations, like drift detection with text or embedding columns, explicit mapping is required.
+**Manual data definition.** While automation works in many cases, manual mapping is more accurate. It helps avoid mistakes like misclassifying numerical columns with few unique values as categorical. Some evaluations, like text or embedding drift detection require explicit mapping.
 
-* Only map what you need for your evaluation. For example, you don’t need to set any any column roles to run data quality checks, but mapping type is useful.
+* Only map what you need for your evals. For example, you don’t need roles like target/prediction to run data quality checks.
 
 * If you map columns manually and exlcude certain columns, they will be ignored in evaluations even if present in the dataset.
 
@@ -64,7 +62,9 @@ eval_data = Dataset.from_pandas(
 
 ## Column types
 
-Mapping **column types** helps process inputs for data quality and data drift analysis: to generate correct statistics, visualizations and types of tests.
+Mapping **column types** helps process inputs for data quality and data drift analysis. This helps generate correct statistics, visualizations and types of tests.
+
+<li>Mapping affects choice of stats, automated tests, data drift methods and visualizations.</li>
 
 Example mapping:
 
@@ -84,7 +84,7 @@ eval_data = Dataset.from_pandas(
 
 | **Column Type**       | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | **Automated Mapping**                                      |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| `numerical_columns`   | <ul><li>Columns with numeric values.</li><li>Mapping affects choice of stats, automated tests, data drift methods and visualizations.</li></ul>                                                                                                                                                                                                                                                                                                                                                                      | All columns with numeric types (`np.number`).              |
+| `numerical_columns`   | <ul><li>Columns with numeric values.</li></ul>                                                                                                                                                                                                                                                                                                                                                                      | All columns with numeric types (`np.number`).              |
 | `datetime_columns`    | <ul><li>Columns with datetime values.</li><li>Ignored in data drift calculations.</li><li>Affects column stats choice and adds appropriate visualizations.</li></ul>                                                                                                                                                                                                                                                                                                                                                                | All columns with DateTime format (`np.datetime64`).        |
 | `categorical_columns` | <ul><li>Columns with categorical values.</li><li>Mapping affects choice of stats, automated tests, data drift methods and visualizations. </li></ul>                                                                                                                                                                                                                                                                                                                                                                 | All other columns not classified as numerical or datetime. |
 | `text_columns`        | <ul><li>Text columns.</li><li>You can generate descriptors without explicit mapping, but it's useful for further analysis. </li><li> Affects choice of automated tests (many don't apply for texts), statics and visuals. </li><li>Unmapped text columns are treated as categorical, which can result in irrelevant plots like raw text distribution histograms.</li><li>Mapping required for text data drift detection.</li></ul> | Not automated.                    |
@@ -110,6 +110,9 @@ If you have a timestamp or ID column, it's always a good idea to map them. It se
 Difference between timestamp and datetime. Datetime is a column types, timestamp is a role. It often represents the time when a data row was recorded.Use it if you want to see it as index on the plots.  There can only be one timestamp, but many dateteim columns.  A DateTime type is any time-related column in your dataset:  for example, conversation start / end, features like "date of last contact", etc.)
 
 ### LLM evals
+
+and treat columns appropriately when computing the Metrics
+
 
 llm=None,
 
