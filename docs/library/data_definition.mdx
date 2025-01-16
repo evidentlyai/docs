@@ -18,8 +18,6 @@ You can define the `DataDefinition` in Python before generating a Report or map 
   You can check data requirements for specific Metrics in the [Reference table](/metrics/all_metrics).
 </Info>
 
-Once you have a Dataset with&#x20;
-
 ## Basic flow
 
 Imports:
@@ -31,13 +29,13 @@ from evidently.future.datasets import DataDefinition
 
 Steps to take:
 
-* **Prepare your data.** Use a `pandas.DataFrame` (or two).
+* Prepare your data as a pandas.DataFrame (or two).
 
-* **Create a Dataset object.** Use `Dataset.from_pandas`.
+* Create an Evidently Dataset object using `Dataset.from_pandas`.
 
-* **Pass the `data_definition`.** Ensure it includes the necessary details.
+* Pass the `data_definition`, including the necessary details.
 
-To use automated recognition, simply pass an empty `DataDefinition()`object:
+To use automated mapping, pass an empty `DataDefinition()`object:
 
 ```python
 eval_data = Dataset.from_pandas(
@@ -46,19 +44,19 @@ eval_data = Dataset.from_pandas(
 )
 ```
 
-**Two datasets.** If you have two datasets (like a second reference dataset for data drift detection), you need two Dataset objects. They must identical data definition.
+**Two datasets.** If you're using two datasets (like current and reference for drift detection), create a Dataset object for each. They must have identical data definition.
 
-**Automated data definition.**  If the `DataDefinition` is not specified or set as `None`, Evidently will use the default mapping strategy, trying to match the columns:
+**Automated data definition.**  If DataDefinition is not specified, Evidently will try to map columns automatically:
 
-* Based on their type (numerical or categorical),
+* Based on type (numerical, categorical).
 
-* Based on their name if it matches a known role (for example, a target column is called "target").
+* By matching column names to known roles (e.g., a column named "target" will be treated as the target).
 
-**Manual data definition.** While automated definition often works, it's best to map columns manually to avoid errors. 
-* Manually mapping columns avoids errors, like numerical columns with few unique values being mistaken for categorical.
-* Additionally, mapping is always required for certain evals like text column or embedding column mapping for drift detection.
+**Manual data definition.** While automation works in many cases, manual mapping is more accurate. It helps avoid mistakes like misclassifying numerical columns with few unique values as categorical. For some evaluations, like drift detection with text or embedding columns, explicit mapping is required.
 
-There are many available mapping options. However, you only need to use those that apply to your evaluation scenario. For example, you don't need role mapping to run data quality checks. If you don't map certain columns, they will be ignored.&#x20;
+* Only map what you need for your evaluation. For example, you don’t need to set any any column roles to run data quality checks, but mapping type is useful.
+
+* If you map columns manually and exlcude certain columns, they will be ignored in evaluations even if present in the dataset.
 
 <Info>
   Once you have the **Dataset** ready, you can add [text Descriptors ](/docs/library/descriptors)and/or [get Reports](/docs/library/report).
@@ -66,7 +64,7 @@ There are many available mapping options. However, you only need to use those th
 
 ## Column types
 
-Mapping column types helps process inputs for data quality and data drift analysis: to generate correct statistics, visualizations and types of tests.&#x20;
+Mapping **column types** helps process inputs for data quality and data drift analysis: to generate correct statistics, visualizations and types of tests.
 
 Example mapping:
 
@@ -84,22 +82,19 @@ eval_data = Dataset.from_pandas(
 )
 ```
 
-| Parameter            | Description                                                                 | Automated mapping                                 |
-| -------------------- | --------------------------------------------------------------------------- | ------------------------------------------------- |
-| `numerical_columns`   | \* All columns with numeric types (np.number) will be treated as Numerical. | All columns with numeric types (np.number)        |
-| `datetime_columns`    |                                                                             | All columns with DateTime format.  (np.datetime64)  |
-| `categorical_columns` |                                                                             | All other columns will be treated as Categorical. |
-| `text_columns`        |                                                                             | N/A, require mapping                              |
-| `embeddings` (TBC)     |                                                                             | N/A, require mapping                              |
+| **Column Type**       | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | **Automated Mapping**                                      |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `numerical_columns`   | <ul><li>Columns with numeric values.</li><li>Affects stats, visualizations, automated test choice, and data drift detection methods.</li></ul>                                                                                                                                                                                                                                                                                                                                                                                            | All columns with numeric types (`np.number`).              |
+| `datetime_columns`    | <ul><li>Columns with datetime values.</li><li>Ignored in data drift calculations.</li><li>Affects column stats choice and adds appropriate visualizations.</li></ul>                                                                                                                                                                                                                                                                                                                                                                      | All columns with DateTime format (`np.datetime64`).        |
+| `categorical_columns` | <ul><li>Columns with categorical values.</li><li>Affects stats, visualizations, automated test choice, and data drift detection methods.</li></ul>                                                                                                                                                                                                                                                                                                                                                                                        | All other columns not classified as numerical or datetime. |
+| `text_columns`        | <ul><li>Text columns.</li><li>You can generate descriptors without explicitly mapping text columns; however, doing so is useful for statistical analysis (e.g., generating a Data Summary Report) to get appropriate visualizations and exclude text data from some automated tests where they don’t apply.</li><li>Unmapped text columns are treated as categorical, which may result in irrelevant evaluations like raw text distribution histograms.</li><li>You always need to map text data for text data drift detection.</li></ul> | Not automated; manual mapping required.                    |
+| `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li> Must be specified using a dictionary where keys are embedding names and values are lists of columns.</li><li>Required to use embeddings-specific data drift detection methods.</li></ul>                                                                                                                                                                                                                                                                                   | Not automated; manual mapping required.                    |
 
-**Embedding columns** (TBC). To specify which columns in your dataset contain embeddings (to use embeddings-specific data drift detection methods), pass a dictionary where keys are embedding names and values are lists of columns.
+**Embedding columns** (TBC).
 
 ```python
 embeddings = {'small_subset': embeddings_data.columns[:10]} #TBC
 ```
-**Text columns**. While you don't need to map text columns to compute decscriptors, it's useful for the following analysis. This ensures relevant stats are computed for text column and they are exlcuded from Tests and Metrics where they don’t apply. If you don’t map text columns, they’ll be treated as categorical, potentially leading to irrelevant evaluations like raw text distribution histograms.
-
-**DateTime columns.** DateTime columns will be ignored in data drift calculation and get appropriate stats and different visualizations for DateTime column in value stats.
 
 ## Column roles
 
@@ -107,43 +102,39 @@ embeddings = {'small_subset': embeddings_data.columns[:10]} #TBC
 
 If you have a timestamp or ID column, it's always a good idea to map them. It serves as the index for certain plots, giving you richer visualizations in your Reports. Mapping the "Timestamp" and "ID" columns also excludes them from analyses like data drift detection, where it wouldn't add any value.
 
+| Parameter  | Description                                                                                        | Automated mapping         |
+| ---------- | -------------------------------------------------------------------------------------------------- | ------------------------- |
+| id\_column | id column                                                                                          | column named "id" column" |
+| timestamp  | timestamp column (used as axis in some plots instead of index), only one column can be a timestamp | column named "timestamp"  |
 
-Parameter            | Description   | Automated mapping   |
-| -------------------- | --------| ----------- |
-| id_column | id column  |  column named "id" column" |
-| timestamp  |      timestamp column (used as axis in some plots instead of index), only one column can be a timestamp       | column named "timestamp"
-
-Difference between timestamp and datetime. Datetime is a column types, timestamp is a role. It often represents the time when a data row was recorded.Use it if you want to see it as index on the plots.  There can only be one timestamp, but many dateteim columns.  A DateTime type is any time-related column in your dataset:  for example, conversation start / end, features like "date of last contact", etc.) 
-
+Difference between timestamp and datetime. Datetime is a column types, timestamp is a role. It often represents the time when a data row was recorded.Use it if you want to see it as index on the plots.  There can only be one timestamp, but many dateteim columns.  A DateTime type is any time-related column in your dataset:  for example, conversation start / end, features like "date of last contact", etc.)
 
 ### LLM evals
 
-llm=None, 
+llm=None,
 
-add here on input, target_output
+add here on input, target\_output
 
 descriptors auto-mapped but you can map directly too
 \When you generate descriptors they are automatically tagged as descriptors.
 
-numerical_descriptors=['target2', 'prediction2'], categorical_descriptors=[])
-
+numerical\_descriptors=\['target2', 'prediction2'], categorical\_descriptors=\[])
 
 ### Regression
 
-, regression=None, 
+, regression=None,
 
-If you have a dataset with ML inferences, it's necessary to map where Predictions and Actuals are to compute the regression quality metrics. 
+If you have a dataset with ML inferences, it's necessary to map where Predictions and Actuals are to compute the regression quality metrics.
 
 show example, defaults
 
 ### Classification
 
- classification=[BinaryClassification()]
+classification=\[BinaryClassification()]
 
- classification=[BinaryClassification(name='default', target='target', prediction_labels=None, prediction_probas='prediction', pos_label=1, labels=None)]
- 
-If you have a dataset with ML inferences, it's necessary to map where Predictions and Ground Truth are to compute the quality metrics. 
+classification=\[BinaryClassification(name='default', target='target', prediction\_labels=None, prediction\_probas='prediction', pos\_label=1, labels=None)]
 
+If you have a dataset with ML inferences, it's necessary to map where Predictions and Ground Truth are to compute the quality metrics.
 
 show example, defaults
 
@@ -151,10 +142,9 @@ show example, defaults
 
 show example, defaults
 
-additional dataset 
+additional dataset
 
-
----
+***
 
 How to define the data schema for ranking and recommendations.
 
@@ -242,7 +232,7 @@ The reference dataset can belong to a previous production period or a different 
 
 * Training data typically contains a history of positive actions, such as user viewing history, page reads, or upvotes. Since it only includes the interaction results, it lacks negative examples (e.g., ignored recommendations) and column with the model output (predicted rank or score).
 
------
+***
 
 ## description: How to define the data schema for classification.
 
