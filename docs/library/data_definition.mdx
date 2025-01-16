@@ -10,13 +10,15 @@ To run evaluations, you must create a `Dataset` object with a `DataDefinition`, 
 
 * **Column roles** (e.g., id, prediction, target, LLM output, etc.).
 
-This helps Evidently process the data correctly. Some evaluations require certain columns, and will fail if these are missing. You can create a `DataDefinition` in Python before generating a Report or map the columns visually in the Evidently platform. 
+This helps Evidently process the data correctly. Some evaluations require certain columns, and will fail if these are missing. 
 
 <Info>
   Check data requirements for specific Metrics in the [Reference table](/metrics/all_metrics).
 </Info>
 
 ## Basic flow
+
+You can create a `DataDefinition` in Python before generating a Report or map the columns visually in the Evidently platform. 
 
 **Import** the following modules:
 
@@ -62,9 +64,7 @@ This page shows all mapping options. Note that you **only need to use the releva
 
 ## Column types
 
-Map the types of the inputs columns. You only need to map the ones you plan to use in your evaluations.
-
-Knowing the column type helps Evidently compute correct statistics, visualizations, and pick default tests.
+Map the types of the inputs columns. You only need to map the ones you plan to use in your evaluations. Knowing the column type helps Evidently compute correct statistics, visualizations, and pick default tests.
 
 ### Text data
 
@@ -82,7 +82,7 @@ eval_data = Dataset.from_pandas(
 ```
 
 <Info>
-For **LLM evals**, you can [generate text descriptors](/docs/library/descriptors) without explicitly mapping text columns. But it's a good idea to map them since you may later run dataset-level evaluations where it's useful to know each column type (like Dataset Summary).
+**It's optional but useful**. For **LLM evals**, you can [generate text descriptors](/docs/library/descriptors) without explicitly mapping text columns. But it's a good idea to map them since you may later run dataset-level evaluations which vary by column type (like Dataset Summary).
 </Info>
 
 ### Tabular data 
@@ -103,7 +103,7 @@ eval_data = Dataset.from_pandas(
 )
 ```
 
-Performing manual mapping helps avoid mistakes like misclassifying numerical columns with few unique values as categorical.
+Explicit mapping helps avoid mistakes like misclassifying numerical columns with few unique values as categorical.
 
 <Info>
 If you map column types and **exclude** certain columns, they’ll be ignored in all evaluations.
@@ -111,7 +111,7 @@ If you map column types and **exclude** certain columns, they’ll be ignored in
 
 ### Embeddings 
 
-(TBC). If you have columns that contain embbeddings:
+(TBC). If you have columns that contain embbeddings, pass a dictionary where the key is an embedding name and values are a list of columns.
 
 ```python
 embeddings = {'small_subset': embeddings_data.columns[:10]} #TBC
@@ -127,12 +127,18 @@ If you do not pass explicit mapping, the following defaults apply:
 | `datetime_columns`    | <ul><li>Columns with datetime values.</li><li>Ignored in data drift calculations.</li></ul>                                                                                                             | All columns with DateTime format (`np.datetime64`). |
 | `categorical_columns` | <ul><li>Columns with categorical values.</li></ul>                                                                                                                                                      | All non-numeric/non-datetime columns.               |
 | `text_columns`        | <ul><li>Text columns.</li><li>Mapping **required** for text data drift detection.</li></ul>                                                                                                             | No automated mapping.                               |
-| `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li> Pass a dictionary where keys are embedding names and values are lists of columns.</li><li>Mapping **required** for embedding drift detection.</li></ul> | No automated mapping.                               |
+| `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li>Mapping **required** for embedding drift detection.</li></ul> | No automated mapping.                               |
 
 
 ## ID and timestamp
 
 If you have a timestamp or ID column, it's useful to identify them.
+
+```python
+definition = DataDefinition(
+    id_column="Id",
+    timestamp="Date"
+    )
 
 | **Column role** | **Description**                                                                                      | **Automated mapping**          |
 | --------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------ |
@@ -149,9 +155,9 @@ If you have a timestamp or ID column, it's useful to identify them.
 
 ## LLM evals
 
-When you generate [text descriptors](/docs/library/descriptors) and add them to the dataset, they are automatically mapped as `descriptors` in Data Definition. This means they will be included in the `TextEvals` [preset](/metrics/preset_text_evals) or treated as descriptor when you plot them on the dashboard.
+When you generate [text descriptors](/docs/library/descriptors) and add them to the dataset, they are automatically mapped as `descriptors` in Data Definition. This means they will be included in the `TextEvals` [preset](/metrics/preset_text_evals) or treated as descriptors when you plot them on the dashboard.
 
-However, if you computed some scores or metadata and want to treat them as decriptors, you can map them manually.
+However, if you computed some scores or metadata externally and want to treat them as decriptors, you can map them explicitly:
 
 ```python
 definition = DataDefinition(
@@ -276,6 +282,3 @@ Available options and defaults:
     target: str = "target"
     prediction: str = "prediction"
 ``
-    
-TBC
-* `recommendations_type`: `score` (default) or `rank`. Helps specify whether the prediction column contains ranking or predicted score.
