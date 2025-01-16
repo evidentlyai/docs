@@ -192,7 +192,7 @@ report = Report([
 ])
 ```
 
-**Testing against reference**. If you pass a reference dataset, you can set conditions relative to the reference values. For example, to Test that the number of rows in the current dataset is equal to or up to 10% greater than in reference:
+**Testing against reference**. If you pass a reference dataset, you can set conditions relative to the reference values. For example, to Test that the number of rows in the current dataset is equal or greater than the reference number of rows +/- 10%:
 
 ```python
 from evidently.future.tests import Reference
@@ -211,7 +211,7 @@ report = Report([
 ])
 ```
 
-This checks that the the number of rows is equal to reference or at most 5 rows greater.
+This checks that the the number of rows is greater or equal to reference +/-5.
 
 ### Set Test criticality
 
