@@ -60,11 +60,11 @@ You can explore different mapping options below. Note that you only need to use 
 
 ## Column types
 
-Mapping column types ensures accurate processing for:
+**Why map them**. Mapping column types ensures accurate processing for:
 * Statistical analysis. Descriptive stats adjust based on column type.
 * Visualizations. This also prevents unsuitable plots (e.g., text columns treated as categorical will get an irrelevant distribution histogram).
 * Data drift analysis. Drift detection methods vary by column type.
-* Automated tests & metrics. Preset logic is mapped to column types.
+* Automated tests. Preset test choice is mapped to column types.
 
 **Any tabular data**. Example mapping: 
 
@@ -92,7 +92,9 @@ embeddings = {'small_subset': embeddings_data.columns[:10]} #TBC
 If you map column types manually and exlcude certain columns, they will be ignored in all evaluations even if present in the dataset.
 </Info>
 
-**Options**. Available types and how automated mapping works.
+### Options
+
+Available types and how automated mapping works.
 
 | **Column Type**       | **Description** | **Automated Mapping**  |
 | --------------------- | ------- | --------- |
