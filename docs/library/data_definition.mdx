@@ -15,7 +15,7 @@ This helps Evidently process the data correctly. Some evaluations require certai
 You can create a `DataDefinition` in Python before generating a Report or map the columns visually in the Evidently platform. **Automated data definition** is also available in some cases.
 
 <Info>
-Check data requirements for specific Metrics in the [Reference table](/metrics/all_metrics).
+  Check data requirements for specific Metrics in the [Reference table](/metrics/all_metrics).
 </Info>
 
 ## Basic flow
@@ -29,7 +29,7 @@ from evidently.future.datasets import DataDefinition
 
 **Create a Dataset**. You can pass data with [flexible structure](/docs/library/overview#dataset).
 
-* Prepare it as a pandas.DataFrame. 
+* Prepare it as a pandas.DataFrame.
 
 * Create an Evidently Dataset object using `Dataset.from_pandas`.
 
@@ -61,18 +61,22 @@ You can explore different mapping options below. Note that you only need to use 
 ## Column types
 
 **Why map column types**. This ensures accurate data processing for:
+
 * Statistical analysis. Descriptive stats adjust based on column type.
+
 * Choice of visualizations. This also prevents unsuitable plots (e.g., text columns treated as categorical may get a raw text distribution histogram).
+
 * Data drift analysis. Drift detection methods vary by column type.
+
 * Automated tests choice. Preset composition is mapped to column types.
 
 <Note>
-If you have **text data**, you can [generate descriptors](/docs/library/descriptors) without explicit mapping. However, mapping is recommended since you may later generate dataset-level Reports, like to get a Data Summary.
+  If you have **text data**, you can [generate descriptors](/docs/library/descriptors) without explicit mapping. However, mapping is recommended since you may later generate dataset-level Reports, like to get a Data Summary.
 </Note>
 
 ### Examples
 
-**Tabular or text data**. Example mapping: 
+**Tabular or text data**. Example mapping:
 
 ```python
 definition = DataDefinition(
@@ -95,40 +99,45 @@ embeddings = {'small_subset': embeddings_data.columns[:10]} #TBC
 ```
 
 <Info>
-If you map column types and exclude certain columns, they’ll be ignored in all evaluations.
+  If you map column types and exclude certain columns, they’ll be ignored in all evaluations.
 </Info>
 
 ### Options
 
 Available types and how automated mapping works.
 
-| **Column Type**       | **Description** | **Automated Mapping**  |
-| --------------------- | ------- | --------- |
-| `numerical_columns`   | <ul><li>Columns with numeric values.</li></ul>                                                                              | All columns with numeric types (`np.number`).              |
-| `datetime_columns`    | <ul><li>Columns with datetime values.</li><li>Ignored in data drift calculations.</li></ul>    | All columns with DateTime format (`np.datetime64`).        |
-| `categorical_columns` | <ul><li>Columns with categorical values.</li></ul>                                                                                     | All non-numeric/non-datetime columns. |
-| `text_columns`        | <ul><li>Text columns.</li><li>Mapping **required** for text data drift detection.</li></ul> | No automated mapping.                    |
-| `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li> Pass a dictionary where keys are embedding names and values are lists of columns.</li><li>Mapping **required** for embedding drift detection.</li></ul>                                                                                                                                                                                                                                                                                            | No automated mapping.|
-
-
+| **Column Type**       | **Description**                                                                                                                                                                                         | **Automated Mapping**                               |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `numerical_columns`   | <ul><li>Columns with numeric values.</li></ul>                                                                                                                                                          | All columns with numeric types (`np.number`).       |
+| `datetime_columns`    | <ul><li>Columns with datetime values.</li><li>Ignored in data drift calculations.</li></ul>                                                                                                             | All columns with DateTime format (`np.datetime64`). |
+| `categorical_columns` | <ul><li>Columns with categorical values.</li></ul>                                                                                                                                                      | All non-numeric/non-datetime columns.               |
+| `text_columns`        | <ul><li>Text columns.</li><li>Mapping **required** for text data drift detection.</li></ul>                                                                                                             | No automated mapping.                               |
+| `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li> Pass a dictionary where keys are embedding names and values are lists of columns.</li><li>Mapping **required** for embedding drift detection.</li></ul> | No automated mapping.                               |
 
 ## Column roles
 
+Depending on the use case and type of analysis to run, you may need to map specific column roles.
+
 ### General
 
-If you have a timestamp or ID column, it's always a good idea to map them. It serves as the index for certain plots, giving you richer visualizations in your Reports. Mapping the "Timestamp" and "ID" columns also excludes them from analyses like data drift detection, where it wouldn't add any value.
+If you have a timestamp or ID column, it's always a good idea to identify them.
 
-| Parameter  | Description                                                                                        | Automated mapping         |
-| ---------- | -------------------------------------------------------------------------------------------------- | ------------------------- |
-| id\_column | id column                                                                                          | column named "id" column" |
-| timestamp  | timestamp column (used as axis in some plots instead of index), only one column can be a timestamp | column named "timestamp"  |
+| **Column role** | **Description**                                           | **Automated mapping**         |
+| ----------- | ------------------------------------------------------ | ------------------------- |
+| `id_column` | <ul><li>Identifier column.</li><li>Ignored in data drift calculations.</ul></li> | Column named "id" (TBC) |
+| `timestamp` | <ul><li>Timestamp column.</li><li> Ignored in data drift calculations (like any DateTime). | Column named "timestamp" (TBC)  |
 
-Difference between timestamp and datetime. Datetime is a column types, timestamp is a role. It often represents the time when a data row was recorded.Use it if you want to see it as index on the plots.  There can only be one timestamp, but many dateteim columns.  A DateTime type is any time-related column in your dataset:  for example, conversation start / end, features like "date of last contact", etc.)
+<Info>
+  How is`timestamp` different from `datetime_columns`?
+
+  * **DateTime** is a column type. You can have many DateTime columns in the dataset. For example, conversation start / end time or features like "date of last contact."
+
+  * **Timestamp** is a role. You can have a single timestamp column. It often represents the time when a data input was recorded. Use it if you want to see it as index on the plots.
+</Info>
 
 ### LLM evals
 
 and treat columns appropriately when computing the Metrics
-
 
 llm=None,
 
