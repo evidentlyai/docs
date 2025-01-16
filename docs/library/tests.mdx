@@ -195,7 +195,7 @@ report = Report([
 **Testing against reference**. If you pass a reference dataset, you can set conditions relative to the reference values. For example, to Test that the number of rows in the current dataset is equal to or up to 10% greater than in reference:
 
 ```python
-from evidently.future.metric_types import Reference
+from evidently.future.tests import Reference
 
 report = Report([
    RowCount(tests=[gte(Reference(relative=0.1))]),
