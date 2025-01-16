@@ -60,13 +60,21 @@ You can explore different mapping options below. Note that you only need to use 
 
 ## Column types
 
-**Why map them**. Mapping column types ensures accurate processing for:
+**Why map column types**. This ensures accurate data processing for:
 * Statistical analysis. Descriptive stats adjust based on column type.
-* Visualizations. This also prevents unsuitable plots (e.g., text columns treated as categorical will get an irrelevant distribution histogram).
+* Choice of visualizations. This also prevents unsuitable plots (e.g., text columns treated as categorical may get a raw text distribution histogram).
 * Data drift analysis. Drift detection methods vary by column type.
-* Automated tests. Preset test choice is mapped to column types.
+* Automated tests choice. Preset composition is mapped to column types.
 
-**Any tabular data**. Example mapping: 
+(e.g., text columns treated as categorical may show a distribution histogram).
+
+<Note>
+If you have **text data**, you can [generate descriptors](/docs/library/descriptors) without explicit mapping. However, it's best to map the inputs since you may later run other types of analysis over the complete dataset with text and metadata like a Data Summary report.
+</Note>
+
+### Examples
+
+**Tabular or text data**. Example mapping: 
 
 ```python
 definition = DataDefinition(
@@ -101,7 +109,7 @@ Available types and how automated mapping works.
 | `numerical_columns`   | <ul><li>Columns with numeric values.</li></ul>                                                                              | All columns with numeric types (`np.number`).              |
 | `datetime_columns`    | <ul><li>Columns with datetime values.</li><li>Ignored in data drift calculations.</li></ul>    | All columns with DateTime format (`np.datetime64`).        |
 | `categorical_columns` | <ul><li>Columns with categorical values.</li></ul>                                                                                     | All non-numeric/non-datetime columns. |
-| `text_columns`        | <ul><li>Text columns.</li><li>You can generate descriptors without explicit mapping. </li><li>Mapping required for text data drift detection.</li></ul> | No automated mapping.                    |
+| `text_columns`        | <ul><li>Text columns.</li><li>Mapping required for text data drift detection.</li></ul> | No automated mapping.                    |
 | `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li> Pass a dictionary where keys are embedding names and values are lists of columns.</li><li>Required for embedding drift detection.</li></ul>                                                                                                                                                                                                                                                                                            | No automated mapping.|
 
 
