@@ -60,12 +60,11 @@ Only map what you need for your evals. For example, you don’t need roles like 
 
 ## Column types
 
-Mapping **column types** helps process inputs for data quality and data drift analysis. This helps generate correct statistics, visualizations and types of tests.
-
-<li>Mapping affects choice of stats, automated tests, data drift methods and visualizations.</li>
-
-* If you map columns manually and exlcude certain columns, they will be ignored in evaluations even if present in the dataset.
-
+Mapping **column types** helps correctly process inputs for:
+* any statistical analysis (computed descriptive stats vary by column type)
+* choice of visualuzation (for example, unmapped text columns are treated as categorical, which can result in irrelevant plots like raw text distribution histograms)
+* data drift analysis (default drift detection methods vary by column type)
+* automatically generated tests and metrics in presets 
 
 Example mapping:
 
@@ -83,12 +82,16 @@ eval_data = Dataset.from_pandas(
 )
 ```
 
+<Info>
+If you map columns manually and exlcude certain columns, they will be ignored in evaluations even if present in the dataset.
+</Info>
+
 | **Column Type**       | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | **Automated Mapping**                                      |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | `numerical_columns`   | <ul><li>Columns with numeric values.</li></ul>                                                                                                                                                                                                                                                                                                                                                                      | All columns with numeric types (`np.number`).              |
-| `datetime_columns`    | <ul><li>Columns with datetime values.</li><li>Ignored in data drift calculations.</li><li>Affects column stats choice and adds appropriate visualizations.</li></ul>                                                                                                                                                                                                                                                                                                                                                                | All columns with DateTime format (`np.datetime64`).        |
-| `categorical_columns` | <ul><li>Columns with categorical values.</li><li>Mapping affects choice of stats, automated tests, data drift methods and visualizations. </li></ul>                                                                                                                                                                                                                                                                                                                                                                 | All other columns not classified as numerical or datetime. |
-| `text_columns`        | <ul><li>Text columns.</li><li>You can generate descriptors without explicit mapping, but it's useful for further analysis. </li><li> Affects choice of automated tests (many don't apply for texts), statics and visuals. </li><li>Unmapped text columns are treated as categorical, which can result in irrelevant plots like raw text distribution histograms.</li><li>Mapping required for text data drift detection.</li></ul> | Not automated.                    |
+| `datetime_columns`    | <ul><li>Columns with datetime values.</li><li>Ignored in data drift calculations.</li></ul>                                                                                                                                                                                                                                                                                                                                                                | All columns with DateTime format (`np.datetime64`).        |
+| `categorical_columns` | <ul><li>Columns with categorical values.</li></ul>                                                                                                                                                                                                                                                                                                                                                                 | All other columns not classified as numerical or datetime. |
+| `text_columns`        | <ul><li>Text columns.</li><li>You can generate descriptors without explicit mapping, but it's useful for further analysis. </li><li>Mapping required for text data drift detection.</li></ul> | Not automated.                    |
 | `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li> pass a dictionary where keys are embedding names and values are lists of columns.</li><li>Required for embeddings data drift detection.</li></ul>                                                                                                                                                                                                                                                                                            | Not automated; manual mapping required.                    |
 
 **Embedding columns** (TBC).
@@ -123,6 +126,8 @@ descriptors auto-mapped but you can map directly too
 \When you generate descriptors they are automatically tagged as descriptors.
 
 numerical\_descriptors=\['target2', 'prediction2'], categorical\_descriptors=\[])
+
+#### Descriptors
 
 ### Regression
 
