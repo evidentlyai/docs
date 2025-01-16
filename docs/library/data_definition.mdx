@@ -86,11 +86,11 @@ eval_data = Dataset.from_pandas(
 
 | Parameter            | Description                                                                 | Automated mapping                                 |
 | -------------------- | --------------------------------------------------------------------------- | ------------------------------------------------- |
-| numerical\_columns   | \* All columns with numeric types (np.number) will be treated as Numerical. | All columns with numeric types (np.number)        |
-| datetime\_columns    |                                                                             | All columns with DateTime format.  (np.datetime64)  |
-| categorical\_columns |                                                                             | All other columns will be treated as Categorical. |
-| text\_columns        |                                                                             | N/A, require mapping                              |
-| embeddings (TBC)     |                                                                             | N/A, require mapping                              |
+| `numerical_columns`   | \* All columns with numeric types (np.number) will be treated as Numerical. | All columns with numeric types (np.number)        |
+| `datetime_columns`    |                                                                             | All columns with DateTime format.  (np.datetime64)  |
+| `categorical_columns` |                                                                             | All other columns will be treated as Categorical. |
+| `text_columns`        |                                                                             | N/A, require mapping                              |
+| `embeddings` (TBC)     |                                                                             | N/A, require mapping                              |
 
 **Embedding columns** (TBC). To specify which columns in your dataset contain embeddings (to use embeddings-specific data drift detection methods), pass a dictionary where keys are embedding names and values are lists of columns.
 
@@ -118,13 +118,19 @@ Difference between timestamp and datetime. Datetime is a column types, timestamp
 
 ### LLM evals
 
+llm=None, 
+
 add here on input, target_output
 
 descriptors auto-mapped but you can map directly too
 \When you generate descriptors they are automatically tagged as descriptors.
 
+numerical_descriptors=['target2', 'prediction2'], categorical_descriptors=[])
+
 
 ### Regression
+
+, regression=None, 
 
 If you have a dataset with ML inferences, it's necessary to map where Predictions and Actuals are to compute the regression quality metrics. 
 
@@ -132,6 +138,10 @@ show example, defaults
 
 ### Classification
 
+ classification=[BinaryClassification()]
+
+ classification=[BinaryClassification(name='default', target='target', prediction_labels=None, prediction_probas='prediction', pos_label=1, labels=None)]
+ 
 If you have a dataset with ML inferences, it's necessary to map where Predictions and Ground Truth are to compute the quality metrics. 
 
 
@@ -144,25 +154,13 @@ show example, defaults
 additional dataset 
 
 
+---
 
+How to define the data schema for ranking and recommendations.
 
-
-
-#---
-
-description: How to define the data schema for ranking and recommendations.
-
-To evaluate data from recommender systems, you must correctly map the input data schema. You can also pass an optional additional dataset with training data.
+To evaluate data from recommender systems, you must correctly map the input data schema. You can also pass an optional **additional dataset** with training data.
 
 **Note**: this mapping will also apply to search and retrieval systems. Treat "user\_id" as "query\_id".
-
-# Code example
-
-Notebook example on using column mapping and additional data for recommender systems:
-
-# Column mapping
-
-You must define column mapping to run evaluations for recommender or ranking systems on your `current` and (optional) `reference` data. Column mapping helps point to the columns with user ID, item ID, prediction, and target.
 
 To evaluate the quality of a ranking or a recommendation system, you must pass:
 
@@ -244,7 +242,7 @@ The reference dataset can belong to a previous production period or a different 
 
 * Training data typically contains a history of positive actions, such as user viewing history, page reads, or upvotes. Since it only includes the interaction results, it lacks negative examples (e.g., ignored recommendations) and column with the model output (predicted rank or score).
 
-***
+-----
 
 ## description: How to define the data schema for classification.
 
