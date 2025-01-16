@@ -10,9 +10,7 @@ To run evaluations, you must create a `Dataset` object with a `DataDefinition`, 
 
 * **Column roles** (e.g., id, prediction, target, LLM output, etc.).
 
-This helps Evidently process the data correctly. Some evaluations require certain columns, and will fail if these are missing.
-
-You can create a `DataDefinition` in Python before generating a Report or map the columns visually in the Evidently platform. **Automated data definition** is also available in some cases.
+This helps Evidently process the data correctly. Some evaluations require certain columns, and will fail if these are missing. You can create a `DataDefinition` in Python before generating a Report or map the columns visually in the Evidently platform. 
 
 <Info>
   Check data requirements for specific Metrics in the [Reference table](/metrics/all_metrics).
@@ -50,13 +48,13 @@ eval_data = Dataset.from_pandas(
 
 **Two datasets.** If you have two datasets (like current and reference for drift detection), create a Dataset object for each. They must have identical data definition.
 
-**Automated data definition.**  If the data definition is not specified, Evidently tries to map columns:
+**Automated data definition.**  You can often use automated mapping. If the data definition is not specified, Evidently tries to map columns:
 
 * Based on type (numerical, categorical).
 
-* By matching column names to known roles (e.g., a column "target" treated as the target).
+* By matching column names to known roles (e.g., a column "target" treated as target).
 
-**Manual data definition.** While automation works in many cases, manual mapping is more accurate. It helps avoid mistakes like misclassifying numerical columns with few unique values as categorical. Some evaluations, like text or embedding drift also require explicit mapping.
+**Manual data definition.** While automation works in many cases, manual mapping is more accurate. Some evaluations, like text or embedding drift always require explicit mapping.
 
 <Note>
 This page shows all mapping options. Note that you **only need to use the relevant ones**. For example, you don’t need columns like target/prediction to run data quality checks.
@@ -64,7 +62,32 @@ This page shows all mapping options. Note that you **only need to use the releva
 
 ## Column types
 
-**Tabular or text data**. Map the columns you have in the dataset:
+Map the types of the inputs columns. You only need to map the ones you plan to use in your evaluations.
+
+Knowing the column type helps Evidently compute correct statistics, visualizations, and pick default tests.
+
+### Text data
+
+Map the columns that contain text:
+
+```python
+definition = DataDefinition(
+    text_columns=["Latest_Review"]
+    )
+    
+eval_data = Dataset.from_pandas(
+    pd.DataFrame(source_df),
+    data_definition=definition
+)
+```
+
+<Info>
+For **LLM evals**, you can [generate text descriptors](/docs/library/descriptors) without explicitly mapping text columns. But it's a good idea to map them since you may later run dataset-level evaluations where it's useful to know each column type (like Dataset Summary).
+</Info>
+
+### Tabular data 
+
+Map numerical, categorical or datetime columns:
 
 ```python
 definition = DataDefinition(
@@ -80,23 +103,23 @@ eval_data = Dataset.from_pandas(
 )
 ```
 
-<Info>
-For **LLM evals**, you can [generate text descriptors](/docs/library/descriptors) without explicitly mapping text columns. But it's often a good idea to map them, since you may later run dataset-level Reports, like to get a Data Summary.
-</Info>
+Performing manual mapping helps avoid mistakes like misclassifying numerical columns with few unique values as categorical.
 
 <Info>
 If you map column types and **exclude** certain columns, they’ll be ignored in all evaluations.
 </Info>
 
-(TBC). **Embeddings** If you have columns that contain embbeddings
+### Embeddings 
+
+(TBC). If you have columns that contain embbeddings:
 
 ```python
 embeddings = {'small_subset': embeddings_data.columns[:10]} #TBC
 ```
 
-### Options
+### Defaults
 
-Available types and how automated mapping works.
+If you do not pass explicit mapping, the following defaults apply:
 
 | **Column Type**       | **Description**                                                                                                                                                                                         | **Automated Mapping**                               |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
@@ -107,20 +130,9 @@ Available types and how automated mapping works.
 | `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li> Pass a dictionary where keys are embedding names and values are lists of columns.</li><li>Mapping **required** for embedding drift detection.</li></ul> | No automated mapping.                               |
 
 
-**Why map column types**. This ensures accurate data processing for:
-
-* Statistical analysis. Descriptive stats adjust based on column type.
-
-* Choice of visualizations. This also prevents unsuitable plots (e.g., text columns treated as categorical may get a raw text distribution histogram).
-
-* Data drift analysis. Drift detection methods vary by column type.
-
-* Automated tests choice. Preset composition is mapped to column types.
-
-
 ## ID and timestamp
 
-If you have a timestamp or ID column, it's always a good idea to identify them.
+If you have a timestamp or ID column, it's useful to identify them.
 
 | **Column role** | **Description**                                                                                      | **Automated mapping**          |
 | --------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------ |
