@@ -131,7 +131,7 @@ Here are the conditions you can set:
 
 | Condition      | Explanation                                       | Example                                                |
 | -------------- | ------------------------------------------------- | ------------------------------------------------------ |
-| `eq(val)`      | equal to <br /> `test_result == val` <br /><br /> Accepts `epsilon` parameter to set a fuzzy +/- range. Useful for float values.             | `MinValue(column="Age", tests=[eq(18)])` <br /> `MinValue(column="Score", tests=[eq(1, epsilon=0.01])`      )           |
+| `eq(val)`      | equal to <br /> `test_result == val` <br /><br />             | `MinValue(column="Age", tests=[eq(18)])`         |
 | `not_eq(val)`  | not equal <br /> `test_result != val`             | `MinValue(column="Age", tests=[not_eq(18)])`           |
 | `gt(val)`      | greater than  <br /> `test_result > val`          | `MinValue(column="Age", tests=[gt(18)])`               |
 | `gte(val)`     | greater than or equal <br /> `test_result >= val` | `MinValue(column="Age", tests=[gte(18)])`              |
