@@ -52,9 +52,7 @@ eval_data = Dataset.from_pandas(
 
 **Manual data definition.** While automation works in many cases, manual mapping is more accurate. It helps avoid mistakes like misclassifying numerical columns with few unique values as categorical. Some evaluations, like text or embedding drift detection require explicit mapping.
 
-* Only map what you need for your evals. For example, you don’t need roles like target/prediction to run data quality checks.
-
-* If you map columns manually and exlcude certain columns, they will be ignored in evaluations even if present in the dataset.
+Only map what you need for your evals. For example, you don’t need roles like target/prediction to run data quality checks.
 
 <Info>
   Once you have the **Dataset** ready, you can add [text Descriptors ](/docs/library/descriptors)and/or [get Reports](/docs/library/report).
@@ -65,6 +63,9 @@ eval_data = Dataset.from_pandas(
 Mapping **column types** helps process inputs for data quality and data drift analysis. This helps generate correct statistics, visualizations and types of tests.
 
 <li>Mapping affects choice of stats, automated tests, data drift methods and visualizations.</li>
+
+* If you map columns manually and exlcude certain columns, they will be ignored in evaluations even if present in the dataset.
+
 
 Example mapping:
 
