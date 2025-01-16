@@ -10,7 +10,7 @@ To run evaluations, you must create a `Dataset` object with a `DataDefinition`, 
 
 * **Column roles** (e.g., id, prediction, target, LLM output, etc.).
 
-This helps Evidently process the data correctly. Some evaluations require certain columns, and will fail if these are missing. 
+This helps Evidently process the data correctly. Some evaluations require certain columns, and will fail if these are missing.
 
 <Info>
   Check data requirements for specific Metrics in the [Reference table](/metrics/all_metrics).
@@ -18,7 +18,7 @@ This helps Evidently process the data correctly. Some evaluations require certai
 
 ## Basic flow
 
-You can create a `DataDefinition` in Python before generating a Report or map the columns visually in the Evidently platform. 
+You can create a `DataDefinition` in Python before generating a Report or map the columns visually in the Evidently platform.
 
 **Import** the following modules:
 
@@ -59,12 +59,12 @@ eval_data = Dataset.from_pandas(
 **Manual data definition.** While automation works in many cases, manual mapping is more accurate. Some evaluations, like text or embedding drift always require explicit mapping.
 
 <Note>
-This page shows all mapping options. Note that you **only need to use the relevant ones**. For example, you don’t need columns like target/prediction to run data quality checks.
+  This page shows all mapping options. Note that you **only need to use the relevant ones**. For example, you don’t need columns like target/prediction to run data quality checks.
 </Note>
 
 ## Column types
 
-Knowing the column type helps Evidently compute correct statistics, visualizations, and pick default tests. You only need to map the ones you plan to use in your evaluations. 
+Knowing the column type helps Evidently compute correct statistics, visualizations, and pick default tests. You only need to map the columns you plan to use in your evaluations.
 
 ### Text data
 
@@ -82,10 +82,10 @@ eval_data = Dataset.from_pandas(
 ```
 
 <Info>
-**It's optional but useful**. For **LLM evals**, you can [generate text descriptors](/docs/library/descriptors) without explicitly mapping text columns. But it's a good idea to map them since you may later run dataset-level evaluations which vary by column type (like Dataset Summary).
+  **It's optional but useful**. For **LLM evals**, you can [generate text descriptors](/docs/library/descriptors) without explicitly mapping text columns. But it's a good idea to map them since you may later run dataset-level evaluations which vary by column type (like Dataset Summary).
 </Info>
 
-### Tabular data 
+### Tabular data
 
 Map numerical, categorical or datetime columns:
 
@@ -106,22 +106,20 @@ eval_data = Dataset.from_pandas(
 Explicit mapping helps avoid mistakes like misclassifying numerical columns with few unique values as categorical.
 
 <Info>
-If you map column types and **exclude** certain columns, they’ll be ignored in all evaluations.
+  If you **exclude** certain columns in mapping, they’ll be ignored in all evaluations.
 </Info>
-
 
 ### Defaults
 
 If you do not pass explicit mapping, the following defaults apply:
 
-| **Column Type**       | **Description**                                                                                                                                                                                         | **Automated Mapping**                               |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
-| `numerical_columns`   | <ul><li>Columns with numeric values.</li></ul>                                                                                                                                                          | All columns with numeric types (`np.number`).       |
-| `datetime_columns`    | <ul><li>Columns with datetime values.</li><li>Ignored in data drift calculations.</li></ul>                                                                                                             | All columns with DateTime format (`np.datetime64`). |
-| `categorical_columns` | <ul><li>Columns with categorical values.</li></ul>                                                                                                                                                      | All non-numeric/non-datetime columns.               |
-| `text_columns`        | <ul><li>Text columns.</li><li>Mapping **required** for text data drift detection.</li></ul>                                                                                                             | No automated mapping.                               |
-                        |
-
+| **Column Type**       | **Description**                                                                             | **Automated Mapping**                               |
+| --------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `numerical_columns`   | <ul><li>Columns with numeric values.</li></ul>                                              | All columns with numeric types (`np.number`).       |
+| `datetime_columns`    | <ul><li>Columns with datetime values.</li><li>Ignored in data drift calculations.</li></ul> | All columns with DateTime format (`np.datetime64`). |
+| `categorical_columns` | <ul><li>Columns with categorical values.</li></ul>                                          | All non-numeric/non-datetime columns.               |
+| `text_columns`        | <ul><li>Text columns.</li><li>Mapping **required** for text data drift detection.</li></ul> | No automated mapping.                               |
+|                       |                                                                                             |                                                     |
 
 ## ID and timestamp
 
@@ -137,7 +135,7 @@ definition = DataDefinition(
 | **Column role** | **Description**                                                                                      | **Automated mapping**          |
 | --------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------ |
 | `id_column`     | <ul><li>Identifier column.</li><li>Ignored in data drift calculations.</li></ul>                     | Column named "id" (TBC)        |
-| `timestamp`     | <ul><li>Timestamp column.</li><li> Ignored in data drift calculations (like any DateTime).</li></ul> | Column named "timestamp" (TBC) |
+| `timestamp`     | <ul><li>Timestamp column.</li><li> Ignored in data drift calculations. </li></ul> | Column named "timestamp" (TBC) |
 
 <Info>
   How is`timestamp` different from `datetime_columns`?
@@ -163,7 +161,9 @@ definition = DataDefinition(
 ## Regression
 
 To run regression quality checks, you must map the columns with:
+
 * Target: actual values.
+
 * Prediction: predicted values.
 
 You can have several regression results in the dataset, for example in case of multiple regression. (Pass the mappings in a list).
@@ -181,15 +181,17 @@ Defaults:
 ```python
     target: str = "target"
     prediction: str = "prediction"
-```    
+```
 
 ## Classification
 
 To run classification checks, you must map the columns with:
+
 * Target: true label.
+
 * Prediction: predicted labels/probabilities.
 
-There two different mapping options, for binary and multi-class classification. You can also have several classification results in the dataset. (Pass the mappings in a list). 
+There two different mapping options, for binary and multi-class classification. You can also have several classification results in the dataset. (Pass the mappings in a list).
 
 ### Multiclass
 
@@ -232,34 +234,37 @@ Available options and defaults:
 
 ## Ranking
 
-### RecSys 
+### RecSys
 
 To evaluate recommender systems performance, you must map the columns with:
+
 * Prediction: this could be predicted score or rank.
+
 * Target: relevance labels (e.g., this could be an interaction result like user click or upvote, or a true relevance label)
 
 The **target** column can contain either:
+
 * a binary label (where `1` is a positive outcome)
+
 * any true labels or scores (any positive values, where a higher value corresponds to a better match or a more valuable user action).
 
 Here are the examples of the expected data inputs.
 
 If the system prediction is a **score** (expected by default):
 
-| user_id | item_id | prediction (score) | target (relevance) |
+| user\_id | item\_id | prediction (score) | target (relevance) |
 | -------- | -------- | ------------------ | ------------------ |
-| user_1  | item_1  | 1.95               | 0                  |
-| user_1  | item_2  | 0.8                | 1                  |
-| user_1  | item_3  | 0.05               | 0                  |
+| user\_1  | item\_1  | 1.95               | 0                  |
+| user\_1  | item\_2  | 0.8                | 1                  |
+| user\_1  | item\_3  | 0.05               | 0                  |
 
 If the model prediction is a **rank**:
 
-| user_id | item_id | prediction (rank) | target (relevance) |
+| user\_id | item\_id | prediction (rank) | target (relevance) |
 | -------- | -------- | ----------------- | ------------------ |
-| user_1  | item_1  | 1                 | 0                  |
-| user_1  | item_2  | 2                 | 1                  |
-| user_1  | item_3  | 3                 | 0                  |
-
+| user\_1  | item\_1  | 1                 | 0                  |
+| user\_1  | item\_2  | 2                 | 1                  |
+| user\_1  | item\_3  | 3                 | 0                  |
 
 Example mapping:
 
@@ -268,6 +273,7 @@ definition = DataDefinition(
     ranking=[Recsys()]
     )
 ```
+
 Available options and defaults:
 
 ```python
@@ -276,3 +282,4 @@ Available options and defaults:
     target: str = "target"
     prediction: str = "prediction"
 ``
+```
