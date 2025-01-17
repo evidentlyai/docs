@@ -27,13 +27,9 @@ from evidently.future.datasets import Dataset
 from evidently.future.datasets import DataDefinition
 ```
 
-**Create a Dataset**. You can pass data with [flexible structure](/docs/library/overview#dataset).
+**Prepare your data**. You can pass data with [flexible structure](/docs/library/overview#dataset). Prepare it as a pandas.DataFrame.
 
-* Prepare it as a pandas.DataFrame.
-
-* Create an Evidently Dataset object using `Dataset.from_pandas`.
-
-* Pass the corresponding `data_definition`.
+**Create an Evidently Dataset** Create a Dataset object using `Dataset.from_pandas`, and pass the corresponding `data_definition`.
 
 For automated mapping, pass an empty `DataDefinition()`object:
 
@@ -50,9 +46,9 @@ eval_data = Dataset.from_pandas(
 
 **Two datasets.** If you have two datasets (like current and reference for drift detection), create a Dataset object for each. They must have identical data definition.
 
-**Automated data definition.**  You can often use automated mapping. If the data definition is not specified, Evidently tries to map columns:
+**Automated data definition.** You can often use the automated mapping like shown above. In this case, Evidently tries to map columns:
 
-* Based on type (numerical, categorical).
+* Based on their type (numerical, categorical).
 
 * By matching column names to known roles (e.g., a column "target" treated as target).
 
@@ -64,7 +60,7 @@ eval_data = Dataset.from_pandas(
 
 ## Column types
 
-Knowing the column type helps Evidently compute correct statistics, visualizations, and pick default tests. You only need to map the columns you plan to use in your evaluations.
+Knowing the column type helps Evidently compute correct statistics, visualizations, and pick default tests. 
 
 ### Text data
 
@@ -82,7 +78,7 @@ eval_data = Dataset.from_pandas(
 ```
 
 <Info>
-  **It's optional but useful**. For **LLM evals**, you can [generate text descriptors](/docs/library/descriptors) without explicitly mapping text columns. But it's a good idea to map them since you may later run dataset-level evaluations which vary by column type (like Dataset Summary).
+  **It's optional but useful**. You can [generate text descriptors](/docs/library/descriptors) without explicitly mapping text columns. But it's a good idea to map them since you may later run other evaluations which vary by column type (like Dataset Summary).
 </Info>
 
 ### Tabular data
@@ -109,7 +105,7 @@ Explicit mapping helps avoid mistakes like misclassifying numerical columns with
   If you **exclude** certain columns in mapping, they’ll be ignored in all evaluations.
 </Info>
 
-### Defaults
+### Default types
 
 If you do not pass explicit mapping, the following defaults apply:
 
@@ -149,7 +145,7 @@ definition = DataDefinition(
 
 When you generate [text descriptors](/docs/library/descriptors) and add them to the dataset, they are automatically mapped as `descriptors` in Data Definition. This means they will be included in the `TextEvals` [preset](/metrics/preset_text_evals) or treated as descriptors when you plot them on the dashboard.
 
-However, if you computed some scores or metadata externally and want to treat them as decriptors, you can map them explicitly:
+However, if you computed some scores or metadata externally and want to treat them as descriptors, you can map them explicitly:
 
 ```python
 definition = DataDefinition(
@@ -246,7 +242,7 @@ The **target** column can contain either:
 
 * a binary label (where `1` is a positive outcome)
 
-* any true labels or scores (any positive values, where a higher value corresponds to a better match or a more valuable user action).
+* any scores (positive values, where a higher value corresponds to a better match or a more valuable user action).
 
 Here are the examples of the expected data inputs.
 
