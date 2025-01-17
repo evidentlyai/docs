@@ -226,12 +226,22 @@
       ]
     },
     {
-      "group": "Tutorials",
+      "group": "LLM Tutorials",
       "pages": [
-        "examples/LLM_judge",
-        "examples/regression_testing",
         "examples/LLM_evals",
-        "examples/data_drift_monitoring"
+        "examples/LLM_regression_testing",
+        "examples/LLM_judge",
+        "examples/LLM_stress-testing",
+        "examples/LLM_summarization",
+        "examples/LLM_classification"
+      ]
+    },
+        {
+      "group": "ML Tutorials",
+      "pages": [
+        "examples/data_drift_monitoring",
+        "examples/data_quality_testing",
+        "examples/ML_monitoring"
       ]
     },
     {
