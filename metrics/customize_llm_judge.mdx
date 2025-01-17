@@ -10,9 +10,9 @@ noindex: "true"
 
 LLM-based descriptors use an external LLM for evaluation. You can:
 
-* use built-in evaluators (with pre-written prompts),
+* Use built-in evaluators (with pre-written prompts), or
 
-* run evals for custom criteria you configure.
+* Run evals for custom criteria you configure.
 
 ## Imports
 
@@ -73,7 +73,7 @@ There are built-in evaluators for popular criteria, like detecting toxicity or i
 
 * Default to using `gpt-4o-mini` model from OpenAI.
 
-* Returns a label, the reasoning for the decision, and an optional score.
+* Return a label, the reasoning for the decision, and an optional score.
 
 **OpenAI key.** Add the token as the environment variable: [see docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).&#x20;
 
@@ -100,9 +100,7 @@ Example output:
 
 ![](/images/examples/llm_judge_example_toxicity-min.png)
 
-**Run a multi-column eval.** Some descriptors like response relevance or completeness naturally require two columns.
-
-For example, to evaluate Context Quality ("does it have enough information to answer the question?"), you must run this evaluation over your `context` column, and pass the `question` column as a parameter.
+**Run a multi-column eval.** Some evaluators naturally require two columns. For example, to evaluate Context Quality ("does it have enough information to answer the question?"), you must run this evaluation over your `context` column, and pass the `question` column as a parameter.
 
 ```python
 eval_df.add_descriptors(descriptors=[
@@ -124,7 +122,7 @@ eval_df.add_descriptors(descriptors=[
 ])
 ```
 
-**Change the LLM**. You can choose to use a different model for the evals.
+**Change the LLM**. To choose to use a different model for the evals.
 
 ```python
 eval_df.add_descriptors(descriptors=[
@@ -138,15 +136,13 @@ You can also create a custom LLM evaluator using the provided **templates**:
 
 * Choose a template.
 
-* Specify the evaluation criteria (grading logic and names of categories).
+* Specify the evaluation criteria (grading logic and names of categories)
 
-* Run the descriptor specifying the model to use.
-
-Evidently will then generate the complete evaluation prompt to send to the LLM together with the evaluation data.
+Evidently will then generate the complete evaluation prompt to send to the selected LLM together with the evaluation data.
 
 ### Evaluate a single column
 
-**Binary classification template**. For example, to define the prompt for "conciseness" evaluation:
+**Binary classification template**. For example, to evaluate if the text is "concise":
 
 ```python
 conciseness = BinaryClassificationPromptTemplate(
@@ -164,7 +160,9 @@ conciseness = BinaryClassificationPromptTemplate(
         )      
 ```
 
-You do not need to explicitly ask the LLM to classify your input into two classes, ask for reasoning, or format the output. This is already part of the Evidently template.
+<Info>
+  You do **not** need to explicitly ask the LLM to classify your input into two classes, return reasoning, or format the output. This is already part of the Evidently template.
+</Info>
 
 To apply this descriptor for your data, pass the `template` name to the `LLMEval` descriptor:
 
@@ -221,11 +219,7 @@ Example output:
 
 ### Evaluate multiple columns
 
-An evaluator can use multiple columns. For example, to assess if the response is grounded in context. To implement this:
-
-* Mention the second `{column_name}` inside your evaluation `criteria.`
-
-* Note: you do **not** need to include the primary column name in the evaluation prompt, since it's already part of the template.
+A custom evaluator can also use multiple columns. To implement this, mention the second `{column_name}` inside your evaluation `criteria.`&#x20;
 
 **Example**. To evaluate if the response is faithful to the context:
 
@@ -253,6 +247,10 @@ hallucination = BinaryClassificationPromptTemplate(
         include_reasoning=True,
         )
 ```
+
+<Info>
+  You do **not** need to include the primary column name in the evaluation prompt, since it's already part of the template. You choose this column when you apply the descriptor.
+</Info>
 
 When applying the descriptor, include the second column using the `additional_columns` parameter:
 
