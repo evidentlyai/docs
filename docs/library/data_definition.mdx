@@ -27,9 +27,9 @@ from evidently.future.datasets import Dataset
 from evidently.future.datasets import DataDefinition
 ```
 
-**Prepare your data**. You can pass data with [flexible structure](/docs/library/overview#dataset). Prepare it as a pandas.DataFrame.
+**Prepare your data**. It can have [flexible structure](/docs/library/overview#dataset). Prepare it as a pandas.DataFrame.
 
-**Create an Evidently Dataset** Create a Dataset object using `Dataset.from_pandas`, and pass the corresponding `data_definition`.
+**Create an Evidently Dataset**. Create a Dataset object using `Dataset.from_pandas`, and pass the corresponding `data_definition`.
 
 For automated mapping, pass an empty `DataDefinition()`object:
 
@@ -78,7 +78,7 @@ eval_data = Dataset.from_pandas(
 ```
 
 <Info>
-  **It's optional but useful**. You can [generate text descriptors](/docs/library/descriptors) without explicitly mapping text columns. But it's a good idea to map them since you may later run other evaluations which vary by column type (like Dataset Summary).
+  **It's optional but useful**. You can [generate text descriptors](/docs/library/descriptors) without explicit mapping. But it's a good idea to map text columns since you may later run other evals which vary by column type (like Dataset Summary).
 </Info>
 
 ### Tabular data
