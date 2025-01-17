@@ -6,33 +6,19 @@ noindex: "true"
 
 **Pre-requisites**:
 
-* You know how to generate Reports or Test Suites with default parameters.
+* You know how to create [Reports](/docs/library/report) and [Tests](/docs/library/tests).
 
-* You know how to pass custom parameters for Reports or Test Suites.
+* You know how to use [Data Definition ](/docs/library/data_definition)to map column types.
 
-* You know how to use Column Mapping to set the input data type.
+**Data drift defaults**. All Presets, Metrics and Tests evaluate data drift use the default [Data Drift algorithm](/metrics/explainer_drift). It automatically selects an appropriate drift detection method based on the column type (text, categorical, numerical) and volume.
 
-# Default
+You can override the defaults by passing a custom parameter to the chosen Metric, or Preset. You can modify the drift detection method, the threshold, or both.
 
-All Presets, Tests, and Metrics that include data or target (prediction) drift evaluation use the default [Data Drift algorithm](/metrics/explainer_drift). It automatically selects an appropriate drift detection method based on the feature type and volume.
+## Data drift parameters
 
-You can override the defaults by passing a custom parameter to the chosen Test, Metric, or Preset. You can define the drift detection method, the threshold, or both.
+### Dataset-level
 
-# Examples
-
-To set a custom drift method and threshold on the **column level**:
-
-```python
-ColumnDriftMetric(column_name='feature1', stattest='wasserstein', stattest_threshold=0.2) 
-```
-
-If you have a Preset, Test or Metric that checks for drift in **multiple columns** at the same time, you can set a custom drift method for all columns, all numerical/categorical columns, or for each column individually.
-
-Here is how you set the drift detection method for all categorical columns:
-
-```python
-DataDriftPreset(cat_stattest='ks', cat_statest_threshold=0.05)
-```
+Share of drifting columns.
 
 To set a custom condition for the **dataset drift** (share of drifting columns in the dataset) in the relevant Metrics or Presets:
 
@@ -42,32 +28,48 @@ DatasetDriftMetric(drift_share=0.7)
 
 Note that this works slightly differently for Tests. To set a custom condition for the **dataset drift** when you run a relevant **Test**, you should set a condition for the share of drifted features using standard `lt` and `gt` parameters:
 
+Column-level parameters.&#x20;
+
+If you have a Preset, Test or Metric that checks for drift in **multiple columns** at the same time, you can set a custom drift method for all columns, all numerical/categorical columns, or for each column individually.
+
+Here is how you set the drift detection method for all categorical columns:
+
 ```python
-TestShareOfDriftedColumns(lt=0.5)
+DataDriftPreset(cat_stattest='ks', cat_statest_threshold=0.05)
 ```
+
+### Column-level
+
+To set a custom drift method and threshold on the **column level**:
+
+```python
+ColumnDriftMetric(column_name='feature1', stattest='wasserstein', stattest_threshold=0.2) 
+```
+
+| Parameter                                                  | Description                                                                                                                                                                                                                                                      | Applies To                                                 |
+| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `stattest`                                                 | Defines the drift detection method for a given column (if a single column is tested), or all columns in the dataset (if multiple columns are tested and the test can apply to all columns - eg. test works for both cat and num, or all columns are text, etc ). | `ValueDrift`, `DriftedColumnsCount()`, `DataDriftPreset()` |
+| `stattest_threshold`                                       | Sets the drift threshold in a given column or all columns.<br />The threshold meaning varies based on the drift detection method, e.g., it can be the value of a distance metric or a p-value of a statistical test.                                             | `ValueDrift`, `DriftedColumnsCount()`, `DataDriftPreset()` |
+| `drift_share`                                              | Defines the share of drifting columns as a condition for Dataset Drift in `DatasetDriftMetric` or inside a Preset.                                                                                                                                               | `DriftedColumnsCount()`, `DataDriftPreset()`               |
+| `cat_stattest` <br />`cat_stattest_threshold`              | Sets the drift method and/or threshold for all categorical columns in the dataset.                                                                                                                                                                               | `DriftedColumnsCount()`, `DataDriftPreset()`               |
+| `num_stattest` <br />`num_stattest_threshold`              | Sets the drift method and/or threshold for all numerical columns in the dataset.                                                                                                                                                                                 | `DriftedColumnsCount()`, `DataDriftPreset()`               |
+| `per_column_stattest`<br />`per_column_stattest_threshold` | Sets the drift method and/or threshold for the listed columns (accepts a dictionary).                                                                                                                                                                            | `DriftedColumnsCount()`, `DataDriftPreset()`               |
+| `text_stattest`                                            | Defines the drift detection method for all text columns in the dataset.                                                                                                                                                                                          | `DriftedColumnsCount()`, `DataDriftPreset()`               |
+| `text_stattest_threshold`                                  | Sets the threshold as a drift detection parameter for text method                                                                                                                                                                                                | `DriftedColumnsCount()`, `DataDriftPreset()`               |
+
+##
 
 When you set drift threshold for `ColumnDriftTest()`, you should use `stattest_threshold` and other parameters the same way as it works in Metrics (not `lt` and `gt`).
 
-# Tabular drift detection
+## Data drift detection methods
+
+### Tabular data
 
 The following methods and parameters apply to **tabular** data (as parsed automatically or specified as numerical or categorical columns in the column mapping).
 
-## Drift parameters - Tabular
-
 The following drift detection parameters are available in the `DataDriftTable()`, `DatasetDriftMetric()`, `ColumnDriftMetric()`, related Tests, and Presets that contain them.
 
-| Parameter                                                  | Description                                                                                                                                                                                                          |
-| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `stattest`                                                 | Defines the drift detection method for a given column (if a single column is tested), or all columns in the dataset (if multiple columns are tested).                                                                |
-| `stattest_threshold`                                       | Sets the drift threshold in a given column or all columns.<br />The threshold meaning varies based on the drift detection method, e.g., it can be the value of a distance metric or a p-value of a statistical test. |
-| `drift_share`                                              | Defines the share of drifting columns as a condition for Dataset Drift in `DatasetDriftMetric` or inside a Preset.                                                                                                   |
-| `cat_stattest` <br />`cat_stattest_threshold`              | Sets the drift method and/or threshold for all categorical columns in the dataset.                                                                                                                                   |
-| `num_stattest` <br />`num_stattest_threshold`              | Sets the drift method and/or threshold for all numerical columns in the dataset.                                                                                                                                     |
-| `per_column_stattest`<br />`per_column_stattest_threshold` | Sets the drift method and/or threshold for the listed columns (accepts a dictionary).                                                                                                                                |
-
 **How to check available parameters.** You can verify which parameters are available for a specific test, metric, or preset in the [All tests](../reference/all-tests.md) or [All metrics](../reference/all-metrics.md).
-
-## Drift detection methods - Tabular
 
 To use the following drift detection methods, pass them using the `stattest` parameter.
 
@@ -92,24 +94,11 @@ To use the following drift detection methods, pass them using the `stattest` par
 | `empirical_mmd`<br /> Empirical-MMD               | tabular data<br />only numerical                                                                                    | returns `p_value`<br />drift detected when `p_value < threshold`<br />default threshold: 0.05         |
 | `TVD`<br /> Total-Variation-Distance              | tabular data<br />only categorical                                                                                  | returns `p_value`<br />drift detected when `p_value` \< `threshold`<br />default threshold: 0.05      |
 
-# Text drift detection
+### Text data
 
 Text drift detection applies to columns with **raw text data**, as specified in column mapping.
 
-**Embedding drift detection.** If you work with embeddings, you can use [Embeddings Drift Detection methods](embeddings-drift-parameters.md).
-
-## Drift parameters - Text
-
 The following text drift detection parameters are available in the `DataDriftTable()`, `DatasetDriftMetric()`, `ColumnDriftMetric()`, related Tests and Presets that contain them.
-
-| Parameter                 | Description                                                                                                                                        |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `stattest`                | Defines the drift detection method for a given column that contains text data, or for all columns in the dataset if all columns contain text data. |
-| `stattest_threshold`      | Sets the threshold as a drift detection parameter.                                                                                                 |
-| `text_stattest`           | Defines the drift detection method for all text columns in the dataset.                                                                            |
-| `text_stattest_threshold` | Sets the threshold as a drift detection parameter.                                                                                                 |
-
-## Drift detection methods - Text
 
 To use the following text drift detection methods, pass them using the `stattest` parameter.
 
@@ -118,7 +107,9 @@ To use the following text drift detection methods, pass them using the `stattest
 | `perc_text_content_drift`<br /> Text content drift (domain classifier, with statistical hypothesis testing) | Applies only to text data. Trains a classifier model to distinguish between text in “current” and “reference” datasets.<br /><br />**Default for text data when less or eq to 1000 objects.** | <ul><li>returns `roc_auc` of the classifier as a `drift_score`</li><li>drift detected when `roc_auc` > possible ROC AUC of the random classifier at a set percentile</li><li>`threshold` sets the percentile of the possible ROC AUC values of the random classifier to compare against</li><li>default threshold: 0.95 (95th percentile)</li><li> `roc_auc` values can be 0 to 1 (typically 0.5 to 1); a higher value means more confident drift detection</li></ul> |
 | `abs_text_content_drift`<br /> Text content drift (domain classifier)                                       | Applies only to text data. Trains a classifier model to distinguish between text in “current” and “reference” datasets.<br /><br />**Default for text data when > 1000 objects.**             | <ul><li>returns `roc_auc` of the classifier as a `drift_score`</li><li>drift detected when `roc_auc` > `threshold` </li><li>`threshold` sets the ROC AUC threshold</li><li>default threshold: 0.55</li><li> `roc_auc` values can be 0 to 1 (typically 0.5 to 1); a higher value means more confident drift detection</li></ul>                                                                                                                                        |
 
-## Text descriptors drift
+**Embedding drift detection.** If you work with embeddings, you can use [Embeddings Drift Detection methods](embeddings-drift-parameters.md).
+
+**Text descriptors drift**
 
 You can also check for distribution drift in text descriptors (such as text length, etc.)
 
@@ -132,23 +123,6 @@ report = Report(metrics=[
 report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
 report
 ```
-
-how to pass parameters
-metrics vs tests if any diff
-
-link to the default algo
-
-### Multivariate drift
-
-available methods
-
-### Tabular columns
-
-available methods, example use
-
-### Text data
-
-available methods
 
 ## Add a custom method
 
