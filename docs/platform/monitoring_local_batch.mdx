@@ -18,7 +18,7 @@ Batch monitoring relies on the core evaluation API of the Evidently Python libra
 
 To get the dataset stats for a single batch and upload to the workspace:
 
-```
+```python
 eval_data = Dataset.from_pandas(
     pd.DataFrame(source_df),
     data_definition=DataDefinition()
