@@ -193,12 +193,12 @@
     {
       "group": "Metric Customization",
       "pages": [
-        "metrics/customize_metric",
         "metrics/customize_descriptor",
         "metrics/customize_llm_judge",
         "metrics/customize_hf_descriptor",
         "metrics/customize_data_drift",
-        "metrics/customize_embedding_drift"
+        "metrics/customize_embedding_drift",
+        "metrics/customize_metric",
       ]
     },
     {
