@@ -198,7 +198,7 @@
         "metrics/customize_hf_descriptor",
         "metrics/customize_data_drift",
         "metrics/customize_embedding_drift",
-        "metrics/customize_metric",
+        "metrics/customize_metric"
       ]
     },
     {
