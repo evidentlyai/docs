@@ -6,7 +6,7 @@ noindex: "true"
 
 In some tests and metrics, Evidently uses the default Data Drift Detection algorithm. It helps detect the distribution drift in the individual columns (features, prediction, or target). This page describes how the **default** algorithm works.
 
-This applies to: `DataDriftPreset`, `ValueDrift`, `DriftedColumnsCount`.&#x20;
+This applies to: `DataDriftPreset`, `ValueDrift`, `DriftedColumnsCount`.
 
 <Info>
   This is an explainer page. For API reference, check the guide on [setting data drift parameters](/metrics/customize_data_drift).
@@ -24,15 +24,15 @@ There is a default logic to choosing the appropriate drift test for each column.
 
 * the number of unique values in the column (n\_unique)
 
-On top of this, you can set a rule to detect dataset-level drift based on the number of columns that are drifted.&#x20;
+On top of this, you can set a rule to detect dataset-level drift based on the number of columns that are drifted.
 
 ## Data requirements
 
 **Two datasets**. You always need to pass two datasets: current (dataset evaluated for drift) and reference (dataset that serves as a benchmark).
 
-**Non-empty columns**. [](https://docs.evidentlyai.com/reference/data-drift-algorithm#empty-columns)To evaluate data or prediction drift in the dataset, you need to ensure that the columns you test for drift are not empty. If these columns are empty in either reference or current data, Evidently will not calculate distribution drift and will raise an error.
+**Non-empty columns**. To evaluate data or prediction drift in the dataset, you need to ensure that the columns you test for drift are not empty. If these columns are empty in either reference or current data, Evidently will not calculate distribution drift and will raise an error.
 
-[](https://docs.evidentlyai.com/reference/data-drift-algorithm#empty-values)**Empty values.** If some columns contain empty or infinite values (+-np.inf), these values will be filtered out when calculating distribution drift in the corresponding column.
+**Empty values.** If some columns contain empty or infinite values (+-np.inf), these values will be filtered out when calculating distribution drift in the corresponding column.
 
 <Note>
   By default, drift tests do **not** react to changes or increases in the number of empty values. Since the high number of nulls can be an important indicator, we recommend running separate tests on share of nulls in the dataset and/or columns. You can choose from several [tests](/metrics/all_metrics#column-data-quality).
@@ -84,7 +84,7 @@ For numerical features, you can also explore the values mapped in a plot.
 
 * The green area covers **one standard deviation** from the mean.
 
-ADD IMG
+![](/images/metrics/preset_data_drift_3-min.png)
 
 ## Text data drift
 
