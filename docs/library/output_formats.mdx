@@ -12,10 +12,10 @@ You can view or export Reports in multiple formats.
 
 ## Log to Workspace
 
-You can save the Report in Evidently Cloud or your local workspace.
+You can save the computed Report in Evidently Cloud or your local workspace.
 
 ```python
-ws.add_report(project.id, my_eval, include_data=False)
+ws.add_run(project.id, my_eval, include_data=False)
 ```
 
 <Info>
@@ -89,7 +89,7 @@ my_report.as_dataframe()
 This will return all relevant values that are computed inside the Metric as the metric result.
 
 <Note>
-**Get the full dataset**. You can also get a full original dataset with new row-level scores, like output-level text evaluations you compute. Check the guide on [descriptors](/docs/library/descriptors) for details.
+  **Get the full dataset**. You can also get a full original dataset with new row-level scores, like output-level text evaluations you compute. Check the guide on [descriptors](/docs/library/descriptors) for details.
 </Note>
 
 ## Evidently snapshot (TBC)
