@@ -24,9 +24,7 @@ You can also implement fully custom drift detection methods.
 
 ### Dataset-level
 
-You can set the share of drifting columns that signals **dataset drift** (default: 0.5) in the relevant Metrics or Presets.
-
-**Dataset drift share**. This will detect drift if over 70% are drifting, using default methods and thresholds for each column.
+**Dataset drift share**. You can set the share of drifting columns that signals **dataset drift** (default: 0.5) in the relevant Metrics or Presets. For example, to set it at 70%:
 
 ```python
 report = Report([
@@ -34,7 +32,9 @@ report = Report([
 ]
 ```
 
-**Drift methods**. You can also specify the drift detection methods: set one method for all columns, by type or individually.  For example, to use PSI (Population Stability Index) for all columns in the dataset:
+This will detect dataset drift if over 70% columns are drifting, using defaults for each column.
+
+**Drift methods**. You can also specify the drift detection methods used on the column level. For example, to use PSI (Population Stability Index) for all columns in the dataset:
 
 ```python
 report = Report([
@@ -42,15 +42,21 @@ report = Report([
 ]
 ```
 
-You can set the threshold for methods accordingly. For example, to use PSI for categorical columns only, with threshold of 0.5.&#x20;
+<Tip>
+  See all available methods in the table below.
+</Tip>
+
+This will check if over 70% columns are drifting, using PSI method with default thresholds.
+
+You can set thresholds for specific methods. For example, use PSI with a threshold of 0.3 for categorical columns.
 
 ```python
 report = Report([
-    DataDriftPreset(cat_stattest="psi", cat_stattest_threshold="0.5")
+    DataDriftPreset(cat_stattest="psi", cat_stattest_threshold="0.3")
 ]
 ```
 
-If PSI is greater or equal to 0.5 for any categorical column, the drift will be detected for that column. For other columns, default methods / thresholds apply. Overall dataset drift will be detected if over 50% of columns are drifting (defaults apply since nothing else is specified).
+If PSI is ≥ 0.3 for any categorical column, drift is detected for that column. Default methods and thresholds apply to other columns (e.g. numerical and text). Dataset drift is detected if over 50% of columns are drifting (default `drift_share` ).
 
 ### Column-level
 
@@ -78,7 +84,7 @@ report = Report([
 
 ### Tabular data
 
-The following methods apply to **tabular** data (numerical or categorical columns in data definition). Pass them using the `stattest` (or `num_stattest`, etc.) parameter.
+The following methods apply to **tabular** data: numerical or categorical columns in data definition. Pass them using the `stattest` (or `num_stattest`, etc.) parameter.
 
 | StatTest                                          | Applicable to                                                                                                       | Drift score                                                                                          |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -160,7 +166,7 @@ snapshot = report.run(dataset, dataset)
 snapshot
 ```
 
-To use the StatTest function, we recommended writing a specific instance of the StatTest class for that function. To create the instance of the `StatTest` class, you need:
+We recommended writing a specific instance of the **StatTest class** for that function. You need:
 
 | Parameter               | Type        | Description                                                                          |
 | ----------------------- | ----------- | ------------------------------------------------------------------------------------ |
@@ -169,17 +175,16 @@ To use the StatTest function, we recommended writing a specific instance of the 
 | `func`                  | `Callable`  | The StatTest function.                                                               |
 | `allowed_feature_types` | `List[str]` | The list of allowed feature types for this function (`cat`, `num`).                  |
 
-The StatTest function itself should match `(reference_data: pd.Series, current_data: pd.Series, threshold: float) -> Tuple[float, bool]` signature.
+The **StatTest function** itself should match `(reference_data: pd.Series, current_data: pd.Series, threshold: float) -> Tuple[float, bool]` signature. 
 
-| Parameter        | Type        | Description                                         |
-| ---------------- | ----------- | --------------------------------------------------- |
-| `reference_data` | `pd.Series` | The reference data series.                          |
-| `current_data`   | `pd.Series` | The current data series to compare.                 |
-| `feature_type`   | `str`       | The type of feature being analyzed.                 |
-| `threshold`      | `float`     | The statistical test threshold for drift detection. |
+Accepts:
+
+* `reference_data: pd.Series` - The reference data series.
+* `current_data: pd.Series` - The current data series to compare.
+* `feature_type: str` - The type of feature being analyzed.
+* `threshold: float` - The test threshold for drift detection.   
 
 Returns:
 
 * `score: float` - Stat Test score (actual value)
-
 * `drift_detected: bool` - indicates is drift detected with given threshold
