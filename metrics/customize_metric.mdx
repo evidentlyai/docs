@@ -4,7 +4,7 @@ description: 'How to create a custom dataset or column-level Metric.'
 noindex: "true"
 ---
 
-You can build fully custom Metrics/Tests to handle any column- or dataset-level evaluations. This lets you implement business metrics, weighted scores, and more.
+You can build fully custom Metrics/Tests to handle any column- or dataset-level evaluations. This lets you implement business metrics, weighted scores, etc.
 
 <Info>
   There are ways to customize your evals that do not require creating Metrics from scratch:
@@ -18,11 +18,11 @@ You can build fully custom Metrics/Tests to handle any column- or dataset-level 
 
 Creating a custom Metric involves:
 
-* (Required). Implementing the Metric calculation method.
+* (Required). Implementing the Metric **calculation method**.
 
-* (Optional). Defining the default Test conditions that apply when you run Tests for this Metric (with or without Reference).
+* (Optional). Defining the **default Test conditions** that apply when you run Tests for this Metric (with or without Reference) without passing a custom condition.
 
-* (Optional). Creating a custom visualization for this Metric using Plotly. If you skip this, the Metric will appear as a simple counter in the Report.
+* (Optional). Creating a **custom visualization** for this Metric using Plotly. If you skip this, the Metric will appear as a simple counter in the Report.
 
 Once you implement the Metric, you can use it as usual: include in Reports, view in the Evidently Cloud (or a self-hosted UI), and visualize over time on the Dashboard.
 
@@ -84,7 +84,7 @@ class MaxMetricImplementation(MetricCalculation[SingleValue, MyMaxMetric]):
         return f"Max value for {self.metric.column}"
 ```
 
-The default Test will checks if the max value is 0 (or within ±10% of the reference value). You can also set any custom threshold when calling the Metric.
+The default Test will checks if the max value is 0 (or within ±10% of the reference value). This applies if you invoke the Tests without setting a custom threshold. 
 
 This implementation uses the default (counter) render. Alternatively, you can define the widget as a Plotly figure.
 
