@@ -34,7 +34,7 @@ report = Report([
 ]
 ```
 
-**Drift methods**. You can also specify the drift detection methods: set one method for all columns (use `stattest`), by type (use `num_stattest` , `cat_statttest`, `text_stattest`) or individually (use `per_column_stattest`). If some columns are left out, defaults apply.&#x20;
+**Drift methods**. You can also specify the drift detection methods: set one method for all columns, by type or individually.&#x20;
 
 For example, to use PSI (Population Stability Index) for all columns in the dataset:
 
@@ -44,13 +44,15 @@ report = Report([
 ]
 ```
 
-You can set the threshold for methods accordingly. For example, to use PSI for categorical columns only, with threshold of 0.5. (If PSI is above, drift is detected for each column).
+You can set the threshold for methods accordingly. For example, to use PSI for categorical columns only, with threshold of 0.5.&#x20;
 
 ```python
 report = Report([
     DataDriftPreset(cat_stattest="psi", cat_stattest_threshold="0.5")
 ]
 ```
+
+If PSI is greater or equal to 0.5 for any categorical column, the drift will be detected for that column. For other columns, default methods / thresholds apply. Overall dataset drift will be detected if over 50% of columns are drifting (defaults apply since nothing else is specified).
 
 ### Column-level
 
@@ -68,7 +70,7 @@ report = Report([
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `stattest`                                                 | Defines the drift detection method for a given column (if one column is tested), or all columns in the dataset (if multiple columns are tested and the method can apply to all columns).                                   | `ValueDrift()`, `DriftedColumnsCount()`, `DataDriftPreset()` |
 | `stattest_threshold`                                       | Sets the drift threshold in a given column or all columns.<br /><br />The threshold meaning varies based on the drift detection method, e.g., it can be the value of a distance metric or a p-value of a statistical test. | `ValueDrift()`, `DriftedColumnsCount()`, `DataDriftPreset()` |
-| `drift_share`                                              | Defines the share of drifting columns as a condition for Dataset Drift.                                                                                                                                                    | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
+| `drift_share`                                              | Defines the share of drifting columns as a condition for Dataset Drift. Default: 0.5                                                                                                                                       | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
 | `cat_stattest` <br />`cat_stattest_threshold`              | Sets the drift method and/or threshold for all categorical columns.                                                                                                                                                        | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
 | `num_stattest` <br />`num_stattest_threshold`              | Sets the drift method and/or threshold for all numerical columns.                                                                                                                                                          | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
 | `per_column_stattest`<br />`per_column_stattest_threshold` | Sets the drift method and/or threshold for the listed columns (accepts a dictionary).                                                                                                                                      | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
