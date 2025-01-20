@@ -4,68 +4,125 @@ description: 'How to create a custom dataset or column-level Metric.'
 noindex: "true"
 ---
 
-There are two ways to add a custom Metric or Test to Evidently:
+You can build fully custom Metrics/Tests to handle any column- or dataset-level evaluations. This lets you implement business metrics, weighted scores, and more.
 
-\* Add it as a Python function (Recommended).
+<Info>
+  There are ways to customize your evals that do not require creating Metrics from scratch:
 
-\* Implement a custom metric with custom Plotly render.
+  * Add a [custom text descriptor](/metrics/customize_descriptor) for row-level evaluations.
 
+  * Use a built-in template to create a custom [LLM-based evaluator](/metrics/customize_llm_judge).
 
+  * Implement a [custom data drift](/metrics/customize_data_drift) detection method reusing existing renders.&#x20;
+</Info>
 
-Implementing a new Metric or Test means that you implement a completely custom column- or dataset-level evaluation.
+Creating a custom Metric involves:
 
+* (Required). Implementing the Metric calculation method.
 
+* (Optional). Defining the default Test conditions that apply when you run Tests for this Metric (with or without Reference).
 
-There are other ways to customize your evaluations that do not require creating Metrics or Tests from scratch:
+* (Optional). Creating a custom visualization for this Metric using Plotly. If you skip this, the Metric will appear as a simple counter in the Report.
 
-\* Add a custom descriptor for row-level evaluations. Read on \[adding custom text descriptors]\(add-custom-descriptor.md).
+Once you implement the Metric, you can use it as usual: include in Reports, view in the Evidently Cloud (or a self-hosted UI), and visualize over time on the Dashboard.
 
-\* Write a custom LLM-based evaluator using templates. Read on \[designing LLM judges]\(llm\_as\_a\_judge.md).
+## Example implementation
 
-\* Add a custom data drift detection method, re-using the existing Data Drift metric render. Read on \[drift method customization]\(add-custom-drift-method.md) option.
+<Note>
+  This is advanced functionality that assumes you’re comfortable working with the codebase. Refer to existing metrics for examples. To implement the visualization, you must be familiar with **Plotly**.
+</Note>
 
+Let's implement `MyMaxMetric` which calculates the maximum value in a column.
 
+Imports:
 
-\# 1. Add a new Metric or Test as a Python function. (Recommended).
+```python
+from evidently.future.report import Report
+from evidently.future.report import Context
+from evidently.future.datasets import Dataset
+from evidently.future.metric_types import Metric
+from evidently.future.metric_types import MetricResult
+from evidently.future.metric_types import MetricTestResult
+from evidently.future.metric_types import SingleValue
+from evidently.future.metric_types import SingleValueTest
+from evidently.future.metric_types import MetricCalculation
+from evidently.future.metric_types import MetricId
+from evidently.future.metric_types import SingleValueMetric
+from evidently.future.metric_types import TResult
+from evidently.future.preset_types import PresetResult
+from evidently.future.metric_types import BoundTest
+from evidently.future.tests import Reference, eq
+from typing import Optional
+from typing import List
+from plotly.express import line
+```
 
+Implementation:
 
+```python
+class MyMaxMetric(SingleValueMetric):
+    column: str
 
-You can implement any custom Metric or Test as a Python function. The visual render in the Report will default to a simple counter.&#x20;
+    def _default_tests(self) -> List[BoundTest]:
+        return [eq(0).bind_single(self.get_fingerprint())]
 
+    def _default_tests_with_reference(self) -> List[BoundTest]:
+        return [eq(Reference(relative=0.1)).bind_single(self.get_fingerprint())]
 
+# implementation
+class MaxMetricImplementation(MetricCalculation[SingleValue, MyMaxMetric]):
+    def calculate(self, context: Context, current_data: Dataset, reference_data: Optional[Dataset]) -> SingleValue:
+        x = current_data.column(self.metric.column).data
+        value = x.max()
+        result = SingleValue(value=value)
+        figure = line(x)
+        figure.add_hrect(6, 10)
+        #result.set_widget([plotly_figure(title=self.display_name(), figure=figure)])
+        return result
 
-This is a recommended path to add custom Metrics. Using this method, you can send Reports with custom Metrics to Evidently Cloud (or view them in the self-hosted Monitoring UI).
+    def display_name(self) -> str:
+        return f"Max value for {self.metric.column}"
+```
 
+The default Test will checks if the max value is 0 (or within ±10% of the reference value). You can also set any custom threshold when calling the Metric.
 
+This implementation uses the default (counter) render. Alternatively, you can define the widget as a Plotly figure.
 
-Example notebook:&#x20;
+## Example use
 
+Once implemented, you can reference your custom Metric in a Report as usual.
 
+Let’s create a sample toy dataset:
 
-\# 2. Implement a new Metric and Test from scratch.&#x20;
+```python
+import pandas as pd
+import numpy as np
+from evidently.future.datasets import DataDefinition
 
+data = {
+    "Item": [f"Item_{i}" for i in range(1, 11)],
+    "Quantity": np.random.randint(1, 50, size=10),
+    "Sales": np.random.uniform(100, 5000, size=10).round(2),
+}
 
+df = pd.DataFrame(data)
 
-You can also implement a new Metric or Test from scratch, defining both the calculation method and the optional visualization.&#x20;
+dataset = Dataset.from_pandas(
+    pd.DataFrame(df),
+    data_definition=DataDefinition()
+)
+```
 
+Add my `MyMaxMetric` to the Report:
 
+```python
+report = Report([
+    MyMaxMetric(column="Sales")
+])
+my_eval = report.run(dataset, None)
+my_eval
+```
 
-This is suitable if you want to access the new Metric (or Test) only in a Report or a Test Suite. However, you won't be able to view such custom Metrics in the Monitoring user interface or Evidently Cloud since the code that defines the custom render won't be accessible from the UI service.&#x20;
-
-
-
-\*\*Note\*\*: this is advanced functionality that expects you to be able to work with the codebase independently. To implement the visualization, you should be familiar with Plotly.&#x20;
-
-You can use the metrics and tests in the codebase as an example.
-
-
-
-This example Jupyter notebook shows how to implement a simple metric and test and include them in a custom Report and Test Suite:
-
-
-
-\# Open a GitHub issue&#x20;
-
-
-
-If you want to suggest adding specific metrics and tests that are currently not covered to the core library, you can also \[open a GitHub issue]\(https://github.com/evidentlyai/evidently/issues) with the feature request or a proposal of the new Metric you'd like to contribute.
+<Note>
+  Want a Metric added to the core library? Share your idea or feature request by [opening a GitHub issue](https://github.com/evidentlyai/evidently/issues).
+</Note>
