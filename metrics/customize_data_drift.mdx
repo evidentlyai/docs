@@ -34,9 +34,7 @@ report = Report([
 ]
 ```
 
-**Drift methods**. You can also specify the drift detection methods: set one method for all columns, by type or individually.&#x20;
-
-For example, to use PSI (Population Stability Index) for all columns in the dataset:
+**Drift methods**. You can also specify the drift detection methods: set one method for all columns, by type or individually.  For example, to use PSI (Population Stability Index) for all columns in the dataset:
 
 ```python
 report = Report([
@@ -162,7 +160,16 @@ snapshot = report.run(dataset, dataset)
 snapshot
 ```
 
-The StatTest function should match `(reference_data: pd.Series, current_data: pd.Series, threshold: float) -> Tuple[float, bool]` signature.
+To use the StatTest function, we recommended writing a specific instance of the StatTest class for that function. To create the instance of the `StatTest` class, you need:
+
+| Parameter               | Type        | Description                                                                          |
+| ----------------------- | ----------- | ------------------------------------------------------------------------------------ |
+| `name`                  | `str`       | A short name used to reference the Stat Test from the options (registered globally). |
+| `display_name`          | `str`       | A long name displayed in the Report.                                                 |
+| `func`                  | `Callable`  | The StatTest function.                                                               |
+| `allowed_feature_types` | `List[str]` | The list of allowed feature types for this function (`cat`, `num`).                  |
+
+The StatTest function itself should match `(reference_data: pd.Series, current_data: pd.Series, threshold: float) -> Tuple[float, bool]` signature.
 
 | Parameter        | Type        | Description                                         |
 | ---------------- | ----------- | --------------------------------------------------- |
@@ -176,12 +183,3 @@ Returns:
 * `score: float` - Stat Test score (actual value)
 
 * `drift_detected: bool` - indicates is drift detected with given threshold
-
-To use the StatTest function, we recommended writing a specific instance of the StatTest class for that function. To create the instance of the `StatTest` class, you need:
-
-| Parameter               | Type        | Description                                                                          |
-| ----------------------- | ----------- | ------------------------------------------------------------------------------------ |
-| `name`                  | `str`       | A short name used to reference the Stat Test from the options (registered globally). |
-| `display_name`          | `str`       | A long name displayed in the Report.                                                 |
-| `func`                  | `Callable`  | The StatTest function.                                                               |
-| `allowed_feature_types` | `List[str]` | The list of allowed feature types for this function (`cat`, `num`).                  |
