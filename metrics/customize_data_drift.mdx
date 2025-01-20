@@ -48,7 +48,7 @@ report = Report([
 
 This will check if over 70% columns are drifting, using PSI method with default thresholds.
 
-You can set thresholds for specific methods. For example, use PSI with a threshold of 0.3 for categorical columns.
+**Drift thresholds**. You can set thresholds for each method. For example, use PSI with a threshold of 0.3 for categorical columns.
 
 ```python
 report = Report([
@@ -56,7 +56,7 @@ report = Report([
 ]
 ```
 
-If PSI is ≥ 0.3 for any categorical column, drift is detected for that column. Default methods and thresholds apply to other columns (e.g. numerical and text). Dataset drift is detected if over 50% of columns are drifting (default `drift_share` ).
+In this case, if PSI is ≥ 0.3 for any categorical column, drift is detected for that column. Default methods and thresholds apply to other columns (e.g. numerical and text). Dataset drift is detected if over 50% of columns are drifting (default `drift_share` applies).
 
 ### Column-level
 
