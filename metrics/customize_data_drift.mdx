@@ -4,7 +4,7 @@ description: 'How to change data drift detection methods and conditions.'
 noindex: "true"
 ---
 
-All Metrics and Presets that evaluate shift in data distribitions use the default [Data Drift algorithm](/metrics/explainer_drift). It automatically selects an appropriate drift detection method based on the column type (text, categorical, numerical) and volume.
+All Metrics and Presets that evaluate shift in data distributions use the default [Data Drift algorithm](/metrics/explainer_drift). It automatically selects the drift detection method based on the column type (text, categorical, numerical) and volume.
 
 You can override the defaults by passing a custom parameter to the chosen Metric or Preset. You can modify the drift detection method (choose from 20+ available), thresholds, or both.
 
@@ -18,11 +18,17 @@ You can also implement fully custom drift detection methods.
 
 ## Data drift parameters
 
+<Note>
+  Setting conditions for data drift works differently from the usual Test  API (with `gt`, `lt`, etc.) This accounts for nuances like varying role of thresholds across drift detection methods, where "greater"  can be better or worse depending on the method.&#x20;
+</Note>
+
+You can set conditions not only for Tests, but also for Metrics.&#x20;
+
 ### Dataset-level
 
-You can configure the share of drifting columns that is associated with the **dataset drift** (share of drifting columns in the dataset) in the relevant Metrics or Presets.
+You can set the share of drifting columns that signals **dataset drift** (default: 0.5) in the relevant Metrics or Presets.
 
-This will detect drift if over 70% are drifting.
+**Dataset drift share**. This will detect drift if over 70% are drifting, using default methods and thresholds for each column.
 
 ```python
 report = Report([
@@ -30,9 +36,9 @@ report = Report([
 ]
 ```
 
-For Presets / Metrics that checks for drift in **multiple columns** at the same time, you can set a custom drift method for all columns, all numerical/categorical columns, or for each column individually.
+**Drift methods**. You can specify the drift detection methods on the column level. You can set one method for all columns (use `stattest`), by type (use `num_stattest` , `cat_statttest`, `text_stattest`) or individually (use `per_column_stattest`). If some columns are left out, defaults apply.&#x20;
 
-For example, to set the data drift method that will apply to all columns in the dataset. (Requires the method to be supported for all column types).
+For example, to use PSI (Population Stability Index) for all columns in the dataset:
 
 ```python
 report = Report([
@@ -40,7 +46,7 @@ report = Report([
 ]
 ```
 
-This configures PSI as as drift detection method for categorical columns only, with threshold of 0.5. (If the value is higher, drifted detected for this column).
+You can set the threshold for methods accordingly. For example, to use PSI for categorical columns only, with threshold of 0.5. (If PSI is above, drift is detected for each column).
 
 ```python
 report = Report([
@@ -48,13 +54,9 @@ report = Report([
 ]
 ```
 
-<Note>
-  Note that this works differently from the usual Test conditions API (with `gt`, `lt`, etc.) This allows to automatically account for nuances like understanding that different drift detection methods have different interpretation of the threshold: depending on the method, greater can be better or worse.
-</Note>
-
 ### Column-level
 
-When you are using column-level metrics, you can set the condition directly for each evaluated column:
+For column-level metrics, you can set the drift method/threshold directly for each column:
 
 ```python
 report = Report([
@@ -66,7 +68,7 @@ report = Report([
 
 | Parameter                                                  | Description                                                                                                                                                                                                                | Applies To                                                   |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `stattest`                                                 | Defines the drift detection method for a given column (if one column is tested), or all columns in the dataset (if multiple columns are tested and the test can apply to all columns).                                     | `ValueDrift()`, `DriftedColumnsCount()`, `DataDriftPreset()` |
+| `stattest`                                                 | Defines the drift detection method for a given column (if one column is tested), or all columns in the dataset (if multiple columns are tested and the method can apply to all columns).                                   | `ValueDrift()`, `DriftedColumnsCount()`, `DataDriftPreset()` |
 | `stattest_threshold`                                       | Sets the drift threshold in a given column or all columns.<br /><br />The threshold meaning varies based on the drift detection method, e.g., it can be the value of a distance metric or a p-value of a statistical test. | `ValueDrift()`, `DriftedColumnsCount()`, `DataDriftPreset()` |
 | `drift_share`                                              | Defines the share of drifting columns as a condition for Dataset Drift.                                                                                                                                                    | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
 | `cat_stattest` <br />`cat_stattest_threshold`              | Sets the drift method and/or threshold for all categorical columns in the dataset.                                                                                                                                         | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
@@ -78,7 +80,7 @@ report = Report([
 
 ### Tabular data
 
-The following methods and parameters apply to **tabular** data (numerical or categorical columns in data definition). Pass them using the `stattest` (or `num_stattest`, etc.) parameter.
+The following methods apply to **tabular** data (numerical or categorical columns in data definition). Pass them using the `stattest` (or `num_stattest`, etc.) parameter.
 
 | StatTest                                          | Applicable to                                                                                                       | Drift score                                                                                          |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -110,11 +112,13 @@ Text drift detection applies to columns with **raw text data**, as specified in 
 | `perc_text_content_drift`<br /> Text content drift (domain classifier, with statistical hypothesis testing) | Applies only to text data. Trains a classifier model to distinguish between text in “current” and “reference” datasets.<br /><br />**Default for text data when less or eq to 1000 objects.** | <ul><li>returns `roc_auc` of the classifier as a `drift_score`</li><li>drift detected when `roc_auc` > possible ROC AUC of the random classifier at a set percentile</li><li>`threshold` sets the percentile of the possible ROC AUC values of the random classifier to compare against</li><li>default threshold: 0.95 (95th percentile)</li><li> `roc_auc` values can be 0 to 1 (typically 0.5 to 1); a higher value means more confident drift detection</li></ul> |
 | `abs_text_content_drift`<br /> Text content drift (domain classifier)                                       | Applies only to text data. Trains a classifier model to distinguish between text in “current” and “reference” datasets.<br /><br />**Default for text data when > 1000 objects.**             | <ul><li>returns `roc_auc` of the classifier as a `drift_score`</li><li>drift detected when `roc_auc` > `threshold` </li><li>`threshold` sets the ROC AUC threshold</li><li>default threshold: 0.55</li><li> `roc_auc` values can be 0 to 1 (typically 0.5 to 1); a higher value means more confident drift detection</li></ul>                                                                                                                                        |
 
-**Text descriptors drift**. If you work with raw text data, you can also check for distribution drift in text descriptors (such as text length, etc.) To use this method, first compute the selected [text descriptors](/docs/library/descriptors). Then, use numerical / categorical drift detection methods as usual.
+<Tip>
+  **Text descriptors drift**. If you work with raw text data, you can also check for distribution drift in text descriptors (such as text length, etc.) To use this method, first compute the selected [text descriptors](/docs/library/descriptors). Then, use numerical / categorical drift detection methods as usual.
+</Tip>
 
 ## Add a custom method
 
-If you do not find a suitable drift detection method, you can implement a custom function.
+If you do not find a suitable drift detection method, you can implement a custom function:
 
 ```
 from scipy.stats import anderson_ksamp
@@ -158,15 +162,14 @@ snapshot = report.run(dataset, dataset)
 snapshot
 ```
 
-The StatTest function should match `(reference_data: pd.Series, current_data: pd.Series, threshold: float) -> Tuple[float, bool]` signature:
+The StatTest function should match `(reference_data: pd.Series, current_data: pd.Series, threshold: float) -> Tuple[float, bool]` signature.
 
-* `reference_data: pd.Series` - reference data series
-
-* `current_data: pd.Series` - current data series to compare
-
-* `feature_type: str` - feature type
-
-* `threshold: float` - Stat Test threshold for drift detection
+| Parameter        | Type        | Description                                         |
+| ---------------- | ----------- | --------------------------------------------------- |
+| `reference_data` | `pd.Series` | The reference data series.                          |
+| `current_data`   | `pd.Series` | The current data series to compare.                 |
+| `feature_type`   | `str`       | The type of feature being analyzed.                 |
+| `threshold`      | `float`     | The statistical test threshold for drift detection. |
 
 Returns:
 
@@ -176,10 +179,9 @@ Returns:
 
 To use the StatTest function, we recommended writing a specific instance of the StatTest class for that function. To create the instance of the `StatTest` class, you need:
 
-* `name: str` - a short name used to reference the Stat Test from the options (the StatTest should be registered globally)
-
-* `display_name: str` - a long name displayed in the Dashboard and Profile
-
-* `func: Callable` - a StatTest function
-
-* `allowed_feature_types: List[str]` - the list of allowed feature types to which this function can be applied (available values: `cat`, `num`)
+| Parameter               | Type        | Description                                                                          |
+| ----------------------- | ----------- | ------------------------------------------------------------------------------------ |
+| `name`                  | `str`       | A short name used to reference the Stat Test from the options (registered globally). |
+| `display_name`          | `str`       | A long name displayed in the Report.                                                 |
+| `func`                  | `Callable`  | The StatTest function.                                                               |
+| `allowed_feature_types` | `List[str]` | The list of allowed feature types for this function (`cat`, `num`).                  |
