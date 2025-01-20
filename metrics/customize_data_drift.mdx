@@ -175,16 +175,20 @@ We recommended writing a specific instance of the **StatTest class** for that fu
 | `func`                  | `Callable`  | The StatTest function.                                                               |
 | `allowed_feature_types` | `List[str]` | The list of allowed feature types for this function (`cat`, `num`).                  |
 
-The **StatTest function** itself should match `(reference_data: pd.Series, current_data: pd.Series, threshold: float) -> Tuple[float, bool]` signature. 
+The **StatTest function** itself should match `(reference_data: pd.Series, current_data: pd.Series, threshold: float) -> Tuple[float, bool]` signature.
 
 Accepts:
 
 * `reference_data: pd.Series` - The reference data series.
+
 * `current_data: pd.Series` - The current data series to compare.
+
 * `feature_type: str` - The type of feature being analyzed.
-* `threshold: float` - The test threshold for drift detection.   
+
+* `threshold: float` - The test threshold for drift detection.
 
 Returns:
 
 * `score: float` - Stat Test score (actual value)
+
 * `drift_detected: bool` - indicates is drift detected with given threshold

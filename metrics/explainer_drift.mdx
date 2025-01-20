@@ -4,26 +4,51 @@ description: "How data drift detection works"
 noindex: "true"
 ---
 
-## Input data requirements
+In some tests and metrics, Evidently uses the default Data Drift Detection algorithm. It helps detect the distribution drift in the individual columns (features, prediction, or target). This page describes how the **default** algorithm works.
 
-#### [](https://docs.evidentlyai.com/reference/data-drift-algorithm#empty-columns)&#xA;Empty columns
+This applies to: `DataDriftPreset`, `ValueDrift`, `DriftedColumnsCount`.&#x20;
 
-To evaluate data or prediction drift in the dataset, you need to ensure that the columns you test for drift are not empty. If these columns are empty in either reference or current data, Evidently will not calculate distribution drift and will raise an error.
+<Info>
+  This is an explainer page. For API reference, check the guide on [setting data drift parameters](/metrics/customize_data_drift).
+</Info>
 
-[](https://docs.evidentlyai.com/reference/data-drift-algorithm#empty-values)
-**Empty values**
+## How it works
 
-If some columns contain empty or infinite values (+-np.inf), these values will be filtered out when calculating distribution drift in the corresponding column.
+Evidently compares the distributions of the values in a given column (or columns) of the two datasets. You should pass these datasets as **reference** and **current**. Evidently applies several statistical tests and drift detection methods to detect if the distribution has changed significantly. It returns a "drift detected" or "not detected" result.
 
-By default, drift tests do not react to changes or increases in the number of empty values. Since the high number of nulls can be an important indicator, we recommend grouping the data drift tests (that check for distribution shift) with data integrity tests (that check for a share of nulls). You can choose from several null-related [tests](https://docs.evidentlyai.com/reference/all-tests#data-integrity) and metrics and set a threshold.
+There is a default logic to choosing the appropriate drift test for each column. It is based on:
+
+* column type: categorical, numerical, text data or embeddings
+
+* the number of observations in the reference dataset
+
+* the number of unique values in the column (n\_unique)
+
+On top of this, you can set a rule to detect dataset-level drift based on the number of columns that are drifted.&#x20;
+
+## Data requirements
+
+**Two datasets**. You always need to pass two datasets: current (dataset evaluated for drift) and reference (dataset that serves as a benchmark).
+
+**Non-empty columns**. [](https://docs.evidentlyai.com/reference/data-drift-algorithm#empty-columns)To evaluate data or prediction drift in the dataset, you need to ensure that the columns you test for drift are not empty. If these columns are empty in either reference or current data, Evidently will not calculate distribution drift and will raise an error.
+
+[](https://docs.evidentlyai.com/reference/data-drift-algorithm#empty-values)**Empty values.** If some columns contain empty or infinite values (+-np.inf), these values will be filtered out when calculating distribution drift in the corresponding column.
+
+<Note>
+  By default, drift tests do **not** react to changes or increases in the number of empty values. Since the high number of nulls can be an important indicator, we recommend running separate tests on share of nulls in the dataset and/or columns. You can choose from several [tests](/metrics/all_metrics#column-data-quality).
+</Note>
+
+## Dataset drift
+
+With Presets like `DatasetDriftPreset()` and Metrics like `DriftedColumnsCount(),`  you can also set a rule on top of the individual column drift results to detect dataset-level drift.
+
+For example, you can declare dataset drift if 50% of all features (columns) drifted. In this case, each column in the Dataset is tested for drift individually using a default method for the column type. You can specify a custom threshold as a [parameter](/metrics/customize_data_drift).
+
+![](/images/metrics/preset_data_drift_2-min.png)
 
 ## Tabular data drift
 
-#### For numerical features, you can also explore the values mapped in a plot.
-
-* The dark green line is the **mean**, as seen in the reference dataset.
-
-* The green area covers **one standard deviation** from the mean.
+The following defaults apply for tabular data: numerical and categorical columns.
 
 For **small data with \<= 1000 observations** in the reference dataset:
 
@@ -33,7 +58,9 @@ For **small data with \<= 1000 observations** in the reference dataset:
 
 * For binary categorical features (n\_unique \<= 2): proportion difference test for independent samples based on Z-score.
 
-All tests use a 0.95 confidence level by default.
+<Info>
+  All tests use a 0.95 confidence level by default.
+</Info>
 
 For **larger data with > 1000 observations** in the reference dataset:
 
@@ -41,57 +68,65 @@ For **larger data with > 1000 observations** in the reference dataset:
 
 * For categorical columns or numerical with n\_unique \<= 5):[Jensen--Shannon divergence](https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence).
 
-All metrics use a threshold = 0.1 by default.
+<Info>
+  All metrics use a threshold = 0.1 by default.
+</Info>
 
-**You can always modify this drift detection logic**. You can select any of the statistical tests available in the library (including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc.), specify custom thresholds, or pass a custom test. You can read more about using [data drift parameters and available drift detection methods](https://docs.evidentlyai.com/user-guide/customization/options-for-statistical-tests).
+**You can always modify this drift detection logic**. You can select any of the statistical tests available in the library (including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc.), specify custom thresholds, or pass a custom test. You can read more about using [data drift parameters and available drift detection methods](/metrics/customize_data_drift).
+
+You can see the distribution of each individual column inside the `DataDriftPreset` or using `ValueDrift` metric:
+
+![](/images/metrics/preset_data_drift-min.png)
+
+For numerical features, you can also explore the values mapped in a plot.
+
+* The dark green line is the **mean**, as seen in the reference dataset.
+
+* The green area covers **one standard deviation** from the mean.
+
+ADD IMG
 
 ## Text data drift
 
-Text content drift using a **domain classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions.
+Text content drift using a **domain classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions. This approach helps identify how well a machine learning model can distinguish between current and reference data.
 
 <Info>
-  You can read more about the domain classifier approach in the [paper ](https://arxiv.org/pdf/1810.11953.pdf)“Failing Loudly: An Empirical Study of Methods for Detecting Dataset Shift.”&#x20;
+  You can read more about the domain classifier approach in the [paper ](https://arxiv.org/pdf/1810.11953.pdf)“Failing Loudly: An Empirical Study of Methods for Detecting Dataset Shift.”
 </Info>
 
-The default for **small data with \<= 1000 observations** detects drift if the ROC AUC of the drift detection classifier > possible ROC AUC of the random classifier at a 95th percentile.
+The drift score in this case is the ROC AUC of the resulting classifier.
 
-The default for **larger data with > 1000 observations** detects drift if the ROC AUC > 0.55.
+* The default for **small data with \<= 1000 observations** detects drift if the ROC AUC of the drift detection classifier > possible ROC AUC of the random classifier at a 95th percentile.
 
-For small data, the drift score is the ROC-AUC score of the domain classifier computed on a validation dataset. The ROC AUC of the created classifier is compared to the ROC AUC of the random classifier at a set percentile. To ensure the result is statistically meaningful, we repeat the calculation 1000 times with randomly assigned target class probabilities. This produces a distribution with a mean of 0,5. We then take the 95th percentile (default) of this distribution and compare it to the ROC-AUC score of the classifier. If the classifier score is higher, we consider the data drift to be detected. You can also set a different percentile as a parameter.
-
-For large data, the ROC AUC of the obtained classifier is directly compared against the set ROC AUC threshold.
-
-This approach helps identify **how well a machine learning model can distinguish** between current and reference data. It also **protects against false positive** drift results for small datasets since we explicitly compare the classifier score against the “best random score” we could obtain. 
-
-If the drift is detected, Evidently will also calculate the **top features of the domain classifier**. The resulting output contains specific characteristic words that help identify whether a given sample belongs to reference or current. They normalized based on vocabulary, for example, to exclude non-interpretable words like articles.
+* The default for **larger data with > 1000 observations** detects drift if the ROC AUC > 0.55.
 
 <Info>
-  **You can also check for drift in Text Descriptors**. There is an additional method that detects drift in Text Descriptors (such as text length, share of OOV words). This test is available as part of [Text Overview Preset](https://docs.evidentlyai.com/presets/text-overview). You can also include it as a **TextDescriptorsDriftMetric()** in a custom Report, or in a Test Suite accordingly.
+  For **small text data**, the drift score is the ROC-AUC score of the domain classifier computed on a validation dataset. The ROC AUC of the created classifier is compared to the ROC AUC of the random classifier at a set percentile. To ensure the result is statistically meaningful, we repeat the calculation 1000 times with randomly assigned target class probabilities. This produces a distribution with a mean of 0.5. We then take the 95th percentile (default) of this distribution and compare it to the ROC-AUC score of the classifier. If the classifier score is higher, we consider the data drift to be detected. You can also set a different percentile as a parameter.
+
+  For **large text data,** the ROC AUC of the obtained classifier is directly compared against the set ROC AUC threshold.
 </Info>
+
+This approach **protects against false positive** drift results for small datasets since we explicitly compare the classifier score against the “best random score” we could obtain. 
+
+If the drift is detected, Evidently will also calculate the **top features of the domain classifier**. The resulting output contains specific characteristic words that help identify whether a given sample belongs to reference or current. They are normalized based on vocabulary, for example, to exclude non-interpretable words such as articles.
+
+<Tip>
+  **Text descriptors drift**. If you work with raw text data, you can also check for distribution drift in text descriptors (such as text length, etc.) To use this method, first compute the selected [text descriptors](/docs/library/descriptors). Then, use numerical / categorical drift detection methods as usual.
+</Tip>
 
 ## Embeddings drift
 
+<Note>
+  This method is pending implementation for the new Evidently API. You can access the existing implementation.
+</Note>
+
 Embedding drift using a **classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions.
 
-The default for **small data with \<= 1000 observations** detects drift if the ROC AUC of the drift detection classifier > possible ROC AUC of the random classifier at a 95th percentile.
+* The default for **small data with \<= 1000 observations** detects drift if the ROC AUC of the drift detection classifier > possible ROC AUC of the random classifier at a 95th percentile.
 
-The default for **larger data with > 1000 observations** detects drift if the ROC AUC > 0.55.
+* The default for **larger data with > 1000 observations** detects drift if the ROC AUC > 0.55.
 
-**You can choose other embedding drift detection methods**. You can specify custom thresholds and parameters such as dimensionality reduction and choose from other methods, including Euclidean distance, Cosine Similarity, Maximum Mean Discrepancy, and share of drifted embeddings. You must specify this as a [parameter](https://docs.evidentlyai.com/user-guide/customization/embeddings-drift-parameters).
-
-## Dataset-level drift
-
-With Presets like `DatasetDriftPreset()`, Metrics like `DatasetDriftMetric()` or Tests like `TestShareOfDriftedColumns()` you can also set a rule on top of the individual feature drift results to detect dataset-level drift.
-
-For example, you can declare dataset drift if 50% of all features (columns) drifted or if ⅓ of the most important features drifted. **The default in `DatasetDriftPreset()` is 0.5**.
-
-Note that by default this includes all columns in the dataset. Suppose your dataset contains the prediction column, and you want to separate it from input drift detection. In that case, you should pre-process your dataset to exclude it or specify a list of columns you want to test for drift, and pass the list as a parameter.
-
-The descriptors are treated as tabular features. The default drift detection methods for tabular features apply.
-
-**You can set different thresholds**. You can specify a custom threshold as a [parameter](https://docs.evidentlyai.com/user-guide/customization/options-for-statistical-tests).
-
-##
+**You can choose other embedding drift detection methods**. You can specify custom thresholds and parameters such as dimensionality reduction and choose from other methods, including Euclidean distance, Cosine Similarity, Maximum Mean Discrepancy, and share of drifted embeddings. You must specify this as a [parameter](/metrics/customize_embedding_drift).
 
 ## Resources
 
@@ -110,7 +145,3 @@ Additional links:
 * ["My data drifted. What's next?" How to handle ML model drift in production.](https://evidentlyai.com/blog/ml-monitoring-data-drift-how-to-handle)
 
 * [What is the difference between outlier detection and data drift detection?](https://evidentlyai.com/blog/ml-monitoring-drift-detection-vs-outlier-detection)
-
-## [](https://docs.evidentlyai.com/reference/data-drift-algorithm#resources)
-
-## [](https://docs.evidentlyai.com/reference/data-drift-algorithm#input-data-requirements)
