@@ -42,11 +42,11 @@ report = Report([
 ]
 ```
 
+This will check if over 70% columns are drifting, using PSI method with default thresholds.
+
 <Tip>
   See all available methods in the table below.
 </Tip>
-
-This will check if over 70% columns are drifting, using PSI method with default thresholds.
 
 **Drift thresholds**. You can set thresholds for each method. For example, use PSI with a threshold of 0.3 for categorical columns.
 
@@ -56,7 +56,7 @@ report = Report([
 ]
 ```
 
-In this case, if PSI is ≥ 0.3 for any categorical column, drift is detected for that column. Default methods and thresholds apply to other columns (e.g. numerical and text). Dataset drift is detected if over 50% of columns are drifting (default `drift_share` applies).
+In this case, if PSI is ≥ 0.3 for any categorical column, drift will be detected for that column. The rest of the checks will use defaults: default methods for numerical and text columns (if present), and 50% as the `drift_share` threshold.
 
 ### Column-level
 
@@ -69,6 +69,8 @@ report = Report([
 ```
 
 ### All parameters
+
+Use the following parameters to pass chosen drift methods. See methods and their defaults below.
 
 | Parameter                                                  | Description                                                                                                                                                                                                                | Applies To                                                   |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
@@ -111,10 +113,10 @@ The following methods apply to **tabular** data: numerical or categorical column
 
 Text drift detection applies to columns with **raw text data**, as specified in data definition. Pass them using the `stattest` (or `text_stattest`) parameter.
 
-| StatTest                                                                                                    | Description                                                                                                                                                                                   | Drift score                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `perc_text_content_drift`<br /> Text content drift (domain classifier, with statistical hypothesis testing) | Applies only to text data. Trains a classifier model to distinguish between text in “current” and “reference” datasets.<br /><br />**Default for text data when less or eq to 1000 objects.** | <ul><li>returns `roc_auc` of the classifier as a `drift_score`</li><li>drift detected when `roc_auc` > possible ROC AUC of the random classifier at a set percentile</li><li>`threshold` sets the percentile of the possible ROC AUC values of the random classifier to compare against</li><li>default threshold: 0.95 (95th percentile)</li><li> `roc_auc` values can be 0 to 1 (typically 0.5 to 1); a higher value means more confident drift detection</li></ul> |
-| `abs_text_content_drift`<br /> Text content drift (domain classifier)                                       | Applies only to text data. Trains a classifier model to distinguish between text in “current” and “reference” datasets.<br /><br />**Default for text data when > 1000 objects.**             | <ul><li>returns `roc_auc` of the classifier as a `drift_score`</li><li>drift detected when `roc_auc` > `threshold` </li><li>`threshold` sets the ROC AUC threshold</li><li>default threshold: 0.55</li><li> `roc_auc` values can be 0 to 1 (typically 0.5 to 1); a higher value means more confident drift detection</li></ul>                                                                                                                                        |
+| StatTest                                                                                                    | Description                                                                                                                                                                       | Drift score                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `perc_text_content_drift`<br /> Text content drift (domain classifier, with statistical hypothesis testing) | Applies only to text data. Trains a classifier model to distinguish between text in “current” and “reference” datasets.<br /><br />**Default for text data ≤ 1000 objects.**      | <ul><li>returns `roc_auc` of the classifier as a `drift_score`</li><li>drift detected when `roc_auc` > possible ROC AUC of the random classifier at a set percentile</li><li>`threshold` sets the percentile of the possible ROC AUC values of the random classifier to compare against</li><li>default threshold: 0.95 (95th percentile)</li><li> `roc_auc` values can be 0 to 1 (typically 0.5 to 1); a higher value means more confident drift detection</li></ul> |
+| `abs_text_content_drift`<br /> Text content drift (domain classifier)                                       | Applies only to text data. Trains a classifier model to distinguish between text in “current” and “reference” datasets.<br /><br />**Default for text data when > 1000 objects.** | <ul><li>returns `roc_auc` of the classifier as a `drift_score`</li><li>drift detected when `roc_auc` > `threshold` </li><li>`threshold` sets the ROC AUC threshold</li><li>default threshold: 0.55</li><li> `roc_auc` values can be 0 to 1 (typically 0.5 to 1); a higher value means more confident drift detection</li></ul>                                                                                                                                        |
 
 <Tip>
   **Text descriptors drift**. If you work with raw text data, you can also check for distribution drift in text descriptors (such as text length, etc.) To use this method, first compute the selected [text descriptors](/docs/library/descriptors). Then, use numerical / categorical drift detection methods as usual.
