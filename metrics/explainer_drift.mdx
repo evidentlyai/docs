@@ -59,7 +59,7 @@ For **small data with \<= 1000 observations** in the reference dataset:
 * For binary categorical features (n\_unique \<= 2): proportion difference test for independent samples based on Z-score.
 
 <Info>
-  All tests use a 0.95 confidence level by default.
+  All tests use a 0.95 confidence level by default. Drift score is P-value. (=\< 0.05 means drift).
 </Info>
 
 For **larger data with > 1000 observations** in the reference dataset:
@@ -69,12 +69,12 @@ For **larger data with > 1000 observations** in the reference dataset:
 * For categorical columns or numerical with n\_unique \<= 5):[Jensen--Shannon divergence](https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence).
 
 <Info>
-  All metrics use a threshold = 0.1 by default.
+  All metrics use a threshold = 0.1 by default. Drift score is distance/divergence. (>= 0.1 means drift).
 </Info>
 
-**You can always modify this drift detection logic**. You can select any of the statistical tests available in the library (including PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc.), specify custom thresholds, or pass a custom test. You can read more about using [data drift parameters and available drift detection methods](/metrics/customize_data_drift).
+**You can modify this drift detection logic**. You can select any method available in the library (PSI, K-L divergence, Jensen-Shannon distance, Wasserstein distance, etc.), specify thresholds, or pass a custom test. Read more about [data drift parameters and available methods](/metrics/customize_data_drift).
 
-You can see the distribution of each individual column inside the `DataDriftPreset` or using `ValueDrift` metric:
+**Exploring drift.** You can see the distribution of each individual column inside the `DataDriftPreset` or using `ValueDrift` metric:
 
 ![](/images/metrics/preset_data_drift-min.png)
 
@@ -86,9 +86,15 @@ For numerical features, you can also explore the values mapped in a plot.
 
 ![](/images/metrics/preset_data_drift_3-min.png)
 
+Index is binned to 150 or uses timestamp if provided.&#x20;
+
 ## Text data drift
 
-Text content drift using a **domain classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions. This approach helps identify how well a machine learning model can distinguish between current and reference data.
+Text content drift using a **domain classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions.&#x20;
+
+![](/images/concepts/text_data_drift_domain_classifier.png)
+
+If the model can confidently identify which text samples belong to the “newer” data, you can consider that the two datasets are significantly different.
 
 <Info>
   You can read more about the domain classifier approach in the [paper ](https://arxiv.org/pdf/1810.11953.pdf)“Failing Loudly: An Empirical Study of Methods for Detecting Dataset Shift.”
@@ -96,17 +102,15 @@ Text content drift using a **domain classifier**. Evidently trains a binary clas
 
 The drift score in this case is the ROC AUC of the resulting classifier.
 
-* The default for **small data with \<= 1000 observations** detects drift if the ROC AUC of the drift detection classifier > possible ROC AUC of the random classifier at a 95th percentile.
-
-* The default for **larger data with > 1000 observations** detects drift if the ROC AUC > 0.55.
+The default for **small data with \<= 1000 observations** detects drift if the ROC AUC of the drift detection classifier > possible ROC AUC of the random classifier at a 95th percentile. This approach **protects against false positive** drift results for small datasets since we explicitly compare the classifier score against the “best random score” we could obtain. 
 
 <Info>
-  For **small text data**, the drift score is the ROC-AUC score of the domain classifier computed on a validation dataset. The ROC AUC of the created classifier is compared to the ROC AUC of the random classifier at a set percentile. To ensure the result is statistically meaningful, we repeat the calculation 1000 times with randomly assigned target class probabilities. This produces a distribution with a mean of 0.5. We then take the 95th percentile (default) of this distribution and compare it to the ROC-AUC score of the classifier. If the classifier score is higher, we consider the data drift to be detected. You can also set a different percentile as a parameter.
+  **How this works.** The drift score is the ROC-AUC score of the domain classifier computed on a validation dataset. This ROC AUC is compared to the ROC AUC of the random classifier at a set percentile. To ensure the result is statistically meaningful, we repeat the calculation 1000 times with randomly assigned target class probabilities. This produces a distribution with a mean of 0.5. We then take the 95th percentile (default) of this distribution and compare it to the ROC-AUC score of the classifier. If the classifier score is higher, we consider the data drift to be detected. You can also set a different percentile as a parameter.
 
-  For **large text data,** the ROC AUC of the obtained classifier is directly compared against the set ROC AUC threshold.
+
 </Info>
 
-This approach **protects against false positive** drift results for small datasets since we explicitly compare the classifier score against the “best random score” we could obtain. 
+The default for **larger data with > 1000 observations** detects drift if the ROC AUC > 0.55. The ROC AUC of the obtained classifier is directly compared against the set ROC AUC threshold.
 
 If the drift is detected, Evidently will also calculate the **top features of the domain classifier**. The resulting output contains specific characteristic words that help identify whether a given sample belongs to reference or current. They are normalized based on vocabulary, for example, to exclude non-interpretable words such as articles.
 
@@ -120,7 +124,7 @@ If the drift is detected, Evidently will also calculate the **top features of t
   This method is pending implementation for the new Evidently API. You can access the existing implementation.
 </Note>
 
-Embedding drift using a **classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions.
+The default embedding drift method is a **classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions.
 
 * The default for **small data with \<= 1000 observations** detects drift if the ROC AUC of the drift detection classifier > possible ROC AUC of the random classifier at a 95th percentile.
 
