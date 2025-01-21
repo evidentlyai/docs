@@ -4,9 +4,9 @@ description: "How production AI quality monitoring works."
 noindex: "true"
 ---
 
-AI observability lets you evaluate the quality of the inputs and outputs of your AI application  as it runs in production. This helps you spot and fix issues while keeping an up-to-date view of your system behavior.&#x20;
+AI observability lets you evaluate the quality of the inputs and outputs of your AI application as it runs in production. This gives an up-to-date view of your system behavior and helps spot and fix issues.
 
-Evidently offers several ways to set up monitoring.&#x20;
+Evidently offers several ways to set up monitoring.
 
 ## Batch monitoring jobs
 
@@ -24,11 +24,11 @@ Evidently offers several ways to set up monitoring.&#x20;
 
 * **Run metric calculations**. Implement the evaluation step in the pipeline using the Evidently Python library. Select the evals, and compute JSON Report `snapshots` that will summarize data, metrics, and test results.
 
-* **Store and visualize snapshots**. Store and monitor results in Evidently Cloud, or in a designated self-hosted workspace.
+* **Store and visualize the results**. Store the Report runs in Evidently Cloud or in a designated self-hosted workspace, and monitor results on a Dashboard.
 
 **Benefits of this approach**:
 
-* **Decouples log storage and monitoring metrics**. In this setup, does not store raw data or model predictions unless you choose to. By default, it only retains the snapshots with data summaries and test results. This protects data privacy and avoids duplicating logs if they’re already stored elsewhere, like for retraining.
+* **Decouples log storage and monitoring metrics**. In this setup, does not store raw data or model predictions unless you choose to. By default, it only retains the aggregated data summaries and test results. This protects data privacy and avoids duplicating logs if they’re already stored elsewhere, like for retraining.
 
 * **Full control over the evaluation pipeline**. You decide when evaluations happen. This setup is great for batch ML models, where you can easily add monitoring as another step in your existing pipeline. For online inference, you can log your predictions to a database and set up separate monitoring jobs to query data at intervals.
 
@@ -52,7 +52,7 @@ Evidently offers several ways to set up monitoring.&#x20;
 
 * **Store raw data**. Evidently Platform stores all raw data, providing a complete record of activity.
 
-* **Schedule evaluations**. Set up evaluations to run automatically at scheduled times. This will generate Reports or run Tests directly on the Evidently Platform. You can also manually run evaluations anytime to assess individual predictions.
+* **Schedule evaluations**. Set up evaluations to run automatically at scheduled times. This will generate Reports or run Tests directly on the Evidently Platform. You can also manually run evaluations anytime to assess individual outputs.
 
 **Benefits of this approach**:
 

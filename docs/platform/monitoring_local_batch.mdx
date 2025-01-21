@@ -29,7 +29,7 @@ report = Report([
 ])
 
 my_eval = report.run(eval_data, None)
-ws.add_report(project.id, my_eval, include_data=False)
+ws.add_run(project.id, my_eval, include_data=False)
 ```
 
 ## Workflow
@@ -44,7 +44,7 @@ The complete workflow looks as the following.
   <Step title="Run the evals">
     You must independently execute Reports on a chosen cadence. Consider tools like Airflow. You can send Reports from different steps in your pipeline. For example:
 
-    * first, send data quality, data drift and prediction drift checks&#x20;
+    * first, send data quality, data drift and prediction drift checks
 
     * after you get the delayed labels, send a ML quality checks results.
 
