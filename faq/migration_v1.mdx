@@ -4,4 +4,142 @@ description: "How to migrate to the new Evidently version?"
 noindex: true
 ---
 
-This guide is for those who previously used Evidently and want to understand the differences between Evidently 0.x and the upcominhg Evidently 1.0. If you're new to Evidently, skip this page and proceed directly to the new Quickstart guides.
+This guide explains the key changes introduced in Evidently 0.6. It outlines key differences and highlights the advantages of the new implementations.
+
+These are breaking changes that are currently available when you import components from `evidently.future`. **This new API will become the default in the upcoming 1.0 release**. 
+
+If you're new to Evidently, skip this page and head directly to the Quickstart for [ML](/quickstart_ml) or [LLM](/quickstart_llm).
+
+<Note>
+You can still access the previous Evidently API inside versions 0.6 and later, so you have time to make the switch.
+</Note>  
+
+## Major changes
+
+### Data Definition
+
+We replaced `column_mapping` with `data_definition`. Now, you also need to explicitly create an Evidently `Dataset` object instead of just passing a dataframe when running a Report. Each `Dataset` object has an associated `DataDefinition`. 
+
+While similar to column mapping, this new structure lets you cleanly map input columns based on their **type** (e.g., categorical, numerical, datetime, text) and **role** (e.g., target, prediction, timestamp). A column can have both a type and role.
+
+You can also now map **multiple targets and predictions** inside the same table: e.g., if you deal with multiple regression or have several classification results in one table. 
+
+Automated column type/role mapping is still available. Additionally, new mappings for LLM use cases, like RAG, will be supported.
+
+<Card title="Data Definition" href="/docs/library/data_definition">
+  Docs on mapping the input data.
+</Card>
+
+### Descriptors 
+
+Descriptors provide row-level text evaluations, ranging from basic checks (e.g., text length) to LLM-based evals (e.g., checking for contradictions). 
+
+With the increasing focus on LLM-related metrics, we’ve updated the text descriptors API to make it more logical and easier to use.
+
+Descriptor computation is now split into **two steps**:
+
+**1. Compute Descriptors**. Add them to the source table containing inputs and outputs. You can do this together with data definition.
+
+```
+eval_data = Dataset.from_pandas(
+    pd.DataFrame(df),
+    data_definition=DataDefinition(
+        text_columns=["question", "answer"]),
+    descriptors=[
+        Sentiment("answer", alias="Sentiment"),
+        TextLength("answer", alias="Length"),
+        IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials"),
+    ]
+)
+```
+
+**2. Aggregate results or run conditional checks**. Use these descriptors like any other dataset column when creating a Report.
+
+Here is how you summarize all descriptors and check that the text length is under 100 symbols.
+
+```
+report = Report([
+    TextEvals(),
+    MaxValue(column="Length", tests=[lt(100)]),
+])
+```
+
+This decoupling means you can reuse descriptor outputs for multiple tests or aggregations without recomputation. It’s especially useful for LLM evaluations.
+
+<Card title="Descriptors" href="/docs/library/descriptors">
+  Docs on adding descriptors.
+</Card>
+
+### New Reports API
+
+As you have probably noticed in the example above, we also made the changes to the core Report API. Here is how generating a single Report with data summary preset for a single dataset works now:
+
+```
+eval_data = Dataset.from_pandas(
+    pd.DataFrame(source_df),
+    data_definition=DataDefinition()
+)
+
+report = Report([
+    DataSummaryPreset()
+])
+
+my_eval = report.run(eval_data, None)
+```
+
+Key changes:
+* The Report object now defines the configuration (e.g., metrics to include).
+* Running a Report returns a separate result object.
+
+<Card title="Reports" href="/docs/library/report">
+  How to generate Reports.
+</Card>
+
+You can also now use "Group by" to compute metrics for specific segments.
+
+### Test Suites joined with Reports
+
+Most importantly,  Reports and Tests are now unified. Previously, these were separate:
+* Reports provided a visual overview of metrics (e.g., distribution summaries, statistics).
+* Tests let you set pass/fail conditions (e.g., checking for missing data or LLM quality thresholds).
+
+Now, the Test Suite mode is an optional extension of a Report. If you choose to enable Tests, their results appear as a separate tab in the same HTML file. This eliminated duplication and the need to switch between separate files or Reports.
+
+For example, here is how you add a Test on max length that will appear in the same Report as all data / column statistics.
+
+```python
+    report = Report([
+        DataSummaryPreset(),
+        MaxValue(column="Length", tests=[lt(100)]),
+    ])
+```
+   
+You can still use auto-generated Test conditions based on your reference dataset or define your own expectations. 
+
+<Card title="Tests" href="/docs/library/tests">
+  How to add Tests with conditions.
+</Card>
+
+### Metric redesign 
+
+The Metric object has been simplified:
+* Metrics now produce a single computation result with a fixed structure.
+* Visualization types can be specified directly as parameters to the Metric.
+
+This redesign significantly improves JSON result parsing and UI integration.
+
+You can check the list of new Metrics here. To get a pre-built combination of multiple checks at once, you can still use Presets.
+
+<Card title="Metric" href="/metrics/all-metrics">
+  All Metrics.
+</Card>
+
+### Simplified Dashboard API
+
+With the redesigned Metrics, the Dashboard API is now much simpler. You can create new panels and point to specific Metric results with a strictly fixed set of options.
+
+<Card title="Dashboard" href="/docs/platform/dashboard_add_panels">
+  How to add Dashboard panels.
+</Card>
+
+Additional improvement: custom metrics with custom renders are now viewable in the UI, which was not previously supported.
