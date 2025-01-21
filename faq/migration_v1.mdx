@@ -14,9 +14,7 @@ If you're new to Evidently, skip this page and head directly to the Quickstart f
 You can still access the previous Evidently API inside versions 0.6 and later, so you have time to make the switch.
 </Note>  
 
-## Major changes
-
-### Data Definition
+## Data Definition
 
 We replaced `column_mapping` with `data_definition`. Now, you also need to explicitly create an Evidently `Dataset` object instead of just passing a dataframe when running a Report. Each `Dataset` object has an associated `DataDefinition`. 
 
@@ -30,7 +28,7 @@ Automated column type/role mapping is still available. Additionally, new mapping
   Docs on mapping the input data.
 </Card>
 
-### Descriptors 
+## Descriptors 
 
 Descriptors provide row-level text evaluations, ranging from basic checks (e.g., text length) to LLM-based evals (e.g., checking for contradictions). 
 
@@ -70,7 +68,7 @@ This decoupling means you can reuse descriptor outputs for multiple tests or agg
   Docs on adding descriptors.
 </Card>
 
-### New Reports API
+## New Reports API
 
 As you have probably noticed in the example above, we also made the changes to the core Report API. Here is how generating a single Report with data summary preset for a single dataset works now:
 
@@ -97,7 +95,7 @@ Key changes:
 
 You can also now use "Group by" to compute metrics for specific segments.
 
-### Test Suites joined with Reports
+## Test Suites joined with Reports
 
 Most importantly,  Reports and Tests are now unified. Previously, these were separate:
 * Reports provided a visual overview of metrics (e.g., distribution summaries, statistics).
@@ -120,7 +118,7 @@ You can still use auto-generated Test conditions based on your reference dataset
   How to add Tests with conditions.
 </Card>
 
-### Metric redesign 
+## Metric redesign 
 
 The Metric object has been simplified:
 * Metrics now produce a single computation result with a fixed structure.
@@ -134,7 +132,7 @@ You can check the list of new Metrics here. To get a pre-built combination of mu
   All Metrics.
 </Card>
 
-### Simplified Dashboard API
+## Simplified Dashboard API
 
 With the redesigned Metrics, the Dashboard API is now much simpler. You can create new panels and point to specific Metric results with a strictly fixed set of options.
 
