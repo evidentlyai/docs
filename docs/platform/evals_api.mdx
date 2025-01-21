@@ -27,7 +27,7 @@ report = Report([
 ])
 
 my_eval = report.run(eval_data, None)
-ws.add_report(project.id, my_eval, include_data=True)
+ws.add_run(project.id, my_eval, include_data=True)
 ```
 
 ## Workflow
@@ -71,16 +71,18 @@ When you upload a Report, you can decide to:
 Use`include_data` (default `False`) to specify whether to include the data.
 
 ```python
-ws.add_report(project.id, my_eval, include_data=False)
+ws.add_run(project.id, my_eval, include_data=False)
 ```
 
 ## Upload existing snapshots
 
-The `add_report` method save Reports in the correct JSON format (`snapshot`). If you already have a snapshot (e.g., you previously saved a Report as a snapshot locally), you can load it load and send it to your Project:
+Typically you compute and upload Reports at the same time. If you already have a snapshot (e.g., you previously saved a Report as a JSON snapshot locally), you can load it load and send it to your Project.&#x20;
 
 ```python
-ws.add_snapshot(project.id, snapshot.load("data_drift_snapshot.json"))
+ws.add_run(project.id, snapshot.load("data_drift_snapshot.json"))
 ```
+
+Note that you must previously save the Report [as a JSON snapshot](/docs/library/output_formats) (not export as JSON or HTML).
 
 ## Delete snapshots
 

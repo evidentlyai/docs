@@ -8,7 +8,7 @@ noindex: true
   You must first connect to [Evidently Cloud](/docs/setup/cloud) and [create a Project](/docs/platform/projects_manage).
 </Tip>
 
-## Upload a Dataset;
+## Upload a Dataset
 
 <Tabs>
   <Tab title="Python">
@@ -53,7 +53,7 @@ By default, you upload only the Report.
 To include the Dataset, use the `include_data` parameter:
 
 ```python
-ws.add_report(project.id, data_report, include_data=True)
+ws.add_run(project.id, data_report, include_data=True)
 ```
 
 Check the docs on [running evals via API](/docs/platform/evals_api) for details.
