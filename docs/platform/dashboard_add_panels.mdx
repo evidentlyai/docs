@@ -531,7 +531,7 @@ All parameters:
 
 ## Panel Value
 
-### `Metric_id` and `metric_fingerprint`
+### Metric ID and fingerprint
 
 To point to an exact value or Test result to plot on a Panel, you use  `test_filters` or `metric_args `as shown above. The`metric_id` or `metric_fingerprint` you include must corresponds to the Metric that is included in the Reports logged to the Project. You must use the same Metic name (with any parameter) that you used when creating the Report.
 
@@ -539,7 +539,7 @@ To point to an exact value or Test result to plot on a Panel, you use  `test_fil
   **Working with Presets.** You must reference a named Evidently Metric even if you used a Preset. You can check the Metrics included in each Preset [here](/metrics/all_metrics).
 </Note>
 
-### `Field_path`
+### Field path
 
 For Metric Panels, you also specify the `field_path`. This helps point to a specific **result** inside the Metric. This can take the following values:
 
@@ -550,7 +550,7 @@ For Metric Panels, you also specify the `field_path`. This helps point to a spec
 * `values` if a Metric contains a histogram visualization (like `UniqueValueCount`). Applies to Distribution panel.
 
 <Note>
-  **Check Metric results.** You can verify how result of each Metric looks in the [All Metrics table](/metrics/all_metrics). You can also see it if you generate a Report with the Metric you are interested in and export the results as a Python dictionary or JSON.
+  **Check Metric results.** You can verify the output name in the [All Metrics table](/metrics/all_metrics). You can also see it if you generate a Report with a given Metric and export the results as a Python dictionary or JSON.
 </Note>
 
 When working in the Evidently Cloud, you can see available fields in the drop-down menu as you add a new Panel.
