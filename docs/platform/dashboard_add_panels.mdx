@@ -26,7 +26,7 @@ Once you are inside the Project:
 
 * Preview and publish.
 
-To delete/edit a Panel, enter the Edit mode and hover over specific Panel to choose an action.
+To delete/edit a Panel, enter Edit mode and hover over a specific Panel to choose an action.
 
 ### Python API
 
@@ -85,7 +85,7 @@ Here is the general flow to add a new Panel:
     You can add multiple Panels at once: they will appear in the listed order.
   </Step>
 
-  <Step title="Save ">
+  <Step title="Save">
     Save the configuration with `project.save()`. Go back to the web app to see the Dashboard. Refresh the page if needed.
   </Step>
 </Steps>
@@ -243,11 +243,11 @@ Examples usage:
 
 All parameters:
 
-| Parameter                            | Description                                                                                                                                                                                                                                                    |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `value: Optional[PanelValue] = None` | Specifies the value to display. <br /> <br />You must point to a named **Metric** and a specific **result** inside it (`value` or `share`/`count`). *Check the Panel Value section below for examples.* <br /><br />If left empty, displays a text-only panel. |
-| `text: Optional[str] = None`         | Supporting text to display.                                                                                                                                                                                                                                    |
-| `agg: CounterAgg`                    | Data aggregation options: <br />`SUM`: Calculates the value sum. <br />`LAST`: Shows the last available value. <br />`NONE`: Reserved for text panels.                                                                                                         |
+| Parameter                     | Description                                                                                                                                                                                                                                                   |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value: Optional[PanelValue]` | Specifies the value to display. <br /> <br />You must point to a named **Metric** and a specific **result** inside it (`value` or `share`/`count`). *Check the Panel Value section below for details.* <br /><br />If left empty, displays a text-only panel. |
+| `text: Optional[str]`         | Supporting text to display.                                                                                                                                                                                                                                   |
+| `agg: CounterAgg`             | Data aggregation options: <br />`SUM`: Calculates the value sum. <br />`LAST`: Shows the last available value. <br />`NONE`: Reserved for text panels.                                                                                                        |
 
 ## Plot
 
@@ -327,10 +327,10 @@ Example usage:
 
 All parameters:
 
-| Parameter                  | Description                                                                                                                                                                                                                                                                                                                                                                              |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `values: List[PanelValue]` | Specifies the value(s) to display in the Plot. <br /><br /> You must point to a named **Metric** and a specific **result** inside it (`value` or `share`/`count`). *Refer to the Panel Value section below for examples.* <br /><br /> If you pass multiple values, they will appear together, e.g., as separate lines on a Line plot, bars on a Bar Chart, or points on a Scatter Plot. |
-| `plot_type: PlotType`      | Specifies the plot type. <br /><br />**Available:** `SCATTER`, `BAR`, `LINE`, `HISTOGRAM`                                                                                                                                                                                                                                                                                                |
+| Parameter                  | Description                                                                                                                                                                                                                                                                                                                                                                                |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `values: List[PanelValue]` | Specifies the value(s) to display in the Plot. <br /><br /> You must point to a named **Metric** and a specific **result** inside it (`value` or `share`/`count`). *Refer to the Panel Value section below for details.* <br /><br /> You can pass multiple values so that will appear together, e.g., as separate lines on a Line plot, bars on a Bar Chart, or points on a Scatter Plot. |
+| `plot_type: PlotType`      | Specifies the plot type. <br /><br />**Available:** `SCATTER`, `BAR`, `LINE`, `HISTOGRAM`                                                                                                                                                                                                                                                                                                  |
 
 ## Distribution
 
@@ -346,7 +346,7 @@ All parameters:
   </Card>
 </CardGroup>
 
-**Example**. To plot the distribution of the the column "refusals" that contains binary labels:
+**Example**. To plot the distribution of the column "refusals" that contains binary labels:
 
 ```python
 project.dashboard.add_panel(
@@ -384,7 +384,7 @@ Example usage:
 
 <Tabs>
   <Tab title="All Tests (Last result)">
-    **All Tests**. To display the results of the latest Test Suite. Filter by LAST, no filter on Test name.&#x20;
+    **All Tests**. To display the results of the latest Test Suite. Filter by LAST, no filter on Test name.
 
     ```python
     project.dashboard.add_panel(
@@ -401,7 +401,7 @@ Example usage:
   </Tab>
 
   <Tab title="Specific Test (All time)">
-    **Specific Test**. To show all failures of specific Test in time. (Filtered by status and Test name).
+    **Specific Test**. To show all failures of a specific Test over time. (Filtered by status and Test name).
 
     ```python
     project.dashboard.add_panel(
@@ -419,7 +419,7 @@ Example usage:
   </Tab>
 
   <Tab title="Specific Test (Last result)">
-    **Specific Test**. To show the last result of a specific Test. (Defaults to showing success status).&#x20;
+    **Specific Test**. To show the last result of a specific Test. (Defaults to showing success status).
 
     ```python
     project.dashboard.add_panel(
@@ -434,8 +434,6 @@ Example usage:
     )
     project.save()
     ```
-
-
   </Tab>
 </Tabs>
 
@@ -477,31 +475,50 @@ Example usage:
     )
     project.save()
     ```
-
-
   </Tab>
 
   <Tab title="Detailed (Selected Tests)">
     **Selected Tests**. Show the results of selected Tests in the Project with per-Test granularity.
+
+    ```
+    project.dashboard.add_panel(
+        DashboardPanelTestSuite(
+            title="Selected tests (missing)",
+            test_filters=[
+                TestFilter(test_args={"test.metric_fingerprint": MissingValueCount(column="length").metric_id}),
+                TestFilter(test_args={"test.metric_fingerprint": MissingValueCount(column="sentiment").metric_id})
+            ],
+            filter=ReportFilter(metadata_values={}, tag_values=[]),
+            size=WidgetSize.HALF,
+            panel_type=TestSuitePanelType.DETAILED,
+        ),
+        tab="Overview"
+    )
+    project.save()
+    ```
+
+
   </Tab>
 
   <Tab title="Aggregated (All Tests)">
     **All Tests.** Show the results of all Tests in aggregate (Total passed/fail).
+
+    ```python
+    project.dashboard.add_panel(
+        DashboardPanelTestSuite(
+            title="All tests: detailed",
+            filter=ReportFilter(metadata_values={}, tag_values=[]),
+            size=WidgetSize.FULL,
+            panel_type=TestSuitePanelType.AGGREGATE
+        ),
+        tab="Overview"
+    )
+    project.save()
+    ```
+
+
   </Tab>
 </Tabs>
-
-```python
-project.dashboard.add_panel(
-    DashboardPanelTestSuite(
-        title="All tests: detailed",
-        filter=ReportFilter(metadata_values={}, tag_values=[]),
-        size=WidgetSize.FULL,
-        panel_type=TestSuitePanelType.AGGREGATE
-    ),
-    tab="Overview"
-)
-project.save()
-```
 
 All parameters:
 
@@ -522,15 +539,14 @@ To point to an exact value or Test result to plot on a Panel, you use  `test_fil
 
 For Metric Panels, you also specify the `field_path`. This helps point to a specific result inside the Metric. This can take the following values:
 
-  * `value` in cases where a Metric returns a single result (majority). Applies to Counter and Plot panels.
+* `value` if a Metric returns a single result (majority). Applies to Counter and Plot panels.
 
-  * `share` or `count` in cases where a Metric (like `MissingValueCount()` ) that return both absolute count and percentage value. Applies to Counter and Plot panels.
+* `share` or `count` if a Metric return both absolute count and percentage value (like `MissingValueCount` ) . Applies to Counter and Plot panels.
 
-  * `values` in cases where the Metric contains a histogram visualization (like `UniqueValueCount()`). Applies to Distribution panel.
+* `values` if a Metric contains a histogram visualization (like `UniqueValueCount`). Applies to Distribution panel.
 
 <Note>
-  **Check Metric results.** You can check the result of each Metric in the [All Metrics table](/metrics/all_metrics). You can also see it if you generate a Report with the Metric you are interested in and export the results as Python dictionary or JSON. 
+  **Check Metric results.** You can verify how result of each Metric looks in the [All Metrics table](/metrics/all_metrics). You can also see it if you generate a Report with the Metric you are interested in and export the results as a Python dictionary or JSON.
 </Note>
-
 
 When working in the Evidently Cloud, you can see available fields in the drop-down menu as you add a new Panel.
