@@ -24,6 +24,8 @@ You can add monitoring Panels using the user interface. Once you are inside the 
 
 * Preview and publish.
 
+To delete or edit a Panel, enter the Edit mode and choose an action by hovering over a specific Panel.
+
 ### Python API
 
 You can add monitoring Panels using the Python API. Here is the general flow:
@@ -38,23 +40,23 @@ You can add monitoring Panels using the Python API. Here is the general flow:
   </Step>
 
   <Step title="Add a new Panel">
-    Use the `add_panel` method and configure the panel:&#x20;
+    Use the `add_panel` method and configure the panel
 
-    * Set the [Panel type](/docs/platform/dashboard_panel_types): Counter, Plot, Distribution, Test Counter, Test Plot.
+    * Pick the [Panel type](/docs/platform/dashboard_panel_types): Counter, Plot, Distribution, Test Counter, Test Plot.
 
-    * Set applicable Panel **parameters.** (See below for each panel type).
+    * Set applicable Panel **parameters.** (See below for each type).
 
-    * Specify panel **title** and **size**.
+    * Specify Panel **title** and **size**.
 
     * Add optional **Tags** to filter data. If empty, the Panel will use data from all Reports.
 
-    * Define what the Panel will show (See examples below):
-        * Use `values` to point a specific Metric results and add **legend**, or
+    * Define what the Panel will show (see examples below):
+        * Use `values` to point a specific Metric result, or
         * Use `test_filters` to select Tests.
 
     * Set if the Panel should appear on specific **Tab**.
 
-    For example, to add a line plot that shows row count across all reports that will appear on the "Overview" tab:
+    For example, to add a line plot that shows Row Count in time to the "Overview" tab:
 
     ```python
     project.dashboard.add_panel(
@@ -76,7 +78,7 @@ You can add monitoring Panels using the Python API. Here is the general flow:
     project.save()
     ```
 
-    You can add multiple Panels at once: they will appear in the listed order.&#x20;
+    You can add multiple Panels at once: they will appear in the listed order.
   </Step>
 
   <Step title="Save ">
@@ -84,28 +86,7 @@ You can add monitoring Panels using the Python API. Here is the general flow:
   </Step>
 </Steps>
 
-See explainers on specific Panel parameters below.
-
-### Add tabs
-
-<Check>
-  Multiple Tabs is a Pro feature available in the Evidently Cloud / Enterprise.
-</Check>
-
-By default, new Panels appear on a single Dashboard. You can add multiple Tabs to organize them.
-
-**Add Tabs the UI.** Enter the "edit" mode on the Dashboard (top right corner) and click "add Tab". To create a custom Tab, choose an “empty” tab and give it a name. Proceed with adding as usual.
-
-**Add Tabs in Python.** Add a Tab, give it a name and save the configuration. You can later reference this Tab when adding Panels to the Project.
-
-```python
-project.dashboard.create_tab("My tab")
-project.save()
-```
-
-Alternatively, you can use the `add_panel` method as usual and specify the name of the destination Tab. If no there is no Tab with a set name, you will create both a new Tab and Panel at once. If it already exists, a new Panel will appear below others in this Tab.
-
-**Delete Tabs or Panels.** To delete all the existing monitoring Panels using the Python API:
+**Delete Panels.** To delete all monitoring Panels, use:
 
 ```
 project.dashboard.panels = []
@@ -114,10 +95,33 @@ project.save()
 ```
 
 <Info>
-  **Note**: This does not delete the Reports or data; it only deletes the Panel configuration.
+**Note**: This does not delete the Reports or data; it only deletes the Panel configuration.
 </Info>
 
-To delete the Tabs or Panels in the UI, use the “Edit” mode and click the “Delete” sign on the corresponding Panel or Tab.
+## Add tabs
+
+<Check>
+  Multiple Tabs is a Pro feature available in the Evidently Cloud / Enterprise.
+</Check>
+
+By default, new Panels appear on a single Dashboard. You can add multiple Tabs to organize them.
+
+### User interface 
+
+**Create Tab**. Enter the "Edit" mode on the Dashboard (top right corner) and click the plus sign with "add Tab". To create a custom Tab, choose an “empty” tab and give it a name. 
+
+**Delete Tab**. To delete the Tabs in the UI, enter the "Edit" mode on the Dashboard (top right corner) and click the sign with three dots with "edit Tabs". Choose the Tab to delete.
+
+### Python
+
+**Add a Tab**. You can explicitly create a new empty Tab. Use `create_tab`, give it a name and save the configuration. 
+
+```python
+project.dashboard.create_tab("My tab")
+project.save()
+```
+
+**Add a Tab together with a new Panel**. Alternatively, you can use the `add_panel` method as usual and specify the name of the destination Tab. If no there is no Tab with a set name, you will create both a new Tab and Panel at once. If it already exists, a new Panel will appear below others in this Tab.
 
 ## Panel parameters
 
@@ -132,8 +136,8 @@ Class `DashboardPanel` is a base class. Its parameters apply to all Panel types.
 | Parameter              | Example use                                              | Description                                                                                                                                                                                                              |
 | ---------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `title: str`           | `title="My Panel"`                                       | Panel name visible at the header.                                                                                                                                                                                        |
-| `filter: ReportFilter` | `filter=ReportFilter(metadata_values={}, tag_values=[])` | Filters define a subset of Reports from which to display the values. Use `metadata_values` or `tag_values` to select a specific group. Tags must be added when logging Reports. See [docs](/docs/library/tags_metadata). |
-| `size: WidgetSize`     | `size=WidgetSize.HALF`, `size=WidgetSize.FULL`           | Sets the Panel size to half-width or full-sized (default).                                                                                                                                                               |
+| `filter: ReportFilter` | `filter=ReportFilter(metadata_values={}, tag_values=[])` | Filters define a subset of Reports from which to display the data. Tags or metadata values you list must be added when logging Reports. See [docs](/docs/library/tags_metadata). |
+| `size: WidgetSize`     | `size=WidgetSize.HALF`, `size=WidgetSize.FULL` (default)           | Sets the Panel size to half-width or full-sized.                                                                                                                                                               |
 
 See examples and panel-specific parameters below.
 
@@ -145,13 +149,7 @@ See examples and panel-specific parameters below.
   <img src="/images/dashboard/panel_counter_example-min.png" />
 </Frame>
 
-| Parameter                            | Description                                                                                                                                                                                  |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `value: Optional[PanelValue] = None` | Specifies the value to display. Can point to the individual **Metric Result** (e.g. `value` or `share`/ `count`) If empty, you get a text-only panel. <br /><br />*Refer to the Panel Value section below for examples.*                                                      |
-| `text: Optional[str] = None`         | Supporting text to display on the Counter.                                                                                                                                                   |
-| `agg: CounterAgg`                    | Data aggregation options:<br />`SUM`: Calculates the value sum (from all Reports or filtered by Tag).<br />`LAST`: Displays the last available value.<br />`NONE`: Reserved for text panels. |
-
-See examples:
+Examples:
 
 <Tabs>
   <Tab title="Text Panel">
@@ -217,6 +215,15 @@ See examples:
     ```
   </Tab>
 </Tabs>
+
+
+| Parameter                            | Example Usage                                                      | Description                                                                                                                                                      |
+|--------------------------------------|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `value: Optional[PanelValue] = None` | `value=PanelValue(metric_args={"metric.metric_id": RowCount().metric_id}, field_path="value", legend="count")` | Specifies the value to display. You must point to a named **Metric** and a specific **result** inside it (`value` or `share`/`count`). If left empty, displays a text-only panel. <br/> </br> *Check the Panel Value section below for examples*.          |
+| `text: Optional[str] = None`         | `text="count"`                                                     | Supporting text to display on the Counter.                                                                                                                       |
+| `agg: CounterAgg`                    | `agg=CounterAgg.SUM`                                               | Data aggregation options: <br />`SUM`: Calculates the value sum. <br />`LAST`: Displays the last available value. <br />`NONE`: Reserved for text panels. |
+
+
 
 ## Plot
 

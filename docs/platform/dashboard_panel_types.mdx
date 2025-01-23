@@ -10,7 +10,7 @@ A monitoring Panel is an individual plot or counter on the Monitoring Dashboard.
 
 * You can add multiple Panels and organize them by **Tabs**. You can choose from Metric, Distribution, and Test Panels, and customize titles and legends.
 
-* When adding a Panel, you choose a **Metric** or **Test** and the value (`metric_result`) inside it. Evidently pulls corresponding value(s) from all Reports in the Project and plots them on the Panel. You can later jump from the Panel to the source Report by clicking on the specific value.
+* When adding a Panel, you choose a **Test** or **Metric** with the specific value ("metric result") inside it. Evidently pulls corresponding value(s) from all Reports in the Project and plots them on the Panel. You can later jump from the Panel to the source Report by clicking on the specific value.
 
 * You can use **Tags** to filter data from specific Reports. For example, you can plot the accuracy of Model A and Model B next to each other. To achieve this, [add relevant Tags](/docs/library/tags_metadata) to the Report.
 
@@ -24,11 +24,11 @@ A monitoring Panel is an individual plot or counter on the Monitoring Dashboard.
 
 * **Test panels** show pass/fail Test outcomes in time.
 
-* **Distribution panels.** plot distributions over time.
+* **Distribution panels** plot distributions over time.
 
 ## Metric Panels
 
-Metric Panels (`DashboardPanel`) show individual values from inside the snapshots.
+Metric Panels (`DashboardPanel`) show individual values from inside the Reports in time.
 
 For example, if you capture Data Summary Reports (include mean, max, min, etc., for each column) or Data Drift Reports (include the share of drifting columns), you can such values over time.
 
@@ -127,7 +127,7 @@ For example, if you capture Text Evals or Data Summary that include histograms f
 </CardGroup>
 
 <Info>
-  **What is the difference between a Distribution Panel (`DashboardPanelHistogram`) and a Histogram Plot (`DashboardPanelPlot` with`PlotType.HISTOGRAM`?** A Histogram shows the distribution of the selected values from all Reports. Each source Report contains a **single value** (e.g., a "mean value"). A Distribution Panel shows how a distribution changes over time. Each source Report contains a **histogram** (e.g. frequency of different categories).
+  **What is the difference between a Distribution Panel and a Histogram Plot?** A Histogram (`DashboardPanelPlot` with`PlotType.HISTOGRAM`) shows the distribution of the selected values from all Reports. Each source Report contains a **single value** (e.g., a "mean value"). A Distribution Panel (`DashboardPanelHistogram`) shows how a distribution changes over time. Each source Report contains a **histogram** (e.g. frequency of different categories).
 </Info>
 
 ## What's next?
