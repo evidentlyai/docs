@@ -1,19 +1,11 @@
 ---
-title: 'All Descriptors'
-description: 'Reference page for all row-level evals.'
+title: "All Descriptors"
+description: "Reference page for all row-level text and LLM evals."
 noindex: "true"
 ---
 
 <Info>
-You can use **Descriptors** to:
-
-* evaluate the quality of LLM-based apps (summarization, Q\&A, chatbots, agents, RAGs, etc) by generating scores for each output
-
-* implement custom checks using templated descriptors (LLM judges, RegExp, etc.)
-
-* run both open-ended or reference-based evals (compare to the target response)
-
-For an intro, read about [Core Concepts](/docs/library/overview) and check the [LLM Quickstart](/quickstart_llm).
+  For an intro, read about [Core Concepts](/docs/library/overview) and check the [LLM Quickstart](/quickstart_llm).
 </Info>
 
 ## Deterministic evals
@@ -86,7 +78,7 @@ Use external LLMs with an evaluation prompt.
 
 | Name                        | Descriptor                                                                                                                                                                                                                               | Parameters                                                                                                                                                                                                     |
 | :-------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **LLMEval()** (Custom)              | <ul><li>Scores the text using user-defined criteria.</li><li>You must specify provider, model and prompt template, and fill in the template (criteria, category names, etc). </li><li>Returns score and/or label as specified.</li></ul> | **Optional:** <ul><li>`alias`</li><li>`template`</li><li>`provider`</li><li>`model`</li><li>`additional_columns: dict`</li><li>See [custom LLM judge parameters](/metrics/customize_llm_judge).</li></ul>      |
+| **LLMEval()** (Custom)      | <ul><li>Scores the text using user-defined criteria.</li><li>You must specify provider, model and prompt template, and fill in the template (criteria, category names, etc). </li><li>Returns score and/or label as specified.</li></ul> | **Optional:** <ul><li>`alias`</li><li>`template`</li><li>`provider`</li><li>`model`</li><li>`additional_columns: dict`</li><li>See [custom LLM judge parameters](/metrics/customize_llm_judge).</li></ul>      |
 | **DeclineLLMEval()**        | <ul><li>Detects texts containing a refusal or rejection.</li><li>Returns a label (DECLINE or OK) or score.</li></ul>                                                                                                                     | **Optional:** <ul><li>`alias`</li><li>`model`</li><li>See [LLM judge parameters](/metrics/customize_llm_judge).</li></ul>                                                                                      |
 | **PIILLMEval()**            | <ul><li>Detects texts containing PII (Personally Identifiable Information).</li><li>Returns a label (PII or OK) or score.</li></ul>                                                                                                      | **Optional:** <ul><li>`alias`</li><li>`model`</li><li>See [LLM judge parameters](/metrics/customize_llm_judge).</li></ul>                                                                                      |
 | **NegativityLLMEval()**     | <ul><li>Detects negative texts.</li><li>Returns a label (NEGATIVE or POSITIVE) or score.</li></ul>                                                                                                                                       | **Optional:** <ul><li>`alias`</li><li>`model`</li><li>See [LLM judge parameters](/metrics/customize_llm_judge).</li></ul>                                                                                      |

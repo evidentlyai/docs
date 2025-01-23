@@ -5,15 +5,7 @@ noindex: "true"
 ---
 
 <Info>
-You can use **Metrics** and **Presets** to:
-
-* evaluate raw data or computed text descriptors (descriptive stats, quality, drift)
-
-* evaluate AI system performance (LLM, regression, classification, ranking, etc.)
-
-* generate rich visuals to explore the results of Metrics and conditional Tests
-
-For an intro, read [Core Concepts](/docs/library/overview) and check quickstarts for [LLMs](docs/quickstart_llm) or [ML](docs/quickstart_ml).
+  For an intro, read [Core Concepts](/docs/library/overview) and check quickstarts for [LLMs](docs/quickstart_llm) or [ML](docs/quickstart_ml).
 </Info>
 
 <Accordion title="How to read the tables" defaultOpen={false}>
@@ -34,7 +26,7 @@ For an intro, read [Core Concepts](/docs/library/overview) and check quickstarts
 
 Use to summarize results of output-level text or LLM evals.
 
-**Data definition**: 
+**Data definition**:
 
 | Metric          | Description                                                                                                                                                                                                                                                                                             | Parameters | Test Defaults |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ------------- |
@@ -44,7 +36,7 @@ Use to summarize results of output-level text or LLM evals.
 
 Use to aggregate descriptor results or check data quality on column level.
 
-**[Data definition](/docs/library/data_definition)**: map column types.
+[Data definition](/docs/library/data_definition): map column types.
 
 ### Value stats
 
@@ -65,7 +57,7 @@ Descriptive statistics.
 
 Column-level data quality metrics.
 
-**[Data definition](/docs/library/data_definition)**: map column types.
+[Data definition](/docs/library/data_definition): map column types.
 
 | Metric                                                                                                                         | Description                                                                                                                                                          | Parameters                                                                                                                                     | Test Defaults                                                                                                                                                      |
 | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -83,7 +75,7 @@ Column-level data quality metrics.
 
 Use for exploratory data analysis and data quality checks.
 
-**[Data definition](/docs/library/data_definition)**: map column types, ID and timestamp if available.
+[Data definition](/docs/library/data_definition): map column types, ID and timestamp if available.
 
 ### Dataset stats
 
@@ -100,7 +92,7 @@ Descriptive statistics.
 
 Dataset-level data quality metrics.
 
-**[Data definition](/docs/library/data_definition)**: map column types, ID and timestamp if available.
+[Data definition](/docs/library/data_definition): map column types, ID and timestamp if available.
 
 | Metric                              | Description                                                                                                                                                                        | Parameters                                                                                                      | Test Defaults                                                                                                                                                 |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -119,11 +111,9 @@ Dataset-level data quality metrics.
 
 Use to detect distribution drift for text, tabular, embeddings data or over computed text descriptors. 20+ drift methods listed separately: [text and tabular](/metrics/customize_data_drift), [embeddings](/metrics/customize_embedding_drift).
 
-**[Data definition](/docs/library/data_definition)**: map column types, ID and timestamp if available.
+[Data definition](/docs/library/data_definition): map column types, ID and timestamp if available.
 
 <Note>**Metric explainers**. Check data drift [metrics explainers](/metrics/explainer_drift).</Note>
-
-
 
 | Metric                    | Description                                                                                                                                                                                                                                                                                                                                | Parameters                                                                                                                                                                                                                                                                             | Test Defaults                                                                                                                            |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -137,7 +127,7 @@ Use to detect distribution drift for text, tabular, embeddings data or over comp
 
 Use for exploratory data analysis, drift monitoring (correlation changes) or to check alignment between scores (e.g. LLM-based descriptors against human labels).
 
-**[Data definition](/docs/library/data_definition)**: map column types.
+[Data definition](/docs/library/data_definition): map column types.
 
 | Metric                    | Description                                                                                                                                                                                                                           | Parameters                                                                                                                                                                                                                        | Test Defaults                                                                                  |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
@@ -147,9 +137,9 @@ Use for exploratory data analysis, drift monitoring (correlation changes) or to 
 
 ## Classification
 
-Use to evaluate quality on a classification task (probabilistic, non-probabilistic, binary and multi-class). 
+Use to evaluate quality on a classification task (probabilistic, non-probabilistic, binary and multi-class).
 
-**[Data definition](/docs/library/data_definition)**: map prediction and target columns and classification type.
+[Data definition](/docs/library/data_definition): map prediction and target columns and classification type.
 
 ### General
 
@@ -203,7 +193,7 @@ Use when you have multiple classes and want to evaluate quality separately.
 
 Use to evaluate the quality of a regression model.
 
-**[Data definition](/docs/library/data_definition)**: map prediction and target columns.
+[Data definition](/docs/library/data_definition): map prediction and target columns.
 
 <Note>**Metric explainers**. Check regression [metrics explainers](/metrics/explainer_regression).</Note>
 
@@ -235,9 +225,9 @@ Dummy metrics:
 
 ## Ranking
 
-Use to evaluate ranking, search / retrieval or recommendations. 
+Use to evaluate ranking, search / retrieval or recommendations.
 
-**[Data definition](/docs/library/data_definition)**: map prediction and target columns and ranking type. Some metrics require additional training data.
+[Data definition](/docs/library/data_definition): map prediction and target columns and ranking type. Some metrics require additional training data.
 
 * TBC `no_feedback_user: bool = False`. Specifies whether to include the users who did not select any of the items, when computing the quality metric. Default: False.
 

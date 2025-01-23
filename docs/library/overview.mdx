@@ -20,15 +20,7 @@ Here is how the core evaluation workflow works:
   </Step>
 
   <Step title="Run evaluations">
-    Use `Presets` or create a custom evaluation:
-
-    * Compute row-level `Descriptors` for text data.
-
-    * Use `Metrics` for dataset-level evals.
-
-    * Optionally, add `Tests` to get pass/fail results.
-
-    There are 100+ built-in evals. You can also add yours. Examples:
+    Use `Presets` or create a custom evaluation. Optionally, run them as `Tests` to get pass/fail results. There are 100+ built-in evals. You can also add yours. Examples:
 
     | **Type**                  | **Example checks**                                                    |
     | ------------------------- | --------------------------------------------------------------------- |
@@ -168,11 +160,13 @@ Once your `Dataset` is ready, you can run evaluations.
 
 To evaluate text data and LLM outputs, you need `Descriptors`.
 
-A **Descriptor** is a row-level score or label that assesses a specific quality of a given text. It’s different from metrics (like accuracy or precision) that give a score for an entire dataset.
+A **Descriptor** is a row-level score or label that assesses a specific quality of a given text. It’s different from metrics (like accuracy or precision) that give a score for an entire dataset. You can use them to assess LLM outputs in summarization, Q\&A, chatbots, agents, RAGs, etc.
 
-A simple example of a descriptor is `TextLength`. Descriptors range from deterministic to complex ML-based checks. For example, LLM-based descriptors can help label responses as "relevant" or "not relevant" using an evaluation prompt. Descriptors can also use two texts at once, like checking `SemanticSimilarity` between two columns.
+A simple example of a descriptor is `TextLength`. Descriptors range from deterministic to complex ML-based checks. For example, LLM-based descriptors can help label responses as "relevant" or "not relevant" using an evaluation prompt.&#x20;
 
-You can use [built-in descriptors](/metrics/all_descriptors), configure templates or add custom checks in Python. Each Descriptor returns a result that can be:
+Descriptors can also use two texts at once, like checking `SemanticSimilarity` between two columns to compare new response to the reference one.&#x20;
+
+You can use [built-in descriptors](/metrics/all_descriptors), configure templates (like LLM judges or regular expressions) or add custom checks in Python. Each Descriptor returns a result that can be:
 
 * **Numerical**. Any scores like symbol count or sentiment score.
 
@@ -188,13 +182,17 @@ After you get the Descriptors, you can use them to compute Metrics and Tests.
 
 ## Reports and Metrics
 
-A **Report** lets you structure and run evaluations on the dataset level. You can generate Reports after computing descriptors, or on any existing dataset like a table with ML model logs.
+A **Report** lets you structure and run evals on the dataset or column-level.&#x20;
 
-* Each Report computes and visualizes a set of **Metrics** and **Tests.**&#x20;
+You can generate Reports after you get the descriptors, or for any existing dataset like a table with ML model logs. Use Reports to:
 
-* Reports return scores on the **dataset-** and **column**-level.&#x20;
+* summarize the computed text descriptors across all inputs
 
-* You can also pass two datasets for a side-by-side comparison. 
+* analyze any tabular dataset (descriptive stats, quality, drift)
+
+* evaluate AI system performance (regression, classification, ranking, etc.)
+
+Each Report runs a computation and visualizes a set of **Metrics** and conditional **Tests.** If you pass two datasets, you get a side-by-side comparison. 
 
 The easiest way to start is by using **Presets**.&#x20;
 
@@ -202,7 +200,7 @@ The easiest way to start is by using **Presets**.&#x20;
 
 Presets are pre-configured evaluation templates.&#x20;
 
-They help compute multiple related Metrics using a single line of code. Evidently has a number of **comprehensive Presets** ([see all](/metrics/all_presets)) for specific scenarios. They help both understand your data and to evaluate different aspects of AI quality. For example:
+They help compute multiple related Metrics using a single line of code. Evidently has a number of **comprehensive Presets** ([see all](/metrics/all_presets)) for specific evaluation scenarios: from exploratory data analysis to AI quality assessments. For example:
 
 <Tabs>
   <Tab title="TextEvals">
@@ -236,13 +234,13 @@ They help compute multiple related Metrics using a single line of code. Evidentl
 
 ### Metrics
 
-You can also create your own **custom Report** by listing individual Metrics to include.&#x20;
+Each Preset is made of individual Metrics. You can also create your own **custom Report** by listing the Metrics you want to include.&#x20;
 
-* You can combine multiple individual Metrics and Presets in a Report. 
+* You can combine multiple Metrics and Presets in a Report. 
 
 * You can include both built-in Metrics and custom Metrics.
 
-A `Metric` is a key building block for evaluations. There are [built-in Metrics](/metrics/all_metrics) that range from simple statistics to complex algorithmic evals. Some examples:
+A `Metric` is a key building block for evaluations. [Built-in Metrics](/metrics/all_metrics) range from simple statistics to complex algorithmic evals. Some examples:
 
 <Tabs>
   <Tab title="MeanValue">
@@ -300,7 +298,7 @@ Each **Metric** computes a single value and has an optional visual representatio
 
 ## Test Suites and Tests 
 
-Reports are great for analysis and debugging, or logging metrics during monitoring. However, in many cases, you don’t want to review all the scores but run a **conditional check** to confirm that nothing is off.
+Reports are great for analysis and debugging, or logging metrics during monitoring. However, in many cases, you don’t want to review all the scores but run a **conditional check** to confirm that nothing is off. In this case, **Tests** are a great option.
 
 ### Tests
 
@@ -326,30 +324,8 @@ Each Test results in one of the following statuses:
 
 * **Error:** Something went wrong with the Test itself, such as an execution error.
 
-You can view extra details to debug. Examples:
-
-<Tabs>
-  <Tab title="Text length">
-    Test that less than 5% of LLM responses fall outside the approved length.&#x20;
-    ![](/images/concepts/overview_descriptor_test_example-min.png)
-  </Tab>
-
-  <Tab title="LLM correctness">
-    Verify that less than 10% of responses are labeled as "incorrect" by the LLM judge.&#x20;
-  </Tab>
-
-  <Tab title="Recall">
-    Check if recall stays within ±10% of a reference model.
-  </Tab>
-
-  <Tab title="Value stability">
-    Test that the mean value of a column is within ±2 of its standard deviation. 
-  </Tab>
-
-  <Tab title="Dataset drift">
-    Test that no more than 50% of features show drift. (Dataset-level Test)
-  </Tab>
-</Tabs>
+You can view extra details to debug. For example, if you run a Test to check that less than 5% of LLM responses fall outside the approved length, you can see the corresponding distribution:
+![](/images/concepts/overview_descriptor_test_example-min.png)
 
 ### Test Conditions
 
