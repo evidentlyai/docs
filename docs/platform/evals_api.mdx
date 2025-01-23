@@ -73,23 +73,3 @@ Use`include_data` (default `False`) to specify whether to include the data.
 ```python
 ws.add_run(project.id, my_eval, include_data=False)
 ```
-
-## Upload existing snapshots
-
-Typically you compute and upload Reports at the same time. If you already have a snapshot (e.g., you previously saved a Report as a JSON snapshot locally), you can load it load and send it to your Project.&#x20;
-
-```python
-ws.add_run(project.id, snapshot.load("data_drift_snapshot.json"))
-```
-
-Note that you must previously save the Report [as a JSON snapshot](/docs/library/output_formats) (not export as JSON or HTML).
-
-## Delete snapshots
-
-To delete individual snapshots in the Workspace `ws`, pass the Project ID and snapshot ID. You can see the snapshot ID on the Report page.&#x20;
-
-```python
-ws.delete_snapshot(project_id, snapshot_id)
-```
-
-You can also delete Reports from the UI.

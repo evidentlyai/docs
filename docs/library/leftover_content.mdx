@@ -1,8 +1,61 @@
 ---
-title: 'New file'
+title: 'Leftovers'
 description: 'Description of your new file.'
 noindex: true
 ---
+
+Use for relevant pages after features are implemented.
+
+# Output format
+
+## Dataframe (TBC)
+
+You can get the Report results in a tabular format as a DataFrame.
+
+To export results for a specific Metric:
+
+```
+my_report.as_dataframe("DatasetStats")
+```
+
+To export results for the entire Report, which returns a dictionary of DataFrames:
+
+```
+my_report.as_dataframe()
+```
+
+This will return all relevant values that are computed inside the Metric as the metric result.
+
+<Note>
+  **Get the full dataset**. You can also get a full original dataset with new row-level scores, like output-level text evaluations you compute. Check the guide on [descriptors](/docs/library/descriptors) for details.
+</Note>
+
+## Evidently snapshot (TBC)
+
+You can also save the output of a Report as an Evidently JSON `snapshot`.
+
+<Info>
+  **How is a JSON snapshot different from `json()`?** Standard JSON output contains only the metric and test results. The JSON snapshot contains all supplementary and render data. This lets you restore the output in any Evidently format (like HTML) without accessing the initial raw data.
+</Info>
+
+When you save Reports to the platform using `add_report`, a snapshot is generated automatically. However, you can also generate and save a snapshot explicitly.
+
+To save the Report as a snapshot:
+
+```python
+drift_report.save('snapshot.json')
+```
+
+To load the snapshot back, use the “load” function.
+
+```
+loaded_report = Report.load('snapshot.json')
+```
+
+After you load the snapshot back, you can again view it in Python or export it to other formats.
+
+
+# Data definition
 
 ### Embeddings 
 
