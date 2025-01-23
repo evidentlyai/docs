@@ -109,8 +109,7 @@
             "docs/library/report",
             "docs/library/tests",
             "docs/library/output_formats",
-            "docs/library/tags_metadata",
-            "docs/library/metric_generator"
+            "docs/library/tags_metadata"
           ]
         }
       ]
@@ -184,8 +183,7 @@
             "metrics/preset_data_drift",
             "metrics/preset_data_summary",
             "metrics/preset_classification",
-            "metrics/preset_regression",
-            "metrics/preset_recsys"
+            "metrics/preset_regression"
           ]
         }
       ]
@@ -197,26 +195,14 @@
         "metrics/customize_llm_judge",
         "metrics/customize_hf_descriptor",
         "metrics/customize_data_drift",
-        "metrics/customize_embedding_drift",
         "metrics/customize_metric"
-      ]
-    },
-    {
-      "group": "Report Customization",
-      "pages": [
-        "metrics/customize_colors",
-        "metrics/customize_add_text"
       ]
     },
     {
       "group": "Explainers",
       "pages": [
-        "metrics/explainer_llm_evals",
         "metrics/explainer_drift",
-        "metrics/explainer_data_stats",
-        "metrics/explainer_recsys",
-        "metrics/explainer_regression",
-        "metrics/explainer_classification"
+        "metrics/explainer_recsys"
       ]
     },
     {
@@ -230,10 +216,7 @@
       "pages": [
         "examples/LLM_evals",
         "examples/LLM_regression_testing",
-        "examples/LLM_judge",
-        "examples/LLM_stress-testing",
-        "examples/LLM_summarization",
-        "examples/LLM_classification"
+        "examples/LLM_judge"
       ]
     },
         {
