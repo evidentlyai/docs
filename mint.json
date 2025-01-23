@@ -219,14 +219,6 @@
         "examples/LLM_judge"
       ]
     },
-        {
-      "group": "ML Tutorials",
-      "pages": [
-        "examples/data_drift_monitoring",
-        "examples/data_quality_testing",
-        "examples/ML_monitoring"
-      ]
-    },
     {
       "group": "Intro",
       "pages": [
