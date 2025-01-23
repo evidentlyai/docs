@@ -4,10 +4,10 @@ description: 'How to design your Dashboard with custom Panels.'
 noindex: true
 ---
 
-We recommend starting with [pre-built Tabs](/docs/platform/dashboard_tabs) for a quick start. This page describes how you can add panels one by one.
+This page shows how to add panels one by one. Check [pre-built Tabs](/docs/platform/dashboard_tabs) for a quick start. 
 
 <Tip>
-  You must first connect to [Evidently Cloud](/docs/setup/cloud) (or your [local workspace](/docs/setup/self-hosting)) and [create a Project](/docs/platform/projects_manage).
+You must first connect to [Evidently Cloud](/docs/setup/cloud) (or your [local workspace](/docs/setup/self-hosting)) and [create a Project](/docs/platform/projects_manage).
 </Tip>
 
 ## Adding panels
@@ -30,7 +30,7 @@ You can add monitoring Panels using the Python API. Here is the general flow:
 
 <Steps>
   <Step title="Connect to the Project">
-    Load the latest dashboard configuration into your Python environment.
+    Load the latest dashboard configuration into your Python environment. 
 
     ```python
     project = ws.get_project("YOUR PROJECT ID HERE")
@@ -40,21 +40,21 @@ You can add monitoring Panels using the Python API. Here is the general flow:
   <Step title="Add a new Panel">
     Use the `add_panel` method and configure the panel:&#x20;
 
-    * Set the [Panel type](/docs/platform/dashboard_panel_types): Counter, Plot, Distribution, Test Counter, Test Plot.&#x20;
+    * Set the [Panel type](/docs/platform/dashboard_panel_types): Counter, Plot, Distribution, Test Counter, Test Plot.
+
+    * Set applicable Panel **parameters.** (See below for each panel type).
 
     * Specify panel **title** and **size**.
 
     * Add optional **Tags** to filter data. If empty, the Panel will use data from all Reports.
 
-    * Set applicable Panel **parameters.** (See list for each panel type below).
+    * Define what the Panel will show (See examples below):
+        * Use `values` to point a specific Metric results and add **legend**, or
+        * Use `test_filters` to select Tests.
 
-    * Define the **Panel value(s)** using `metric_id` and `field_path`. (See examples below).&#x20;
+    * Set if the Panel should appear on specific **Tab**.
 
-    * Add a **legend**.
-
-    * Set if the Panel should appear on specific **Tab**.&#x20;
-
-    For example, to add a line plot that shows row count across all reports:
+    For example, to add a line plot that shows row count across all reports that will appear on the "Overview" tab:
 
     ```python
     project.dashboard.add_panel(
