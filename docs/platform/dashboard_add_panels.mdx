@@ -533,7 +533,7 @@ All parameters:
 
 ### Metric ID and fingerprint
 
-To point to an exact value or Test result to plot on a Panel, you use  `test_filters` or `metric_args `as shown above. The`metric_id` or `metric_fingerprint` you include must corresponds to the Metric that is included in the Reports logged to the Project. You must use the same Metic name (with any parameter) that you used when creating the Report.
+To point to the Metric or Test to plot on a Panel, you use  `test_filters` or `metric_args `as shown above and pass `metric_id` or `metric_fingerprint` . They must include the name of the Metric that corresponds to the Metric inside the Reports logged to the Project. You must use the same Metic name (with any applicable parameters) that you used when creating the Report.
 
 <Note>
   **Working with Presets.** You must reference a named Evidently Metric even if you used a Preset. You can check the Metrics included in each Preset [here](/metrics/all_metrics).
