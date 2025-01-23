@@ -531,17 +531,21 @@ All parameters:
 
 ## Panel Value
 
-To point to an exact value or Test result to plot on a Panel, you use  `test_filters` or `metric_args `as shown above. Both must include the **Metric name** that corresponds to the Metric that is included in the Report and logged to the Project.
+### `Metric_id` and `metric_fingerprint`
+
+To point to an exact value or Test result to plot on a Panel, you use  `test_filters` or `metric_args `as shown above. The`metric_id` or `metric_fingerprint` you include must corresponds to the Metric that is included in the Reports logged to the Project. You must use the same Metic name (with any parameter) that you used when creating the Report.
 
 <Note>
   **Working with Presets.** You must reference a named Evidently Metric even if you used a Preset. You can check the Metrics included in each Preset [here](/metrics/all_metrics).
 </Note>
 
-For Metric Panels, you also specify the `field_path`. This helps point to a specific result inside the Metric. This can take the following values:
+### `Field_path`
+
+For Metric Panels, you also specify the `field_path`. This helps point to a specific **result** inside the Metric. This can take the following values:
 
 * `value` if a Metric returns a single result (majority). Applies to Counter and Plot panels.
 
-* `share` or `count` if a Metric return both absolute count and percentage value (like `MissingValueCount` ) . Applies to Counter and Plot panels.
+* `share` or `count` if a Metric can return both absolute count and percentage value (like `MissingValueCount` ) . Applies to Counter and Plot panels.
 
 * `values` if a Metric contains a histogram visualization (like `UniqueValueCount`). Applies to Distribution panel.
 
