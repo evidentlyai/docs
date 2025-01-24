@@ -56,6 +56,10 @@
     {
       "name": "Changelog",
       "url": "changelog"
+    },
+    {
+      "name": "Old docs",
+      "url": "https://docs.evidentlyai.com/"
     }
   ],
   "primaryTab": {
