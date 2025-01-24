@@ -75,7 +75,7 @@ There are built-in evaluators for popular criteria, like detecting toxicity or i
 
 * Return a label, the reasoning for the decision, and an optional score.
 
-**OpenAI key.** Add the token as the environment variable: [see docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).&#x20;
+**OpenAI key.** Add the token as the environment variable: [see docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
 
 ```python
 import os
@@ -121,6 +121,10 @@ eval_df.add_descriptors(descriptors=[
     PIILLMEval("response", alias="PII", include_score=True), 
 ])
 ```
+
+<Info>
+**Column names**. The alias you set defines the column name with the category. If you enable the score result as well, it will get the "Alias score" name.
+</Info>
 
 **Change the LLM**. To choose to use a different model for the evals.
 
