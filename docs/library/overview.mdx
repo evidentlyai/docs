@@ -10,8 +10,6 @@ This page gives a closer look at the library.
 
 # At a glance
 
-![](/images/concepts/report_test_preview.gif)
-
 Here is how the core evaluation workflow works:
 
 <Steps>
@@ -20,7 +18,7 @@ Here is how the core evaluation workflow works:
   </Step>
 
   <Step title="Run evaluations">
-    Use `Presets` or create a custom evaluation. Optionally, run them as `Tests` to get pass/fail results. There are 100+ built-in evals. You can also add yours. Examples:
+    Use `Presets` or configure your own Report. Optionally, add `Tests` to get pass/fail results. There are 100+ built-in evals. You can also add yours. Examples:
 
     | **Type**                  | **Example checks**                                                    |
     | ------------------------- | --------------------------------------------------------------------- |
@@ -35,6 +33,7 @@ Here is how the core evaluation workflow works:
   </Step>
 
   <Step title="Explore results">
+
     * **View** visual Reports directly in Python environments like Jupyter or Colab.
 
     * **Export** as JSON, Python dictionary, pandas DataFrame, or HTML file.
@@ -45,7 +44,11 @@ Here is how the core evaluation workflow works:
   </Step>
 </Steps>
 
-Below is a detailed overview of how evaluations work in Evidently. If you prefer code:
+Here an example output for Data Quality checks. Any other evaluation can be presented in the same way:
+
+![](/images/concepts/report_test_preview.gif)
+ 
+This page explains how evaluations work in Evidently. If you prefer code:
 
 * Try a quickstart for [LLM evaluation](/quickstart_llm) or [ML evaluation](/quickstart_ml).
 
@@ -59,11 +62,13 @@ That said, we recommend giving this a read once to understand the core library c
 
 **Prepare data**. First, you need to get your input data ready. For example, generate outputs from your ML or LLM system that you want to evaluate.
 
-* **Tabular data**. Prepare your data as a pandas DataFrame. All column names must be strings.
+* **Tabular data**. Prepare your data as a pandas DataFrame. 
 
 * **Flexible structure**. The table can include any combination of numerical, categorical, text, metadata (including timestamps or IDs), and embedding columns.
 
-**Create a Dataset**. Once you have the data, you must create an Evidently `Dataset` object.  Some evaluations may require specific columns or data types present. For example, to evaluate classification quality, you need both predictions and actual labels. To specify where they are located in your table, you can map the data schema using [Data Definition](/docs/library/data_definition).&#x20;
+**Create a Dataset**. Once you have the data, you must create an Evidently `Dataset` object.  
+
+Some evaluations may require specific columns or data types present. For example, to evaluate classification quality, you need both predictions and actual labels. To specify where they are located in your table, you can map the data schema using [Data Definition](/docs/library/data_definition).&#x20;
 
 Here are a few examples of data inputs Evidently can handle:
 
