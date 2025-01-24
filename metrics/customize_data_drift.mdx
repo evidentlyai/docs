@@ -126,7 +126,7 @@ Text drift detection applies to columns with **raw text data**, as specified in 
 
 If you do not find a suitable drift detection method, you can implement a custom function:
 
-```
+```python
 from scipy.stats import anderson_ksamp
 from evidently import ColumnType
 from evidently.calculations.stattests import register_stattest

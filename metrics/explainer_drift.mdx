@@ -102,15 +102,13 @@ If the model can confidently identify which text samples belong to the “newer�
 
 The drift score in this case is the ROC AUC of the resulting classifier.
 
+The default for **larger data with > 1000 observations** detects drift if the ROC AUC > 0.55. The ROC AUC of the obtained classifier is directly compared against the set ROC AUC threshold. You can set a different threshold as a parameter.
+
 The default for **small data with \<= 1000 observations** detects drift if the ROC AUC of the drift detection classifier > possible ROC AUC of the random classifier at a 95th percentile. This approach **protects against false positive** drift results for small datasets since we explicitly compare the classifier score against the “best random score” we could obtain. 
 
 <Info>
   **How this works.** The drift score is the ROC-AUC score of the domain classifier computed on a validation dataset. This ROC AUC is compared to the ROC AUC of the random classifier at a set percentile. To ensure the result is statistically meaningful, we repeat the calculation 1000 times with randomly assigned target class probabilities. This produces a distribution with a mean of 0.5. We then take the 95th percentile (default) of this distribution and compare it to the ROC-AUC score of the classifier. If the classifier score is higher, we consider the data drift to be detected. You can also set a different percentile as a parameter.
-
-
 </Info>
-
-The default for **larger data with > 1000 observations** detects drift if the ROC AUC > 0.55. The ROC AUC of the obtained classifier is directly compared against the set ROC AUC threshold.
 
 If the drift is detected, Evidently will also calculate the **top features of the domain classifier**. The resulting output contains specific characteristic words that help identify whether a given sample belongs to reference or current. They are normalized based on vocabulary, for example, to exclude non-interpretable words such as articles.
 
@@ -123,8 +121,6 @@ If the drift is detected, Evidently will also calculate the **top features of t
 <Warning>
   This method is **coming soon** to the new Evidently API! Check the old docs for now.
 </Warning>
-
- These metrics 
 
 The default embedding drift method is a **classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions.
 
