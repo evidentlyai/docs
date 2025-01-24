@@ -57,13 +57,15 @@ That said, we recommend giving this a read once to understand the core library c
 
 ## Dataset
 
-First, you need to get your input data ready. For example, generate outputs from your ML or LLM system that you want to evaluate.
+**Prepare data**. First, you need to get your input data ready. For example, generate outputs from your ML or LLM system that you want to evaluate.
 
 * **Tabular data**. Prepare your data as a pandas DataFrame. All column names must be strings.
 
 * **Flexible structure**. The table can include any combination of numerical, categorical, text, metadata (including timestamps or IDs), and embedding columns.
 
-Here are a few examples.
+**Create a Dataset**. Once you have the data, you must create an Evidently `Dataset` object.  Some evaluations may require specific columns or data types present. For example, to evaluate classification quality, you need both predictions and actual labels. To specify where they are located in your table, you can map the data schema using [Data Definition](/docs/library/data_definition).&#x20;
+
+Here are a few examples of data inputs Evidently can handle:
 
 <Tabs>
   <Tab title="LLM logs">
@@ -126,15 +128,9 @@ Here are a few examples.
   </Tab>
 </Tabs>
 
-Once you have the data, you must create a `Dataset` object.&#x20;
-
-**Data Definition**. Some evaluations require specific columns or data types present. For example, to evaluate classification quality, you need both predictions and actual labels. To specify where they are located in your table, you can map the data schema using [Data Definition](/docs/library/data_definition).
-
-**Two datasets**. Typically you run evaluations for a single dataset (`current` dataset). Optionally, you can include a second (`reference`) dataset). Both datasets must have identical structures.
-
 ![](/images/datasets_input_data_two.png)
 
-When to use two datasets:
+**Two datasets**. Typically you evaluate a single (`current` ) dataset. Optionally, you can include a second (`reference`) dataset. Both must have identical structures. When to use two datasets:
 
 * **Side-by-side comparison**. This lets you compare outputs or data quality across two periods, prompt/model versions, etc.
 
