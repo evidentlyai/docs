@@ -62,6 +62,10 @@ my_eval
 #my_eval.json
 ```
 
+<Note>
+Note that in this case the order matters: the first `eval_data_1` is the current data you evaluate, the second `eval_data_2` is the reference dataset you consider as a baseline for drift detection.
+</Note>
+
 If nothing else is specified, the Report will run with the default parameters for all columns in the dataset. You can also pass custom parameters to some Presets.
 
 **Combine Presets**. You can also include multiple Presets in the same Report. List the m one by one.

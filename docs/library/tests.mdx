@@ -64,6 +64,10 @@ my_eval = report.run(eval_data_1, eval_data_2) # eval_data_2 is reference
 
 For example, the check on missing values will validate if the current share of missing values is within +/-10% of the reference.
 
+<Note>
+Note that in this case the order matters: the first `eval_data_1` is the current data you evaluate, the second `eval_data_2` is the reference dataset you consider as a baseline and use to generate test conditions.
+</Note>
+
 **Using heuristics**. Without reference, Tests use predefined rules:
 
 ```Python
