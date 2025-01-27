@@ -2,25 +2,28 @@
 title: 'LLM Evaluation'
 description: 'Evaluate text outputs in under 5 minutes'
 noindex: true
-mode: "wide"
 ---
 
 import CloudSignup from '/snippets/cloud_signup.mdx';
 import CreateProject from '/snippets/create_project.mdx';
 
+This quickstart shows both local open-source and cloud workflows.
+
+Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
+
+## 1. Set up your environment
+
 <Tabs>
   <Tab title="Evidently Cloud">
     You will run a simple evaluation locally in Python and send results to Evidently Cloud for analysis and monitoring.
 
-    Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
-
-    ## 1. Set up Evidently Cloud
+    ### Set up Evidently Cloud
 
     <CloudSignup />
 
     Now, switch to your Python environment.
 
-    ## 2. Installation and imports
+    ### Installation and imports
 
     Install the Evidently Python library:
 
@@ -48,145 +51,13 @@ import CreateProject from '/snippets/create_project.mdx';
     from evidently.ui.workspace.cloud import CloudWorkspace
     ```
 
-    ## 3. Create a Project
+    ### Create a Project
 
     <CreateProject />
-
-    ## 4. Import the toy dataset
-
-    Pass data as a pandas dataframe. Here’s a toy chatbot dataset with "Questions" and "Answers".
-
-    ```python
-    data = [
-    ["What is the chemical symbol for gold?", "The chemical symbol for gold is Au."],
-    ["What is the capital of Japan?", "The capital of Japan is Tokyo."],
-    ["Tell me a joke.", "Why don't programmers like nature? It has too many bugs!"],
-    ["What is the boiling point of water?", "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit)."],
-    ["Who painted the Mona Lisa?", "Leonardo da Vinci painted the Mona Lisa."],
-    ["What’s the fastest animal on land?", "The cheetah is the fastest land animal, capable of running up to 75 miles per hour."],
-    ["Can you help me with my math homework?", "I'm sorry, but I can't assist with homework."],
-    ["How many states are there in the USA?", "There are 50 states in the USA."],
-    ["What’s the primary function of the heart?", "The primary function of the heart is to pump blood throughout the body."],
-    ["Can you tell me the latest stock market trends?", "I'm sorry, but I can't provide real-time stock market trends. You might want to check a financial news website or consult a financial advisor."]
-    ]
-
-    columns = ["question", "answer"]
-
-    eval_df = pd.DataFrame(data, columns=columns)
-    #eval_df.head()
-    ```
-
-    <Note>**Collecting live data**: you can also trace inputs and outputs from your LLM app, and download the dataset created from traces for evals. Check the [Tracing Quickstart](/quickstart_tracing.md). </Note>
-
-    ## 5. Score your data
-
-    Let's evaluate all "Answers" for:
-
-    * Sentiment: from -1 for negative to 1 for positive.
-
-    * Text length: character count.
-
-    * Denials: detect if the chatbot denied an answer.
-
-    The last eval uses LLM-as-a-judge with a template Evidently prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label with an explanation.
-
-    <Note>
-      No OpenAI key? Use the provided alternative.
-    </Note>
-
-    Set the OpenAI key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
-
-    ```python
-    ## import os
-    ## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
-    ```
-
-    Create an Evidently dataset and run all the evals together. Each evaluation is a "descriptor". You can run built-in or custom evals:
-
-    ```python
-    eval_dataset = Dataset.from_pandas(
-    pd.DataFrame(eval_df),
-    data_definition=DataDefinition(),
-    descriptors=[
-        Sentiment("answer", alias="Sentiment"),
-        TextLength("answer", alias="Length"),
-        DeclineLLMEval("answer", alias="Denials"), # or IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials"),
-    ]
-    )
-    ```
-
-    <Info>
-      **Alternative**. If you don't have an OpenAI key, you can run a deterministic eval that uses regular expressions instead of LLM judge: check if words "sorry" or "apologize" are present (True/False). Use the part of the code that is commented out.
-    </Info>
-
-    This adds new scores directly to your source data. You can optionally preview them locally in pandas:
-
-    ```python
-    eval_dataset.as_dataframe()
-    ```
-
-    ![](/images/examples/llm_quickstart_preview.png)
-
-    ## 6. Test the results
-
-    Now, let's create a Report to summarize and test the results. Let's run a check:
-    
-    * Sentiment: should be non-negative (greater or equal to 0)
-
-    * Text length: should be at most 150 symbols.
-
-    * Denials: there should be no denials.
-    
-
-    ```
-    report = Report([
-        TextEvals(),
-        MinValue(column="Sentiment", tests=[gte(0)]),
-        MaxValue(column="Length", tests=[lte(150)]),
-        CategoryCount(column="Denials", category="DECLINE", tests=[eq(0)]) # CategoryCount(column="Denials", category=True, tests=[eq(0)])
-    ],
-    include_tests=True)
-
-    my_eval = report.run(eval_dataset, None)
-    ```
-
-    <Info>
-    **Tests are optional**. You can simply run the Report with `TextEvals()` to summarize the results.
-    </Info>
-
-    
-        ## 6. Send results to Evidently Cloud
-
-        **Upload the Report** and include raw data for detailed analysis:
-
-        ```python
-        ws.add_run(project.id, my_eval, include_data=True)
-    ````
-
-    **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report.
-
-    You will see the scores summary, and the dataset with new descriptor columns. For example, you can sort to find all answers with "Denials".
-
-    ![](/images/examples/llm_quickstart_explore.png)
-
-    You can also see a summary of Test results that show pass/fail for your conditions. 
-
-    ![](/images/examples/llm_quickstart_tests.png)
-
-    ## 7. Get a dashboard
-
-    Go to the "Dashboard" tab and enter the "Edit" mode. Add a new tab, and select the "Descriptors" template.
-
-    You'll see a set of panels that show descriptor values. Each has a single data point. As you log ongoing evaluation results, you can track trends and set up alerts.
-
-    ![](/images/examples/llm_quickstart_create_tab.gif)
-
   </Tab>
 
-  <Tab title="Open-source">
-   You will run a simple evaluation locally and preview the results in your Python environment.
-
-    ## 1. Installation and imports
+  <Tab title="Local">
+    You will run a simple evaluation locally and preview the results in your Python environment.
 
     Install the Evidently Python library:
 
@@ -207,138 +78,165 @@ import CreateProject from '/snippets/create_project.mdx';
     from evidently.future.metrics import *
     from evidently.future.tests import *
     ```
+  </Tab>
+</Tabs>
 
-    ## 2. Import the toy dataset
+## 2. Prepare a toy dataset
 
-    Pass data as a pandas dataframe. Here’s a toy chatbot dataset with "Questions" and "Answers".
+Let's create a toy demo chatbot dataset with "Questions" and "Answers".
+
+```python
+data = [
+["What is the chemical symbol for gold?", "The chemical symbol for gold is Au."],
+["What is the capital of Japan?", "The capital of Japan is Tokyo."],
+["Tell me a joke.", "Why don't programmers like nature? It has too many bugs!"],
+["What is the boiling point of water?", "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit)."],
+["Who painted the Mona Lisa?", "Leonardo da Vinci painted the Mona Lisa."],
+["What’s the fastest animal on land?", "The cheetah is the fastest land animal, capable of running up to 75 miles per hour."],
+["Can you help me with my math homework?", "I'm sorry, but I can't assist with homework."],
+["How many states are there in the USA?", "There are 50 states in the USA."],
+["What’s the primary function of the heart?", "The primary function of the heart is to pump blood throughout the body."],
+["Can you tell me the latest stock market trends?", "I'm sorry, but I can't provide real-time stock market trends. You might want to check a financial news website or consult a financial advisor."]
+]
+
+columns = ["question", "answer"]
+
+eval_df = pd.DataFrame(data, columns=columns)
+#eval_df.head()
+```
+
+<Note>**Collecting live data**: you can also trace inputs and outputs from your LLM app, and download the dataset created from traces for evals. Check the [Tracing Quickstart](/quickstart_tracing.md). </Note>
+
+## 3. Score individual outputs
+
+Let's evaluate all "Answers" for:
+
+* Sentiment: from -1 for negative to 1 for positive.
+
+* Text length: character count.
+
+* Denials: detect if the chatbot denied an answer.
+
+The last eval uses LLM-as-a-judge with a template Evidently prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label with an explanation.
+
+<Note>
+  No OpenAI key? Use the provided alternative.
+</Note>
+
+Set the OpenAI key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
+
+```python
+## import os
+## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
+```
+
+Create an Evidently dataset and run all the evals together. Each evaluation is a "descriptor". You can run built-in or custom evals:
+
+```python
+eval_dataset = Dataset.from_pandas(
+pd.DataFrame(eval_df),
+data_definition=DataDefinition(),
+descriptors=[
+    Sentiment("answer", alias="Sentiment"),
+    TextLength("answer", alias="Length"),
+    DeclineLLMEval("answer", alias="Denials"), # or IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials"),
+]
+)
+```
+
+<Info>
+  **Alternative**. If you don't have an OpenAI key, you can run a deterministic eval that uses regular expressions instead of LLM judge: check if words "sorry" or "apologize" are present (True/False). Use the part of the code that is commented out.
+</Info>
+
+This adds new scores directly to your source data. You can preview them locally in pandas:
+
+```python
+eval_dataset.as_dataframe()
+```
+
+![](/images/examples/llm_quickstart_preview.png)
+
+## 4. Evaluate the results
+
+Now, let's create a Report to summarize all individual scores and test the results. Let's run a check:
+
+* Sentiment: should be non-negative (greater or equal to 0)
+
+* Text length: should be at most 150 symbols.
+
+* Denials: there should be no denials.
+
+```
+report = Report([
+    TextEvals(),
+    MinValue(column="Sentiment", tests=[gte(0)]),
+    MaxValue(column="Length", tests=[lte(150)]),
+    CategoryCount(column="Denials", category="DECLINE", tests=[eq(0)]) # CategoryCount(column="Denials", category=True, tests=[eq(0)])
+],
+include_tests=True)
+
+my_eval = report.run(eval_dataset, None)
+```
+
+<Info>
+  **Tests are optional**. You can simply run the Report with `TextEvals()` to summarize the results.
+</Info>
+
+## 5. Explore the results
+
+<Tabs>
+  <Tab title="Evidently Cloud">
+    Send results to Evidently Cloud
+
+    **Upload the Report** and include raw data for detailed analysis:
 
     ```python
-    data = [
-    ["What is the chemical symbol for gold?", "The chemical symbol for gold is Au."],
-    ["What is the capital of Japan?", "The capital of Japan is Tokyo."],
-    ["Tell me a joke.", "Why don't programmers like nature? It has too many bugs!"],
-    ["What is the boiling point of water?", "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit)."],
-    ["Who painted the Mona Lisa?", "Leonardo da Vinci painted the Mona Lisa."],
-    ["What’s the fastest animal on land?", "The cheetah is the fastest land animal, capable of running up to 75 miles per hour."],
-    ["Can you help me with my math homework?", "I'm sorry, but I can't assist with homework."],
-    ["How many states are there in the USA?", "There are 50 states in the USA."],
-    ["What’s the primary function of the heart?", "The primary function of the heart is to pump blood throughout the body."],
-    ["Can you tell me the latest stock market trends?", "I'm sorry, but I can't provide real-time stock market trends. You might want to check a financial news website or consult a financial advisor."]
-    ]
-
-    columns = ["question", "answer"]
-
-    eval_df = pd.DataFrame(data, columns=columns)
-    #eval_df.head()
+    ws.add_run(project.id, my_eval, include_data=True)
     ```
 
-    <Note>**Collecting live data**: you can also trace inputs and outputs from your LLM app, and download the dataset created from traces for evals. Check the [Tracing Quickstart](/quickstart_tracing.md). </Note>
+    **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report.
 
-    ## 3. Score your data
+    You will see the scores summary, and the dataset with new descriptor columns. For example, you can sort to find all answers with "Denials".
 
-    Let's evaluate all "Answers" for:
+    ![](/images/examples/llm_quickstart_explore.png)
 
-    * Sentiment: from -1 for negative to 1 for positive.
+    You can also see a summary of Test results that show pass/fail for your conditions.
 
-    * Text length: character count.
+    ![](/images/examples/llm_quickstart_tests.png)
 
-    * Denials: detect if the chatbot denied an answer.
+    **Get a Dashboard**.  Go to the "Dashboard" tab and enter the "Edit" mode. Add a new tab, and select the "Descriptors" template.
 
-    The last eval uses LLM-as-a-judge with a template Evidently prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label with an explanation.
-
-    <Note>
-      No OpenAI key? Use the provided alternative.
-    </Note>
-
-    Set the OpenAI key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
-
-    ```python
-    ## import os
-    ## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
-    ```
-
-    Create an Evidently dataset and run all the evals together. Each evaluation is a "descriptor". You can run built-in or custom evals:
-
-    ```python
-    eval_dataset = Dataset.from_pandas(
-    pd.DataFrame(eval_df),
-    data_definition=DataDefinition(),
-    descriptors=[
-        Sentiment("answer", alias="Sentiment"),
-        TextLength("answer", alias="Length"),
-        DeclineLLMEval("answer", alias="Denials"), # or IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials"),
-    ]
-    )
-    ```
-
-    <Info>
-      **Alternative**. If you don't have an OpenAI key, you can run a deterministic eval that uses regular expressions instead of LLM judge: check if words "sorry" or "apologize" are present (True/False). Use the part of the code that is commented out.
-    </Info>
-
-    This will adds new scores directly to your source data. 
+    ![](/images/examples/llm_quickstart_create_tab.gif)
     
-    You can preview it locally in pandas:
+    You'll see a set of panels that show descriptor values. Each has a single data point. As you log ongoing evaluation results, you can track trends and set up alerts.
+  </Tab>
 
-    ```python
-    eval_dataset.as_dataframe()
-    ```
-
-    ![](/images/examples/llm_quickstart_preview.png)
-
-    ## 4. Test the results
-
-    Now, let's create a Report to summarize and test the results. Let's run a check:
-    
-    * Sentiment: should be non-negative (greater or eq to 0)
-
-    * Text length: should be at most 150 symbols.
-
-    * Denials: there should be no denials.
-    
-
-    ```
-    report = Report([
-        TextEvals(),
-        MinValue(column="Sentiment", tests=[gte(0)]),
-        MaxValue(column="Length", tests=[lte(150)]),
-        CategoryCount(column="Denials", category="DECLINE", tests=[eq(0)]) # CategoryCount(column="Denials", category=True, tests=[eq(0)])
-    ],
-    include_tests=True)
-
-    my_eval = report.run(eval_dataset, None)
-    ```
-
-    <Info>
-    **Tests are optional**. You can simply run the Report with `TextEvals()` to summarize the results.
-    </Info>
-
-    ## 5. Explore the results
-    
+  <Tab title="Local">
     If you are an interactive Python environment like Jupyter notebook or Colab, you can directly see an interactive Report.
 
     ```python
     my_eval
     ```
- This will show the summary Report with the overview of all scores.
 
-     ![](/images/examples/llm_quickstart_report.png)
+    This will show the summary Report with the overview of all scores.
 
-In the separate Tab, you'll see the pass/fail results for all Tests.
+    ![](/images/examples/llm_quickstart_report.png)
+
+    In the separate Tab, you'll see the pass/fail results for all Tests.
 
     ![](/images/examples/llm_quickstart_tests.png)
 
-You can also view the results as a JSON or Python dictionary:
+    You can also view the results as a JSON or Python dictionary:
 
- ```python
-    # my_eval.json()
-# my_eval.dict()
+    ```python
+       # my_eval.json()
+    # my_eval.dict()
     ```
 
-Or save and open an HTML file externally:
+    Or save and open an HTML file externally:
 
- ```python
-my_report.save_html(“file.html”)
-  ```
- 
+    ```python
+    my_report.save_html(“file.html”)
+    ```
   </Tab>
 </Tabs>

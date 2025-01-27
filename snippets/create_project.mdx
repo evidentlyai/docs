@@ -4,7 +4,7 @@ Connect to Evidently Cloud using your API token:
 ws = CloudWorkspace(token="YOUR_API_TOKEN", url="https://app.evidently.cloud")
 ```
 
-Create a Project within your Organization (or connect to an existing one):
+Create a Project within your Organization, or connect to an existing Project:
 
 ```python
 project = ws.create_project("My project name", org_id="YOUR_ORG_ID")
