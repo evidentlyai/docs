@@ -9,13 +9,15 @@ import CreateProject from '/snippets/create_project.mdx';
 
 This quickstart shows both local open-source and cloud workflows.
 
+<Info>
 Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
+</Info>
 
 ## 1. Set up your environment
 
 <Tabs>
   <Tab title="Evidently Cloud">
-    You will run a simple evaluation locally in Python and send results to Evidently Cloud for analysis and monitoring.
+    You will run a simple evaluation in Python and explore results in Evidently Cloud.
 
     ### Set up Evidently Cloud
 
@@ -111,16 +113,16 @@ eval_df = pd.DataFrame(data, columns=columns)
 
 Let's evaluate all "Answers" for:
 
-* Sentiment: from -1 for negative to 1 for positive.
+* **Sentiment**: from -1 for negative to 1 for positive.
 
-* Text length: character count.
+* **Text length**: character count.
 
-* Denials: detect if the chatbot denied an answer.
+* **Denials**: detect if the chatbot denied an answer. This eval uses LLM-as-a-judge with a template Evidently prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label with an explanation.
 
-The last eval uses LLM-as-a-judge with a template Evidently prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label with an explanation.
+Each such evaluation is a "descriptor". You can run built-in or custom evals.
 
 <Note>
-  No OpenAI key? Use the provided alternative.
+  No OpenAI key? There is an alternative below.
 </Note>
 
 Set the OpenAI key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
@@ -130,7 +132,7 @@ Set the OpenAI key as an environment variable. [See Open AI docs](https://help.o
 ## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
 ```
 
-Create an Evidently dataset and run all the evals together. Each evaluation is a "descriptor". You can run built-in or custom evals:
+Create an Evidently dataset and run all the evals: 
 
 ```python
 eval_dataset = Dataset.from_pandas(
@@ -145,7 +147,7 @@ descriptors=[
 ```
 
 <Info>
-  **Alternative**. If you don't have an OpenAI key, you can run a deterministic eval that uses regular expressions instead of LLM judge: check if words "sorry" or "apologize" are present (True/False). Use the part of the code that is commented out.
+  **Alternative**. If you don't have an OpenAI key, you can run a deterministic eval that checks if words "sorry" or "apologize" are present in text (True/False). Use the `IncludesWords` as shown in the code comment.
 </Info>
 
 This adds new scores directly to your source data. You can preview them locally in pandas:
@@ -156,17 +158,17 @@ eval_dataset.as_dataframe()
 
 ![](/images/examples/llm_quickstart_preview.png)
 
-## 4. Evaluate the results
+## 4. Run tests
 
-Now, let's create a Report to summarize all individual scores and test the results. Let's run a check:
+Now, let's create a Report to summarize individual scores and test the results. We check that: 
 
-* Sentiment: should be non-negative (greater or equal to 0)
+* **Sentiment** is non-negative (greater or equal to 0)
 
-* Text length: should be at most 150 symbols.
+* **Text length** is at most 150 symbols.
 
-* Denials: there should be no denials.
+* **Denials**: there are none.
 
-```
+```python
 report = Report([
     TextEvals(),
     MinValue(column="Sentiment", tests=[gte(0)]),
@@ -186,7 +188,6 @@ my_eval = report.run(eval_dataset, None)
 
 <Tabs>
   <Tab title="Evidently Cloud">
-    Send results to Evidently Cloud
 
     **Upload the Report** and include raw data for detailed analysis:
 
@@ -194,17 +195,17 @@ my_eval = report.run(eval_dataset, None)
     ws.add_run(project.id, my_eval, include_data=True)
     ```
 
-    **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report.
+    **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report. You will see the scores summary, and the dataset with new descriptor columns. 
 
-    You will see the scores summary, and the dataset with new descriptor columns. For example, you can sort to find all answers with "Denials".
+    **See Test results**. Inside the "Tests" tab of the Report, you will get a pass/fail summary for your conditions. 
+
+    ![](/images/examples/llm_quickstart_tests.png)
+    
+    **Explore**. For example, sort to find all answers with "Denials".
 
     ![](/images/examples/llm_quickstart_explore.png)
 
-    You can also see a summary of Test results that show pass/fail for your conditions.
-
-    ![](/images/examples/llm_quickstart_tests.png)
-
-    **Get a Dashboard**.  Go to the "Dashboard" tab and enter the "Edit" mode. Add a new tab, and select the "Descriptors" template.
+    **Get a Dashboard**. As you run repeated evals, you may want to track the results in time. Go to the "Dashboard" tab in the left menu and enter the "Edit" mode. Add a new tab, and select the "Descriptors" template.
 
     ![](/images/examples/llm_quickstart_create_tab.gif)
     
@@ -212,12 +213,12 @@ my_eval = report.run(eval_dataset, None)
   </Tab>
 
   <Tab title="Local">
-    If you are an interactive Python environment like Jupyter notebook or Colab, you can directly see an interactive Report.
+    You can view the Report directly in an interactive Python environment like Jupyter notebook or Colab. Run:
 
     ```python
     my_eval
     ```
-
+    
     This will show the summary Report with the overview of all scores.
 
     ![](/images/examples/llm_quickstart_report.png)
@@ -229,14 +230,14 @@ my_eval = report.run(eval_dataset, None)
     You can also view the results as a JSON or Python dictionary:
 
     ```python
-       # my_eval.json()
+    # my_eval.json()
     # my_eval.dict()
     ```
 
     Or save and open an HTML file externally:
 
     ```python
-    my_report.save_html(“file.html”)
+    # my_report.save_html(“file.html”)
     ```
   </Tab>
 </Tabs>
