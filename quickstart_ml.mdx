@@ -10,7 +10,7 @@ import CreateProject from '/snippets/create_project.mdx';
 This quickstart shows both local open-source and cloud workflows.
 
 <Info>
-Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
+  Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
 </Info>
 
 ## 1. Set up your environment
@@ -35,15 +35,15 @@ Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
 
     ```python
     import pandas as pd
-from sklearn import datasets
+    from sklearn import datasets
 
-from evidently.future.datasets import Dataset
-from evidently.future.datasets import DataDefinition
+    from evidently.future.datasets import Dataset
+    from evidently.future.datasets import DataDefinition
 
-from evidently.future.report import Report
-from evidently.future.metrics import *
-from evidently.future.presets import *
-from evidently.future.tests import *
+    from evidently.future.report import Report
+    from evidently.future.metrics import *
+    from evidently.future.presets import *
+    from evidently.future.tests import *
     ```
 
     Components to connect with Evidently Cloud:
@@ -56,6 +56,7 @@ from evidently.future.tests import *
 
     <CreateProject />
   </Tab>
+
   <Tab title="Local">
     You will run a simple evaluation locally and preview the results in your Python environment.
 
@@ -69,15 +70,15 @@ from evidently.future.tests import *
 
     ```python
     import pandas as pd
-from sklearn import datasets
+    from sklearn import datasets
 
-from evidently.future.datasets import Dataset
-from evidently.future.datasets import DataDefinition
+    from evidently.future.datasets import Dataset
+    from evidently.future.datasets import DataDefinition
 
-from evidently.future.report import Report
-from evidently.future.metrics import *
-from evidently.future.presets import *
-from evidently.future.tests import *
+    from evidently.future.report import Report
+    from evidently.future.metrics import *
+    from evidently.future.presets import *
+    from evidently.future.tests import *
     ```
   </Tab>
 </Tabs>
@@ -91,11 +92,14 @@ adult_data = datasets.fetch_openml(name="adult", version=2, as_frame="auto")
 adult = adult_data.frame
 ```
 
-If OpenML is not available, you can download the same dataset:
+<Accordion title="Have trouble downloading the data?" defaultOpen={false}>
+If OpenML is not available, you can download the same dataset from here:
+
 ```python
 url = "https://github.com/evidentlyai/evidently/blob/main/test_data/adults.parquet?raw=true"
 adult = pd.read_parquet(url, engine='pyarrow')
 ```
+</Accordion>
 
 Let's split the data into two and introduce some artificial drift for demo purposes. `Prod` data will include people with education levels unseen in the reference dataset:
 
@@ -124,7 +128,7 @@ eval_data_1 = Dataset.from_pandas(
 
 ```python
 eval_data_2 = Dataset.from_pandas(
-    pd.DataFrame(adult_prod),
+    pd.DataFrame(adult_ref),
     data_definition=schema
 )
 ```
@@ -145,7 +149,6 @@ my_eval = report.run(eval_data_1, eval_data_2)
 
 <Tabs>
   <Tab title="Evidently Cloud">
-
     **Upload the Report** with summary results:
 
     ```python
@@ -155,16 +158,17 @@ my_eval = report.run(eval_data_1, eval_data_2)
     **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report. You will see the summary with scores and Test results.
 
     **Get a Dashboard**. As you run repeated evals, you may want to track the results in time. Go to the "Dashboard" tab in the left menu and enter the "Edit" mode. Add a new tab, and select the "Columns" template.
-    
+
     You'll see a set of panels that show column stats. Each has a single data point. As you log ongoing evaluation results, you can track trends and set up alerts.
   </Tab>
+
   <Tab title="Local">
     To view the Report in an interactive Python environment like Jupyter notebook or Colab, run:
 
     ```python
     my_eval
     ```
-    
+
     This will show the summary Report. In the separate Tab, you'll see the pass/fail results for all Tests.
 
     You can also view the results as a JSON or Python dictionary:
