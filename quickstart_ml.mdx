@@ -1,105 +1,186 @@
 ---
 title: 'Data and ML checks'
-description: 'Preview changes locally to update your docs'
+description: 'ML monitoring hello world'
 noindex: true
-mode: "wide"
 ---
 
+import CloudSignup from '/snippets/cloud_signup.mdx';
+import CreateProject from '/snippets/create_project.mdx';
+
+This quickstart shows both local open-source and cloud workflows.
+
 <Info>
-  **Prerequisite**: Please install Node.js (version 19 or higher) before proceeding.
+Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
 </Info>
 
-Follow these steps to install and run Mintlify on your operating system:
+## 1. Set up your environment
 
-**Step 1**: Install Mintlify:
+<Tabs>
+  <Tab title="Evidently Cloud">
+    You will run a simple evaluation in Python and explore results in Evidently Cloud.
 
-<CodeGroup>
-  ```bash npm
-  npm i -g mintlify
-  ```
+    ### 1.2 Set up Evidently Cloud
 
-  ```bash yarn
-  yarn global add mintlify
-  ```
-</CodeGroup>
+    <CloudSignup />
 
-**Step 2**: Navigate to the docs directory (where the `mint.json` file is located) and execute the following command:
+    ### 1.3. Installation and imports
 
-```bash
-mintlify dev
+    Install the Evidently Python library:
+
+    ```python
+    !pip install evidently
+    ```
+
+    Components to run the evals:
+
+    ```python
+    import pandas as pd
+from sklearn import datasets
+
+from evidently.future.datasets import Dataset
+from evidently.future.datasets import DataDefinition
+
+from evidently.future.report import Report
+from evidently.future.metrics import *
+from evidently.future.presets import *
+from evidently.future.tests import *
+    ```
+
+    Components to connect with Evidently Cloud:
+
+    ```python
+    from evidently.ui.workspace.cloud import CloudWorkspace
+    ```
+
+    ### 1.3. Create a Project
+
+    <CreateProject />
+  </Tab>
+
+  <Tab title="Local">
+    You will run a simple evaluation locally and preview the results in your Python environment.
+
+    Install the Evidently Python library:
+
+    ```python
+    !pip install evidently
+    ```
+
+    Components to run the evals:
+
+    ```python
+    import pandas as pd
+from sklearn import datasets
+
+from evidently.future.datasets import Dataset
+from evidently.future.datasets import DataDefinition
+
+from evidently.future.report import Report
+from evidently.future.metrics import *
+from evidently.future.presets import *
+from evidently.future.tests import *
+    ```
+  </Tab>
+</Tabs>
+
+## 2. Prepare a toy dataset
+
+Let's import a toy dataset with tabular data:
+
+```python
+adult_data = datasets.fetch_openml(name="adult", version=2, as_frame="auto")
+adult = adult_data.frame
 ```
 
-A local preview of your documentation will be available at `http://localhost:3000`.
+<Note>If OpenML is not available, you can download the same dataset:
+```python
+url = "https://github.com/evidentlyai/evidently/blob/main/test_data/adults.parquet?raw=true"
+adult = pd.read_parquet(url, engine='pyarrow')
+```
+</Note>
 
-### Custom Ports
+Let's split the data into two and introduce some artificial drift for demo purposes. `Prod` data will include people with education levels unseen in the reference dataset:
 
-By default, Mintlify uses port 3000. You can customize the port Mintlify runs on by using the `--port` flag. To run Mintlify on port 3333, for instance, use this command:
-
-```bash
-mintlify dev --port 3333
+```python
+adult_ref = adult[~adult.education.isin(["Some-college", "HS-grad", "Bachelors"])]
+adult_prod = adult[adult.education.isin(["Some-college", "HS-grad", "Bachelors"])]
 ```
 
-If you attempt to run Mintlify on a port that's already in use, it will use the next available port:
+Map the column types:
 
-```md
-Port 3000 is already in use. Trying 3001 instead.
+```python
+schema = DataDefinition(
+    numerical_columns=["education-num", "age", "capital-gain", "hours-per-week", "capital-loss"],
+    categorical_columns=["education", "occupation", "native-country", "workclass", "marital-status"],
+    )
 ```
 
-## Mintlify Versions
+Create Evidently Datasets to work with:
 
-Please note that each CLI release is associated with a specific version of Mintlify. If your local website doesn't align with the production version, please update the CLI:
-
-<CodeGroup>
-  ```bash npm
-  npm i -g mintlify@latest
-  ```
-
-  ```bash yarn
-  yarn global upgrade mintlify
-  ```
-</CodeGroup>
-
-## Validating Links
-
-The CLI can assist with validating reference links made in your documentation. To identify any broken links, use the following command:
-
-```bash
-mintlify broken-links
+```python
+eval_data_1 = Dataset.from_pandas(
+    pd.DataFrame(adult_prod),
+    data_definition=schema
+)
 ```
 
-## Deployment
+```python
+eval_data_2 = Dataset.from_pandas(
+    pd.DataFrame(adult_prod),
+    data_definition=schema
+)
+```
 
-<Tip>
-  Unlimited editors available under the [Pro
-  Plan](https://mintlify.com/pricing) and above.
-</Tip>
+## 3. Get a Report
 
-If the deployment is successful, you should see the following:
+Let's a summary of all columns in the dataset, and run auto-generated Tests to check for data quality and core statistics between two datasets:
 
-<Frame>
-  <img src="/images/checks-passed.png" style={{ borderRadius: '0.5rem' }} />
-</Frame>
+```python
+report = Report([
+    DataSummaryPreset()
+],
+include_tests="True")
+my_eval = report.run(eval_data_1, eval_data_2)
+```
 
-## Code Formatting
+## 4. Explore the results
 
-We suggest using extensions on your IDE to recognize and format MDX. If you're a VSCode user, consider the [MDX VSCode extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) for syntax highlighting, and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting.
+<Tabs>
+  <Tab title="Evidently Cloud">
 
-## Troubleshooting
+    **Upload the Report** with summary results:
 
-<AccordionGroup>
-  <Accordion title="Error: Could not load the &#x22;sharp&#x22; module using the darwin-arm64 runtime">
-    This may be due to an outdated version of node. Try the following:
+    ```python
+    ws.add_run(project.id, my_eval, include_data=False)
+    ```
 
-    1. Remove the currently-installed version of mintlify: `npm remove -g mintlify`
+    **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report. You will see the summary with scores and Test results.
 
-    2. Upgrade to Node v19 or higher.
+    **Get a Dashboard**. As you run repeated evals, you may want to track the results in time. Go to the "Dashboard" tab in the left menu and enter the "Edit" mode. Add a new tab, and select the "Columns" template.
+    
+    You'll see a set of panels that show column stats. Each has a single data point. As you log ongoing evaluation results, you can track trends and set up alerts.
+  </Tab>
 
-    3. Reinstall mintlify: `npm install -g mintlify`
-  </Accordion>
+  <Tab title="Local">
+    To view the Report in an interactive Python environment like Jupyter notebook or Colab, run:
 
-  <Accordion title="Issue: Encountering an unknown error">
-    Solution: Go to the root of your device and delete the \~/.mintlify folder. Afterwards, run `mintlify dev` again.
-  </Accordion>
-</AccordionGroup>
+    ```python
+    my_eval
+    ```
+    
+    This will show the summary Report. In the separate Tab, you'll see the pass/fail results for all Tests.
 
-Curious about what changed in the CLI version? [Check out the CLI changelog.](https://www.npmjs.com/package/mintlify?activeTab=versions)
+    You can also view the results as a JSON or Python dictionary:
+
+    ```python
+    # my_eval.json()
+    # my_eval.dict()
+    ```
+
+    Or save and open an HTML file externally:
+
+    ```python
+    # my_report.save_html(“file.html”)
+    ```
+  </Tab>
+</Tabs>
