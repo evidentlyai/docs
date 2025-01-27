@@ -91,12 +91,11 @@ adult_data = datasets.fetch_openml(name="adult", version=2, as_frame="auto")
 adult = adult_data.frame
 ```
 
-<Note>If OpenML is not available, you can download the same dataset:
+If OpenML is not available, you can download the same dataset:
 ```python
 url = "https://github.com/evidentlyai/evidently/blob/main/test_data/adults.parquet?raw=true"
 adult = pd.read_parquet(url, engine='pyarrow')
 ```
-</Note>
 
 Let's split the data into two and introduce some artificial drift for demo purposes. `Prod` data will include people with education levels unseen in the reference dataset:
 
