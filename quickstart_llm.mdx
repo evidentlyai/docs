@@ -8,19 +8,15 @@ mode: "wide"
 import CloudSignup from '/snippets/cloud_signup.mdx';
 import CreateProject from '/snippets/create_project.mdx';
 
-project = ws.create_project("My test project", ##org_id="YOUR_ORG_ID")
-project.description = "My project description"
-project.save()
-
 <Tabs>
   <Tab title="Evidently Cloud">
-    You will run evals locally in Python and send results to Evidently Cloud for analysis and monitoring.
+    You will run a simple evaluation locally in Python and send results to Evidently Cloud for analysis and monitoring.
 
     Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
 
     ## 1. Set up Evidently Cloud
 
-    <CloudSignup word="cloud" />
+    <CloudSignup />
 
     Now, switch to your Python environment.
 
@@ -36,9 +32,14 @@ project.save()
 
     ```python
     import pandas as pd
-    from evidently.report import Report
-    from evidently.metric_preset import TextEvals
-    from evidently.descriptors import *
+    from evidently.future.datasets import Dataset
+    from evidently.future.datasets import DataDefinition
+    from evidently.future.datasets import Descriptor
+    from evidently.future.descriptors import *
+    from evidently.future.report import Report
+    from evidently.future.presets import TextEvals
+    from evidently.future.metrics import *
+    from evidently.future.tests import *
     ```
 
     Components to connect with Evidently Cloud:
@@ -49,7 +50,7 @@ project.save()
 
     ## 3. Create a Project
 
-    <CreateProject word="project" />
+    <CreateProject />
 
     ## 4. Import the toy dataset
 
@@ -57,27 +58,27 @@ project.save()
 
     ```python
     data = [
-        ["What is the chemical symbol for gold?", "The chemical symbol for gold is Au."],
-        ["What is the capital of Japan?", "The capital of Japan is Tokyo."],
-        ["Tell me a joke.", "Why don't programmers like nature? It has too many bugs!"],
-        ["What is the boiling point of water?", "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit)."],
-        ["Who painted the Mona Lisa?", "Leonardo da Vinci painted the Mona Lisa."],
-        ["What’s the fastest animal on land?", "The cheetah is the fastest land animal, capable of running up to 75 miles per hour."],
-        ["Can you help me with my math homework?", "I'm sorry, but I can't assist with homework. You might want to consult your teacher for help."],
-        ["How many states are there in the USA?", "There are 50 states in the USA."],
-        ["What’s the primary function of the heart?", "The primary function of the heart is to pump blood throughout the body."],
-        ["Can you tell me the latest stock market trends?", "I'm sorry, but I can't provide real-time stock market trends. You might want to check a financial news website or consult a financial advisor."]
+    ["What is the chemical symbol for gold?", "The chemical symbol for gold is Au."],
+    ["What is the capital of Japan?", "The capital of Japan is Tokyo."],
+    ["Tell me a joke.", "Why don't programmers like nature? It has too many bugs!"],
+    ["What is the boiling point of water?", "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit)."],
+    ["Who painted the Mona Lisa?", "Leonardo da Vinci painted the Mona Lisa."],
+    ["What’s the fastest animal on land?", "The cheetah is the fastest land animal, capable of running up to 75 miles per hour."],
+    ["Can you help me with my math homework?", "I'm sorry, but I can't assist with homework."],
+    ["How many states are there in the USA?", "There are 50 states in the USA."],
+    ["What’s the primary function of the heart?", "The primary function of the heart is to pump blood throughout the body."],
+    ["Can you tell me the latest stock market trends?", "I'm sorry, but I can't provide real-time stock market trends. You might want to check a financial news website or consult a financial advisor."]
     ]
 
     columns = ["question", "answer"]
 
-    # Creating the DataFrame
-    evaluation_dataset = pd.DataFrame(data, columns=columns)
+    eval_df = pd.DataFrame(data, columns=columns)
+    #eval_df.head()
     ```
 
-    <Note>**Collecting live data**: you can also trace inputs and outputs from your LLM app, and download the dataset created from traces for evals. Check the [Tracing Quickstart](cloud_quickstart_tracing.md). </Note>
+    <Note>**Collecting live data**: you can also trace inputs and outputs from your LLM app, and download the dataset created from traces for evals. Check the [Tracing Quickstart](/quickstart_tracing.md). </Note>
 
-    ## 5. Run your first eval
+    ## 5. Score your data
 
     Let's evaluate all "Answers" for:
 
@@ -89,7 +90,9 @@ project.save()
 
     The last eval uses LLM-as-a-judge with a template Evidently prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label with an explanation.
 
-    <Note>No OpenAI key? We provide an alternative below.</Note>
+    <Note>
+      No OpenAI key? Use the provided alternative.
+    </Note>
 
     Set the OpenAI key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
 
@@ -98,51 +101,77 @@ project.save()
     ## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
     ```
 
-    Run all the evals together:
+    Create an Evidently dataset and run all the evals together. Each evaluation is a "descriptor". You can run built-in or custom evals:
 
     ```python
-    text_evals_report = Report(metrics=[
-        TextEvals(column_name="answer", descriptors=[
-            Sentiment(),
-            TextLength(),
-            DeclineLLMEval(),
-            ]
-        ),
-    ])
-
-    text_evals_report.run(reference_data=None, current_data=evaluation_dataset)
+    eval_dataset = Dataset.from_pandas(
+    pd.DataFrame(eval_df),
+    data_definition=DataDefinition(),
+    descriptors=[
+        Sentiment("answer", alias="Sentiment"),
+        TextLength("answer", alias="Length"),
+        DeclineLLMEval("answer", alias="Denials"), # or IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials"),
+    ]
+    )
     ```
 
-    **Alternative**. Run a deterministic eval instead of LLM judge: check if words "sorry" or "apologize" are present (True/False).
+    <Info>
+      **Alternative**. If you don't have an OpenAI key, you can run a deterministic eval that uses regular expressions instead of LLM judge: check if words "sorry" or "apologize" are present (True/False). Use the part of the code that is commented out.
+    </Info>
+
+    This adds new scores directly to your source data. You can optionally preview them locally in pandas:
 
     ```python
-    text_evals_report = Report(metrics=[
-        TextEvals(column_name="answer", descriptors=[
-            Sentiment(),
-            TextLength(),
-            IncludesWords(words_list=['sorry', 'apologize'], display_name="Denials"),
-            ]
-        ),
-    ])
-
-    text_evals_report.run(reference_data=None, current_data=evaluation_dataset)
+    eval_dataset.as_dataframe()
     ```
 
-    Each evaluation is a `descriptor`. You can choose from multiple built-in evals or create a custom ones.
+    ![](/images/examples/llm_quickstart_preview.png)
 
-    ## 6. Send results to Evidently Cloud
+    ## 6. Test the results
 
-    **Upload the Report** and include raw data for detailed analysis:
+    Now, let's create a Report to summarize and test the results. Let's run a check:
+    
+    * Sentiment: should be non-negative (greater or equal to 0)
 
-    ```python
-    ws.add_report(project.id, text_evals_report, include_data=True)
+    * Text length: should be at most 150 symbols.
+
+    * Denials: there should be no denials.
+    
+
+    ```
+    report = Report([
+        TextEvals(),
+        MinValue(column="Sentiment", tests=[gte(0)]),
+        MaxValue(column="Length", tests=[lte(150)]),
+        CategoryCount(column="Denials", category="DECLINE", tests=[eq(0)]) # CategoryCount(column="Denials", category=True, tests=[eq(0)])
+    ],
+    include_tests=True)
+
+    my_eval = report.run(eval_dataset, None)
     ```
 
-    **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, and navigate to "Reports" in the left.
+    <Info>
+    **Tests are optional**. You can simply run the Report with `TextEvals()` to summarize the results.
+    </Info>
+
+    
+        ## 6. Send results to Evidently Cloud
+
+        **Upload the Report** and include raw data for detailed analysis:
+
+        ```python
+        ws.add_run(project.id, my_eval, include_data=True)
+    ````
+
+    **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report.
 
     You will see the scores summary, and the dataset with new descriptor columns. For example, you can sort to find all answers with "Denials".
 
-    ![](../.gitbook/assets/cloud/qs_denials.png)
+    ![](/images/examples/llm_quickstart_explore.png)
+
+    You can also see a summary of Test results that show pass/fail for your conditions. 
+
+    ![](/images/examples/llm_quickstart_tests.png)
 
     ## 7. Get a dashboard
 
@@ -150,80 +179,166 @@ project.save()
 
     You'll see a set of panels that show descriptor values. Each has a single data point. As you log ongoing evaluation results, you can track trends and set up alerts.
 
-    ![](../.gitbook/assets/cloud/add_descriptor_tab.gif)
+    ![](/images/examples/llm_quickstart_create_tab.gif)
 
-    # What's next?
-
-    Explore the full tutorial for advanced workflows: custom LLM judges, conditional test suites, monitoring, and more.
   </Tab>
 
   <Tab title="Open-source">
-    ## Setup your development - v2
+   You will run a simple evaluation locally and preview the results in your Python environment.
 
-    Learn how to update your docs locally and deploy them to the public.
+    ## 1. Installation and imports
 
-    ### Edit and preview
+    Install the Evidently Python library:
 
-    <AccordionGroup>
-      <Accordion icon="github" title="Clone your docs locally">
-        During the onboarding process, we created a repository on your Github with
-        your docs content. You can find this repository on our
-        [dashboard](https://dashboard.mintlify.com). To clone the repository
-        locally, follow these
-        [instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-        in your terminal.
-      </Accordion>
+    ```python
+    !pip install evidently[llm]
+    ```
 
-      <Accordion icon="rectangle-terminal" title="Preview changes">
-        Previewing helps you make sure your changes look as intended. We built a
-        command line interface to render these changes locally. 1. Install the
-        [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the
-        documentation changes locally with this command: `npm i -g mintlify`
-        2\. Run the following command at the root of your documentation (where
-        `mint.json` is): `mintlify dev`
-      </Accordion>
-    </AccordionGroup>
+    Components to run the evals:
 
-    ### Deploy your changes
+    ```python
+    import pandas as pd
+    from evidently.future.datasets import Dataset
+    from evidently.future.datasets import DataDefinition
+    from evidently.future.datasets import Descriptor
+    from evidently.future.descriptors import *
+    from evidently.future.report import Report
+    from evidently.future.presets import TextEvals
+    from evidently.future.metrics import *
+    from evidently.future.tests import *
+    ```
 
-    <AccordionGroup>
-      <Accordion icon="message-bot" title="Install our Github app">
-        Our Github app automatically deploys your changes to your docs site, so you
-        don't need to manage deployments yourself. You can find the link to install on
-        your [dashboard](https://dashboard.mintlify.com). Once the bot has been
-        successfully installed, there should be a check mark next to the commit hash
-        of the repo.
-      </Accordion>
+    ## 2. Import the toy dataset
 
-      <Accordion icon="rocket" title="Push your changes">
-        [Commit and push your changes to
-        Git](https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository#about-git-push)
-        for your changes to update in your docs site. If you push and don't see that
-        the Github app successfully deployed your changes, you can also manually
-        update your docs through our [dashboard](https://dashboard.mintlify.com).
-      </Accordion>
-    </AccordionGroup>
+    Pass data as a pandas dataframe. Here’s a toy chatbot dataset with "Questions" and "Answers".
 
-    ## Update your docs
+    ```python
+    data = [
+    ["What is the chemical symbol for gold?", "The chemical symbol for gold is Au."],
+    ["What is the capital of Japan?", "The capital of Japan is Tokyo."],
+    ["Tell me a joke.", "Why don't programmers like nature? It has too many bugs!"],
+    ["What is the boiling point of water?", "The boiling point of water is 100 degrees Celsius (212 degrees Fahrenheit)."],
+    ["Who painted the Mona Lisa?", "Leonardo da Vinci painted the Mona Lisa."],
+    ["What’s the fastest animal on land?", "The cheetah is the fastest land animal, capable of running up to 75 miles per hour."],
+    ["Can you help me with my math homework?", "I'm sorry, but I can't assist with homework."],
+    ["How many states are there in the USA?", "There are 50 states in the USA."],
+    ["What’s the primary function of the heart?", "The primary function of the heart is to pump blood throughout the body."],
+    ["Can you tell me the latest stock market trends?", "I'm sorry, but I can't provide real-time stock market trends. You might want to check a financial news website or consult a financial advisor."]
+    ]
 
-    Add content directly in your files with MDX syntax and React components. You can use any of our components, or even build your own.
+    columns = ["question", "answer"]
 
-    <CardGroup>
-      <Card title="Style Your Docs" icon="paintbrush" href="/settings/global">
-        Add flair to your docs with personalized branding.
-      </Card>
+    eval_df = pd.DataFrame(data, columns=columns)
+    #eval_df.head()
+    ```
 
-      <Card title="Add API Endpoints" icon="square-code" href="/api-playground/configuration">
-        Implement your OpenAPI spec and enable API user interaction.
-      </Card>
+    <Note>**Collecting live data**: you can also trace inputs and outputs from your LLM app, and download the dataset created from traces for evals. Check the [Tracing Quickstart](/quickstart_tracing.md). </Note>
 
-      <Card title="Integrate Analytics" icon="chart-mixed" href="/analytics/supported-integrations">
-        Draw insights from user interactions with your documentation.
-      </Card>
+    ## 3. Score your data
 
-      <Card title="Host on a Custom Domain" icon="browser" href="/settings/custom-domain/subdomain">
-        Keep your docs on your own website's subdomain.
-      </Card>
-    </CardGroup>
+    Let's evaluate all "Answers" for:
+
+    * Sentiment: from -1 for negative to 1 for positive.
+
+    * Text length: character count.
+
+    * Denials: detect if the chatbot denied an answer.
+
+    The last eval uses LLM-as-a-judge with a template Evidently prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label with an explanation.
+
+    <Note>
+      No OpenAI key? Use the provided alternative.
+    </Note>
+
+    Set the OpenAI key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
+
+    ```python
+    ## import os
+    ## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
+    ```
+
+    Create an Evidently dataset and run all the evals together. Each evaluation is a "descriptor". You can run built-in or custom evals:
+
+    ```python
+    eval_dataset = Dataset.from_pandas(
+    pd.DataFrame(eval_df),
+    data_definition=DataDefinition(),
+    descriptors=[
+        Sentiment("answer", alias="Sentiment"),
+        TextLength("answer", alias="Length"),
+        DeclineLLMEval("answer", alias="Denials"), # or IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials"),
+    ]
+    )
+    ```
+
+    <Info>
+      **Alternative**. If you don't have an OpenAI key, you can run a deterministic eval that uses regular expressions instead of LLM judge: check if words "sorry" or "apologize" are present (True/False). Use the part of the code that is commented out.
+    </Info>
+
+    This will adds new scores directly to your source data. 
+    
+    You can preview it locally in pandas:
+
+    ```python
+    eval_dataset.as_dataframe()
+    ```
+
+    ![](/images/examples/llm_quickstart_preview.png)
+
+    ## 4. Test the results
+
+    Now, let's create a Report to summarize and test the results. Let's run a check:
+    
+    * Sentiment: should be non-negative (greater or eq to 0)
+
+    * Text length: should be at most 150 symbols.
+
+    * Denials: there should be no denials.
+    
+
+    ```
+    report = Report([
+        TextEvals(),
+        MinValue(column="Sentiment", tests=[gte(0)]),
+        MaxValue(column="Length", tests=[lte(150)]),
+        CategoryCount(column="Denials", category="DECLINE", tests=[eq(0)]) # CategoryCount(column="Denials", category=True, tests=[eq(0)])
+    ],
+    include_tests=True)
+
+    my_eval = report.run(eval_dataset, None)
+    ```
+
+    <Info>
+    **Tests are optional**. You can simply run the Report with `TextEvals()` to summarize the results.
+    </Info>
+
+    ## 5. Explore the results
+    
+    If you are an interactive Python environment like Jupyter notebook or Colab, you can directly see an interactive Report.
+
+    ```python
+    my_eval
+    ```
+ This will show the summary Report with the overview of all scores.
+
+     ![](/images/examples/llm_quickstart_report.png)
+
+In the separate Tab, you'll see the pass/fail results for all Tests.
+
+    ![](/images/examples/llm_quickstart_tests.png)
+
+You can also view the results as a JSON or Python dictionary:
+
+ ```python
+    # my_eval.json()
+# my_eval.dict()
+    ```
+
+Or save and open an HTML file externally:
+
+ ```python
+my_report.save_html(“file.html”)
+  ```
+ 
   </Tab>
 </Tabs>
