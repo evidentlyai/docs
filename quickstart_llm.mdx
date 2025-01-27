@@ -19,13 +19,11 @@ Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
   <Tab title="Evidently Cloud">
     You will run a simple evaluation in Python and explore results in Evidently Cloud.
 
-    ### Set up Evidently Cloud
+    ### 1.2 Set up Evidently Cloud
 
     <CloudSignup />
 
-    Now, switch to your Python environment.
-
-    ### Installation and imports
+    ### 1.3. Installation and imports
 
     Install the Evidently Python library:
 
@@ -53,7 +51,7 @@ Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
     from evidently.ui.workspace.cloud import CloudWorkspace
     ```
 
-    ### Create a Project
+    ### 1.3. Create a Project
 
     <CreateProject />
   </Tab>
@@ -135,19 +133,17 @@ Set the OpenAI key as an environment variable. [See Open AI docs](https://help.o
 Create an Evidently dataset and run all the evals: 
 
 ```python
-eval_dataset = Dataset.from_pandas(
-pd.DataFrame(eval_df),
+eval_dataset = Dataset.from_pandas(pd.DataFrame(eval_df),
 data_definition=DataDefinition(),
 descriptors=[
     Sentiment("answer", alias="Sentiment"),
     TextLength("answer", alias="Length"),
-    DeclineLLMEval("answer", alias="Denials"), # or IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials"),
-]
-)
+    DeclineLLMEval("answer", alias="Denials"), # or IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials")
+])
 ```
 
 <Info>
-  **Alternative**. If you don't have an OpenAI key, you can run a deterministic eval that checks if words "sorry" or "apologize" are present in text (True/False). Use the `IncludesWords` as shown in the code comment.
+  **Alternative**. If you don't have an OpenAI key, you can run a deterministic eval that checks if words "sorry" or "apologize" are present (True/False). Use the `IncludesWords` as shown in the code comment.
 </Info>
 
 This adds new scores directly to your source data. You can preview them locally in pandas:
@@ -197,7 +193,7 @@ my_eval = report.run(eval_dataset, None)
 
     **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report. You will see the scores summary, and the dataset with new descriptor columns. 
 
-    **See Test results**. Inside the "Tests" tab of the Report, you will get a pass/fail summary for your conditions. 
+    **See Test results**. Inside the "Tests" tab of the Report, you will get a pass/fail summary: 
 
     ![](/images/examples/llm_quickstart_tests.png)
     
@@ -213,7 +209,7 @@ my_eval = report.run(eval_dataset, None)
   </Tab>
 
   <Tab title="Local">
-    You can view the Report directly in an interactive Python environment like Jupyter notebook or Colab. Run:
+    To view the Report in an interactive Python environment like Jupyter notebook or Colab, run:
 
     ```python
     my_eval
