@@ -4,11 +4,26 @@ description: 'How to design your Dashboard with custom Panels.'
 noindex: true
 ---
 
-This page shows how to add panels one by one. Check [pre-built Tabs](/docs/platform/dashboard_tabs) for a quick start.
+This page shows how to add panels one by one. Check [pre-built Tabs](/docs/platform/dashboard_tabs) for a quick start, and explore [available Panel types](/docs/platform/dashboard_panel_types).
 
-<Tip>
-  You must first connect to [Evidently Cloud](/docs/setup/cloud) (or your [local workspace](/docs/setup/self-hosting)) and [create a Project](/docs/platform/projects_manage).
-</Tip>
+## Adding Tabs
+
+<Check>
+  Multiple Tabs are available in the Evidently Cloud and Enterprise.
+</Check>
+
+By default, new Panels appear on a single Dashboard. You can add multiple Tabs to organize them.
+
+**User interface.** Enter the "Edit" mode on the Dashboard (top right corner) and click the plus sign with "add Tab". To create a custom Tab, choose an “empty” tab and give it a name.
+
+**Python**. You can add an empty tab using `create_tab`:
+
+```python
+project.dashboard.create_tab("My tab")
+project.save()
+```
+
+You can also use the `add_panel` method shown below and specify the destination Tab. If there is no Tab with a set name, you will create both a new Tab and Panel at once. If it already exists, a new Panel will appear below others in this Tab.
 
 ## Adding Panels
 
@@ -17,7 +32,7 @@ You can add Panels in the user interface or using Python API.
 ### User interface
 
 <Check>
-  Adding Panels in the UI Pro feature available in the Evidently Cloud / Enterprise.
+  No-code Dashboards are available in the Evidently Cloud and Enterprise.
 </Check>
 
 Once you are inside the Project:
@@ -33,6 +48,33 @@ Once you are inside the Project:
 To delete/edit a Panel, enter Edit mode and hover over a specific Panel to choose an action.
 
 ### Python API
+
+<Check>
+  Dashboards as code are available in Evidently OSS, Cloud, Enterprise.
+</Check>
+
+<Tip>
+  You must first connect to [Evidently Cloud](/docs/setup/cloud) (or your [local workspace](/docs/setup/self-hosting)) and [create a Project](/docs/platform/projects_manage).
+</Tip>
+
+Import the necessary modules to configure the Panels as code:
+
+```python
+from evidently.future.metrics import *
+from evidently.ui.dashboards import DashboardPanelCounter
+from evidently.ui.dashboards import DashboardPanelHistogram
+from evidently.ui.dashboards import DashboardPanelPlot
+from evidently.ui.dashboards import DashboardPanelTestSuiteCounter
+from evidently.ui.dashboards import DashboardPanelTestSuite
+from evidently.ui.dashboards import PanelValue
+from evidently.ui.dashboards import PlotType
+from evidently.ui.dashboards import TestSuitePanelType
+from evidently.ui.dashboards import ReportFilter
+from evidently.ui.dashboards import TestFilter
+from evidently.ui.dashboards import CounterAgg
+from evidently.tests.base_test import TestStatus
+from evidently.renderers.html_widgets import WidgetSize
+```
 
 Here is the general flow to add a new Panel:
 
@@ -94,6 +136,7 @@ Here is the general flow to add a new Panel:
   </Step>
 </Steps>
 
+
 **Delete Panels.** To delete all monitoring Panels, use:
 
 ```
@@ -106,59 +149,9 @@ project.save()
   **Note**: This does not delete the Reports or data; it only deletes the Panel configuration.
 </Info>
 
-## Add tabs
+## Panel Parameters
 
-<Check>
-  Multiple Tabs is a Pro feature available in the Evidently Cloud / Enterprise.
-</Check>
-
-By default, new Panels appear on a single Dashboard. You can add multiple Tabs to organize them.
-
-### User interface
-
-**Create Tab**. Enter the "Edit" mode on the Dashboard (top right corner) and click the plus sign with "add Tab". To create a custom Tab, choose an “empty” tab and give it a name.
-
-**Delete Tab**. To delete the Tabs in the UI, enter the "Edit" mode on the Dashboard (top right corner) and click the sign with three dots with "edit Tabs". Choose the Tab to delete.
-
-### Python
-
-**Add an empty Tab**. Use `create_tab`, give it a name and save the configuration.
-
-```python
-project.dashboard.create_tab("My tab")
-project.save()
-```
-
-**Add a Tab together with a new Panel**. You can also use the `add_panel` method as usual and specify the destination Tab. If there is no Tab with a set name, you will create both a new Tab and Panel at once. If it already exists, a new Panel will appear below others in this Tab.
-
-## Panel parameters
-
-<Info>
-  To preview all Panel types, check the previous [docs section](/docs/platform/dashboard_panel_types).
-</Info>
-
-### Imports
-
-Import the necessary modules to configure the Panels as code.
-
-```python
-from evidently.future.metrics import *
-from evidently.ui.dashboards import DashboardPanelCounter
-from evidently.ui.dashboards import DashboardPanelHistogram
-from evidently.ui.dashboards import DashboardPanelPlot
-from evidently.ui.dashboards import DashboardPanelTestSuiteCounter
-from evidently.ui.dashboards import DashboardPanelTestSuite
-from evidently.ui.dashboards import PanelValue
-from evidently.ui.dashboards import PlotType
-from evidently.ui.dashboards import TestSuitePanelType
-from evidently.ui.dashboards import ReportFilter
-from evidently.ui.dashboards import TestFilter
-from evidently.ui.dashboards import CounterAgg
-from evidently.tests.base_test import TestStatus
-from evidently.renderers.html_widgets import WidgetSize
-```
-
-### General
+### General parameters
 
 Class `DashboardPanel` is a base class. These parameters apply to all Panel types.
 
@@ -167,8 +160,6 @@ Class `DashboardPanel` is a base class. These parameters apply to all Panel type
 | `title: str`           | `title="My Panel"`                                       | Panel name visible at the header.                                                                                                                                                |
 | `filter: ReportFilter` | `filter=ReportFilter(metadata_values={}, tag_values=[])` | Filters define a subset of Reports from which to display the data. Tags or metadata values you list must be added when logging Reports. See [docs](/docs/library/tags_metadata). |
 | `size: WidgetSize`     | `size=WidgetSize.HALF`, `size=WidgetSize.FULL` (default) | Sets the Panel size to half-width or full-sized.                                                                                                                                 |
-
-See usage examples below.
 
 ### Counter
 
@@ -253,7 +244,7 @@ All parameters:
 | `text: Optional[str]`         | Supporting text to display.                                                                                                                                                                                                                                   |
 | `agg: CounterAgg`             | Data aggregation options: <br />`SUM`: Calculates the value sum. <br />`LAST`: Shows the last available value. <br />`NONE`: Reserved for text panels.                                                                                                        |
 
-## Plot
+### Plot
 
 `DashboardPanelPlot` shows individual values over time.&#x20;
 
@@ -336,7 +327,7 @@ All parameters:
 | `values: List[PanelValue]` | Specifies the value(s) to display in the Plot. <br /><br /> You must point to a named **Metric** and a specific **result** inside it (`value` or `share`/`count`). *Refer to the Panel Value section below for details.* <br /><br /> You can pass multiple values so that will appear together, e.g., as separate lines on a Line plot, bars on a Bar Chart, or points on a Scatter Plot. |
 | `plot_type: PlotType`      | Specifies the plot type. <br /><br />**Available:** `SCATTER`, `BAR`, `LINE`, `HISTOGRAM`                                                                                                                                                                                                                                                                                                  |
 
-## Distribution
+### Distribution
 
 `DashboardPanelHistogram` shows changes in the distribution over time. It's mostly relevant for showing distributions of categorical columns.
 
@@ -376,7 +367,7 @@ All parameters:
 | `value: PanelValue`    | Specifies the distribution to display on the Panel. <br /><br /> You must point to a named **Metric** that contains a distribution histogram and set `field_path="values"`. |
 | `barmode: HistBarMode` | Specifies the distribution plot type. <br /><br />**Available:** `STACK`, `GROUP`, `OVERLAY`, `RELATIVE`                                                                    |
 
-## Test Counter
+### Test Counter
 
 `DashboardPanelTestSuiteCounter` shows a counter with Test results.
 
@@ -447,7 +438,7 @@ Example usage:
 | `statuses: List[statuses]`<br /><br />**Available**:<br />`TestStatus.ERROR`, `TestStatus.FAIL`, `TestStatus.SUCCESS`(default), `TestStatus.WARNING`, `TestStatus.SKIPPED` | Status filters select Tests with specific outcomes. (E.g., choose the FAIL status to display a counter for failed Tests). Without a filter, the Panel shows Tests SUCCESS. |
 | <br />`agg: CounterAgg`<br /><br />**Available**:<br />`SUM`(default),  `LAST`                                                                                             | Data aggregation options:<br />`SUM`: Calculates the sum of Test results. <br />`LAST`: Displays the last available Test result.                                           |
 
-## Test Plot
+### Test Plot
 
 `DashboardPanelTestSuite` shows Test results over time.
 
@@ -531,17 +522,13 @@ All parameters:
 
 ## Panel Value
 
-### Metric ID and fingerprint
-
-To point to the Metric or Test to plot on a Panel, you use  `test_filters` or `metric_args `as shown above and pass `metric_id` or `metric_fingerprint` . They must include the name of the Metric that corresponds to the Metric inside the Reports logged to the Project. You must use the same Metic name (with any applicable parameters) that you used when creating the Report.
+**Metric ID**. To point to the Metric or Test to plot on a Panel, you use  `test_filters` or `metric_args `as shown above and pass `metric_id` or `metric_fingerprint` . They must include the name of the Metric that was logged to the Project. You must use the same Metic name (with any applicable parameters) that you used when creating the Report.
 
 <Note>
   **Working with Presets.** You must reference a named Evidently Metric even if you used a Preset. You can check the Metrics included in each Preset [here](/metrics/all_metrics).
 </Note>
 
-### Field path
-
-For Metric Panels, you also specify the `field_path`. This helps point to a specific **result** inside the Metric. This can take the following values: `value` , `share`/`count` or `values` .
+**Field path**. For Metric Panels, you also specify the `field_path`. This helps point to a specific **result** inside the Metric. This can take the following values: `value` , `share`/`count` or `values` .
 
 | Field path         | Description                                          | Applicable Metrics                                                               | Applicable Panels |
 | ------------------ | ---------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------- |
