@@ -87,6 +87,7 @@
         "introduction",
         {
           "group": "Quickstart",
+          "icon": "rocket",
           "pages": [
             "quickstart_llm",
             "quickstart_ml",
@@ -109,6 +110,7 @@
         "docs/library/overview",
         {
           "group": "Run an evaluation",
+          "icon": "traffic-light-stop",
           "pages": [
             "docs/library/evaluations_overview",
             "docs/library/data_definition",
@@ -127,6 +129,7 @@
         "docs/platform/overview",
         {
           "group": "Projects",
+          "icon": "folder",
           "pages": [
             "docs/platform/projects_overview",
             "docs/platform/projects_manage"
@@ -134,6 +137,7 @@
         },
         {
           "group": "Datasets",
+          "icon": "table",
           "pages": [
             "docs/platform/datasets_overview",
             "docs/platform/datasets_workflow",
@@ -142,6 +146,7 @@
         },
         {
           "group": "Tracing",
+          "icon": "bars-staggered",
           "pages": [
             "docs/platform/tracing_overview",
             "docs/platform/tracing_setup"
@@ -149,6 +154,7 @@
         },
         {
           "group": "Evaluations",
+          "icon": "plot-simple",
           "pages": [
             "docs/platform/evals_overview",
             "docs/platform/evals_api",
@@ -158,6 +164,7 @@
         },
         {
           "group": "Dashboard",
+          "icon": "chart-mixed",
           "pages": [
             "docs/platform/dashboard_overview",
             "docs/platform/dashboard_tabs",
@@ -167,6 +174,7 @@
         },
         {
           "group": "Monitoring",
+          "icon": "bell",
           "pages": [
             "docs/platform/monitoring_overview",
             "docs/platform/monitoring_local_batch",
