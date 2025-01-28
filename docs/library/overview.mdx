@@ -4,7 +4,7 @@ description: "Core concepts and components of the Evidently Python library."
 noindex: "true"
 ---
 
-The Evidently Python library is an open-source tool designed to evaluate, test and monitor the quality of AI systems, from experimentation to production. You can use the evaluation library on its own, or as part of the [Monitoring Platform](/docs/platform/overview) (self-hosted or Evidently Cloud).&#x20;
+The Evidently Python library is an open-source tool designed to evaluate, test and monitor the quality of AI systems, from experimentation to production. You can use the evaluation library on its own, or as part of the [Monitoring Platform](/docs/platform/overview) (self-hosted or Evidently Cloud).
 
 This page gives a closer look at the library.
 
@@ -18,7 +18,7 @@ Here is how the core evaluation workflow works:
   </Step>
 
   <Step title="Run evaluations">
-    Use `Presets` or configure your own Report. Optionally, add `Tests` to get pass/fail results. There are 100+ built-in evals. You can also add yours. Examples:
+    Use `Presets` or configure your own Report. Optionally, add `Tests` to get pass/fail results. There are 100+ built-in evals. You can also add yours. They cover:
 
     | **Type**                  | **Example checks**                                                    |
     | ------------------------- | --------------------------------------------------------------------- |
@@ -44,7 +44,7 @@ Here is how the core evaluation workflow works:
   </Step>
 </Steps>
 
-Here an example output for Data Quality checks. Any other evaluation can be presented in the same way:
+Here an example Report with Data Quality checks. Other evaluations can be presented in the same way:
 
 ![](/images/concepts/report_test_preview.gif)
  
@@ -60,7 +60,7 @@ That said, we recommend giving this a read once to understand the core library c
 
 ## Dataset
 
-**Prepare data**. First, you need to get your input data ready. For example, generate outputs from your ML or LLM system that you want to evaluate.
+First, you need to get your input data ready. For example, generate outputs from your ML or LLM system that you want to evaluate.
 
 * **Tabular data**. Prepare your data as a pandas DataFrame. 
 
@@ -133,6 +133,8 @@ Here are a few examples of data inputs Evidently can handle:
   </Tab>
 </Tabs>
 
+These are examples: you data can have other structure.
+
 ![](/images/datasets_input_data_two.png)
 
 **Two datasets**. Typically you evaluate a single (`current` ) dataset. Optionally, you can include a second (`reference`) dataset. Both must have identical structures. When to use two datasets:
@@ -146,11 +148,11 @@ Here are a few examples of data inputs Evidently can handle:
 <Info>
   **Data sampling**. For large datasets (millions of rows), evals can take some time. The depends on:
 
-  * the specific evaluation (some are more computationally intensive than others)
+  * the specific evaluation: some are more computationally intensive than others
 
-  * your dataset (e.g., if you run column-level evals and have lots of columns)
+  * your dataset: e.g., if you run column-level evals and have lots of columns
 
-  * your infrastructure (data is processed in-memory).
+  * your infrastructure: data is processed in-memory.
 
   If the computation takes too long, it’s often more efficient to use samples. For example, in data drift detection, you can apply random or stratified sampling.
 </Info>
@@ -161,11 +163,11 @@ Once your `Dataset` is ready, you can run evaluations.
 
 To evaluate text data and LLM outputs, you need `Descriptors`.
 
-A **Descriptor** is a row-level score or label that assesses a specific quality of a given text. It’s different from metrics (like accuracy or precision) that give a score for an entire dataset. You can use them to assess LLM outputs in summarization, Q\&A, chatbots, agents, RAGs, etc.
+A **Descriptor** is a *row-level* score or label that assesses a specific quality of a given text. It’s different from metrics (like accuracy or precision) that give a score for an entire *dataset*. You can use descriptors to assess LLM outputs in summarization, Q\&A, chatbots, agents, RAGs, etc.
 
-A simple example of a descriptor is `TextLength`. Descriptors range from deterministic to complex ML-based checks. For example, LLM-based descriptors can help label responses as "relevant" or "not relevant" using an evaluation prompt.&#x20;
+A simple example of a descriptor is `TextLength`. Descriptors range from deterministic to complex ML-based checks. For example, LLM-based descriptors can help label responses as "relevant" or "not relevant" using an evaluation prompt.
 
-Descriptors can also use two texts at once, like checking `SemanticSimilarity` between two columns to compare new response to the reference one.&#x20;
+Descriptors can also use two texts at once, like checking `SemanticSimilarity` between two columns to compare new response to the reference one.
 
 You can use [built-in descriptors](/metrics/all_descriptors), configure templates (like LLM judges or regular expressions) or add custom checks in Python. Each Descriptor returns a result that can be:
 
@@ -183,7 +185,7 @@ After you get the Descriptors, you can use them to compute Metrics and Tests.
 
 ## Reports and Metrics
 
-A **Report** lets you structure and run evals on the dataset or column-level.&#x20;
+A **Report** lets you structure and run evals on the dataset or column-level.
 
 You can generate Reports after you get the descriptors, or for any existing dataset like a table with ML model logs. Use Reports to:
 
@@ -195,23 +197,23 @@ You can generate Reports after you get the descriptors, or for any existing data
 
 Each Report runs a computation and visualizes a set of **Metrics** and conditional **Tests.** If you pass two datasets, you get a side-by-side comparison. 
 
-The easiest way to start is by using **Presets**.&#x20;
+The easiest way to start is by using **Presets**.
 
 ### Presets
 
-Presets are pre-configured evaluation templates.&#x20;
+Presets are pre-configured evaluation templates.
 
 They help compute multiple related Metrics using a single line of code. Evidently has a number of **comprehensive Presets** ([see all](/metrics/all_presets)) for specific evaluation scenarios: from exploratory data analysis to AI quality assessments. For example:
 
 <Tabs>
   <Tab title="TextEvals">
     `TextEvals` summarizes the scores from all text descriptors.
-    ![](/images/concepts/overview_drift_report-min.png)
+    ![](/images/examples/llm_quickstart_report.png)
   </Tab>
 
   <Tab title="Data Drift">
     `DataDriftPreset` identifies shifts in individual data distribution for all columns in the dataset and consolidates the results.
-    ADD IMG
+    ![](/images/concepts/overview_drift_report-min.png)
   </Tab>
 
   <Tab title="Data Summary">
@@ -223,79 +225,23 @@ They help compute multiple related Metrics using a single line of code. Evidentl
   <Tab title="Classification">
     `ClassificationPreset` breaks down classification metrics and includes debugging plots.
   </Tab>
-
-  <Tab title="RecSys">
-    `RecSysPreset` measures the performance of ranking or recommendation systems.
-  </Tab>
-
-  <Tab title="Regression">
-    `RegressionPreset` returns multiple regession quality metrics like MAE, ME, RMSE, etc. with debugging plots.
-  </Tab>
 </Tabs>
 
 ### Metrics
 
-Each Preset is made of individual Metrics. You can also create your own **custom Report** by listing the Metrics you want to include.&#x20;
+Each Preset is made of individual Metrics. You can also create your own **custom Report** by listing the Metrics you want to include.
 
 * You can combine multiple Metrics and Presets in a Report. 
 
 * You can include both built-in Metrics and custom Metrics.
 
-A `Metric` is a key building block for evaluations. [Built-in Metrics](/metrics/all_metrics) range from simple statistics to complex algorithmic evals. Some examples:
+A `Metric` is a key building block for evaluations. [Built-in Metrics](/metrics/all_metrics) range from simple statistics (like `MeanValue` or `MissingValueCount()`) to complex algorithmic evals (like `DriftedColumnsCount()`). 
 
-<Tabs>
-  <Tab title="MeanValue">
-    `MeanValue` computes the mean of any column. You can use it to aggregate descriptor values (like to get a mean sentiment or similarity scores) or to analyze your input data.
+Each **Metric** computes a single value and has an optional visual representation (or several to choose from). For convenience, there are also **small Presets** that combine a handful of scores in a single widget, like `ValueStats` that shows many relevant descriptive value statistics at once (varies for column type: categorical, numerical, text).
 
-    ![](/images/concepts/overview_small_preset_cat_value_example.png)
-  </Tab>
+![](/images/concepts/overview_small_preset_cat_value_compare_example.png)
 
-  <Tab title="ValueDrift">
-    `ValueDrift` evaluates data distribution drift for any column, target or prediction. You can set different drift detection methods as a parameter.
-  </Tab>
-
-  <Tab title="Accuracy">
-    `Accuracy` computes classification accuracy.
-  </Tab>
-
-  <Tab title="Missing Values">
-    `MissingValueCount` computes the share/count of missing values.
-  </Tab>
-
-  <Tab title="Diversity">
-    `Diversity` computes the diversity of generated recommendations.
-  </Tab>
-
-  <Tab title="MeanError">
-    `MeanError` computes mean error for regression tasks.
-  </Tab>
-</Tabs>
-
-Each **Metric** computes a single value and has an optional visual representation (or several to choose from). For convenience, there are also **small Presets** that combine a handful of scores in a single widget. Examples:&#x20;
-
-<Tabs>
-  <Tab title="ValueStats">
-    `ValueStats` shows all relevant descriptive value statistics at once. The stats will be chosen based on the column or descriptor type (categorical, numerical, text).
-
-    ![](/images/concepts/overview_small_preset_cat_value_compare_example.png)
-  </Tab>
-
-  <Tab title="DatasetStats">
-    `DatasetStats` give quick overview of all dataset-level stats.
-  </Tab>
-
-  <Tab title="Classification">
-    `ClassificationQuality` computes multiple classification quality metrics like Precision, Recall, Accuracy, ROC AUC, etc. together.
-  </Tab>
-
-  <Tab title="Regression">
-    `RegressionQuality` computes multiple regession quality metrics like MAE, ME, RMSE, etc.
-  </Tab>
-
-  <Tab title="Correlations">
-    `DatasetCorrelations` compute correlations between all columns in the dataset and show it on a heatmap.
-  </Tab>
-</Tabs>
+Similarlity, `DatasetStats` give quick overview of all dataset-level stats, `ClassificationQuality` computes multiple metrics like Precision, Recall, Accuracy, ROC AUC, etc. 
 
 ## Test Suites and Tests 
 
@@ -303,17 +249,17 @@ Reports are great for analysis and debugging, or logging metrics during monitori
 
 ### Tests
 
-**Tests** let you validate your results against specific expectations. You create a Test by adding a **condition** parameter to a Metric. Each Test will calculate a given value, check it against the rule, and report a pass/fail result.&#x20;
+**Tests** let you validate your results against specific expectations. You create a Test by adding a **condition** parameter to a Metric. Each Test will calculate a given value, check it against the rule, and report a pass/fail result.
 
-* You can run multiple Tests in one go.&#x20;
+* You can run multiple Tests in one go.
 
 * You can create Tests on the dataset or column level.
 
 * You can formulate custom conditions or use defaults.
 
-A **Test Suite** is a collection of individual Tests. It works as an extension to a Report. Once you configure Tests, your Report will get an **additional tab** that shows a summary of outcomes.&#x20;
+A **Test Suite** is a collection of individual Tests. It works as an extension to a Report. Once you configure Tests, your Report will get an **additional tab** that shows a summary of outcomes.;
 
-You can navigate the results by test status or column name.![](/images/concepts/overview_test_suite_example-min.png)
+You can navigate the results by test outcome. ![](/images/concepts/overview_test_suite_example-min.png)
 
 Each Test results in one of the following statuses:
 
@@ -406,6 +352,8 @@ This setup works for both experiments and production monitoring. For example:
 
 * Self-host the open-source platform version. 
 
-* Sign up for [Evidently Cloud](https://www.evidentlyai.com/register) (Recommended). 
+* Sign up for [Evidently Cloud](https://www.evidentlyai.com/register) (Recommended).
+
+The Evidently Platform has additional features beyond evaluation: from synthetic data to tracing.
 
 [Read more on the platform](/docs/platform/overview).
