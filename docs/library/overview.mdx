@@ -44,7 +44,7 @@ Here is how the core evaluation workflow works:
   </Step>
 </Steps>
 
-Here an example Report with Data Quality checks. Other evaluations can be presented in the same way:
+Here an example Report with data overview. Other evaluations can be presented in the same way:
 
 ![](/images/concepts/report_test_preview.gif)
  
@@ -219,29 +219,34 @@ They help compute multiple related Metrics using a single line of code. Evidentl
   <Tab title="Data Summary">
     `DataSummaryPreset` summarizes all dataset columns, generating statistics and profiles for each.
 
-    ![](/images/concepts/overview_small_preset_num_value_example-min.png)
+    ![](/images/metrics/preset_datasummary_example-min.png)
   </Tab>
 
   <Tab title="Classification">
     `ClassificationPreset` breaks down classification metrics and includes debugging plots.
+    ![](/images/metrics/preset_classification_example-min.png)
   </Tab>
 </Tabs>
 
 ### Metrics
 
-Each Preset is made of individual Metrics. You can also create your own **custom Report** by listing the Metrics you want to include.
+Each Preset is made of individual Metrics. You can also create your own **custom Report** by listing the `Metrics` you want to include.
 
 * You can combine multiple Metrics and Presets in a Report. 
 
 * You can include both built-in Metrics and custom Metrics.
 
-A `Metric` is a key building block for evaluations. [Built-in Metrics](/metrics/all_metrics) range from simple statistics (like `MeanValue` or `MissingValueCount()`) to complex algorithmic evals (like `DriftedColumnsCount()`). 
+Built-in Metrics range from simple statistics like `MeanValue` or `MissingValueCount` to complex algorithmic evals like `DriftedColumnsCount`. 
 
 Each **Metric** computes a single value and has an optional visual representation (or several to choose from). For convenience, there are also **small Presets** that combine a handful of scores in a single widget, like `ValueStats` that shows many relevant descriptive value statistics at once (varies for column type: categorical, numerical, text).
 
 ![](/images/concepts/overview_small_preset_cat_value_compare_example.png)
 
-Similarlity, `DatasetStats` give quick overview of all dataset-level stats, `ClassificationQuality` computes multiple metrics like Precision, Recall, Accuracy, ROC AUC, etc. 
+Similarly `DatasetStats` give quick overview of all dataset-level stats, `ClassificationQuality` computes multiple metrics like Precision, Recall, Accuracy, ROC AUC, etc. 
+
+<Info>
+Explore all [**Built-in Metrics**](/metrics/all_metrics).
+</Info>
 
 ## Test Suites and Tests 
 
