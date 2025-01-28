@@ -115,7 +115,7 @@ Let's evaluate all "Answers" for:
 
 * **Text length**: character count.
 
-* **Denials**: detect if the chatbot denied an answer. This eval uses LLM-as-a-judge with a template Evidently prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label with an explanation.
+* **Denials**: detect if the chatbot denied an answer. This uses LLM-as-a-judge with a built-in prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label and an explanation.
 
 Each such evaluation is a "descriptor". You can run built-in or custom evals.
 
@@ -143,7 +143,7 @@ descriptors=[
 ```
 
 <Info>
-  **Alternative**. If you don't have an OpenAI key, you can run a deterministic eval that checks if words "sorry" or "apologize" are present (True/False). Use the `IncludesWords` as shown in the code comment.
+  **Alternative**. Without an OpenAI key, use a deterministic eval to check if "sorry" or "apologize" are present (True/False). Use `IncludesWords` as shown in the code comment.
 </Info>
 
 This adds new scores directly to your source data. You can preview them locally in pandas:
