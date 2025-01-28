@@ -43,7 +43,7 @@ It lets you visually explore distributions and capture all relevant statistics a
 
 * **Based on reference dataset.** If the reference dataset is provided, conditions like expected descriptor values are derived directly from it.
 
-* **Based on heuristics.** If there is no reference, some Tests will run with heuristics (like expect no missing values).&#x20;
+* **Based on heuristics.** If there is no reference, some data quality Tests will run with heuristics (like expect no missing values).
 
 <Info>
   **How Tests work.** Read about [Tests](/docs/library/tests) and check defaults for each Test in the [reference table.](/metrics/all_metrics)
@@ -62,8 +62,6 @@ You can use this Preset in different scenarios.
 * **Input dataset with descriptors**. Dataset with computed descriptors (check [how](/docs/library/descriptors)).
 
 * **One or two datasets**. Pass a single dataset or two for comparison or to auto-generate test conditions.
-
-* **Timestamp** (Optional). If you have a DateTime index and want to learn how descriptor values change with time, specify the `timestamp` column in data definition. This is useful if you run the Report over a large period.
 
 <Info>
   **Data schema mapping**. Use the [data definition](/docs/library/data_definition) to map your input data.
