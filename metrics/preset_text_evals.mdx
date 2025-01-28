@@ -19,7 +19,7 @@ my_eval = report.run(current, None)
 **Test Suite.** To add pass/fail data quality Tests, auto-generated from `ref` dataset:
 
 ```python
-report = Report(metrics=[
+report = Report([
     TextEvals(),
 ],
 include_tests=True)

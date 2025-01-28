@@ -11,7 +11,7 @@ noindex: "true"
 **Report.** To run a Preset on your data for a single current dataset for top-k recommendations:
 
 ```python
-report = Report(metrics=[
+report = Report([
     RecSysPreset(k=5),
 ])
 
@@ -21,7 +21,7 @@ my_eval = report.run(current, None)
 **Test Suite**. To add pass/fail ranking quality Tests, auto-generated from the `ref` dataset:
 
 ```python
-report = Report(metrics=[
+report = Report([
     RecSysPreset(k=5),
 ],
 include_tests=True)

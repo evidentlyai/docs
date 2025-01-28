@@ -7,7 +7,7 @@ noindex: "true"
 **Report.** To run a Preset on your data for a single `current` dataset:
 
 ```python
-report = Report(metrics=[
+report = Report([
     DataSummaryPreset(),
 ])
 
@@ -17,7 +17,7 @@ my_eval = report.run(current, None)
 **Test Suite.** To add pass/fail data quality Tests, auto-generated from `ref` dataset:
 
 ```python
-report = Report(metrics=[
+report = Report([
     DataSummaryPreset(),
 ],
 include_tests=True)

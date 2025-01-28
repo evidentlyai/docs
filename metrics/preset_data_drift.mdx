@@ -7,7 +7,7 @@ noindex: "true"
 **Report.** To run a Preset on your data, comparing `current` data to `ref` data:
 
 ```python
-report = Report(metrics=[
+report = Report([
     DataDriftPreset(),
 ])
 
@@ -17,7 +17,7 @@ my_eval = report.run(current, ref)
 **Test Suite.** To add Tests with explicit pass/fail for each column:
 
 ```python
-report = Report(metrics=[
+report = Report([
     DataDriftPreset(),
 ],
 include_tests=True)
