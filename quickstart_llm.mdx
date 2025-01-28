@@ -170,8 +170,7 @@ report = Report([
     MinValue(column="Sentiment", tests=[gte(0)]),
     MaxValue(column="Length", tests=[lte(150)]),
     CategoryCount(column="Denials", category="DECLINE", tests=[eq(0)]) # CategoryCount(column="Denials", category=True, tests=[eq(0)])
-],
-include_tests=True)
+])
 
 my_eval = report.run(eval_dataset, None)
 ```
