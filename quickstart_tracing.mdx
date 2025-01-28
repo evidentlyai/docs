@@ -4,36 +4,17 @@ description: 'How to capture LLM inputs and outputs and view them in Evidently C
 noindex: true
 ---
 
-In this tutorial, you will learn how to set up tracing for an LLM application to collect inputs and outputs of your generative AI application and view the collected traces in Evidently Cloud. You can later run evaluations on the created datasets. 
+In this tutorial, you will learn how to set up tracing for an LLM application to collect its inputs and outputs, view the traces in Evidently Cloud, and optionally run evaluations.
 
 You will use the following tools:
 
-* **Tracely**: An open-source library based on OpenTelemetry to track events in your LLM application.
+* **Tracely**: An open-source tracing library based on OpenTelemetry.
 
 * **Evidently**: An open-source library to run LLM evaluations and interact with Evidently Cloud. 
 
 * **Evidently Cloud**: A web platform to view traces and run evaluations.
 
 * **OpenAI**: Used to simulate an LLM application.
-
-You will go through the following steps:
-
-* Install libraries 
-
-* Set up and initialize tracing
-
-* Create a simple question-answer LLM function
-
-* Collect and send traces to Evidently Cloud 
-
-* (Optional) Download the resulting dataset to run local evals
-
-To complete the tutorial, use the provided code snippets or run a sample notebook.
-
-Jupyter notebook:
-[https://github.com/evidentlyai/evidently/blob/main/examples/sample\_notebooks/llm\_tracing\_tutorial.ipynb](https://github.com/evidentlyai/evidently/blob/main/examples/sample_notebooks/llm_tracing_tutorial.ipynb)
-
-Or click to [open in Colab](https://colab.research.google.com/github/evidentlyai/evidently/blob/main/examples/sample_notebooks/llm_tracing_tutorial.ipynb).
 
 If you're having problems or getting stuck, reach out on [Discord](https://discord.com/invite/xZjKRaNp8b).
 
@@ -42,77 +23,78 @@ If you're having problems or getting stuck, reach out on [Discord](https://disco
 Install the necessary libraries:
 
 ```python
-pip install evidently 
-pip install tracely 
-pip install openai
+! pip install evidently[llm]
+! pip install tracely 
+! pip install openai
 ```
 
 Import the required modules:
 
 ```python
-import pandas as pd
+import os
 import openai
+import time
+import uuid
 from tracely import init_tracing
 from tracely import trace_event
+from tracely import create_trace_event
+from evidently.ui.workspace.cloud import CloudWorkspace
 ```
 
 **Optional**. To load the traced dataset back to Python and run evals.
 
 ```python
-from evidently.ui.workspace.cloud import CloudWorkspace
-from evidently.report import Report
-from evidently.metric_preset import TextEvals
-from evidently.descriptors import *
-
+import pandas as pd
+from evidently.future.datasets import Dataset
+from evidently.future.datasets import DataDefinition
+from evidently.future.datasets import Descriptor
+from evidently.future.descriptors import *
+from evidently.future.report import Report
+from evidently.future.presets import TextEvals
+from evidently.future.metrics import *
+from evidently.future.tests import *
 ```
 
-# 2. Get the API keys
+## 2. Set up workspace
 
-Obtain your API keys from Evidently Cloud and OpenAI.
+### 2.1 Set up Evidently Cloud
 
-* **Evidently Cloud**: Create an account, set up an Organization and Team. Get the API key from the [Token page](https://app.evidently.cloud/token). (Check the [step by step instructions](../installation/cloud_account.md) if you need help).
+<CloudSignup />
 
-* **OpenAI:**  Get your API key from OpenAI. ([Token page](https://platform.openai.com/api-keys)).
+### 2.2. Create a Project
 
-Set your API keys:
+<CreateProject />
+
+### 2.3. Get Open AI key
+
+Set up the OpenAI key ([Token page](https://platform.openai.com/api-keys)) as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
 
 ```python
-openai_api_key = "YOUR_OPEN_AI_API_KEY" 
-my_token = "YOUR_EVIDENTLY_TOKEN"
+os.environ["OPENAI_API_KEY"] = "YOUR_KEY"
 ```
 
-It is recommended to pass the key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety) for best practices.
+## 3. Configure tracing
 
-# 3. Configure tracing
-
-Set up configuration details:
-
-* The `address` is the destination backend to store collected traces. In this case, it is Evidently Cloud.
-
-* `Project_id` is the identification of the Evidently Project. Go to the [Projects page](https://app.evidently.cloud/), enter the selected Project and copy its ID.
-
-* `Dataset_name` helps identify the resulting Tracing dataset. All data with the same ID would be grouped into single dataset.
-
-```python
-address="https://app.evidently.cloud/"
-project_id="YOUR_PROJECT_ID"
-dataset_name="YOUR_TRACING_DATASET_NAME"
-```
-
-Initialize tracing:
+Set up and initialize tracing:
 
 ```python
 init_tracing(
- address=address,
- api_key=my_token,
+ address="https://app.evidently.cloud/",
+ api_key="YOUR_API_TOKEN",
  project_id=project_id,
- export_name=dataset_name
+ export_name="TRACING_DATASET"
  )
 ```
 
-# 4. Trace a simple LLM app 
+* The `address` is the destination backend to store collected traces.
 
-You will now create a simple function that sends a list of questions to the LLM and gets the responses.
+* `Project_id` should belong to the Evidently Project you just created. Go to the [Projects page](https://app.evidently.cloud/), enter the Project and copy its ID from above the dashboard.
+
+* `Dataset_name` helps identify the resulting Tracing dataset. All data with the same ID would be grouped into a single dataset.
+
+## 4. Trace a simple LLM app 
+
+Let's create and trace a simple function that sends a list of questions to the LLM.
 
 Initialize the OpenAI client with the API key:
 
@@ -124,138 +106,101 @@ Define the list of questions to answer:
 
 ```python
 question_list = [
-   "What are the main differences between climate change and global warming?",
-   "What are the key principles of quantum mechanics?",
-   "Can you explain the theory of relativity in simple terms?",
-   "How do vaccines work?",
-   "What is blockchain technology and how does it work?",
-   "What are the potential benefits and risks of artificial intelligence?",
-   "What are the distinguishing features of Baroque art?",
-   "What are some effective ways to manage stress?",
-   "What is the difference between stocks and bonds?",
-   "Can you explain the concept of cryptocurrency and how it works?",
-
+    "What is Evidently Python library?",
+    "What is LLM observability?",
+    "How is MLOps different from LLMOps?",
+    "What is an LLM prompt?",
+    "Why should you care about LLM safety?"
 ]
 ```
 
-Create a template for the questions you will pass to the LLM.
+Instruct the assistant to answer questions, and use the `create_trace_event` from `Tracely` to trace the execution of the function and treat each as a separate session. This loops through the list of questions, captures input arguments and outputs and sends the data to Evidently Cloud: 
 
 ```python
-question_prompt = """
-Please answer the following question nicely with a clear structure of response and some conclusions at the end.
-Here is a question: {{text_input}}
-"""
-```
-
-Use the `@trace_event()` decorator from `Tracely` to trace the execution of the function. This captures input arguments and outputs, sending the trace data to Evidently Cloud. 
-
-```python
-@trace_event()
-def pseudo_assistant(prompt, question):
- model = "gpt-4o-mini"
- system_prompt = "You are a nice and helpful assistant "
- user_prompt = prompt.replace("{{text_input}}", question)
-
- choices = client.chat.completions.create(
- model=model,
- messages=[
- {"role": "system", "content": system_prompt},
- {"role": "user", "content": user_prompt},
- ]
- )
-
- response = choices.choices[0].message.content
-
- return response
-```
-
-Loop through the list of questions and call the traced function `pseudo_assistant` to get responses while `Tracely` captures all relevant data.
-
-```python
-for question in question_list:
- pseudo_assistant(prompt=question_prompt, question=question)
-```
-
-# 5. View traces
-
-Go to the Evidently Cloud, navigate to the datasets in the left menu, and open the traces you just sent. It might take a few moments until OpenAI processes all the inputs. 
-
-You can now view, sort, export, and work with the traced dataset. You can run evaluations on this dataset both in the Cloud and locally.
-
-![](../.gitbook/assets/cloud/tracing_tutorial_dataset.png)
-
-# 6. Load the dataset 
-
-**This is an optional step**. If you want to access your traced dataset locally, for example, to run evaluations, you can do that by loading your dataset from Evidently Cloud.
-
-Connect to the Evidently Cloud workspace:
-
-```python
-ws = CloudWorkspace(token=my_token, url=address)
-```
-
-Specify the dataset ID. You can copy it from the dataset page in the UI.
-
-```python
-dataset_id = "YOUR_DATASET_ID"
-```
-
-Load the dataset to pandas:
-
-```python
-traced_data = ws.load_dataset(dataset_id = dataset_id)
-```
-
-Preview the dataset with `traced_data.head()`.
-
-# 7. Run an evaluation 
-
-You can run evaluations on this dataset using the Evidently Python library. You can generate the Reports to view them locally or send them to Evidently Cloud.
-For example, let’s evaluate the length and sentiment of the responses, and whether they include the word "Certainly".
-
-```python
-project = ws.get_project(project_id)
-```
-
-Define the evaluations:
-
-```python
-evals_report = Report(
-    metrics=[
-        TextEvals(
-            column_name="pseudo_assistant.result",
-            descriptors=[
-                TextLength(display_name="Response length"),
-                Sentiment(display_name="Response sentiment"),
-                IncludesWords(words_list=["certainly"], display_name="Says 'Certainly'"),
-            ],
-        ),
+def qa_assistant(question):
+    system_prompt = "You are a helpful assistant. Please answer the following question in one sentence."
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": question},
     ]
-)
+    return client.chat.completions.create(model="gpt-4o-mini", messages=messages).choices[0].message.content
+
+# Iterate over the list of questions and pass each to the assistant
+for question in question_list:
+    session_id = str(uuid.uuid4())
+    with create_trace_event("qa", session_id=session_id) as event:
+      response = qa_assistant(question=question)
+      event.set_attribute("question", question)
+      event.set_attribute("response", response)
+      time.sleep(1)
 ```
 
-Run the Report on the `traced_data`:
+## 5. View traces
+
+Go to the Evidently Cloud, open your Project, and navigate to the "Traces" in the left menu. Open the traces you just sent. It might take a few moments until OpenAI processes all the inputs. 
+
+You can now view, sort, export, and work with the traced dataset. You can switch between Traces, Dataset and Dialog view (select session there).
+
+<Tabs>
+  <Tab title="Dialog ">
+    ![](/images/examples/tracing_tutorial_session_view.png)
+  </Tab>
+
+  <Tab title="Dataset">
+    ![](/images/examples/tracing_tutorial_dataset_view.png)
+  </Tab>
+
+  <Tab title="Traces">
+    ![](/images/examples/tracing_tutorial_traces_view.png)
+  </Tab>
+</Tabs>
+
+## 6. Run an evaluation (Optional) 
+
+You can run evaluations on this dataset both in the Cloud and locally. For local evaluations, first load the dataset to your Python environment:
 
 ```python
-evals_report.run(reference_data=None, current_data=traced_data)
+traced_data = ws.load_dataset(dataset_id = "YOUR_DATASET_ID")
+# traced_data.head()
 ```
 
-Send the results to Evidently Cloud:
+You can copy it from the dataset ID from the Traces page inside your Project.
+
+To run an evaluation, create an Evidently dataset object and choose the descriptors:
 
 ```python
-ws.add_report(project.id, evals_report, include_data=True)
+eval_dataset = Dataset.from_pandas(pd.DataFrame(traced_data),
+data_definition=DataDefinition(),
+descriptors=[
+    SentenceCount("qa.response", alias="SentenceCount"),
+    TextLength("qa.response", alias="Length"), 
+    Sentiment("qa.response", alias="Sentiment"), 
+])
 ```
 
-To explore the evaluation results, go to Evidently Cloud, enter your Project and navigate to "Reports" in the left menu.
+To summarize and run conditional checks:
 
-You can view and brows the results. For example, find the longest responses or all responses that say "Certainly".
+```python
+report = Report([
+    TextEvals(),
+    MaxValue(column="SentenceCount", tests=[eq(1)]),
+    MaxValue(column="Length", tests=[lte(300)]),
+])
 
-![](../.gitbook/assets/cloud/tracing_tutorial_eval_example.png)
+my_eval = report.run(eval_dataset, None)
+```
 
-To view the evals locally, run `evals_report` for the Report and `evals_report.datasets().current` for the Dataset with added scores. 
+This will explicitly test if all responses are 1 sentence, and each one's length is \<300 symbols.
+
+To upload the results to your Project:
+
+```python
+ws.add_run(project.id, my_eval, include_data=True)
+```
+![](/images/examples/tracing_tutorial_evals.png)
 
 # What's next?
 
-Check the complete [LLM evaluation tutorial](tutorial-llm.md) for more details: how to run other evaluation methods, including LLM as a judge, or test for specific conditions. 
+Check the tutorial on [LLM evaluations](/quickstart_llm) for more details: how to run other evaluation methods, including LLM as a judge, or test for specific conditions. 
 
 Need help? Ask in our [Discord community](https://discord.com/invite/xZjKRaNp8b).
