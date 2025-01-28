@@ -541,16 +541,18 @@ To point to the Metric or Test to plot on a Panel, you use  `test_filters` or `m
 
 ### Field path
 
-For Metric Panels, you also specify the `field_path`. This helps point to a specific **result** inside the Metric. This can take the following values:
+For Metric Panels, you also specify the `field_path`. This helps point to a specific **result** inside the Metric. This can take the following values: `value` , `share`/`count` or `values` .
 
-* `value` if a Metric returns a single result (majority). Applies to Counter and Plot panels.
+| Field path         | Description                                          | Applicable Metrics                                                               | Applicable Panels |
+| ------------------ | ---------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------- |
+| `value`            | Points to a single result from the Metric.           | Most Metrics                                                                     | Counter, Plot     |
+| `share` or `count` | Points to either absolute count or percentage value. | Metrics that return both absolute and percentage values like `MissingValueCount` | Counter, Plot     |
+| `values`           | Points to a histogram visualization within a Metric. | Metrics with histogram visualizations,  like `UniqueValueCount`.                 | Distribution      |
 
-* `share` or `count` if a Metric can return both absolute count and percentage value (like `MissingValueCount` ) . Applies to Counter and Plot panels.
-
-* `values` if a Metric contains a histogram visualization (like `UniqueValueCount`). Applies to Distribution panel.
+There are a few exceptions where a Metric can return a different result or a dictionary.
 
 <Note>
-  **Check Metric results.** You can verify the output name in the [All Metrics table](/metrics/all_metrics). You can also see it if you generate a Report with a given Metric and export the results as a Python dictionary or JSON.
+  **How to verify the result of a specific Metric?** Check in the [All Metrics table](/metrics/all_metrics). You can also generate the Report with a given Metric, export the Report as JSON and check the value name it returns.
 </Note>
 
 When working in the Evidently Cloud, you can see available fields in the drop-down menu as you add a new Panel.
