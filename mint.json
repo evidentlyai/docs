@@ -15,6 +15,9 @@
       "to": "#ed0400"
     }
   },
+  "metadata": {
+   "robots": "noindex"
+  },
   "background": {
     "style": "gradient"
   },
