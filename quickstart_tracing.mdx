@@ -1,15 +1,13 @@
 ---
 title: 'Tracing'
-description: 'How to capture LLM inputs and outputs and view them in Evidently Cloud.'
+description: 'How to capture LLM inputs and outputs and evaluate them.'
 noindex: true
 ---
 
 import CloudSignup from '/snippets/cloud_signup.mdx';
 import CreateProject from '/snippets/create_project.mdx';
 
-In this tutorial, you will learn how to set up tracing for an LLM application to collect its inputs and outputs, view the traces in Evidently Cloud, and optionally run evaluations.
-
-You will use the following tools:
+This tutorial shows how to set up tracing for an LLM app, collect its inputs and outputs, view them in Evidently Cloud, and optionally run evaluations. You will use the following tools:
 
 * **Tracely**: An open-source tracing library based on OpenTelemetry.
 
@@ -19,7 +17,9 @@ You will use the following tools:
 
 * **OpenAI**: Used to simulate an LLM application.
 
-If you're having problems or getting stuck, reach out on [Discord](https://discord.com/invite/xZjKRaNp8b).
+<Info>
+  Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
+</Info>
 
 ## 1. Installation
 
@@ -91,9 +91,9 @@ init_tracing(
 
 * The `address` is the destination backend to store collected traces.
 
-* `Project_id` should belong to the Evidently Project you just created. Go to the [Projects page](https://app.evidently.cloud/), enter the Project and copy its ID from above the dashboard.
+* `Project_id` is the ID of the Evidently Project you just created. Go to the [Home page](https://app.evidently.cloud/), enter the Project and copy its ID from above the dashboard.
 
-* `Dataset_name` helps identify the resulting Tracing dataset. All data with the same ID would be grouped into a single dataset.
+* `Dataset_name` helps identify the resulting Tracing dataset. All data with the same ID is grouped into a single dataset.
 
 ## 4. Trace a simple LLM app 
 
@@ -167,9 +167,9 @@ traced_data = ws.load_dataset(dataset_id = "YOUR_DATASET_ID")
 # traced_data.head()
 ```
 
-You can copy it from the dataset ID from the Traces page inside your Project.
+You can copy the dataset ID from the Traces page inside your Project.
 
-To run an evaluation, create an Evidently dataset object and choose the descriptors:
+To run an evaluation, create an Evidently Dataset object and choose the descriptors:
 
 ```python
 eval_dataset = Dataset.from_pandas(pd.DataFrame(traced_data),
@@ -181,7 +181,8 @@ descriptors=[
 ])
 ```
 
-To summarize and run conditional checks:
+Now you can summarize the results and add conditional checks. This will explicitly test if all responses are 1 sentence, and each one's length is \<300 symbols.
+
 
 ```python
 report = Report([
@@ -193,13 +194,13 @@ report = Report([
 my_eval = report.run(eval_dataset, None)
 ```
 
-This will explicitly test if all responses are 1 sentence, and each one's length is \<300 symbols.
-
 To upload the results to your Project:
 
 ```python
 ws.add_run(project.id, my_eval, include_data=True)
 ```
+
+You can go to your Project and open the Report:
 
 ![](/images/examples/tracing_tutorial_evals.png)
 
