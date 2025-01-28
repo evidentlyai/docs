@@ -4,6 +4,9 @@ description: 'How to capture LLM inputs and outputs and view them in Evidently C
 noindex: true
 ---
 
+import CloudSignup from '/snippets/cloud_signup.mdx';
+import CreateProject from '/snippets/create_project.mdx';
+
 In this tutorial, you will learn how to set up tracing for an LLM application to collect its inputs and outputs, view the traces in Evidently Cloud, and optionally run evaluations.
 
 You will use the following tools:
@@ -197,6 +200,7 @@ To upload the results to your Project:
 ```python
 ws.add_run(project.id, my_eval, include_data=True)
 ```
+
 ![](/images/examples/tracing_tutorial_evals.png)
 
 # What's next?
