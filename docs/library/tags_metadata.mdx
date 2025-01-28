@@ -1,98 +1,79 @@
 ---
 title: 'Add tags and metadata'
-description: 'Description of your new file.'
+description: 'How to add metadata to the Report you upload.'
 noindex: true
 ---
 
-* This is relevant when you logging results to the Platform, like to associate Report with a specific model version.
+This is relevant when you logging Reports to the Platform. Tags help you associate the Report with a specific model / prompt version, period, etc.
 
-### Add timestamp
+## Add timestamp
 
-Each `snapshot` is associated with a single timestamp. By default, Evidently will assign the `datetime.now()` using the Report/Test Suite computation time based on the user time zone.
+Each Report run has a single timestamp. By default, Evidently will assign the `datetime.now()` using the Report computation time based on the user time zone.
 
-You can also add your own timestamp. Pass it to the run method when you compute the snapshot:
+You can also add your own timestamp. Pass it to the run method:
 
-Copy
+```python
+from datetime import datetime
 
-`drift_checks.run(`
-`    reference_data=reference_batch,`
-`    current_data=batch1,`
-`    timestamp=datetime.now()`
-`)`
+my_eval_4 = report.run(eval_data_1,
+                       eval_data_2,
+                       timestamp=datetime(2024, 1, 29))
+```
 
-Since you can assign arbitrary timestamps, you can log snapshots asynchronously or with a delay (for example, after you receive ground truth) and assign it to the specific period.
+Since you can assign arbitrary timestamps, you can log Reports asynchronously or with a delay (for example, after you receive ground truth) and assign it to the specific period.
 
-### [](https://docs.evidentlyai.com/user-guide/evaluations/snapshots#add-tags-and-metadata)&#xA;Add tags and metadata
+## Add tags and metadata
 
-You can include `tags` and `metadata` in snapshots. This is useful for search and data filtering. By adding **Tags**, you can then visualize data only from a specific subset of your snapshots on a monitoring Panel.
+You can include `tags` and `metadata` to Reports. This is useful for search and data filtering. By adding **Tags**, you can then visualize data only from a specific subset of your snapshots on a monitoring Panel.
 
 Examples of when to use tags include:
 
-* You want to identify a specific evaluation run or group of experiments by model version or test scenario.
+* Identify a specific evaluation run or experiment (by model version, prompt version, test scenario, etc).
 
-* You are logging data on production/shadow, champion/challenger, or A/B model versions.
+* Identify app or model status: production/shadow, champion/challenger, or A/B model versions.
 
-* You compute snapshots with different reference datasets (for example, to compare distribution drift week-by-week and month-by-month).
+* Identify the Report by geography, use case, segment, role, etc. 
 
-* You have data for multiple models of the same type inside a Project.
+* Identify the reference dataset window (for example, if you compare distribution drift week-by-week and month-by-month and log two different Reports).
 
-* You capture snapshots for multiple segments in your data.
-
-* You want to tag individual Reports, e.g., a datasheet card, a model card, etc.
+* You want to tag individual Reports that have a special role, e.g., a datasheet card, a model card, etc.
 
 **Custom tags**. Pass any custom Tags as a list:
 
-Copy
-
-`data_drift_report = Report(`
-&#x9;`metrics=[`
-`	``DatasetSummaryMetric().`
-&#x9;`],`
-&#x9;`tags=["groupA", "shadow"],`
-`)`
+```python
+report = Report([
+    ClassificationPreset()
+],
+tags=["groupA", "shadow"])
+```
 
 **Custom metadata**. Pass metadata as a Python dictionary in key:value pairs:
 
-Copy
-
-`data_drift_report = Report(`
-&#x9;`metrics=[`
-`	``DatasetSummaryMetric(),`
-&#x9;`],`
-&#x9;`metadata = {`
-`	``"deployment": "shadow",`
-`	``"status": "production",`
-&#x9;`}`
-`)`
+```python
+report = Report([
+    ClassificationPreset()
+],
+metadata = {
+	"deployment": "shadow",
+	"status": "production",
+	}
+```
 
 **Default metadata**. Use built-in metadata fields `model_id`, `reference_id`, `batch_size`, `dataset_id`:
 
-Copy
-
-`data_drift_report = Report(`
-&#x9;`metrics=[`
-`	``DatasetSummaryMetric(),`
-&#x9;`],`
-&#x9;`model_id=model_id,`
-&#x9;`reference_id=reference_id,`
-&#x9;`batch_size=batch_size,`
-&#x9;`dataset_id=dataset_id,`
-`)`
+```python
+report = Report([
+    ClassificationPreset()
+],
+    model_id=model_id,
+	reference_id=reference_id,
+	batch_size=batch_size,
+	dataset_id=dataset_id
+)
+```
 
 **Add Tags to existing Reports.**. You can add Tags to a previously generated Report or Test Suite:
 
-Copy
-
-`data_summary_report.tags=["training_data"]`
-
-[](https://docs.evidentlyai.com/user-guide/evaluations/snapshots#delete-snapshots)
-Delete snapshots
-----------------
-
-To delete snapshots in the Workspace `ws`, pass the Project ID and snapshot ID. You can see the snapshot ID on the Report or Test Suite page.
-
-Copy
-
-`ws.delete_snapshot(project_id, snapshot_id)`
-
-## [](https://docs.evidentlyai.com/user-guide/evaluations/snapshots#whats-next)
+```python
+data_summary_report.tags=["training_data"]
+```
