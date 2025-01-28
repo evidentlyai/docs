@@ -77,7 +77,7 @@
     {
       "name": "Community",
       "icon": "discord",
-      "url": "https://discord.com/invoke/xZjKRaNp8b"
+      "url": "https://discord.gg/xZjKRaNp8b"
     }
   ],
   "navigation": [
@@ -154,7 +154,7 @@
         },
         {
           "group": "Evaluations",
-          "icon": "plot-simple",
+          "icon": "chart-simple",
           "pages": [
             "docs/platform/evals_overview",
             "docs/platform/evals_api",
