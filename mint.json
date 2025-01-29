@@ -6,6 +6,11 @@
     "light": "/logo/evidently_ai_logo_docs.svg"
   },
   "favicon": "/logo/favicon.png",
+  "analytics": {
+    "ga4": {
+        "measurementId": "G-K75F5C0XM0"
+    }
+  },
   "colors": {
     "primary": "#ed0400",
     "light": "#f59aa2",
