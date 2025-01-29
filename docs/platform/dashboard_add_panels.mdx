@@ -333,11 +333,11 @@ All parameters:
 
 <CardGroup cols={2}>
   <Card title="Stacked" img="/images/dashboard/panel_dist_stacked_2-min.png">
-    `HistBarMode.STACK`: stacked bar chart shows **absolute** counts in a single bar.
+    `barmode="stack"`: stacked bar chart shows **absolute** counts in a single bar.
   </Card>
 
   <Card title="Grouped" img="/images/dashboard/panel_dist_group_2-min.png">
-    `HistBarMode.GROUP`: grouped bar chart shows **absolute** counts in separate bars.
+    `barmode="group"`: grouped bar chart shows **absolute** counts in separate bars.
   </Card>
 </CardGroup>
 
@@ -345,17 +345,17 @@ All parameters:
 
 ```python
 project.dashboard.add_panel(
-        DashboardPanelHistogram(
-            title="Does the chatbot deny to respond?",
+        DashboardPanelDistribution(
+            title="Is the context valid? (group)",
             value=PanelValue(
-                field_path="values",
-                metric_args={"metric.metric_id": UniqueValueCount(column="refusals").metric_id}
+                field_path="values", 
+                metric_args={"metric.metric_id": UniqueValueCount(column="context quality").metric_id}
                 ),
             filter=ReportFilter(metadata_values={}, tag_values=[]),
-            barmode="stack",
+            barmode="group",
             size=WidgetSize.FULL,
         ),
-        tab="Overview"
+    tab="Overview"
     )
 project.save()
 ```
@@ -365,7 +365,7 @@ All parameters:
 | Parameter              | Description                                                                                                                                                                 |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `value: PanelValue`    | Specifies the distribution to display on the Panel. <br /><br /> You must point to a named **Metric** that contains a distribution histogram and set `field_path="values"`. |
-| `barmode: HistBarMode` | Specifies the distribution plot type. <br /><br />**Available:** `STACK`, `GROUP`, `OVERLAY`, `RELATIVE`                                                                    |
+| `barmode: HistBarMode` | Specifies the distribution plot type. <br /><br />**Available:** `stack`, `group`, `overlay`, `relative`                                                                    |
 
 ### Test Counter
 

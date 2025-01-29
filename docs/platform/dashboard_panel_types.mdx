@@ -102,7 +102,7 @@ Class `DashboardPanelTestSuite`.
 
 ## Distribution Panel
 
-Class `DashboardPanelHistogram`. Shows a distribution of values over time.
+Class `DashboardPanelDistribution`. Shows a distribution of values over time.
 
 ![](/images/dashboard//distribution_panels.png)
 
@@ -110,24 +110,24 @@ For example, if you capture Text Evals or Data Summary that include histograms f
 
 <CardGroup cols={2}>
   <Card title="Stacked" img="/images/dashboard/panel_dist_stacked_2-min.png">
-    `HistBarMode.STACK`: stacked bar chart shows **absolute** counts in a single bar.
+    `barmode="stack"`: stacked bar chart shows **absolute** counts in a single bar.
   </Card>
 
   <Card title="Grouped" img="/images/dashboard/panel_dist_group_2-min.png">
-    `HistBarMode.GROUP`: grouped bar chart shows **absolute** counts in separate bars.
+    `barmode="group"`: grouped bar chart shows **absolute** counts in separate bars.
   </Card>
 
   <Card title="Overlay" img="/images/dashboard/panel_dist_overlay-min.png">
-    `HistBarMode.OVERLAY`: overlay bar chart shows overlaying **absolute** counts.
+    `barmode="overlay"`: overlay bar chart shows overlaying **absolute** counts.
   </Card>
 
   <Card title="Relative" img="/images/dashboard/panel_dist_relative-min.png">
-    `HistBarMode.RELATIVE`: relative bar chart shows stacked **relative** frequency.
+    `barmode="relative"`: relative bar chart shows stacked **relative** frequency.
   </Card>
 </CardGroup>
 
 <Info>
-  **What is the difference between a Distribution Panel and a Histogram Plot?** A Histogram (`DashboardPanelPlot` with`PlotType.HISTOGRAM`) shows the distribution of the selected values from all Reports. Each source Report contains a **single value** (e.g., a "mean value"). A Distribution Panel (`DashboardPanelHistogram`) shows how a distribution changes over time. Each source Report contains a **histogram** (e.g. frequency of different categories).
+  **What is the difference between a Distribution panel and a Histogram?** A histogram plot (`DashboardPanelPlot` with`PlotType.HISTOGRAM`) shows the distribution of the selected values from all Reports. Each source Report contains a **single value** (e.g., a "mean value"). A Distribution Panel (`DashboardPanelDistribution`) shows how a distribution changes over time. Each source Report contains a **histogram** (e.g. frequency of different categories).
 </Info>
 
 ## What's next?
