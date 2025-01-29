@@ -62,7 +62,7 @@ Import the necessary modules to configure the Panels as code:
 ```python
 from evidently.future.metrics import *
 from evidently.ui.dashboards import DashboardPanelCounter
-from evidently.ui.dashboards import DashboardPanelHistogram
+from evidently.ui.dashboards import DashboardPanelDistribution
 from evidently.ui.dashboards import DashboardPanelPlot
 from evidently.ui.dashboards import DashboardPanelTestSuiteCounter
 from evidently.ui.dashboards import DashboardPanelTestSuite
@@ -329,7 +329,7 @@ All parameters:
 
 ### Distribution
 
-`DashboardPanelHistogram` shows changes in the distribution over time. It's mostly relevant for showing distributions of categorical columns.
+`DashboardPanelDistribution` shows changes in the distribution over time. It's mostly relevant for showing distributions of categorical columns.
 
 <CardGroup cols={2}>
   <Card title="Stacked" img="/images/dashboard/panel_dist_stacked_2-min.png">
