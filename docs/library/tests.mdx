@@ -129,7 +129,7 @@ report = Report([
 
 Note that you don't need to use `include_tests` when setting Tests manually.
 
-### Parameters
+### Test parameters
 
 Here are the conditions you can set:
 
@@ -195,6 +195,8 @@ report = Report([
     MissingValueCount(column="Age", share_tests=[lte(0.1)]),
 ])
 ```
+
+### Tests relative to reference
 
 **Testing against reference**. If you pass a reference dataset, you can set conditions relative to the reference values. For example, to Test that the number of rows in the current dataset is equal or greater than the reference number of rows +/- 10%:
 
