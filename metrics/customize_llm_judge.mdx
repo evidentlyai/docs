@@ -1,5 +1,5 @@
 ---
-title: "Custom LLM Judge"
+title: "Configure LLM Judges"
 description: "How to run prompt-based evaluators for custom criteria."
 noindex: "true"
 ---
@@ -61,7 +61,7 @@ from evidently.future.descriptors import LLMEval, ToxicityLLMEval, ContextQualit
   ```
 </Accordion>
 
-## Built-in LLM evals
+## Built-in LLM judges
 
 <Tip>
   **Available descriptors**. Check all available built-in LLM evals in the [reference table](/metrics/all_descriptors#llm-based-evals).
@@ -137,11 +137,11 @@ eval_df.add_descriptors(descriptors=[
     DeclineLLMEval("response", alias="Decline by Turbo", provider="openai", model="gpt-3.5-turbo"),
 ])
 ```
-**Change the provider**. To use a different LLM, first import the corresponding API key.
+**Change the provider**. To use a different LLM, first import the corresponding API key as an environment variable.
 
-```
-## import os
-## os.environ["ANTHROPIC_API_KEY"] = "YOUR KEY"
+```python
+import os
+os.environ["ANTHROPIC_API_KEY"] = "YOUR KEY"
 ```
 
 And pass the name of the `provider` and `model`. For example:
@@ -156,7 +156,7 @@ eval_df.add_descriptors(descriptors=[
 **List of providers and models**. Evidently uses `litellm` to call different model APIs which implements 50+ providers. You can match the `provider` name and the `model` name parameters to the list given in the [LiteLLM docs](https://docs.litellm.ai/docs/providers).
 </Note>
 
-## Custom LLM evals
+## Custom LLM judge
 
 You can also create a custom LLM evaluator using the provided **templates**:
 
