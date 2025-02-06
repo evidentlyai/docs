@@ -126,13 +126,35 @@ eval_df.add_descriptors(descriptors=[
 **Column names**. The alias you set defines the column name with the category. If you enable the score result as well, it will get the "Alias score" name.
 </Info>
 
-**Change the LLM**. To choose to use a different model for the evals.
+## Change the evaluator LLM
+
+You can change the model and provider that you use for LLM evaluations.
+
+**Change the model**. Specify a different model from OpenAI:
 
 ```python
 eval_df.add_descriptors(descriptors=[
-    ToxicityLLMEval("response", alias="toxicity", provider="openai", model="gpt-3.5-turbo"),
+    DeclineLLMEval("response", alias="Decline by Turbo", provider="openai", model="gpt-3.5-turbo"),
 ])
 ```
+**Change the provider**. To use a different LLM, first import the corresponding API key.
+
+```
+## import os
+## os.environ["ANTHROPIC_API_KEY"] = "YOUR KEY"
+```
+
+And pass the name of the `provider` and `model`. For example:
+
+```
+eval_df.add_descriptors(descriptors=[
+    DeclineLLMEval("response", alias="Decline by Claude", provider="anthropic", model="claude-3-5-sonnet-20240620"),
+])
+```
+
+<Note>
+**List of providers and models**. Evidently uses `litellm` to call different model APIs which implements 50+ providers. You can match the `provider` name and the `model` name parameters to the list given in the [LiteLLM docs](https://docs.litellm.ai/docs/providers).
+</Note>
 
 ## Custom LLM evals
 
@@ -286,8 +308,8 @@ Example output:
 | Parameter            | Description                                                                                                                                                                                                                                 | Options                                                        |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | `template`           | Sets a specific template for evaluation.                                                                                                                                                                                                    | `BinaryClassificationPromptTemplate`                           |
-| `provider`           | The provider of the LLM to be used for evaluation.                                                                                                                                                                                          | `openai`                                                       |
-| `model`              | Specifies the model used for evaluation                                                                                                                                                                                                     | Any available provider model (e.g., `gpt-3.5-turbo`, `gpt-4`)  |
+| `provider`           | The provider of the LLM to be used for evaluation.                                                                                                                                                                                          | `openai` (Default) or any provider supported by [LiteLLM](https://docs.litellm.ai/docs/providers).                                                       |
+| `model`              | Specifies the model used for evaluation.                                                                                                                                                                                                     | Any available provider model (e.g., `gpt-3.5-turbo`, `gpt-4`)  |
 | `additional_columns` | A dictionary of additional columns present in your dataset to include in the evaluation prompt. <br /> <br /> Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`. | Custom dictionary (optional)                                   |
 
 ### BinaryClassificationPromptTemplate
