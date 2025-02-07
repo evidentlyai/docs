@@ -81,6 +81,8 @@ os.environ["OPENAI_API_KEY"] = "YOUR_KEY"
 Set up and initialize tracing:
 
 ```python
+project_id = str(project.id)
+
 init_tracing(
  address="https://app.evidently.cloud/",
  api_key="YOUR_API_TOKEN",
