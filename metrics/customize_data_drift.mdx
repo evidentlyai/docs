@@ -1,7 +1,6 @@
 ---
 title: 'Customize Data Drift'
 description: 'How to change data drift detection methods and conditions.'
-noindex: "true"
 ---
 
 All Metrics and Presets that evaluate shift in data distributions use the default [Data Drift algorithm](/metrics/explainer_drift). It automatically selects the drift detection method based on the column type (text, categorical, numerical) and volume.
@@ -38,7 +37,7 @@ This will detect dataset drift if over 70% columns are drifting, using defaults 
 
 ```python
 report = Report([
-    DataDriftPreset(drift_share=0.7, stattest="psi")
+    DataDriftPreset(drift_share=0.7, method="psi")
 ]
 ```
 
@@ -52,7 +51,7 @@ This will check if over 70% columns are drifting, using PSI method with default 
 
 ```python
 report = Report([
-    DataDriftPreset(cat_stattest="psi", cat_stattest_threshold="0.3")
+    DataDriftPreset(cat_method="psi", cat_threshold="0.3")
 ]
 ```
 
@@ -64,7 +63,7 @@ For column-level metrics, you can set the drift method/threshold directly for ea
 
 ```python
 report = Report([
-    ValueDrift(column="Salary", stattest="psi")
+    ValueDrift(column="Salary", method="psi"),
 ]
 ```
 
@@ -74,13 +73,13 @@ Use the following parameters to pass chosen drift methods. See methods and their
 
 | Parameter                                                  | Description                                                                                                                                                                                                                | Applies To                                                   |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `stattest`                                                 | Defines the drift detection method for a given column (if one column is tested), or all columns in the dataset (if multiple columns are tested and the method can apply to all columns).                                   | `ValueDrift()`, `DriftedColumnsCount()`, `DataDriftPreset()` |
-| `stattest_threshold`                                       | Sets the drift threshold in a given column or all columns.<br /><br />The threshold meaning varies based on the drift detection method, e.g., it can be the value of a distance metric or a p-value of a statistical test. | `ValueDrift()`, `DriftedColumnsCount()`, `DataDriftPreset()` |
+| `method`                                                 | Defines the drift detection method for a given column (if one column is tested), or all columns in the dataset (if multiple columns are tested and the method can apply to all columns).                                   | `ValueDrift()`, `DriftedColumnsCount()`, `DataDriftPreset()` |
+| `threshold`                                       | Sets the drift threshold in a given column or all columns.<br /><br />The threshold meaning varies based on the drift detection method, e.g., it can be the value of a distance metric or a p-value of a statistical test. | `ValueDrift()`, `DriftedColumnsCount()`, `DataDriftPreset()` |
 | `drift_share`                                              | Defines the share of drifting columns as a condition for Dataset Drift. Default: 0.5                                                                                                                                       | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
-| `cat_stattest` <br />`cat_stattest_threshold`              | Sets the drift method and/or threshold for all categorical columns.                                                                                                                                                        | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
-| `num_stattest` <br />`num_stattest_threshold`              | Sets the drift method and/or threshold for all numerical columns.                                                                                                                                                          | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
-| `per_column_stattest`<br />`per_column_stattest_threshold` | Sets the drift method and/or threshold for the listed columns (accepts a dictionary).                                                                                                                                      | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
-| `text_stattest` <br /> `text_stattest_threshold`           | Defines the drift detection method and threshold for all text columns.                                                                                                                                                     | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
+| `cat_method` <br />`cat_threshold`              | Sets the drift method and/or threshold for all categorical columns.                                                                                                                                                        | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
+| `num_method` <br />`num_threshold`              | Sets the drift method and/or threshold for all numerical columns.                                                                                                                                                          | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
+| `per_column_method`<br />`per_column_threshold` | Sets the drift method and/or threshold for the listed columns (accepts a dictionary).                                                                                                                                      | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
+| `text_method` <br /> `text_threshold`           | Defines the drift detection method and threshold for all text columns.                                                                                                                                                     | `DriftedColumnsCount()`, `DataDriftPreset()`                 |
 
 ## Data drift detection methods
 
