@@ -23,11 +23,11 @@ Since you can assign arbitrary timestamps, you can log Reports asynchronously or
 
 ## Add tags and metadata
 
-You can include `tags` and `metadata` to Reports. This is useful for search and data filtering. By adding **Tags**, you can then visualize data only from a specific subset of your snapshots on a monitoring Panel.
+You can add `tags` and `metadata` to Reports. This is useful for search and data filtering. By adding **Tags**, you can also visualize data only from a specific subset of Reports on a monitoring Panel.
 
 Examples of when to use tags include:
 
-* Identify a specific evaluation run or experiment (by model version, prompt version, test scenario, etc).
+* Identify a specific evaluation run or experiment (by model or prompt version, test scenario, etc).
 
 * Identify app or model status: production/shadow, champion/challenger, or A/B model versions.
 
@@ -55,7 +55,7 @@ report = Report([
 metadata = {
 	"deployment": "shadow",
 	"status": "production",
-	}
+	})
 ```
 
 **Default metadata**. Use built-in metadata fields `model_id`, `reference_id`, `batch_size`, `dataset_id`:
@@ -64,15 +64,9 @@ metadata = {
 report = Report([
     ClassificationPreset()
 ],
-    model_id=model_id,
-	reference_id=reference_id,
-	batch_size=batch_size,
-	dataset_id=dataset_id
+  model_id="model_id",
+	reference_id="reference_id",
+	batch_size="batch_size",
+	dataset_id="dataset_id"
 )
-```
-
-**Add Tags to existing Reports.**. You can add Tags to a previously generated Report or Test Suite:
-
-```python
-data_summary_report.tags=["training_data"]
 ```
