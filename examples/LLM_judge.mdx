@@ -4,5 +4,457 @@ description: 'How to create and evaluate an LLM judge.'
 noindex: "true"
 ---
 
-Pending update to a new API:
-[https://docs.evidentlyai.com/tutorials-and-examples/cookbook\_llm\_judge](https://docs.evidentlyai.com/tutorials-and-examples/cookbook_llm_judge)
+In this tutorial, we'll show:
+
+* How to evaluate text for custom criteria using LLM as the judge.
+
+* How to evaluate the quality of LLM judge against your own labels.
+
+<Info>
+  **This is a local example.** You will run and explore results using the open-source Python library. At the end, we’ll optionally show how to upload results to the Evidently Platform for easy exploration.
+</Info>
+
+We'll show two ways to use an LLM as a judge:
+
+* **Reference-based**
+
+  . Compare new responses against a reference. This is useful for regression testing or whenever you have a "ground truth" (approved responses) to compare against.
+
+* **Open-ended**
+
+  . Evaluate responses based on custom criteria, which helps evaluate new outputs when there's no reference available.
+
+Our primary focus is to demonstrate **how to create and tune the LLM evaluator**, which you can then apply in different contexts, like regression testing or prompt comparison.
+
+## Tutorial scope
+
+Here's what we'll do:
+
+* **Create an evaluation dataset**
+
+  . Create a toy Q&A dataset with two responses to each question.
+
+* **Create and run an LLM as a judge**
+
+  . Design an LLM evaluator prompt.
+
+* **Evaluate the judge**
+
+  . Compare the LLM judge's evaluations with manual labels.
+
+We'll start with the reference-based evaluator that determines whether a new response is correct (it's more complex since it requires passing two columns to the prompt). Then, we'll create a simpler judge focused on verbosity.
+
+To complete the tutorial, you will need:
+
+* Basic Python knowledge.
+
+* An OpenAI API key to use for the LLM evaluator.
+
+<Info>
+  Use the provided code snippets or run a sample notebook: [Jupyter notebook](https://github.com/evidentlyai/community-examples/blob/main/tutorials/LLM_as_a_judge_tutorial_updated.ipynb) or [open it in Colab](https://colab.research.google.com/github/evidentlyai/community-examples/blob/main/tutorials/LLM_as_a_judge_tutorial_updated.ipynb).
+</Info>
+
+We recommend running this tutorial in Jupyter Notebook or Google Colab to render rich HTML objects with summary results directly in a notebook cell.
+
+## 1.  Installation and Imports
+
+Install Evidently:
+
+```python
+!pip install evidently
+```
+
+Import the required modules:
+
+```python
+import pandas as pd
+import numpy as np
+
+from evidently.future.datasets import Dataset
+from evidently.future.datasets import DataDefinition
+from evidently.future.datasets import Descriptor
+from evidently.future.descriptors import *
+
+from evidently.future.datasets import BinaryClassification
+
+from evidently.future.report import Report
+from evidently.future.presets import TextEvals, ValueStats, ClassificationPreset
+from evidently.future.metrics import *
+
+from evidently.features.llm_judge import BinaryClassificationPromptTemplate
+```
+
+Pass your OpenAI key as an environment variable:
+
+```python
+import os
+os.environ["OPENAI_API_KEY"] = "YOUR_KEY"
+```
+
+## 2.  Create the Dataset
+
+First, we'll create a toy Q\&A dataset with customer support question that includes:
+
+* **Questions**
+
+  . The inputs sent to the LLM app.
+
+* **Target responses**
+
+  . The approved responses you consider accurate.
+
+* **New responses**
+
+  . Imitated new responses from the system.
+
+* **Manual labels with explanation**
+
+  . Labels that say if response is correct or not.
+
+Why add the labels? It's a good idea to be the judge yourself before you write a prompt. This helps:&#x20;
+
+* Formulate better criteria. You discover nuances you may want to clarify in the evaluator prompt.
+
+* Get the "ground truth". You can use it to evaluate the quality of the LLM judge.
+
+Ultimately, an LLM judge is a small ML system, and it needs its own evals!
+
+**Generate the dataframe**. Here's how you can create this dataset in one go:
+
+<Accordion title="Toy data to run the example" defaultOpen={false}>
+  ```python
+  data = [
+    ["Hi there, how do I reset my password?",
+     "To reset your password, click on 'Forgot Password' on the login page and follow the instructions sent to your registered email.",
+     "To change your password, select 'Forgot Password' on the login screen and follow the steps sent to your registered email address. If you don't receive the email, check your spam folder or contact support for assistance.",
+     "incorrect", "adds new information (contact support)"],
+
+    ["Where can I find my transaction history?",
+     "You can view your transaction history by logging into your account and navigating to the 'Transaction History' section. Here, you can see all your past transactions. You can also filter the transactions by date or type for easier viewing.",
+     "Log into your account and go to 'Transaction History' to see all your past transactions. In this section, you can view and filter your transactions by date or type. This allows you to find specific transactions quickly and easily.",
+     "correct", ""],
+
+    ["How do I add another user to my account?",
+     "I am afraid it is not currently possible to add multiple users to the account. Our system supports only one user per account for security reasons. We recommend creating separate accounts for different users.",
+     "To add a secondary user, go to 'Account Settings', select 'Manage Users', and enter the details of the person you want to add. You can set permissions for their access, deciding what they can and cannot do within the account.",
+     "incorrect", "contradiction (incorrect answer)"],
+
+    ["Is it possible to link multiple bank accounts?",
+     "Yes, you can link multiple bank accounts by going to 'Account Settings' in the menu and selecting 'Add Bank Account'. Follow the prompts to add your bank account details. Make sure to verify each bank account by following the verification process.",
+     "You can add multiple bank accounts by visiting 'Accounts' in the menu and choosing 'Add Bank Account'. Enter your bank details as prompted and complete the verification process for each account to link them successfully.",
+     "incorrect", "contradiction (incorrect menu item)"],
+
+    ["Can I use your service for cryptocurrency transactions?",
+     "Currently, our service does not support cryptocurrency transactions. Please check our website for updates regarding this feature. We are continuously working to expand our services and may include this in the future.",
+     "Currently, our service does not support cryptocurrency transactions. Please check our website for updates regarding this feature. We are continuously working to expand our services and may include this in the future.",
+     "correct", ""],
+
+    ["Hi, can I get a detailed report of my monthly transactions?",
+     "Yes, you can generate a detailed monthly report of your transactions by logging into your account, going to 'Transaction History', and selecting 'Generate Report'. You can customize the report by selecting specific dates or transaction types.",
+     "You can get a detailed monthly report by logging into your account, navigating to 'Transaction History', and clicking on 'Generate Report'. Customize your report by choosing the date range and types of transactions you want to include.",
+     "correct", ""],
+
+    ["I am traveling to the US. Can I use the app there?",
+     "Yes, you can use the app in the US just like you do at home. Ensure you have an internet connection. You may also want to update your app to the latest version before traveling for optimal performance.",
+     "The app will work in the US without any issues. Just make sure you have access to the internet. For the best experience, update your app to the latest version before you travel.",
+     "correct", ""],
+
+    ["How do I link my payment account to a new mobile number?",
+     "To link a new mobile number, log in to your account, go to 'Account Settings', select 'Mobile Number', and follow the instructions to verify your new number. You will need to enter the new number and verify it via a code sent to your phone.",
+     "To add a new number, navigate to the 'Account Settings' section, select 'Mobile Number' and proceed with the steps to add and confirm the new number. Enter the new mobile number and verify it using the code sent to your phone.",
+     "correct", ""],
+
+    ["Can I receive notifications for transactions in real-time?",
+     "Yes, you can enable real-time notifications for transactions by going to 'Account Settings', then 'Notifications', and turning on 'Transaction Alerts'. You can choose to receive alerts via SMS, email, or push notifications on your mobile device.",
+     "To receive real-time notifications for transactions, log into your account, go to 'Account Settings', select 'Notifications', and enable 'Transaction Alerts'. Choose your preferred notification method between email or push notifications.",
+     "incorrect", "omits information (sms notification)"],
+
+    ["Hey, can I set up automatic transfers to my savings account?",
+     "Yes, you can set up automatic transfers by going to 'Account Settings', selecting 'Automatic Transfers', and specifying the amount and frequency. You can choose to transfer weekly, bi-weekly, or monthly. Make sure to save the settings to activate the transfers.",
+     "You can arrange automatic transfers by going to 'Account Settings', choosing 'Automatic Transfers', and setting the desired amount and frequency. Don't forget to save the changes to enable the automatic transfers.",
+     "incorrect", "omits information (limited frequency of transfers available)"],
+
+    ["Hi there, how do I reset my password?",
+     "To reset your password, click on 'Forgot Password' on the login page and follow the instructions sent to your registered email.",
+     "To change your password, select 'Forgot Password' on the login screen and follow the steps sent to your registered email address. If you don't receive the email, check your spam folder.",
+     "correct", ""],
+
+    ["How can I update my billing address?",
+     "To update your billing address, log into your account, go to 'Account Settings', select 'Billing Information', and enter your new address. Make sure to save the changes once you are done.",
+     "To update your billing address, log into your account, navigate to 'Account Settings', and select 'Billing Information'. Enter your new address and ensure all fields are filled out correctly. Save the changes, and you will receive a confirmation email with the updated address details.",
+     "incorrect", "adds new information (confirmation email)"],
+
+    ["How do I contact customer support?",
+     "You can contact customer support by logging into your account, going to the 'Help' section, and selecting 'Contact Us'. You can choose to reach us via email, phone, or live chat for immediate assistance.",
+     "To contact customer support, log into your account and go to the 'Help' section. Select 'Contact Us' and choose your preferred method: email, phone, or live chat. Our support team is available 24/7 to assist you with any issues. Additionally, you can find a FAQ section that may answer your questions without needing to contact support.",
+     "incorrect", "adds new information (24/7 availability, FAQ section)"],
+
+    ["What should I do if my card is lost or stolen?",
+     "If your card is lost or stolen, immediately log into your account, go to 'Card Management', and select 'Report Lost/Stolen'. Follow the instructions to block your card and request a replacement. You can also contact our support team for assistance.",
+     "If your card is lost or stolen, navigate to 'Card Management' in your account, and select 'Report Lost/Stolen'. Follow the prompts to block your card and request a replacement. Additionally, you can contact our support team for help.",
+     "correct", ""],
+
+    ["How do I enable two-factor authentication (2FA)?",
+     "To enable two-factor authentication, log into your account, go to 'Security Settings', and select 'Enable 2FA'. Follow the instructions to link your account with a 2FA app like Google Authenticator. Once set up, you will need to enter a code from the app each time you log in.",
+     "To enable two-factor authentication, log into your account, navigate to 'Security Settings', and choose 'Enable 2FA'. Follow the on-screen instructions to link your account with a 2FA app such as Google Authenticator. After setup, each login will require a code from the app. Additionally, you can set up backup codes in case you lose access to the 2FA app.",
+     "incorrect", "adds new information (backup codes)"]
+  ]
+
+  columns = ["question", "target_response", "new_response", "label", "comment"]
+
+  golden_dataset = pd.DataFrame(data, columns=columns)
+  ```
+</Accordion>
+
+<Note>
+  **Synthetic data**. You can also generate example inputs for your LLM app using [Evidently Platform](/docs/platform/datasets_generate).
+</Note>
+
+**Create an Evidently dataset object.** Pass the dataframe and [map the column types](/docs/library/data_definition):
+
+```python
+definition = DataDefinition(
+    text_columns=["question", "target_response", "new_response"],
+    categorical_columns=["label"]
+    )
+
+eval_dataset = Dataset.from_pandas(
+    pd.DataFrame(golden_dataset),
+    data_definition=definition)
+```
+
+To preview the dataset:
+
+```python
+pd.set_option('display.max_colwidth', None)
+golden_dataset.head(5)
+```
+
+![](/images/examples/llm_judge_tutorial_data_preview-min.png)
+
+Here's the distribution of examples: we have both correct and incorrect responses.
+
+![](/images/examples/llm_judge_tutorial_judge_label_dist-min.png)
+
+<Accordion title="How to preview" defaultOpen={false}>
+  Run this to preview the distribution of the column.
+
+  ```python
+  report = Report([
+    ValueStats(column="label")
+  ])
+
+  my_eval = report.run(eval_dataset, None)
+  my_eval
+
+  # my_eval.dict()
+  # my_eval.json()
+  ```
+</Accordion>
+
+## 3. Correctness evaluator
+
+Now it's time to set up an LLM judge! We'll start with an evaluator that checks if responses are correct compared to the reference. The goal is to match the quality of our manual labels.
+
+**Configure the evaluator prompt**. We'll use the LLMEval [Descriptor](/docs/library/descriptors) to create a custom binary evaluator. Here's how to define the prompt template for correctness:
+
+```python
+correctness = BinaryClassificationPromptTemplate(
+        criteria = """An ANSWER is correct when it is the same as the REFERENCE in all facts and details, even if worded differently.
+        The ANSWER is incorrect if it contradicts the REFERENCE, adds additional claims, omits or changes details.
+        REFERENCE:
+        =====
+        {target_response}
+        =====""",
+        target_category="incorrect",
+        non_target_category="correct",
+        uncertainty="unknown",
+        include_reasoning=True,
+        pre_messages=[("system", "You are an expert evaluator. You will be given an ANSWER and REFERENCE")],
+        )
+```
+
+<Info>
+  The **Binary Classification** template (check [docs](/metrics/customize_llm_judge)) instructs an LLM to classify the input into two classes and add reasoning. You don't need to ask for these details explicitly, or worry about parsing the output structure — that's built into the template. You only need to add the criteria.
+</Info>
+
+In this example, we've set up the prompt to be strict ("all fact and details"). You can write it differently. This flexibility is one of the key benefits of creating a custom judge.
+
+**Score your data**. To add this new descriptor to your dataset, run:
+
+```
+eval_dataset.add_descriptors(descriptors=[
+    LLMEval("new_response",
+            template=correctness,
+            provider = "openai",
+            model = "gpt-4o-mini",
+            alias="Correctness",
+            additional_columns={"target_response": "target_response"}),
+    ])
+```
+
+**Preview the results**. You can view the scored dataset in Python. This will show a DataFrame with newly added scores and explanations.
+
+```python
+eval_dataset.as_dataframe()
+```
+
+![](/images/examples/llm_judge_tutorial_judge_scored_data-min.png)
+
+<Info>
+  **Note**: your explanations will vary since LLMs are non-deterministic.
+</Info>
+
+If you want, you can also add the column that will help you easily sort and find all error where the LLM-judged label is different from the ground truth label.
+
+```python
+eval_dataset.add_descriptors(descriptors=[
+    ExactMatch(columns=["label", "Correctness"], alias="Judge_match")])
+```
+
+**Get a Report.** Summarize the result by generating an Evidently Report.
+
+```python
+report = Report([
+    TextEvals()
+])
+
+my_eval = report.run(eval_dataset, None)
+my_eval
+```
+
+This will render an HTML report in the notebook cell. You can use other [export options](/docs/library/output_formats), like `as_dict()` for a Python dictionary output.
+
+![](/images/examples/llm_judge_tutorial_report-min.png)
+
+Since we already performed exact matching, you can see the crude accuracy of our judge. However, accuracy is not always the best metric. In this case, we might be more interested in recall: we want to make sure that the judge does not miss any "incorrect" answers .
+
+## 4. Evaluate the LLM Eval quality
+
+This part is a bit meta: we're going to evaluate the quality of our LLM evaluator itself! We can treat it as a simple **binary classification** problem.
+
+**Data definition**. To evaluate the classification quality, we need to map the structure of the dataset. The column with the manual label is the "target", and the LLM-judge response is the "prediction":
+
+```python
+df=eval_dataset.as_dataframe()
+
+definition_2 = DataDefinition(
+    classification=[BinaryClassification(
+        target="label",
+        prediction_labels="Correctness",
+        pos_label = "incorrect")],
+    categorical_columns=["label", "Correctness"])
+
+class_dataset = Dataset.from_pandas(
+    pd.DataFrame(df),
+    data_definition=definition_2)
+```
+
+<Info>
+  `Pos_label` in refers to the class that is treated as the target ("what we want to predict better") for metrics like precision, recall, F1-score.
+</Info>
+
+**Get a Report**. Let's use a`ClassificationPreset()` that combines several classification metrics:
+
+```python
+report = Report([
+    ClassificationPreset()
+])
+
+my_eval = report.run(class_dataset, None)
+my_eval
+
+# or my_eval.as_dict()
+```
+
+We can now get a more balanced evaluation and explore the confusion matrix. We have one type of error each so overall the results are pretty good! You can also continue refining your judge prompt.
+
+![](/images/examples/llm_judge_tutorial_conf_matrix-min.png)
+
+## 5. Verbosity evaluator
+
+Next, let’s create a simpler LLM judge that evaluates the verbosity of the responses. This judge will check whether the responses are concise and to the point. This only requires evaluating one output column. This is perfect for production evaluations where you don’t have a reference answer.
+
+Here's how to set up the prompt template for verbosity:
+
+```python
+verbosity = BinaryClassificationPromptTemplate(
+        criteria = """Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+            A concise response should:
+            - Provide the necessary information without unnecessary details or repetition.
+            - Be brief yet comprehensive enough to address the query.
+            - Use simple and direct language to convey the message effectively.""",
+        target_category="concise",
+        non_target_category="verbose",
+        uncertainty="unknown",
+        include_reasoning=True,
+        pre_messages=[("system", "You are an expert text evaluator. You will be given a text of the response to a user question.")],
+        )
+```
+
+Add this new descriptor to our existing dataset:
+
+```python
+eval_dataset.add_descriptors(descriptors=[
+    LLMEval("new_response",
+            template=verbosity,
+            provider = "openai",
+            model = "gpt-4o-mini",
+            alias="Verbosity")
+    ])
+```
+
+Run the Report and view the summary results: 
+
+```python
+report = Report([
+    TextEvals()
+])
+
+my_eval = report.run(eval_dataset, None)
+my_eval
+```
+
+![](/images/examples/llm_judge_tutorial_verbosity-min.png)
+
+You can also view the dataframe using `eval_dataset.as_dataframe()`
+
+<Info>
+  Don't fully agree with the results? Use these labels as a starting point, edit the decisions where you see fit - now you've got your golden dataset! Next, iterate on your judge prompt. You can also try different evaluator LLMs to see which one does the job better. [How to change an LLM](/metrics/customize_llm_judge#change-the-evaluator-llm).
+</Info>
+
+## What's next?
+
+The LLM judge itself is just one part of your overall evaluation framework. You can integrate this evaluator into different workflows, such as testing your LLM outputs after changing a prompt.
+
+To be able to easily run and compare evals, systematically track the results, and interact with your evaluation dataset, you can use the Evidently Cloud platform.
+
+### Set up Evidently Cloud
+
+<CloudSignup />
+
+Import the components to connect with Evidently Cloud:
+
+```python
+from evidently.ui.workspace.cloud import CloudWorkspace
+```
+
+### Create a Project
+
+<CreateProject />
+
+### Send your eval
+
+Since you already created the eval, you can simply upload it to the Evidently Cloud.
+
+```python
+ws.add_run(project.id, my_eval, include_data=True)
+```
+
+You can then go to the Evidently Cloud, open your Project and explore the Report.
+
+![](/images/examples/llm_judge_tutorial_cloud-min.png)
+
+<Info>
+  You can also [create the LLM judges with no-code](/docs/platform/evals_no_code).
+</Info>
