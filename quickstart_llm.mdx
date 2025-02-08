@@ -7,7 +7,7 @@ import CloudSignup from '/snippets/cloud_signup.mdx';
 import CreateProject from '/snippets/create_project.mdx';
 
 <Info>
-Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
+  Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
 </Info>
 
 ## 1. Set up your environment
@@ -110,11 +110,25 @@ eval_df = pd.DataFrame(data, columns=columns)
 
 Let's evaluate all "Answers" for:
 
-* **Sentiment**: from -1 for negative to 1 for positive.
+* **Sentiment**
 
-* **Text length**: character count.
+  : from -1 for negative to 1 for positive.
 
-* **Denials**: detect if the chatbot denied an answer. This uses LLM-as-a-judge with a built-in prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label and an explanation.
+* **Text length**
+
+  : character count.
+
+* **Denials**
+
+  : detect if the chatbot denied an answer. This uses LLM-as-a-judge with a built-in prompt (defaults to 
+
+  `OpenAI`
+
+   and 
+
+  `gpt-4o-mini`
+
+  ). It returns a label and an explanation.
 
 Each such evaluation is a "descriptor". You can run built-in or custom evals.
 
@@ -129,7 +143,7 @@ Set the OpenAI key as an environment variable. [See Open AI docs](https://help.o
 ## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
 ```
 
-Create an Evidently dataset and run all the evals: 
+Create an Evidently dataset and run all the evals:
 
 ```python
 eval_dataset = Dataset.from_pandas(pd.DataFrame(eval_df),
@@ -155,13 +169,19 @@ eval_dataset.as_dataframe()
 
 ## 4. Run tests
 
-Now, let's create a Report to summarize individual scores and test the results. We check that: 
+Now, let's create a Report to summarize individual scores and test the results. We check that:
 
-* **Sentiment** is non-negative (greater or equal to 0)
+* **Sentiment**
 
-* **Text length** is at most 150 symbols.
+   is non-negative (greater or equal to 0)
 
-* **Denials**: there are none.
+* **Text length**
+
+   is at most 150 symbols.
+
+* **Denials**
+
+  : there are none.
 
 ```python
 report = Report([
@@ -182,19 +202,18 @@ my_eval = report.run(eval_dataset, None)
 
 <Tabs>
   <Tab title="Evidently Cloud">
-
     **Upload the Report** and include raw data for detailed analysis:
 
     ```python
     ws.add_run(project.id, my_eval, include_data=True)
     ```
 
-    **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report. You will see the scores summary, and the dataset with new descriptor columns. 
+    **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report. You will see the scores summary, and the dataset with new descriptor columns.
 
-    **See Test results**. Inside the "Tests" tab of the Report, you will get a pass/fail summary: 
+    **See Test results**. Inside the "Tests" tab of the Report, you will get a pass/fail summary:
 
     ![](/images/examples/llm_quickstart_tests.png)
-    
+
     **Explore**. For example, sort to find all answers with "Denials".
 
     ![](/images/examples/llm_quickstart_explore.png)
@@ -202,7 +221,7 @@ my_eval = report.run(eval_dataset, None)
     **Get a Dashboard**. As you run repeated evals, you may want to track the results in time. Go to the "Dashboard" tab in the left menu and enter the "Edit" mode. Add a new tab, and select the "Descriptors" template.
 
     ![](/images/examples/llm_quickstart_create_tab.gif)
-    
+
     You'll see a set of panels that show descriptor values. Each has a single data point. As you log ongoing evaluation results, you can track trends and set up alerts.
   </Tab>
 
@@ -212,7 +231,7 @@ my_eval = report.run(eval_dataset, None)
     ```python
     my_eval
     ```
-    
+
     This will show the summary Report with the overview of all scores.
 
     ![](/images/examples/llm_quickstart_report.png)
@@ -235,3 +254,7 @@ my_eval = report.run(eval_dataset, None)
     ```
   </Tab>
 </Tabs>
+
+## What's next?
+
+See how you can configure [LLM judges for custom criteria](/metrics/customize_llm_judge).
