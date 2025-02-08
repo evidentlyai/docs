@@ -3,7 +3,7 @@ title: "LLM regression testing"
 description: "How to run regression testing for LLM outputs."
 ---
 
-In this tutorial, you will learn how to perform regression testing for LLM outputs.&#x20;
+In this tutorial, you will learn how to perform regression testing for LLM outputs.
 
 You can compare new and old responses after changing a prompt, model, or anything else in your system. By re-running the same inputs with new parameters, you can spot any significant changes. This helps you push updates with confidence or identify issues to fix.
 
@@ -15,21 +15,13 @@ You can compare new and old responses after changing a prompt, model, or anythin
 
 Here's what we'll do:
 
-* **Create a toy dataset**
+* **Create a toy dataset**. Build a small Q&A dataset with answers and reference responses.
 
-  . Build a small Q&A dataset with answers and reference responses.
+* **Get new answers**. Imitate generating new answers to the same question.
 
-* **Get new answers**
+* **Create and run a Report with Tests**. Compare the answers using LLM-as-a-judge to evaluate length, correctness and style consistency.
 
-  . Imitate generating new answers to the same question.
-
-* **Create and run a Report with Tests**
-
-  . Compare the answers using LLM-as-a-judge to evaluate length, correctness and style consistency.
-
-* **Build a monitoring Dashboard**
-
-  . Get plots to track the results of Tests over time.
+* **Build a monitoring Dashboard**. Get plots to track the results of Tests over time.
 
 <Note>
   To simplify things, we won't create an actual LLM app, but will simulate generating new outputs.
@@ -41,11 +33,7 @@ To complete the tutorial, you will need:
 
 * An OpenAI API key to use for the LLM evaluator.
 
-* An Evidently Cloud account to track test results. If not yet,
-
-  [sign up](https://www.evidentlyai.com/register)
-
-  for a free account.
+* An Evidently Cloud account to track test results. If not yet, [sign up](https://www.evidentlyai.com/register) for a free account.
 
 <Info>
   You can see all the code in [Jupyter notebook](https://github.com/evidentlyai/community-examples/blob/main/tutorials/Regression_testing_with_debugging_updated.ipynb) or click to [open in Colab](https://github.com/evidentlyai/community-examples/blob/main/tutorials/Regression_testing_with_debugging_updated.ipynb).
@@ -162,17 +150,9 @@ ref_dataset.as_dataframe()
 
 In this code, you:
 
-* Created an Evidently Dataset object with automatic
+* Created an Evidently Dataset object with automatic [data definition](/docs/library/data_definition).
 
-  [data definition](/docs/library/data_definition)
-
-  .
-
-* Added two built-in descriptors on text length and symbol count. (
-
-  [See others](/metrics/all_descriptors.md)
-
-  ).
+* Added two built-in descriptors on text length and symbol count. ([See others](/metrics/all_descriptors.md)).
 
 * Exported results as a dataframe.
 
@@ -248,17 +228,11 @@ To compare new answers with old ones, we need evaluation metrics. You can use de
 
 Let’s formulate what we want to Tests:
 
-* **Length check**
+* **Length check**. All new responses must be no longer than 200 symbols.
 
-  . All new responses must be no longer than 200 symbols.
+* **Correctness**. All new responses should not contradict the reference answer.
 
-* **Correctness**
-
-  . All new responses should not contradict the reference answer.
-
-* **Style**
-
-  . All new responses should match the style of the reference.
+* **Style**. All new responses should match the style of the reference.
 
 Text length is easy to check, but for Correctness and Style, we'll write our custom LLM judges.
 
@@ -322,6 +296,8 @@ You must focus only on STYLE. Ignore any differences in contents.
 
 This could be useful to detect more subtle changes, like LLM becoming suddenly more verbose.
 
+At the same time, these types of checks are much more subjective and we can expect some variability in the judge responses, so we can treat this test as "non-critical".
+
 ## Run the evaluation
 
 Now, we can run tests that evaluate for correctness, style and text length. We do this in two steps.
@@ -381,35 +357,11 @@ What happens in this code:
 
 * We create an Evidently Report to compute aggregate Metrics.
 
-* We use
+* We use `TextEvals` to summarize all descriptors.
 
-  `TextEvals`
+* We also add Tests for specific values we want to validate. You add Tests by picking a metric you want to assess, and adding a condition to it. (See [available Metrics](/metrics/all_metrics)).
 
-   to summarize all descriptors.
-
-* We also add Tests for specific values we want to validate. You add Tests by picking a metric you want to assess, and adding a condition to it. (See 
-
-  [available Metrics](/metrics/all_metrics)
-
-  ).
-
-* To set test conditions, you define the expectations using parameters like
-
-  `gt`
-
-  (greater than),
-
-  `lt`
-
-  (less than),
-
-  `eq`
-
-  (equal), etc. (Check 
-
-  [Test docs](/docs/library/tests)
-
-  ).
+* To set test conditions, you define the expectations using parameters like `gt` (greater than), `lt` (less than), `eq` (equal), etc. (Check [Test docs](/docs/library/tests)).
 
 * We also label one of the tests (style match) as non-critical. This means it will trigger warning instead of a fail, and will be visually labeled yellow in the Report o a monitoring panel.
 
@@ -552,4 +504,4 @@ If you hover over individual Test results, you will able to see the specific Tes
   **Using Dashboards**. You can design and add other Panel types, like simply plotting mean/max values or distributions of scores over time. Check the [docs on Dashboards](/docs/platform/dashboard).
 </Info>
 
-**What's next?** As you design a similar Test Suite for your use case, you can integrate it with CI/CD workflows to run on every change. You can also enable alerts to be sent to your email / Slack whenever the Tests fail.&#x20;
+**What's next?** As you design a similar Test Suite for your use case, you can integrate it with CI/CD workflows to run on every change. You can also enable alerts to be sent to your email / Slack whenever the Tests fail.
