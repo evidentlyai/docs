@@ -2,6 +2,8 @@
 title: 'LLM as a judge'
 description: 'How to create and evaluate an LLM judge.'
 ---
+import CloudSignup from '/snippets/cloud_signup.mdx';
+import CreateProject from '/snippets/create_project.mdx';
 
 In this tutorial, we'll show how to evaluate text for custom criteria using LLM as the judge, and evaluate the LLM judge itself.
 
@@ -11,13 +13,9 @@ In this tutorial, we'll show how to evaluate text for custom criteria using LLM 
 
 We'll show two ways to use an LLM as a judge:
 
-* **Reference-based**
+* **Reference-based**. Compare new responses against a reference. This is useful for regression testing or whenever you have a "ground truth" (approved responses) to compare against.
 
-  . Compare new responses against a reference. This is useful for regression testing or whenever you have a "ground truth" (approved responses) to compare against.
-
-* **Open-ended**
-
-  . Evaluate responses based on custom criteria, which helps evaluate new outputs when there's no reference available.
+* **Open-ended**. Evaluate responses based on custom criteria, which helps evaluate new outputs when there's no reference available.
 
 We will focus on demonstrating **how to create and tune the LLM evaluator**, which you can then apply in different contexts, like regression testing or prompt comparison.
 
@@ -25,17 +23,11 @@ We will focus on demonstrating **how to create and tune the LLM evaluator**, whi
 
 Here's what we'll do:
 
-* **Create an evaluation dataset**
+* **Create an evaluation dataset**. Create a toy Q&A dataset.
 
-  . Create a toy Q&A dataset.
+* **Create and run an LLM as a judge**. Design an LLM evaluator prompt.
 
-* **Create and run an LLM as a judge**
-
-  . Design an LLM evaluator prompt.
-
-* **Evaluate the judge**
-
-  . Compare the LLM judge's evaluations with manual labels.
+* **Evaluate the judge**. Compare the LLM judge's evaluations with manual labels.
 
 We'll start with the reference-based evaluator that determines whether a new response is correct (it's more complex since it requires passing two columns to the prompt). Then, we'll create a simpler judge focused on verbosity.
 
@@ -90,21 +82,13 @@ os.environ["OPENAI_API_KEY"] = "YOUR_KEY"
 
 First, we'll create a toy Q\&A dataset with customer support question that includes:
 
-* **Questions**
+* **Questions**. The inputs sent to the LLM app.
 
-  . The inputs sent to the LLM app.
+* **Target responses**. The approved responses you consider accurate.
 
-* **Target responses**
+* **New responses**. Imitated new responses from the system.
 
-  . The approved responses you consider accurate.
-
-* **New responses**
-
-  . Imitated new responses from the system.
-
-* **Manual labels with explanation**
-
-  . Labels that say if response is correct or not.
+* **Manual labels with explanation**. Labels that say if response is correct or not.
 
 Why add the labels? It's a good idea to be the judge yourself before you write a prompt. This helps:
 

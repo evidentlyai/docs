@@ -36,7 +36,7 @@ To complete the tutorial, you will need:
 * An Evidently Cloud account to track test results. If not yet, [sign up](https://www.evidentlyai.com/register) for a free account.
 
 <Info>
-  You can see all the code in [Jupyter notebook](https://github.com/evidentlyai/community-examples/blob/main/tutorials/Regression_testing_with_debugging_updated.ipynb) or click to [open in Colab](https://github.com/evidentlyai/community-examples/blob/main/tutorials/Regression_testing_with_debugging_updated.ipynb).
+  You can see all the code in [Jupyter notebook](https://github.com/evidentlyai/community-examples/blob/main/tutorials/Regression_testing_with_debugging_updated.ipynb) or click to [open in Colab](https://colab.research.google.com/github/evidentlyai/community-examples/blob/main/tutorials/Regression_testing_with_debugging_updated.ipynb).
 </Info>
 
 ## 1. Installation and Imports
@@ -152,7 +152,7 @@ In this code, you:
 
 * Created an Evidently Dataset object with automatic [data definition](/docs/library/data_definition).
 
-* Added two built-in descriptors on text length and symbol count. ([See others](/metrics/all_descriptors.md)).
+* Added two built-in descriptors on text length and symbol count. ([See others](/metrics/all_descriptors)).
 
 * Exported results as a dataframe.
 
@@ -259,7 +259,7 @@ correctness = BinaryClassificationPromptTemplate(
 We recommend splitting each evaluation criterion into separate judges and using a simple grading scale, like binary classifiers, for better reliability.
 
 <Info>
-  **Ideally, evaluate your judge first!** Each LLM evaluator is a small ML system you should align with your preferences. We recommend running a couple of iterations. Check the tutorial on [LLM judges](/examples/LLM_judge.md).
+  **Ideally, evaluate your judge first!** Each LLM evaluator is a small ML system you should align with your preferences. We recommend running a couple of iterations. Check the [tutorial on LLM judges](/examples/LLM_judge).
 </Info>
 
 <Info>
@@ -298,7 +298,7 @@ This could be useful to detect more subtle changes, like LLM becoming suddenly m
 
 At the same time, these types of checks are much more subjective and we can expect some variability in the judge responses, so we can treat this test as "non-critical".
 
-## Run the evaluation
+## 6. Run the evaluation
 
 Now, we can run tests that evaluate for correctness, style and text length. We do this in two steps.
 
@@ -363,7 +363,7 @@ What happens in this code:
 
 * To set test conditions, you define the expectations using parameters like `gt` (greater than), `lt` (less than), `eq` (equal), etc. (Check [Test docs](/docs/library/tests)).
 
-* We also label one of the tests (style match) as non-critical. This means it will trigger warning instead of a fail, and will be visually labeled yellow in the Report o a monitoring panel.
+* We also label one of the tests (style match) as non-critical. This means it will trigger warning instead of a fail, and will be visually labeled yellow in the Report and the monitoring panel.
 
 <Info>
   If you want to test share instead of count, use `share_tests` instead of `tests`.
