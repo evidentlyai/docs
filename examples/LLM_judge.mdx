@@ -3,9 +3,6 @@ title: 'LLM as a judge'
 description: 'How to create and evaluate an LLM judge.'
 ---
 
-import CloudSignup from '/snippets/cloud_signup.mdx';
-import CreateProject from '/snippets/create_project.mdx';
-
 In this tutorial, we'll show how to evaluate text for custom criteria using LLM as the judge, and evaluate the LLM judge itself.
 
 <Info>
@@ -14,9 +11,13 @@ In this tutorial, we'll show how to evaluate text for custom criteria using LLM 
 
 We'll show two ways to use an LLM as a judge:
 
-* **Reference-based**. Compare new responses against a reference. This is useful for regression testing or whenever you have a "ground truth" (approved responses) to compare against.
+* **Reference-based**
 
-* **Open-ended**. Evaluate responses based on custom criteria, which helps evaluate new outputs when there's no reference available.
+  . Compare new responses against a reference. This is useful for regression testing or whenever you have a "ground truth" (approved responses) to compare against.
+
+* **Open-ended**
+
+  . Evaluate responses based on custom criteria, which helps evaluate new outputs when there's no reference available.
 
 We will focus on demonstrating **how to create and tune the LLM evaluator**, which you can then apply in different contexts, like regression testing or prompt comparison.
 
@@ -24,11 +25,17 @@ We will focus on demonstrating **how to create and tune the LLM evaluator**, whi
 
 Here's what we'll do:
 
-* **Create an evaluation dataset**. Create a toy Q&A dataset.
+* **Create an evaluation dataset**
 
-* **Create and run an LLM as a judge**. Design an LLM evaluator prompt.
+  . Create a toy Q&A dataset.
 
-* **Evaluate the judge**. Compare the LLM judge's evaluations with manual labels.
+* **Create and run an LLM as a judge**
+
+  . Design an LLM evaluator prompt.
+
+* **Evaluate the judge**
+
+  . Compare the LLM judge's evaluations with manual labels.
 
 We'll start with the reference-based evaluator that determines whether a new response is correct (it's more complex since it requires passing two columns to the prompt). Then, we'll create a simpler judge focused on verbosity.
 
@@ -41,9 +48,8 @@ To complete the tutorial, you will need:
 We recommend running this tutorial in Jupyter Notebook or Google Colab to render rich HTML objects with summary results directly in a notebook cell.
 
 <Info>
-Run a sample notebook: [Jupyter notebook](https://github.com/evidentlyai/community-examples/blob/main/tutorials/LLM_as_a_judge_tutorial_updated.ipynb) or [open it in Colab](https://colab.research.google.com/github/evidentlyai/community-examples/blob/main/tutorials/LLM_as_a_judge_tutorial_updated.ipynb).
+  Run a sample notebook: [Jupyter notebook](https://github.com/evidentlyai/community-examples/blob/main/tutorials/LLM_as_a_judge_tutorial_updated.ipynb) or [open it in Colab](https://colab.research.google.com/github/evidentlyai/community-examples/blob/main/tutorials/LLM_as_a_judge_tutorial_updated.ipynb).
 </Info>
-
 
 ## 1.  Installation and Imports
 
@@ -84,13 +90,21 @@ os.environ["OPENAI_API_KEY"] = "YOUR_KEY"
 
 First, we'll create a toy Q\&A dataset with customer support question that includes:
 
-* **Questions**. The inputs sent to the LLM app.
+* **Questions**
 
-* **Target responses**. The approved responses you consider accurate.
+  . The inputs sent to the LLM app.
 
-* **New responses**. Imitated new responses from the system.
+* **Target responses**
 
-* **Manual labels with explanation**. Labels that say if response is correct or not.
+  . The approved responses you consider accurate.
+
+* **New responses**
+
+  . Imitated new responses from the system.
+
+* **Manual labels with explanation**
+
+  . Labels that say if response is correct or not.
 
 Why add the labels? It's a good idea to be the judge yourself before you write a prompt. This helps:
 
