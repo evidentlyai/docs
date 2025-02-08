@@ -7,11 +7,7 @@ noindex: "true"
 import CloudSignup from '/snippets/cloud_signup.mdx';
 import CreateProject from '/snippets/create_project.mdx';
 
-In this tutorial, we'll show:
-
-* How to evaluate text for custom criteria using LLM as the judge.
-
-* How to evaluate the quality of LLM judge against your own labels.
+In this tutorial, we'll show how to evaluate text for custom criteria using LLM as the judge, and evaluate the LLM judge itself.
 
 <Info>
   **This is a local example.** You will run and explore results using the open-source Python library. At the end, we’ll optionally show how to upload results to the Evidently Platform for easy exploration.
@@ -29,7 +25,7 @@ We will focus on demonstrating **how to create and tune the LLM evaluator**, whi
 
 Here's what we'll do:
 
-* **Create an evaluation dataset**. Create a toy Q&A dataset with two responses to each question.
+* **Create an evaluation dataset**. Create a toy Q&A dataset.
 
 * **Create and run an LLM as a judge**. Design an LLM evaluator prompt.
 
@@ -43,11 +39,12 @@ To complete the tutorial, you will need:
 
 * An OpenAI API key to use for the LLM evaluator.
 
+We recommend running this tutorial in Jupyter Notebook or Google Colab to render rich HTML objects with summary results directly in a notebook cell.
+
 <Info>
-  Use the provided code snippets or run a sample notebook: [Jupyter notebook](https://github.com/evidentlyai/community-examples/blob/main/tutorials/LLM_as_a_judge_tutorial_updated.ipynb) or [open it in Colab](https://colab.research.google.com/github/evidentlyai/community-examples/blob/main/tutorials/LLM_as_a_judge_tutorial_updated.ipynb).
+Run a sample notebook: [Jupyter notebook](https://github.com/evidentlyai/community-examples/blob/main/tutorials/LLM_as_a_judge_tutorial_updated.ipynb) or [open it in Colab](https://colab.research.google.com/github/evidentlyai/community-examples/blob/main/tutorials/LLM_as_a_judge_tutorial_updated.ipynb).
 </Info>
 
-We recommend running this tutorial in Jupyter Notebook or Google Colab to render rich HTML objects with summary results directly in a notebook cell.
 
 ## 1.  Installation and Imports
 
@@ -96,9 +93,9 @@ First, we'll create a toy Q\&A dataset with customer support question that inclu
 
 * **Manual labels with explanation**. Labels that say if response is correct or not.
 
-Why add the labels? It's a good idea to be the judge yourself before you write a prompt. This helps:&#x20;
+Why add the labels? It's a good idea to be the judge yourself before you write a prompt. This helps:
 
-* Formulate better criteria. You discover nuances you may want to clarify in the evaluator prompt.
+* Formulate better criteria. You discover nuances that help you write a better prompt.
 
 * Get the "ground truth". You can use it to evaluate the quality of the LLM judge.
 
@@ -267,7 +264,7 @@ In this example, we've set up the prompt to be strict ("all fact and details"). 
 
 **Score your data**. To add this new descriptor to your dataset, run:
 
-```
+```python
 eval_dataset.add_descriptors(descriptors=[
     LLMEval("new_response",
             template=correctness,
@@ -318,7 +315,7 @@ Since we already performed exact matching, you can see the crude accuracy of our
 
 This part is a bit meta: we're going to evaluate the quality of our LLM evaluator itself! We can treat it as a simple **binary classification** problem.
 
-**Data definition**. To evaluate the classification quality, we need to map the structure of the dataset. The column with the manual label is the "target", and the LLM-judge response is the "prediction":
+**Data definition**. To evaluate the classification quality, we need to map the structure of the dataset accordingly first. The column with the manual label is the "target", and the LLM-judge response is the "prediction":
 
 ```python
 df=eval_dataset.as_dataframe()
@@ -352,13 +349,13 @@ my_eval
 # or my_eval.as_dict()
 ```
 
-We can now get a more balanced evaluation and explore the confusion matrix. We have one type of error each so overall the results are pretty good! You can also continue refining your judge prompt.
+We can now get a well-rounded evaluation and explore the confusion matrix. We have one type of error each: overall the results are pretty good! You can also refine the prompt to try to improve them.
 
 ![](/images/examples/llm_judge_tutorial_conf_matrix-min.png)
 
 ## 5. Verbosity evaluator
 
-Next, let’s create a simpler LLM judge that evaluates the verbosity of the responses. This judge will check whether the responses are concise and to the point. This only requires evaluating one output column. This is perfect for production evaluations where you don’t have a reference answer.
+Next, let’s create a simpler verbosity judge. It will check whether the responses are concise and to the point. This only requires evaluating one output column: such checks are perfect for production evaluations where you don’t have a reference answer.
 
 Here's how to set up the prompt template for verbosity:
 
