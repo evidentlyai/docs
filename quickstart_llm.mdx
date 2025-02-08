@@ -110,25 +110,11 @@ eval_df = pd.DataFrame(data, columns=columns)
 
 Let's evaluate all "Answers" for:
 
-* **Sentiment**
+* **Sentiment**: from -1 for negative to 1 for positive.
 
-  : from -1 for negative to 1 for positive.
+* **Text length**: character count.
 
-* **Text length**
-
-  : character count.
-
-* **Denials**
-
-  : detect if the chatbot denied an answer. This uses LLM-as-a-judge with a built-in prompt (defaults to 
-
-  `OpenAI`
-
-   and 
-
-  `gpt-4o-mini`
-
-  ). It returns a label and an explanation.
+* **Denials**: detect if the chatbot denied an answer. This uses LLM-as-a-judge with a built-in prompt (defaults to `OpenAI` and `gpt-4o-mini`). It returns a label and an explanation.
 
 Each such evaluation is a "descriptor". You can run built-in or custom evals.
 
@@ -171,17 +157,11 @@ eval_dataset.as_dataframe()
 
 Now, let's create a Report to summarize individual scores and test the results. We check that:
 
-* **Sentiment**
+* **Sentiment** is non-negative (greater or equal to 0)
 
-   is non-negative (greater or equal to 0)
+* **Text length** is at most 150 symbols.
 
-* **Text length**
-
-   is at most 150 symbols.
-
-* **Denials**
-
-  : there are none.
+* **Denials**: there are none.
 
 ```python
 report = Report([
