@@ -1,0 +1,316 @@
+---
+title: 'RAG evals'
+description: 'Simple example of using RAG-related metrics.'
+---
+
+import CloudSignup from '/snippets/cloud_signup.mdx';
+import CreateProject from '/snippets/create_project.mdx';
+
+In this tutorial, we'll demonstrate how to evaluate different aspects of Retrieval-Augmented Generation (RAG) using Evidently.
+
+<Info>
+  **This is a local example.** You will run and explore results using the open-source Python library. At the end, we’ll optionally show how to upload results to the Evidently Platform for easy exploration.
+</Info>
+
+We will evaluate both retrieval and generation quality:
+
+* **Retrieval evaluation.** Assessing the quality of retrieved contexts, including per-chunk relevance.
+* **Generation evaluation.** Evaluating the quality of the final response, both with and without ground truth.
+
+By the end of this tutorial, you'll know to evaluate different aspects of RAG system, and generate structured reports to track RAG performance.
+
+<Info>
+  Run a sample notebook: [Jupyter notebook](https://github.com/evidentlyai/community-examples/blob/main/tutorials/RAG_metrics.ipynb) or [open it in Colab](https://colab.research.google.com/github/evidentlyai/community-examples/blob/main/tutorials/RAG_metrics.ipynb).
+</Info>
+
+## 1. Installation and Imports
+
+Install Evidently:
+
+```python
+!pip install evidently[llm]
+```
+
+Import the required modules:
+
+```python
+import pandas as pd
+from evidently.future.datasets import Dataset, DataDefinition
+from evidently.future.metrics import *
+from evidently.future.descriptors import *
+from evidently.future.report import Report
+from evidently.future.presets import TextEvals
+from evidently.ui.workspace.cloud import CloudWorkspace
+```
+
+Pass your OpenAI key as an environment variable:
+
+```python
+import os
+os.environ["OPENAI_API_KEY"] = "YOUR_KEY"
+```
+
+## 2. Evaluating Retrieval 
+
+### Single Context
+
+First, let's test retrieval quality when a single context is retrieved for each query.
+
+**Generate a synthetic dataset**. We create a simple dataset with questions, retrieved contexts, and generated responses.
+
+```python
+synthetic_data = [
+    ["Why do flowers bloom in spring?", "Plants require extra care during cold months.", "because of the rising temperatures"],
+    ["Why do we yawn when we see someone else yawn?", "Yawning is contagious due to social bonding and mirror neurons.", "because it's a glitch in the matrix"],
+    ["How far is Saturn from Earth?", "Saturn is about 1.4 billion kilometers away.", "about 1.4 billion kilometers"],
+    ["Where do penguins live?", "Penguins primarily live in the Southern Hemisphere.", "mostly in Antarctica"]
+]
+
+columns = ["Question", "Context", "Response"]
+synthetic_df = pd.DataFrame(synthetic_data, columns=columns)
+```
+
+**Evaluate overall context quality** We first assess whether the retrieved context provides sufficient information to answer the question and view results as a pandas dataframe.
+
+```python
+context_based_evals = Dataset.from_pandas(
+    synthetic_df,
+    data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
+    descriptors=[ContextQualityLLMEval("Context", question="Question")]
+)
+context_based_evals.as_dataframe()
+```
+
+![](/images/examples/rag_single_context_valid-min.png)
+
+What happens in this code:
+* We create an [Evidently dataset object](/docs/library/data_definition).
+* Simulatenously, we add [descriptors](/docs/library/descriptors): evaluators that score each row.
+* We use a built-in LLM judge metric. You can further customize it by choosing a different evaluator LLM or modifying the prompt. [Custom LLM judge parameters](/metrics/customize_llm_judge).
+
+**Evaluate chunk relevance**. You can also score the relevance of the chunk using a different `ContextRelevance` metric. 
+
+```python
+context_based_evals = Dataset.from_pandas(
+    synthetic_df,
+    data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
+    descriptors=[ContextRelevance("Question", "Context", output_scores=True, aggregation_method="hit", method="llm", alias="Hit")]
+)
+context_based_evals.as_dataframe()
+```
+
+![](/images/examples/rag_single_context_hit-min.png)
+
+It's more useful for multiple context, though.
+
+## 3. Multiple Contexts
+
+RAG systems often retrieve multiple chunks. In this case, we can assess the relevance of each indiviudal chunk first. 
+
+Let's generate a toy dataset. Pass all contexts as a list.
+
+```python
+synthetic_data = [
+    ["Why are bananas healthy?", ["Bananas are rich in potassium.", "Bananas provide quick energy.", "Are bananas actually a vegetable?"], "because they are rich in nutrients"],
+    ["How do you cook potatoes?", ["Potatoes are easy to grow.", "The best way to cook potatoes is to eat them raw.", "Can potatoes be cooked in space?"], "boil, bake, or fry them"]
+]
+columns = ["Question", "Context", "Response"]
+synthetic_df_2 = pd.DataFrame(synthetic_data, columns=columns)
+```
+
+**Hit Rate:**. To aggregate the results per query, we can assess if at least one retrieved chunk contains relevant information (Hit). 
+
+```python
+context_based_evals = Dataset.from_pandas(
+    synthetic_df_2,
+    data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
+    descriptors=[ContextRelevance("Question", "Context", output_scores=True, aggregation_method="hit", method="llm", alias="Hit")]
+)
+context_based_evals.as_dataframe()
+```
+
+If you output scores, you can also see the list of relevance scores that appear in the same order as your chunks. 
+
+![](/images/examples/rag_multi_context_hit-min.png)
+
+**Mean Relevance:**. Alternatively, you can compute an average relevance score.
+
+```python
+context_based_evals = Dataset.from_pandas(
+    synthetic_df_2,
+    data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
+    descriptors=[ContextRelevance("Question", "Context", output_scores=True, aggregation_method="mean", method="llm", alias="Relevance")]
+)
+context_based_evals.as_dataframe()
+```
+
+![](/images/examples/rag_multi_context_mean-min.png)
+
+## 4. Evaluating Generation 
+
+### With Ground Truth
+
+If you a have ground truth dataset for RAG, you can compare generated responses against known correct answers.
+
+<Note>
+  **Synthetic data**. You can also generate example inputs with correct outputs for your RAG system using [Evidently Platform](/docs/platform/datasets_generate).
+</Note>
+
+Let's generate a new toy example with "target" column:
+
+```python
+synthetic_data = [
+    ["Why do we yawn?", "because it's a glitch in the matrix", "Due to mirror neurons."],
+    ["Why do flowers bloom?", "Because of rising temperatures", "Because it gets warmer."]
+]
+columns = ["Question", "Response", "Target"]
+synthetic_df_4 = pd.DataFrame(synthetic_data, columns=columns)
+```
+
+There are multiple ways to run this comparison, including LLM-based matching (`CorrectnessLLMEval`) and non-LLM methods like Semantic similarity and BERTScore. Let's run all three at once, but we'd recommend choosing the one:
+
+```python
+context_based_evals = Dataset.from_pandas(
+    synthetic_df_4,
+    data_definition=DataDefinition(text_columns=["Question", "Response", "Target"]),
+    descriptors=[
+        CorrectnessLLMEval("Response", target_output="Target"),
+        BERTScore(columns=["Response", "Target"], alias="BERTScore"),
+        SemanticSimilarity(columns=["Response", "Target"], alias="Semantic Similarity")
+    ]
+)
+context_based_evals.as_dataframe()
+```
+
+Here is what you get:
+
+![](/images/examples/rag_correctness-min.png)
+
+<Note>
+  **Changing the LLM prompt**. You can tweak the definition of correctness to your own liking. Here is an example tutorial on how we tune [a correctness descriptor prompt](/examples/LLM_judge).
+</Note>
+
+### Without Ground Truth
+
+If you don't have reference answers, you can use reference-free LLM judges to assess response quality.
+
+For example, here is you can run evaluation for `Faithfulness` to detect if the response is contradictory or unfaithful to the context:
+
+```python
+context_based_evals = Dataset.from_pandas(
+    synthetic_df,
+    data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
+    descriptors=[FaithfulnessLLMEval("Response", context="Context")]
+)
+context_based_evals.as_dataframe()
+```
+
+Here is an example result:
+
+![](/images/examples/rag_faithfulness-min.png)
+
+You can add other useful checks over your final response like:
+* Length constraints: are responses within expected limits?
+* Refusal rate: monitoring how often the system declines questions.
+* String matching: checking for required wording (e.g., disclaimers).
+* Response tone: ensuring responses match the intended style.
+
+<Note>
+  **Available evaluators**. Check a full [list of available descriptors](/metrics/all_descriptors).
+</Note>
+
+## 5. Get Reports
+
+Once you defined what you are evaluating, you can group all your evals in a Report to summarize the results across multiple tested inputs. 
+
+Let's put it all together. 
+
+**Score data**. Once you have a pandas dataframe `synthetic_df`, you create an Evidently dataset object and choose the selected decsriptors by simply listing them.
+
+```python
+context_based_evals = Dataset.from_pandas(
+    pd.DataFrame(synthetic_df),
+    data_definition=DataDefinition(
+        text_columns=["Question", "Context", "Response"],
+    ),
+    descriptors=[
+        FaithfulnessLLMEval("Response", context="Context"),
+        ContextQualityLLMEval("Context", question="Question"),
+    ]
+)
+# context_based_evals.as_dataframe()
+```
+
+**Get a Report**. Instead of rendering the results as a dataframe, you create a [Report](/docs/library/report).
+
+```python
+report = Report([
+    TextEvals()
+])
+
+my_eval = report.run(context_based_evals, None)
+my_eval
+```
+
+This will render an HTML report in the notebook cell. You can use other [export options](/docs/library/output_formats), like `as_dict()` for a Python dictionary output.
+
+![](/images/examples/rag_reports-min.png)
+
+This lets you see a well-rounded evaluation. In this toy example, we can se that the the system retrieves the right data better than uses it for generation. The next step could be improving your generation prompt to ensure responses stay true to conetxt.
+
+**Add test conditions**. You can also set up explicit pass/fail tests based on expected score distributions using the [Tests](/docs/library/tests). These are conditional expectations you add to metrics.
+
+```python
+report = Report([
+    TextEvals(),
+    CategoryCount(column="Faithfulness", category="FAITHFUL", tests=[eq(0)]),
+    CategoryCount(column="ContextQuality", category="INVALID", tests=[eq(0)])
+])
+
+my_eval = report.run(context_based_evals, None)
+my_eval
+```
+
+In this case, we expect all retrieved contexts to be valid and all responses to be faithful, so our test fail. You can adjust these conditions — for example, allowing a certain percentage of responses to fail. 
+
+![](/images/examples/rag_tests-min.png)
+
+## 6. Upload to Evidently Cloud
+
+To be able to easily run and compare evals, systematically track the results, and interact with your evaluation dataset, you can use the Evidently Cloud platform.
+
+### Set up Evidently Cloud
+
+<CloudSignup />
+
+Import the components to connect with Evidently Cloud:
+
+```python
+from evidently.ui.workspace.cloud import CloudWorkspace
+```
+
+### Create a Project
+
+<CreateProject />
+
+Alternatively, retrieve an existing project:
+
+```python
+# project = ws.get_project("PROJECT_ID")
+```
+
+### Send your eval
+
+Since you already created the eval, you can simply upload it to the Evidently Cloud.
+
+```python
+ws.add_run(project.id, my_eval, include_data=True)
+```
+
+You can then go to the Evidently Cloud, open your Project and explore the Report with scored data that's easy to interact with.
+
+![](/images/examples/rag_cloud_view-min.png)
+
+## What's Next?
+
+Considering implementing a [regression testing](/examples/LLM_regression_testing) at every update to monitor how your RAG system retrieval and response quality changes.
