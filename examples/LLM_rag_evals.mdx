@@ -85,7 +85,9 @@ context_based_evals.as_dataframe()
 What happened in this code:
 
 * We create an [Evidently dataset object](/docs/library/data_definition).
-* Simultaneously, we add [descriptors](/docs/library/descriptors) : evaluators that score each row.
+
+* Simultaneously, we add [descriptors](/docs/library/descriptors): evaluators that score each row.
+
 * We use a built-in LLM judge metric `ContextQualityLLMEval`.
 
 <Info>
@@ -107,7 +109,7 @@ context_based_evals = Dataset.from_pandas(
 context_based_evals.as_dataframe()
 ```
 
-In this case you will get a binary "Hit" on whether the context is relevant or not.&#x20;
+In this case you will get a binary "Hit" on whether the context is relevant or not.
 
 ![](/images/examples/rag_single_context_hit-min.png)
 
@@ -158,7 +160,7 @@ Here is an example result:
 
 ![](/images/examples/rag_multi_context_mean-min.png)
 
-## 4. Evaluating Generation
+## 3. Evaluating Generation
 
 ### With Ground Truth
 
@@ -233,7 +235,7 @@ You can add other useful checks over your final response like:
   **Available evaluators**. Check a full [list of available descriptors](/metrics/all_descriptors).
 </Note>
 
-## 5. Get Reports
+## 4. Get Reports
 
 Once you have defined what you are evaluating, you can group all your evals in a **Report** to summarize the results across multiple tested inputs.
 
@@ -289,7 +291,7 @@ In this case, we expect all retrieved contexts to be valid and all responses to 
 
 ![](/images/examples/rag_tests-min.png)
 
-## 6. Upload to Evidently Cloud
+## 5. Upload to Evidently Cloud
 
 To be able to easily run and compare evals, systematically track the results, and interact with your evaluation dataset, you can use the Evidently Cloud platform.
 
