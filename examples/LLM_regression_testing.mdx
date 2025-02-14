@@ -240,6 +240,10 @@ Text length is easy to check, but for Correctness and Style, we'll write our cus
 
 We implement the correctness evaluator, using an Evidenty template for binary classification. We ask the LLM to classify each response as "correct" or "incorrect" based on the `target_response` column and provide reasoning for its decision.
 
+<Note>
+You can also use a built-in `CorrectnessLLMEval()` to use a default prompt.
+</Note>
+
 ```python
 correctness = BinaryClassificationPromptTemplate(
         criteria = """An ANSWER is correct when it is the same as the REFERENCE in all facts and details, even if worded differently.
