@@ -208,14 +208,14 @@ synthetic_data = [
     ["Why do flowers bloom?", "Because of rising temperatures", "Because it gets warmer."]
 ]
 columns = ["Question", "Response", "Target"]
-synthetic_df_4 = pd.DataFrame(synthetic_data, columns=columns)
+synthetic_df_3 = pd.DataFrame(synthetic_data, columns=columns)
 ```
 
 There are multiple ways to run this comparison, including LLM-based matching (`CorrectnessLLMEval`) and non-LLM methods like Semantic similarity and BERTScore. Let's run all three at once, but we'd recommend choosing the one:
 
 ```python
 context_based_evals = Dataset.from_pandas(
-    synthetic_df_4,
+    synthetic_df_3,
     data_definition=DataDefinition(text_columns=["Question", "Response", "Target"]),
     descriptors=[
         CorrectnessLLMEval("Response", target_output="Target"),
