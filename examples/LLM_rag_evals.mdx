@@ -83,6 +83,12 @@ columns = ["Question", "Context", "Response"]
 synthetic_df = pd.DataFrame(synthetic_data, columns=columns)
 ```
 
+To be able to preview a full-with pandas dataset.
+
+```python
+pd.set_option('display.max_colwidth', None)
+```
+
 **Evaluate overall context quality.** We first assess whether the retrieved context provides sufficient information to answer the question and view results as a pandas dataframe.
 
 ```python
@@ -116,8 +122,12 @@ Here is what you get:
 context_based_evals = Dataset.from_pandas(
     synthetic_df,
     data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
-    descriptors=[ContextRelevance("Question", "Context", output_scores=True, aggregation_method="hit", method="llm", alias="Hit")]
-)
+    descriptors=[ContextRelevance("Question", "Context", 
+                                  output_scores=True, 
+                                  aggregation_method="hit", 
+                                  method="llm", 
+                                  alias="Hit")]
+    )
 context_based_evals.as_dataframe()
 ```
 
@@ -148,7 +158,11 @@ synthetic_df_2 = pd.DataFrame(synthetic_data, columns=columns)
 context_based_evals = Dataset.from_pandas(
     synthetic_df_2,
     data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
-    descriptors=[ContextRelevance("Question", "Context", output_scores=True, aggregation_method="hit", method="llm", alias="Hit")]
+    descriptors=[ContextRelevance("Question", "Context", 
+                                  output_scores=True, 
+                                  aggregation_method="hit", 
+                                  method="llm", 
+                                  alias="Hit")]
 )
 context_based_evals.as_dataframe()
 ```
@@ -163,7 +177,11 @@ You can see the list of individual relevance scores that appear in the same orde
 context_based_evals = Dataset.from_pandas(
     synthetic_df_2,
     data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
-    descriptors=[ContextRelevance("Question", "Context", output_scores=True, aggregation_method="mean", method="llm", alias="Relevance")]
+    descriptors=[ContextRelevance("Question", "Context", 
+                                  output_scores=True, 
+                                  aggregation_method="mean", 
+                                  method="llm", 
+                                  alias="Relevance")]
 )
 context_based_evals.as_dataframe()
 ```
