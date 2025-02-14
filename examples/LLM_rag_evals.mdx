@@ -61,10 +61,22 @@ First, let's test retrieval quality when a single context is retrieved for each 
 
 ```python
 synthetic_data = [
-    ["Why do flowers bloom in spring?", "Plants require extra care during cold months.", "because of the rising temperatures"],
-    ["Why do we yawn when we see someone else yawn?", "Yawning is contagious due to social bonding and mirror neurons.", "because it's a glitch in the matrix"],
-    ["How far is Saturn from Earth?", "Saturn is about 1.4 billion kilometers away.", "about 1.4 billion kilometers"],
-    ["Where do penguins live?", "Penguins primarily live in the Southern Hemisphere.", "mostly in Antarctica"]
+
+    ["Why do flowers bloom in spring?",
+     "Plants require extra care during cold months. You should keep them indoors.",
+     "because of the rising temperatures"],
+
+    ["Why do we yawn when we see someone else yawn?",
+     "Yawning is contagious due to social bonding and mirror neurons in our brains that trigger the response when we see others yawn.",
+     "because it's a glitch in the matrix"],
+
+    ["How far is Saturn from Earth?",
+     "The distance between Earth and Saturn varies, but on average, Saturn is about 1.4 billion kilometers (886 million miles) away from Earth.",
+     "about 1.4 billion kilometers"],
+
+    ["Where do penguins live?",
+     "Penguins primarily live in the Southern Hemisphere, with most species found in Antarctica, as well as on islands and coastlines of South America, Africa, Australia, and New Zealand.",
+     "mostly in Antarctica and southern regions"],
 ]
 
 columns = ["Question", "Context", "Response"]
