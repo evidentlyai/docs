@@ -6,22 +6,23 @@ description: 'Synthetic edge cases and tricky inputs'
 Adversarial tests are designed to challenge AI models by exposing weaknesses and vulnerabilities. These inputs may attempt to:
 
 * Bypass safety protections and generate harmful responses.
-
 * Trick the model into revealing sensitive or unintended information.
-
 * Exploit edge cases to evaluate system robustness.
 
 Evidently Cloud lets you automate adversarial test generation based on defined categories of risk.
 
 ## Create an adversarial test dataset
 
+You can configure your own adversarial dataset.
+
 ### 1. Create a Project
 
 In the Evidently UI, start a new Project or open an existing one.
 
 * Navigate to “Datasets” in the left menu.
-
 * Click “Generate” and select the “Adversarial testing” option.
+
+![](/images/synthetic/synthetic_data_select_method.png)
 
 ### 2. Select a test scenario
 
@@ -29,18 +30,13 @@ Choose a predefined adversarial scenario:
 
 ![](/images/synthetic/synthetic_data_adversarial.png)
 
+You can choose the following categories:
 * Harmful content (e.g., profanity, toxicity, illegal advice).
-
 * Forbidden topics (e.g., financial, legal, medical queries).
-
 * Brand image (eliciting negative feedback on a company or product).
-
 * Competition (comparisons with competitor products).
-
 * Offers and promises (attempting to get AI to make commitments).
-
 * Hijacking (out-of-scope questions unrelated to the intended purpose).
-
 * Prompt leakage (extracting system instructions or hidden prompts).
 
 ### 3. Configure the dataset
@@ -48,7 +44,6 @@ Choose a predefined adversarial scenario:
 After selecting a scenario
 
 * Provide an optional dataset name and description. (This applies if you export each dataset separately).
-
 * Set the number of inputs to generate.
 
 ![](/images/synthetic/synthetic_data_brand_image.png)
@@ -70,9 +65,7 @@ You can choose to:
 Once generated, you can:
 
 * Open and edit each dataset as needed.
-
 * Download it as a CSV file.
-
 * Access it via the Python API using the dataset ID.
 
 <Info>
