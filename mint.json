@@ -230,7 +230,7 @@
       "group": "Intro",
       "pages": [
         "synthetic-data/introduction",
-        "synthetic-data/why_synthetic",
+        "synthetic-data/why_synthetic"
       ]
     },
     {
@@ -238,7 +238,7 @@
       "pages": [
         "synthetic-data/rag_data",
         "synthetic-data/adversarial_data",
-        "synthetic-data/input_data",
+        "synthetic-data/input_data"
       ]
     },
     {
