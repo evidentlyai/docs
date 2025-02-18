@@ -12,24 +12,49 @@ Instead of manually creating test cases, you can generate them directly from you
 ### 1. Create a Project
 
 In the Evidently UI, start a new Project or open an existing one.
+
 * Navigate to “Datasets” in the left menu.
+
 * Click “Generate” and select the “RAG” option.
 
-### 2. Upload your knowledge base 
+### 2. Upload your knowledge base
 
 Select a file containing the information your AI system retrieves from. Supported formats: Markdown (.md), CSV, TXT, PDFs. Choose how many inputs to generate.
 
+![](/images/synthetic/synthetic_data_inputs_example_upload.png)
+
+Simply drop the file, then:
+
+* Choose the number of inputs to generate.
+
+* Choose if you want to include the context used to generate the answer.
+
+![](/images/synthetic/synthetic_data_inputs_example_upload2.png)
+
 The system automatically extracts relevant facts and generates user-like questions to your data source with ground truth answers.
+
+<Info>
+  Note that it may take some time to process the dataset. Limits apply on the free plan.
+</Info>
 
 ### 3. Review the test cases
 
 You can preview and refine the generated dataset.
 
+![](/images/synthetic/synthetic_data_rag_example_result.png)
+
 You can:
+
 * Use “More like this” to add more variations.
+
 * Drop rows that aren’t relevant.
+
 * Manually edit questions or responses.
 
 ### 4. Save the Dataset
 
 Once you are finished, store the dataset. You can download it as a CSV file or access it via the Python API using the dataset ID to use in your evaluation.
+
+<Info>
+  **Dataset API.** How to work with [Evidently datasets](/docs/platform/datasets_overview).
+</Info>
