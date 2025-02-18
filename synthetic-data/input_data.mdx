@@ -1,0 +1,40 @@
+---
+title: 'Create synthetic inputs'
+description: 'Generate input test cases.'
+---
+
+Synthetic input generation allows you to create test questions from descriptions and examples. This helps expand test coverage and evaluate how your AI system handles different types of queries.
+
+You can use this to:
+* Generate test questions for RAG systems where you only need queries without predefined answers.
+* Create adversarial inputs by describing specific edge cases.
+* Generate questions tailored to specific user personas for more targeted testing.
+
+## Create synthetic inputs
+
+### 1. Create a Project
+
+In the Evidently UI, start a new Project or open an existing one.
+* Navigate to “Datasets” in the left menu.
+* Click “Generate” and select the “Generate from examples” option.
+
+### 2. Describe the scenario
+
+Define what kind of inputs you need by providing a brief description of the task or domain, and choose how many inputs to generate. For example, if you’re building a travel assistant, you could enter:
+* Description: "Questions a person can ask when planning a trip"
+* Example input: "What can I do in Paris in a day?"
+  
+This guides the system in generating relevant and diverse inputs.
+
+## 3. Review the results 
+
+The system will generate a list of input questions based on your description. You can preview and refine the generated dataset.
+
+You can:
+* Use “More like this” to generate additional variations.
+* Drop questions that don’t fit your needs.
+* Manually edit or rephrase questions.
+
+## 4. Save and use the dataset
+
+Once finalized, save the dataset. You can download it as a CSV file or access it via the Python API using the dataset ID.

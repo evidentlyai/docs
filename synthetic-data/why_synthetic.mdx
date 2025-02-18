@@ -1,0 +1,30 @@
+---
+title: 'Why synthetic data?'
+description: 'When do you need synthetic data in LLM evaluations.'
+---
+
+When working on an AI system, you need test data to run automated evaluations for quality and safety. A test dataset is a structured set of test cases. It can contain:
+* Just the inputs, or 
+* Both inputs and expected outputs (ground truth).
+
+You can use this test dataset to:
+* Run **experiments**and track if changes improve or degrade system performance.
+* Run **regression testing** to ensure updates don’t break what was already working.
+* **Stress-test** your system with complex or adversarial inputs to check its resilience.
+  
+You can create test datasets manually, collect them from real or historical data, or generate them synthetically. While real data is best, it is not always available or sufficient to cover all cases. Public LLM benchmarks help with general model comparisons but don’t reflect your specific use case. Manually writing test cases takes time and effort. 
+
+Synthetic data helps here. It’s especially useful when you are:
+* You're starting from scratch and don’t have real data.
+* You need to scale a manually designed dataset with more variation.
+* You want to test edge cases, adversarial inputs, or system robustness.
+* You're evaluating complex AI systems like RAG and AI agents.
+
+Synthetic data is not a replacement for real data or expert-designed tests — it’s a way to add variety and speed up the process. With synthetic data you can:
+* Quickly generate hundreds structured test cases.
+* Fill gaps by adding missing scenarios and tricky inputs.
+* Create controlled variations to evaluate specific weaknesses.
+
+It’s a practical way to expand your evaluation dataset efficiently while keeping human expertise focused on high-value testing.
+
+Synthetic data can also work for **complex AI systems** where designing test cases is simply difficult. For example, in RAG evaluation, synthetic data helps create input-output datasets from knowledge bases. In AI agent testing, it enables multi-turn interactions across different scenarios.

@@ -51,6 +51,10 @@
       "url": "metrics"
     },
     {
+      "name": "Synthetic data",
+      "url": "synthetic-data"
+    },
+    {
       "name": "Examples",
       "url": "examples"
     },
@@ -220,6 +224,21 @@
       "pages": [
         "metrics/explainer_drift",
         "metrics/explainer_recsys"
+      ]
+    },
+    {
+      "group": "Intro",
+      "pages": [
+        "synthetic-data/introduction",
+        "synthetic-data/why_synthetic",
+      ]
+    },
+    {
+      "group": "Generation",
+      "pages": [
+        "synthetic-data/rag_data",
+        "synthetic-data/adversarial_data",
+        "synthetic-data/input_data",
       ]
     },
     {

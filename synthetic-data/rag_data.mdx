@@ -1,0 +1,35 @@
+---
+title: 'RAG evaluation dataset'
+description: 'Synthetic data for RAG.'
+---
+
+Retrieval-Augmented Generation (RAG) systems rely on retrieving answers from a knowledge base before generating responses. To evaluate them effectively, you need a test dataset that reflects what the system *should* know.
+
+Instead of manually creating test cases, you can generate them directly from your knowledge source, ensuring accurate and relevant ground truth data.
+
+## Create a RAG test dataset
+
+### 1. Create a Project
+
+In the Evidently UI, start a new Project or open an existing one.
+* Navigate to “Datasets” in the left menu.
+* Click “Generate” and select the “RAG” option.
+
+### 2. Upload your knowledge base 
+
+Select a file containing the information your AI system retrieves from. Supported formats: Markdown (.md), CSV, TXT, PDFs. Choose how many inputs to generate.
+
+The system automatically extracts relevant facts and generates user-like questions to your data source with ground truth answers.
+
+### 3. Review the test cases
+
+You can preview and refine the generated dataset.
+
+You can:
+* Use “More like this” to add more variations.
+* Drop rows that aren’t relevant.
+* Manually edit questions or responses.
+
+### 4. Save the Dataset
+
+Once you are finished, store the dataset. You can download it as a CSV file or access it via the Python API using the dataset ID to use in your evaluation.
