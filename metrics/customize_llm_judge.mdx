@@ -145,7 +145,7 @@ os.environ["ANTHROPIC_API_KEY"] = "YOUR KEY"
 
 And pass the name of the `provider` and `model`. For example:
 
-```
+```python
 eval_df.add_descriptors(descriptors=[
     DeclineLLMEval("response", alias="Decline by Claude", provider="anthropic", model="claude-3-5-sonnet-20240620"),
 ])
