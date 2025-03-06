@@ -164,12 +164,9 @@ from evidently.utils.llm.wrapper import AnthropicOptions
 llm_options_evals = Dataset.from_pandas(
     pd.DataFrame(data),
     data_definition=data_definition,
-     descriptors=[
-        NegativityLLMEval("Answer", provider='anthropic', model='claude-3-5-sonnet-20240620'),
-        ],
-    options=AnthropicOptions(api_key="YOUR_KEY_HERE", 
-                             rpm_limit=50)
-)
+    descriptors=[
+        NegativityLLMEval("Answer", provider="anthropic", model="claude-3-5-sonnet-20240620"),],
+    options=AnthropicOptions(api_key="YOUR_KEY_HERE", rpm_limit=50))
 ```
 
 ## Custom LLM judge

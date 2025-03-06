@@ -117,7 +117,7 @@ with create_trace_event("external_span", session_id=session_id) as event:
 | -------------- | -------------------------------------------------------------------------------------- | ------- |
 | `name`         | Span name.                                                                             | -       |
 | `parse_output` | Whether to parse the result into separate fields for `dict`, `list`, or `tuple` types. | `True`  |
-| `params`     | Key-value parameters to set as attributes.                                             | -       |
+| `params`       | Key-value parameters to set as attributes.                                             | -       |
 
 ### `event` Object Methods
 
@@ -155,3 +155,26 @@ with create_trace_event("external_span", session_id=session_id):
 | --------------- | ------------------------------------------------------------------------------------------------------------ |
 | `set_attribute` | Adds a new attribute to the active span.                                                                     |
 | `set_result`    | Sets a result field for the active span. (*Has no effect in decorated functions that define return values).* |
+
+## Connecting event into a trace
+
+Sometimes events happen across different systems, but it’s helpful to link them all into a single trace. You can do this using `tracely.bind_to_trace`:
+
+```python
+@tracely.trace_event()
+def process_request(question: str, session_id: str):
+    # do work
+    return "work done"
+
+# trace id is unique 128-bit integer representing single trace
+trace_id = 1234
+
+with tracely.bind_to_trace(trace_id):
+    process_request(...)
+```
+
+In this example, instead of creating a new trace ID for each event, all events will be attached to the existing trace with the given `trace_id`.
+
+<Warning>
+  In this case you manage the `trace_id` yourself, so you need to make sure it’s truly unique. If you  reuse the same `trace_id`, all events will be joined, even if they don’t belong together.
+</Warning>
