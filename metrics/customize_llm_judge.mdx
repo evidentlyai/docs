@@ -122,7 +122,7 @@ eval_df.add_descriptors(descriptors=[
 ```
 
 <Info>
-**Column names**. The alias you set defines the column name with the category. If you enable the score result as well, it will get the "Alias score" name.
+  **Column names**. The alias you set defines the column name with the category. If you enable the score result as well, it will get the "Alias score" name.
 </Info>
 
 ## Change the evaluator LLM
@@ -136,6 +136,7 @@ eval_df.add_descriptors(descriptors=[
     DeclineLLMEval("response", alias="Decline by Turbo", provider="openai", model="gpt-3.5-turbo"),
 ])
 ```
+
 **Change the provider**. To use a different LLM, first import the corresponding API key as an environment variable.
 
 ```python
@@ -152,8 +153,24 @@ eval_df.add_descriptors(descriptors=[
 ```
 
 <Note>
-**List of providers and models**. Evidently uses `litellm` to call different model APIs which implements 50+ providers. You can match the `provider` name and the `model` name parameters to the list given in the [LiteLLM docs](https://docs.litellm.ai/docs/providers).
+  **List of providers and models**. Evidently uses `litellm` to call different model APIs which implements 50+ providers. You can match the `provider` name and the `model` name parameters to the list given in the [LiteLLM docs](https://docs.litellm.ai/docs/providers).
 </Note>
+
+You can also pass the API key as an option instead of an environment variable.
+
+```python
+from evidently.utils.llm.wrapper import AnthropicOptions
+
+llm_options_evals = Dataset.from_pandas(
+    pd.DataFrame(data),
+    data_definition=data_definition,
+     descriptors=[
+        NegativityLLMEval("Answer", provider='anthropic', model='claude-3-5-sonnet-20240620'),
+        ],
+    options=AnthropicOptions(api_key="YOUR_KEY_HERE", 
+                             rpm_limit=50)
+)
+```
 
 ## Custom LLM judge
 
@@ -304,12 +321,12 @@ Example output:
 
 ### LLMEval
 
-| Parameter            | Description                                                                                                                                                                                                                                 | Options                                                        |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| `template`           | Sets a specific template for evaluation.                                                                                                                                                                                                    | `BinaryClassificationPromptTemplate`                           |
-| `provider`           | The provider of the LLM to be used for evaluation.                                                                                                                                                                                          | `openai` (Default) or any provider supported by [LiteLLM](https://docs.litellm.ai/docs/providers).                                                       |
-| `model`              | Specifies the model used for evaluation.                                                                                                                                                                                                     | Any available provider model (e.g., `gpt-3.5-turbo`, `gpt-4`)  |
-| `additional_columns` | A dictionary of additional columns present in your dataset to include in the evaluation prompt. <br /> <br /> Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`. | Custom dictionary (optional)                                   |
+| Parameter            | Description                                                                                                                                                                                                                                 | Options                                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `template`           | Sets a specific template for evaluation.                                                                                                                                                                                                    | `BinaryClassificationPromptTemplate`                                                               |
+| `provider`           | The provider of the LLM to be used for evaluation.                                                                                                                                                                                          | `openai` (Default) or any provider supported by [LiteLLM](https://docs.litellm.ai/docs/providers). |
+| `model`              | Specifies the model used for evaluation.                                                                                                                                                                                                    | Any available provider model (e.g., `gpt-3.5-turbo`, `gpt-4`)                                      |
+| `additional_columns` | A dictionary of additional columns present in your dataset to include in the evaluation prompt. <br /> <br /> Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`. | Custom dictionary (optional)                                                                       |
 
 ### BinaryClassificationPromptTemplate
 
