@@ -62,7 +62,7 @@ my_eval
 ```
 
 <Note>
-Note that in this case the order matters: the first `eval_data_1` is the current data you evaluate, the second `eval_data_2` is the reference dataset you consider as a baseline for drift detection.
+  Note that in this case the order matters: the first `eval_data_1` is the current data you evaluate, the second `eval_data_2` is the reference dataset you consider as a baseline for drift detection.
 </Note>
 
 If nothing else is specified, the Report will run with the default parameters for all columns in the dataset. You can also pass custom parameters to some Presets.
@@ -135,6 +135,19 @@ report = Report([
 ])
 ```
 
+**Group by**. You can calculate metrics separately for different groups in your data, using a column with categories to split by. Use the `GroupyBy` metric as shown below.
+
+For example, this will compute the maximum value of salaries by each label in the "Department" column.
+
+```python
+report = Report([
+    GroupBy(MaxValue(column="Salary"), "Department"),
+])
+my_eval = report.run(data, None)
+my_eval.dict()
+```
+
+Note: you cannot use auto-generated Test conditions when you use GroupBy.
 
 ## What's next?
 
