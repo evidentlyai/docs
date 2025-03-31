@@ -20,7 +20,7 @@ from evidently.features.llm_judge import BinaryClassificationPromptTemplate, Mul
 from evidently.future.descriptors import LLMEval, ToxicityLLMEval, ContextQualityLLMEval, DeclineLLMEval
 ```
 
-<Accordion title="Toy data to run the example" defaultOpen="false">
+<Accordion title="Toy data to run the example" defaultOpen={false}>
   To generate toy data and create a Dataset object:
 
   ```python
@@ -177,6 +177,10 @@ Evidently will then generate the complete evaluation prompt to send to the selec
 
 ### Binary classifier
 
+You can as the LLM judge to classify texts into two categories you define.
+
+#### Single column
+
 **Example 1**. To evaluate if the text is "concise" or "verbose":
 
 ```python
@@ -217,7 +221,7 @@ Publish results as usual:
 eval_df.as_dataframe()
 ```
 
-**Example 2**. This template is very flexible: you can use it for any custom criteria. For instance, you can use to decide if the question is appropriate to the scope of your LLM application. A simplified prompt:
+**Example 2**. This template is very flexible: you can adapt it for any custom criteria. For instance, to evaluate if the question is appropriate to the scope of your LLM application. A simplified prompt:
 
 ```python
 appropriate_scope = BinaryClassificationPromptTemplate(
@@ -252,7 +256,7 @@ Example output:
 
 ![](/images/examples/llm_judge_example_appropriate_question-min.png)
 
-### Binary classifier, using multiple columns
+#### Multiple columns
 
 A custom evaluator can also use multiple columns. To implement this, mention the second `{column_name}` inside your evaluation `criteria.`
 
@@ -287,7 +291,7 @@ hallucination = BinaryClassificationPromptTemplate(
   You do **not** need to include the primary column name in the evaluation prompt, since it's already part of the template. You choose this column when you apply the descriptor.
 </Info>
 
-When applying the descriptor, include the second column using the `additional_columns` parameter:
+When you apply the descriptor, include the second column using the `additional_columns` parameter:
 
 ```python
 eval_df.add_descriptors(descriptors=[
@@ -314,7 +318,13 @@ Example output:
 
 If you want to use more than two classes, use the multi-class template and define your grading rubric (class and class definition) as a dictionary.
 
-**Single-column**. Let's evaluate how well the response aligns with the brand policy, classifying into 5 categories. Note that it's generally recommended to use as few categories as possible to make sure each of them is clearly defined.
+#### Single column
+
+**Example**. Let's evaluate how well the response aligns with the brand policy, classifying into 5 categories. 
+
+<Info>
+It's usually best to use as few categories as possible to make sure each of them is clearly defined.
+</Info>
 
 To define the template:
 
@@ -366,7 +376,12 @@ Example output:
 
 ![](/images/examples/llm_judge_example_multi_class_safety.png)
 
-**Multi-column**. Let's evaluate the relevance of answer to the question, classifying into "relevant", "irrelevant" and "partially" relevant. To define the evaluation template:
+
+#### Multi-column
+
+Similarly to the binary evaluator, you can pass multiple columns to your evaluation prompt. To implement this, mention the additional `{column_name}` inside your evaluation `criteria.`
+
+Let's evaluate the relevance of answer to the question, classifying into "relevant", "irrelevant" and "partially" relevant. To define the evaluation template, we include the {question} placeholder in our template:
 
 ```python
 relevance = MulticlassClassificationPromptTemplate(   
@@ -426,7 +441,6 @@ Example output:
 | `provider`           | The provider of the LLM to be used for evaluation.                                                                                                                                                                                  | `openai` (Default) or any provider supported by [LiteLLM](https://docs.litellm.ai/docs/providers). |
 | `model`              | Specifies the model used for evaluation.                                                                                                                                                                                            | Any available provider model (e.g., `gpt-3.5-turbo`, `gpt-4`)                                      |
 | `additional_columns` | A dictionary of additional columns present in your dataset to include in the evaluation prompt.       Use it to map the column name to the placeholder name you reference in the `criteria`. For example: `({"mycol": "question"}`. | Custom dictionary (optional)                                                                       |
-
 
 ### BinaryClassificationPromptTemplate
 
