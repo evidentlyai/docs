@@ -319,7 +319,7 @@ This lets you see a well-rounded evaluation. In this toy example, we can see tha
 ```python
 report = Report([
     TextEvals(),
-    CategoryCount(column="Faithfulness", category="FAITHFUL", tests=[eq(0)]),
+    CategoryCount(column="Faithfulness", category="UNFAITHFUL", tests=[eq(0)]),
     CategoryCount(column="ContextQuality", category="INVALID", tests=[eq(0)])
 ])
 
