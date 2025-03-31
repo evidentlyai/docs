@@ -123,6 +123,7 @@
             "docs/library/descriptors",
             "docs/library/report",
             "docs/library/tests",
+            "docs/library/metric_generator",
             "docs/library/output_formats",
             "docs/library/tags_metadata"
           ]
