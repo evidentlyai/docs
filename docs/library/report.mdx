@@ -140,6 +140,8 @@ report = Report([
 For example, this will compute the maximum value of salaries by each label in the "Department" column.
 
 ```python
+from evidently.future.metrics.group_by import GroupBy
+
 report = Report([
     GroupBy(MaxValue(column="Salary"), "Department"),
 ])

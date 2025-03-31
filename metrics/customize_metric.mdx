@@ -44,13 +44,15 @@ from evidently.future.metric_types import MetricResult
 from evidently.future.metric_types import MetricTestResult
 from evidently.future.metric_types import SingleValue
 from evidently.future.metric_types import SingleValueTest
-from evidently.future.metric_types import MetricCalculation
+from evidently.future.metric_types import SingleValueCalculation
 from evidently.future.metric_types import MetricId
 from evidently.future.metric_types import SingleValueMetric
 from evidently.future.metric_types import TResult
 from evidently.future.preset_types import PresetResult
 from evidently.future.metric_types import BoundTest
 from evidently.future.tests import Reference, eq
+
+from evidently.renderers.html_widgets import plotly_figure
 from typing import Optional
 from typing import List
 from plotly.express import line
@@ -62,21 +64,21 @@ Implementation:
 class MyMaxMetric(SingleValueMetric):
     column: str
 
-    def _default_tests(self) -> List[BoundTest]:
+    def _default_tests(self, context: Context) -> List[BoundTest]:
         return [eq(0).bind_single(self.get_fingerprint())]
 
-    def _default_tests_with_reference(self) -> List[BoundTest]:
+    def _default_tests_with_reference(self, context: Context) -> List[BoundTest]:
         return [eq(Reference(relative=0.1)).bind_single(self.get_fingerprint())]
 
 # implementation
-class MaxMetricImplementation(MetricCalculation[SingleValue, MyMaxMetric]):
+class MaxMetricImplementation(SingleValueCalculation[MyMaxMetric]):
     def calculate(self, context: Context, current_data: Dataset, reference_data: Optional[Dataset]) -> SingleValue:
         x = current_data.column(self.metric.column).data
         value = x.max()
-        result = SingleValue(value=value)
+        result = self.result(value=value)
         figure = line(x)
         figure.add_hrect(6, 10)
-        #result.set_widget([plotly_figure(title=self.display_name(), figure=figure)])
+        # result.widget = [plotly_figure(title=self.display_name(), figure=figure)]
         return result
 
     def display_name(self) -> str:
@@ -85,7 +87,7 @@ class MaxMetricImplementation(MetricCalculation[SingleValue, MyMaxMetric]):
 
 The default Test will checks if the max value is 0 (or within ±10% of the reference value). This applies if you invoke the Tests without setting a custom threshold. 
 
-This implementation uses the default (counter) render. Alternatively, you can define the widget as a Plotly figure.
+This implementation uses the default (counter) render. Alternatively, you can define the widget as a Plotly figure. In this case, set the `result.widget` as shown in the code.
 
 ## Example use
 
