@@ -1,15 +1,15 @@
 ---
 title: 'Add tags and metadata'
-description: 'How to add metadata to the Report you upload.'
+description: 'How to add metadata to evaluations.'
 ---
 
-This is relevant when you logging Reports to the Platform. Tags help you associate the Report with a specific model / prompt version, period, etc.
+This is relevant when you logging Reports to the Platform. Tags help you associate each Report with a specific model / prompt version, time period, or other context.
 
 ## Add timestamp
 
-Each Report run has a single timestamp. By default, Evidently will assign the `datetime.now()` using the Report computation time based on the user time zone.
+Each Report run has a single timestamp. By default, Evidently assigns `datetime.now()` as the run time based on the user's time zone.
 
-You can also add your own timestamp. Pass it to the run method:
+You can also specify a custom timestamp by passing it to the `run()` method:
 
 ```python
 from datetime import datetime
@@ -19,31 +19,26 @@ my_eval_4 = report.run(eval_data_1,
                        timestamp=datetime(2024, 1, 29))
 ```
 
-Since you can assign arbitrary timestamps, you can log Reports asynchronously or with a delay (for example, after you receive ground truth) and assign it to the specific period.
+Because timestamps are fully customizable, you can log Reports asynchronously or with a delay. For example, make an evaluation after receiving ground truth and backdate Reports to the relevant time period.
 
 ## Add tags and metadata
 
-You can add `tags` and `metadata` to Reports. This is useful for search and data filtering. By adding **Tags**, you can also visualize data only from a specific subset of Reports on a monitoring Panel.
+You can add `tags` and `metadata` to Reports to support search and ease of filtering. Tags also let you visualize data from specific subsets of Reports on monitoring Panels.
 
-Examples of when to use tags include:
+Use tags in the following scenarios:
+* Mark evaluation runs by model version, prompt version, or test scenario.
+* Indicate status: production, shadow, champion/challenger, A/B versions.
+* Identify Reports by geography, use case, user segment, or role.
+* Tag based on reference dataset windows (for example, weekly vs. monthly drift comparisons)
+* Highlight Reports with a specific role, such as datasheet or model card.
 
-* Identify a specific evaluation run or experiment (by model or prompt version, test scenario, etc).
-
-* Identify app or model status: production/shadow, champion/challenger, or A/B model versions.
-
-* Identify the Report by geography, use case, segment, role, etc. 
-
-* Identify the reference dataset window (for example, if you compare distribution drift week-by-week and month-by-month and log two different Reports).
-
-* You want to tag individual Reports that have a special role, e.g., a datasheet card, a model card, etc.
-
-**Custom tags**. Pass any custom Tags as a list:
+**Custom tags**. You can add tags to the Report. Pass any custom Tags as a list:
 
 ```python
 report = Report([
     ClassificationPreset()
 ],
-tags=["groupA", "shadow"])
+tags=["classification", "production"])
 ```
 
 **Custom metadata**. Pass metadata as a Python dictionary in key:value pairs:
@@ -69,4 +64,11 @@ report = Report([
 	batch_size="batch_size",
 	dataset_id="dataset_id"
 )
+```
+
+**Add tags to run**: You can also tag individual Report runs. This is useful for experiments where you re-run the same Report with different prompts or hyperparameter settings.
+
+
+```python
+my_eval = report.run(eval_data_1, eval_data_2, tags=["prompt_v1", "claude"])
 ```
