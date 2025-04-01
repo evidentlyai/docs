@@ -135,9 +135,11 @@ report = Report([
 ])
 ```
 
-**Group by**. You can calculate metrics separately for different groups in your data, using a column with categories to split by. Use the `GroupyBy` metric as shown below.
+## Group by
 
-For example, this will compute the maximum value of salaries by each label in the "Department" column.
+You can calculate metrics separately for different groups in your data, using a column with categories to split by. Use the `GroupyBy` metric as shown below.
+
+**Example**. This will compute the maximum value of salaries by each label in the "Department" column.
 
 ```python
 from evidently.future.metrics.group_by import GroupBy
