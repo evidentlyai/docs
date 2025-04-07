@@ -6,364 +6,228 @@ noindex: true
 
 Use for relevant pages after features are implemented.
 
-# Output format
+# Metrics
 
-## Dataframe (TBC)
+## Correlations
 
-You can get the Report results in a tabular format as a DataFrame.
-
-To export results for a specific Metric:
-
-```
-my_report.as_dataframe("DatasetStats")
-```
-
-To export results for the entire Report, which returns a dictionary of DataFrames:
-
-```
-my_report.as_dataframe()
-```
-
-This will return all relevant values that are computed inside the Metric as the metric result.
-
-<Note>
-  **Get the full dataset**. You can also get a full original dataset with new row-level scores, like output-level text evaluations you compute. Check the guide on [descriptors](/docs/library/descriptors) for details.
-</Note>
-
-## Evidently snapshot (TBC)
-
-You can also save the output of a Report as an Evidently JSON `snapshot`.
+Use for exploratory data analysis, drift monitoring (correlation changes) or to check alignment between scores (e.g. LLM-based descriptors against human labels).
 
 <Info>
-  **How is a JSON snapshot different from `json()`?** Standard JSON output contains only the metric and test results. The JSON snapshot contains all supplementary and render data. This lets you restore the output in any Evidently format (like HTML) without accessing the initial raw data.
+  [Data definition](/docs/library/data_definition). You may need to map column types.
 </Info>
 
-When you save Reports to the platform using `add_report`, a snapshot is generated automatically. However, you can also generate and save a snapshot explicitly.
+| Metric                                  | Description                                                                                                                                                                                               | Parameters                                                                                                                                                                                                                        | Test Defaults                                                                                  |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------
+| **RowsWithMissingValuesCount()**  (Coming soon) | <ul><li> Dataset-level.</li><li>Counts rows with missing values.</li><li>Metric result: `value`.</li></ul>                                                                             | **Optional**: <ul><li>[Test conditions](/docs/library/tests)</li></ul>                                          | <ul><li>**No reference**: Fails if there is at least one row with missing values.</li><li>**With reference**: Fails if share differs by >10% (+/-)</li></ul>           |
+| **AlmostEmptyColumnCount()**  (Coming soon)     | <ul><li> Dataset-level.</li><li>Counts almost empty columns (95% empty).</li><li>Metric result: `value`.</li></ul>                                                                     | **Optional**: <ul><li>[Test conditions](/docs/library/tests)</li></ul>                                          | <ul><li>**No reference**: Fails if there is at least one almost empty column.</li><li>**With reference**: Fails if count is higher than in reference.</li></ul>        |
 
-To save the Report as a snapshot:
+| Metric                                  | Description                                                                                                                                                                                               | Parameters                                                                                                                                                                                                                        | Test Defaults                                                                                  |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- 
+| **EmbeddingDrift()** (Coming soon)    | <ul><li>Column-level.</li><li> Requires reference.</li><li>Calculates data drift for embeddings.</li><li>Requires embedding columns set in data definition.</li><li>Metric result: `value`.</li></ul>                                                                                                                                      | **Required**: <ul><li>`embeddings`</li><li>`method`</li></ul> See [embedding drift options](/metrics/customize_embedding_drift).                                                                                                                                                       | <ul><li>**With reference**: Defaults for method. See [methods](/metrics/customize_embedding_drift).</li></ul>                            |
 
-```python
-drift_report.save('snapshot.json')
-```
+| Metric                                  | Description                                                                                                                                                                                               | Parameters                                                                                                                                                                                                                        | Test Defaults                                                                                  |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **DatasetCorrelations()** (Coming soon) | <ul><li>Calculates the correlations between all or set columns in the dataset.</li><li>Supported methods: Pearson, Spearman, Kendall, Cramer\_V.</li></ul>                                                | **Optional**: <ul><li>`columns`</li><li>[Test conditions](/docs/library/tests)</li></ul>                                                                                                                                          | N/A                                                                                            |
+| **Correlation()** (Coming soon)         | <ul><li>Calculates the correlation between two defined columns.</li></ul>                                                                                                                                 | **Required**: <ul><li>`column_x`</li><li>`column_y`</li></ul>**Optional**:<ul><li>`method` (default: `pearson`, available: `pearson`, `spearman`, `kendall`, `cramer_v`)</li><li>[Test conditions](/docs/library/tests)</li></ul> | N/A                                                                                            |
+| **CorrelationChanges()** (Coming soon)  | <ul><li>Dataset-level.</li><li>Reference required.</li><li>Checks the number of correlation violations (significant changes in correlation strength between columns) across all or set columns.</li></ul> | **Optional**: <ul><li>`columns`</li><li>`method` (default: `pearson`, available: `pearson`, `spearman`, `kendall`, `cramer_v`)</li><li>`corr_diff` (default: 0.25)</li><li>[Test conditions](/docs/library/tests)</li></ul>       | <ul><li>**With reference**: Fails if at least one correlation violation is detected.</li></ul> |
 
-To load the snapshot back, use the “load” function.
 
-```
-loaded_report = Report.load('snapshot.json')
-```
+<Info>
+  [Data definition](/docs/library/data_definition). You may need to map prediction and target columns and ranking type. Some metrics require additional training data.
+</Info>
 
-After you load the snapshot back, you can again view it in Python or export it to other formats.
+| Metric                              | Description                                                                                                                                                                         | Parameters                                                                                                                                                     | Test Defaults                                                                                                                           |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Personalization()** (Coming soon) | <ul><li>Calculates Personalization score at the top K recommendations.</li><li>Metric result: `value`.</li></ul>                                                                    | **Required**: <ul><li>`k`</li></ul> **Optional**: <ul><li>[Test conditions](/docs/library/tests)</li></ul>                                                     | <ul><li>**No reference**: Tests if Personalization > 0.</li><li>**With reference**: Fails if Personalization differs by >10%.</li></ul> |
+| **ARP()** (Coming soon)             | <ul><li>Computes Average Recommendation Popularity at the top K recommendations.</li><li>Requires a training dataset.</li><li>Metric result: `value`.</li></ul>                     | **Required**: <ul><li>`k`</li></ul> **Optional**: <ul><li>`normalize_arp` (default: `False`)</li><li>[Test conditions](/docs/library/tests)</li></ul>          | <ul><li>**No reference**: Tests if ARP > 0.</li><li>**With reference**: Fails if ARP differs by >10%.</li></ul>                         |
+| **Coverage()**(Coming soon)         | <ul><li>Calculates Coverage at the top K recommendations.</li><li>Requires a training dataset.</li><li>Metric result: `value`.</li></ul>                                            | **Required**: <ul><li>`k`</li></ul> **Optional**: <ul><li>[Test conditions](/docs/library/tests)</li></ul>                                                     | <ul><li>**No reference**: Tests if Coverage > 0.</li><li>**With reference**: Fails if Coverage differs by >10%.</li></ul>               |
+| **GiniIndex()**(Coming soon)        | <ul><li>Calculates Gini Index at the top K recommendations.</li><li>Requires a training dataset.</li><li>Metric result: `value`.</li></ul>                                          | **Required**: <ul><li>`k`</li></ul> **Optional**: <ul><li>[Test conditions](/docs/library/tests)</li></ul>                                                     | <ul><li>**No reference**: Tests if Gini Index \< 1.</li><li>**With reference**: Fails if Gini Index differs by >10%.</li></ul>          |
+| **Diversity()**  (Coming soon)      | <ul><li>Calculates Diversity at the top K recommendations.</li><li>Requires item features.</li><li>Metric result: `value`.</li></ul>                                                | **Required**: <ul><li>`k`</li><li>`item_features`</li></ul> **Optional**: <ul><li>[Test conditions](/docs/library/tests)</li></ul>                             | <ul><li>**No reference**: Tests if Diversity > 0.</li><li>**With reference**: Fails if Diversity differs by >10%.</li></ul>             |
+| **Serendipity()**(Coming soon)      | <ul><li>Calculates Serendipity at the top K recommendations.</li><li>Requires a training dataset.</li><li>Metric result: `value`.</li></ul>                                         | **Required**: <ul><li>`k`</li><li>`item_features`</li></ul> **Optional**: <ul><li>`min_rel_score`</li><li>[Test conditions](/docs/library/tests)</li></ul>     | <ul><li>**No reference**: Tests if Serendipity > 0.</li><li>**With reference**: Fails if Serendipity differs by >10%.</li></ul>         |
+| **Novelty()**  (Coming soon)        | <ul><li>Calculates Novelty at the top K recommendations.</li><li>Requires a training dataset.</li><li>Metric result: `value`.</li></ul>                                             | **Required**: <ul><li>`k`</li></ul> **Optional**: <ul><li>[Test conditions](/docs/library/tests)</li></ul>                                                     | <ul><li>**No reference**: Tests if Novelty > 0.</li><li>**With reference**: Fails if Novelty differs by >10%.</li></ul>                 |
 
+Relevant for RecSys metrics:
 
-# Data definition
+* `no_feedback_user: bool = False`. Specifies whether to include the users who did not select any of the items, when computing the quality metric. Default: False.
 
-### Embeddings 
+* `min_rel_score: Optional[int] = None`. Specifies the minimum relevance score to consider relevant when calculating the quality metrics for non-binary targets (e.g., if a target is a rating or a custom score).
 
-(TBC). If you have columns that contain embbeddings, pass a dictionary where the key is an embedding name and values are a list of columns.
+# Ranking metrics explainers
 
-```python
-embeddings = {'small_subset': embeddings_data.columns[:10]} #TBC
-```
-| `embeddings` (TBC)    | <ul><li>Columns containing embeddings.</li><li>Mapping **required** for embedding drift detection.</li></ul> | No automated mapping.       
+### Diversity
 
-### Ranking
+**Evidently Metric**: `Diversity`
 
+**Recommendation diversity**: this metric measures the average intra-list diversity at K. It reflects the variety of items within the same user's recommendation list, averaged by all users. 
 
-```python
-    user_id: str = "user_id" #columns with user IDs
-    item_id: str = "item_id" #columns with ranked items
-    target: str = "target"
-    prediction: str = "prediction"
-``
-    
-TBC
-* `recommendations_type`: `score` (default) or `rank`. Helps specify whether the prediction column contains ranking or predicted score.
+**Implemented method**:
+* **Measure the difference between recommended items**. Calculate the Cosine distance for each pair of recommendations inside the top-K in each user's list. The cosine distance serves as a measure of diversity between vectors representing recommended items, and is computed as:
 
-***
+$$\text{Cosine distance} = 1 - \text{Cosine Similarity}$$
 
-How to define the data schema for ranking and recommendations.
+Link: [Cosine Similarity on Wikipedia](https://en.wikipedia.org/wiki/Cosine_similarity). 
 
-To evaluate data from recommender systems, you must correctly map the input data schema. You can also pass an optional **additional dataset** with training data.
+* **Intra-list diversity**. Calculate intra-list diversity for each user by averaging the Cosine Distance between each pair of items in the user's top-K list.
+* **Overall diversity**. Calculate the overall diversity by averaging the intra-list diversity across all users.
 
-**Note**: this mapping will also apply to search and retrieval systems. Treat "user\_id" as "query\_id".
+**Range**: The metric is based on Cosine distance, and can take values from 0 to 2. 
+**0:** identical recommendations in top-K.
+**2:** very diverse recommendations in top-K.
 
-To evaluate the quality of a ranking or a recommendation system, you must pass:
+**Interpretation**: the higher the value, the more varied items are shown to each user (e.g. inside a single recommendation block).
 
-* The score or rank generated by the system as the prediction.
+**Requirements**: You must pass the `item_features` list to point to numerical columns or embeddings that describe the recommended items. For example, these could be encoded genres that represent each movie. This makes it possible to compare the degree of similarity between different items. 
 
-* The relevance labels as the target (e.g., this could be an interaction result like user click, assigned relevance label, etc.)
+**Notes**: 
+* This metric does not consider relevance. A recommender system showing varied but irrelevant items will have high diversity.
+* This method performs many pairwise calculations between items and can take some time to compute.
+  
+### Novelty
 
-Here are the examples of the expected data inputs.
+**Evidently Metric**: `Novelty`
 
-If the model prediction is a score (expected by default):
+**Recommendation novelty**: this metric measures the average novelty of recommendations at K. It reflects how unusual top-K items are shown to each user, averaged by all users. 
 
-| user\_id | item\_id | prediction (score) | target (relevance) |
-| -------- | -------- | ------------------ | ------------------ |
-| user\_1  | item\_1  | 1.95               | 0                  |
-| user\_1  | item\_2  | 0.8                | 1                  |
-| user\_1  | item\_3  | 0.05               | 0                  |
+**Implemented method**:
+* Measure **novelty of recommended items**. The novelty of an item can be defined based on its popularity in the training set.
 
-If the model prediction is a rank:
+$$\text{novelty}_i = -\log_2(p_i)$$
+where *p* represents the probability that item *i* is observed. It is calculated as the share of users that interacted with an item in the training set.
 
-| user\_id | item\_id | prediction (rank) | target (relevance) |
-| -------- | -------- | ----------------- | ------------------ |
-| user\_1  | item\_1  | 1                 | 0                  |
-| user\_1  | item\_2  | 2                 | 1                  |
-| user\_1  | item\_3  | 3                 | 0                  |
+$$\text{novelty}_i = -\log_2\left(\frac{\text{users who interacted with } i}{\text{number of users}}\right)$$
 
-The **target** column with the interaction result or relevance label can contain either:
+High novelty corresponds to long-tail items that few users interacted with, and low novelty values correspond to popular items. If all users had interacted with an item, novelty is 0.
+* Measure **novelty by user**. For each user, compute the average item novelty at K, by summing up the novelty of all items and dividing by K.
+* **Overall novelty**. Average the novelty by user across all users.
 
-* a binary label (where `1` is a positive outcome)
+**Range**: 0 to infinity. 
 
-* any true labels or scores (any positive values, where a higher value corresponds to a better match or a more valuable user action).
+**Interpretation**: if the value is higher, the items shown to users are more unusual. If the value is lower, the recommended items are well-known.   
 
-You might need to add additional details about your dataset via column mapping:
+**Notes**: 
+* This metric does not consider relevance. A recommender system showing many irrelevant but unexpected (long tail) items will have high novelty. 
+* It is not possible to define the novelty of an item absent in the training set. The evaluation only considers items that are present in training. 
 
-* `recommendations_type`: `score` (default) or `rank`. Helps specify whether the prediction column contains ranking or predicted score.
+Further reading: [Castells, P., Vargas, S., & Wang, J. (2011). Novelty and Diversity Metrics for Recommender Systems: Choice, Discovery and Relevance](https://repositorio.uam.es/bitstream/handle/10486/666094/novelty_castells_DDR_2011.pdf)
 
-* `user_id`: helps specify the column that contains user IDs.
+### Serendipity
 
-* `item_id`: helps specify the column that contains ranked items.
+**Evidently Metric**: `Serendipity`
 
-# Additional data
+Recommendation serendipity: this metric measures how unusual the relevant recommendations are in K, averaged for all users. 
 
-Some metrics like novelty or popularity bias require training data, which has a different structure from production data. To pass it, use the `additional_data` object. You can pass your training data as `current_train_data` and (optional) `reference_train_data`.
+Serendipity combines unexpectedness and relevance. It reflects the ability of a recommender system to show relevant items (that get a positive ranking or action) that are unexpected in the context of the user history (= are not similar to previous interactions). For example, a user who usually likes comedies gets recommended and upvotes a thriller.
 
-Example:
+**Implemented method**. 
+* Measure the **unexpectedness** of relevant recommendations. The “unexpectedness” is measured using Cosine distance. For every relevant recommendation in top-K, we compute the distance between this item and the previous user interactions in the training set. Higher cosine distance indicates higher unexpectedness.
 
-```python
-report = Report(metrics=[
-   UserBiasMetric(column_name='age'),
-])
-report.run(reference_data=ref, current_data=cur, column_mapping=column_mapping, additional_data={'current_train_data': train})
-report
-```
+$$\text{serendipity}_i = \text{unexpectedness}_i\times\text{relevance}_i$$
 
-## Requirements:
+Where *relevance(i)* is equal to 1 if the item is relevant, and is 0 otherwise.
+* **Serendipity by user**. Calculate the average of the resulting distances for all relevant recommendations in the user list.  
+* **Overall serendipity**. Calculate the overall recommendation serendipity by averaging the results across all users.
 
-* The additional training dataset should have the following structure:
+$$\text{Serendipity} = 1 - \sum_{u \in S} \frac{1}{|S| |H_u|} \sum_{h \in H_u} \sum_{i \in R_{u,k}} \frac{\text{CosSim}(i, h)}{k}$$
 
-| user | item | target |
-| ---- | ---- | ------ |
-| id1  | id1  | 1      |
-| id2  | id9  | 1      |
-| id3  | id2  | 1      |
-| id3  | id1  | 1      |
-| id4  | id6  | 1      |
+Where
+* *S* is the set of all users.
+* *H(u)* is the item history of user *u*.
+* *R(u)* Top-K function, where *R(u,k)* gives the top *k* recommended items for user *u*.
 
-* The names of the columns with `user_id` and `item_id` should match the corresponding columns in the current (and optional reference) data.
+**Range**: The metric is based on Cosine distance, and can take values from 0 to 2. 
+* **0**: only popular, expected relevant recommendations.
+* **2**: completely unexpected relevant recommendations.
+ 
+**Interpretation**: the higher the value, the better the ability of the system to “positively surprise” the user. 
 
-* The name of the column with the interaction result should match the name of the `target` column in the current (and optional reference) data.
+**Requirements**: You must pass the `item_features` list to point to the numerical columns or embeddings that describe the recommended items. This allows comparing the degree of similarity between recommended items.
 
-* If you use metrics that refer to specific columns (such as `UserBiasMetric` metric), these columns must also be present in the training dataset.
+**Notes**: 
+* This metric is only computed for the users that are present in the training set. If there is no previous recommendation history, these users will be ignored. 
+* This metric only considers the unexpectedness of relevant items in top-K. Irrelevant recommendations, and their share, are not taken into account.
 
-* You can pass a single training dataset or two datasets (in case your reference and current dataset have different training data).
+Further reading: [Zhang, Y., Séaghdha, D., Quercia, D., Jambor, T. (2011). Auralist: introducing serendipity into music recommendation.](http://www.cs.ucl.ac.uk/fileadmin/UCL-CS/research/Research_Notes/RN_11_21.pdf)
 
-### What is the difference between training and reference data?
+### Personalization
 
-The reference dataset can belong to a previous production period or a different model you compare against. The training dataset is used to train the model. Their structure usually differs:
+**Evidently Metric**: `Personalization`
 
-* Production data typically includes a list of all recommended items, where some of them earn a positive interaction result. It also contains negative examples (ignored recommendations) and data about model prediction (predicted rank or score).
+Personalization of recommendations: this metric measures the average uniqueness of each user's recommendations in top-K.
 
-* Training data typically contains a history of positive actions, such as user viewing history, page reads, or upvotes. Since it only includes the interaction results, it lacks negative examples (e.g., ignored recommendations) and column with the model output (predicted rank or score).
+**Implemented method**:
+* For every two users, compute the **overlap between top-K recommended items**. (The number of common items in top-K between two lists, divided by K).
+* Calculate the **average overlap** across all pairs of users.
+* Calculate personalization as: 
 
-***
+$$\text{Personalization} = 1 - \text{average overlap}$$
 
-# Classification
+The resulting metric reflects the average share of unique recommendations in each user’s list.
 
-To evaluate classification model performance, you must correctly map the input data schema.
+**Range**: 0 to 1.
+* **0**: Identical recommendations for each user in top-K. 
+* **1**: Each user’s recommendations in top-K are unique.   
 
+**Interpretation**: the higher the value, the more personalized (= different from others) is each user’s list. The metric visualization also shows the top-10 most popular items.
 
-To evaluate the classification performance, you need both true labels and prediction. Depending on the classification type (e.g., binary, multi-class, probabilistic), you have different options of how to pass the predictions.
+### Average Recommendation Popularity (ARP)
 
-## Multiclass classification
+**Evidently Metric**: `ARP`
 
-### Option 1
+The recommendation popularity bias is a tendency to favor a few popular items. 
 
-Target: encoded labels, Preds: encoded labels + Optional\[target\_names].
+ARP reflects the average popularity of the items recommended to the users. 
 
-| target | prediction |
-| ------ | ---------- |
-| 1      | 1          |
-| 0      | 2          |
-| …      | …          |
-| 2      | 2          |
+**Implementation**.
+* Compute the item popularity as the number of times each item was seen in training. 
+* Compute the average popularity for each user’s list as a sum of all items’ popularity divided by the number of recommended items.
+* Compute the average popularity for all users by averaging the results across all users.
 
-```python
-column_mapping = ColumnMapping()
+$$ARP = \frac{1}{|U|} \sum_{u \in U} \frac{1}{|L_u|} \sum_{i \in L_u} \phi(i)$$
 
-column_mapping.target = 'target'
-column_mapping.prediction = 'prediction'
-column_mapping.target_names = ['Setosa', 'Versicolour', 'Virginica']
-```
+Where:
+* *U* is the total number of users.
+* *L(u)* is the list of items recommended for the user *u*.
+* *ϕ(i)* is the number of times item *i* was rated in the training set (popularity of item *i*)
 
-If you pass the target names, they will appear on the visualizations.
+**Range**: 0 to infinity 
 
-You can also pass the target names as a dictionary:
+**Interpretation**: the higher the value, the more popular on average the recommendations are in top-K.  
 
-```python
-column_mapping.target_names = {'0':'Setosa', '1':'Versicolor', '2':'Virginica'}
-```
+**Note**: This metric is not normalized and depends on the number of recommendations in the training set.
 
-or
+Further reading: [Abdollahpouri, H., Mansoury, M., Burke, R., Mobasher, B., & Malthouse, E. (2021). User-centered Evaluation of Popularity Bias in Recommender Systems](https://dl.acm.org/doi/fullHtml/10.1145/3450613.3456821)
 
-```python
-column_mapping.target_names = {0:'Setosa', 1:'Versicolor', 2:'Virginica'} 
-```
+### Coverage
 
-### Option 2
+**Evidently Metric**: `Coverage`
 
-Target: labels, Preds: labels.
+Coverage reflects the item coverage as a proportion of items that has been recommended by the system.
 
-| target        | prediction    |
-| ------------- | ------------- |
-| ‘Versicolour’ | ‘Versicolour’ |
-| ‘Setosa’      | ‘Virginica’   |
-| …             | …             |
-| ‘Virginica’   | ‘Virginica’   |
+**Implementation**: compute the share of items recommended to the users out of the total number of potential items (as seen in the training dataset).
 
-```python
-column_mapping = ColumnMapping()
+$$\text{Coverage} = \frac{\text{Number of unique items recommended} K}{\text{Total number of unique items}}$$
 
-column_mapping.target = 'target'
-column_mapping.prediction = 'prediction'
-```
+**Range**: 0 to 1, where 1 means that 100% of items have been recommended to users. 
 
-## Multiclass probabilistic classification
+**Interpretation**: the higher the value (usually preferable), the larger the share of items represented in the recommendations. Popularity-based recommenders that only recommend a limited number of popular items will have low coverage.
 
-Target: labels, Preds: columns named after labels.
+### Gini index 
 
-| target      | ‘Versicolour’ | ‘Setosa’ | ‘Virginica’ |
-| ----------- | ------------- | -------- | ----------- |
-| ‘Setosa’    | 0.98          | 0.01     | 0.01        |
-| ‘Virginica’ | 0.5           | 0.2      | 0.3         |
-| …           | …             |          |             |
-| ‘Virginica’ | 0.2           | 0.7      | 0.1         |
+**Evidently Metric**: `GiniIndex`
 
-```python
-column_mapping = ColumnMapping()
+Gini index: reflects the inequality in the distribution of recommended items shown to different users, as compared to a perfectly equal distribution. 
 
-column_mapping.target = 'target'
-column_mapping.prediction = ['Setosa', 'Versicolour', 'Virginica']
+**Implementation**:  
 
-```
+$$ Gini(L) = 1 - \frac{1}{|I| - 1} \sum_{k=1}^{|I|} (2k - |I| - 1) p(i_k | L)$$
 
-Naming the columns after the labels is a requirement. You cannot pass a custom list.
+Where 
+* *L* is the combined list of all recommendation lists given to different users (note that an item may appear multiple times in L, if recommended for more than one user).
+* *p(i|L)* is the ratio of occurrence of item *i* in *L*.
+* *I* is the set of all items in the catalog.
 
-## Binary classification
+**Range**: 0 to 1, where 0 represents the perfect equality (recommended items are evenly distributed among users), and 1 is complete inequality (the recommendations are concentrated on a single item).
 
-### Option 1
+**Interpretation**: the lower the value (usually preferable), the more equal the item distribution in recommendations. If the value is high, a few items are frequently recommended to many users while others are ignored.
 
-Target: encoded labels, Preds: encoded labels + pos\_label + Optional\[target\_names]
-
-| target | prediction |
-| ------ | ---------- |
-| 1      | 1          |
-| 0      | 1          |
-| …      | …          |
-| 1      | 0          |
-
-By default, Evidently expects the positive class to be labeled as ‘1’. If you have a different label, specify it explicitly.
-
-```python
-column_mapping = ColumnMapping()
-
-column_mapping.target = 'target'
-column_mapping.prediction = 'prediction'
-column_mapping.target_names = ['churn', 'not_churn']
-column_mapping.pos_label = 0
-
-```
-
-If you pass the target names, they will appear on the visualizations.
-
-### Option 2
-
-Target: labels, Preds: labels + pos\_label
-
-| target       | prediction   |
-| ------------ | ------------ |
-| ‘churn’      | ‘churn’      |
-| ‘not\_churn’ | ‘churn’      |
-| …            | …            |
-| ‘churn’      | ‘not\_churn’ |
-
-Passing the name of the positive class is a requirement in this case.
-
-```python
-column_mapping = ColumnMapping()
-
-column_mapping.target = 'target'
-column_mapping.prediction = 'prediction'
-column_mapping.pos_label = 'churn'
-
-```
-
-## Binary probabilistic classification
-
-### Option 1
-
-Target: labels, Preds: columns named after labels + pos\_label
-
-| target       | ‘churn’ | ‘not\_churn’ |
-| ------------ | ------- | ------------ |
-| ‘churn’      | 0.9     | 0.1          |
-| ‘churn’      | 0.7     | 0.3          |
-| …            | …       |              |
-| ‘not\_churn’ | 0.5     | 0.5          |
-
-Passing the name of the positive class is a requirement in this case.
-
-```python
-column_mapping = ColumnMapping()
-
-column_mapping.target = 'target'
-column_mapping.prediction = ['churn', 'not_churn']
-column_mapping.pos_label = 'churn'
-
-```
-
-### Option 2
-
-Target: labels, Preds: a column named like one of the labels + pos\_label
-
-| target       | ‘not\_churn’ |
-| ------------ | ------------ |
-| ‘churn’      | 0.5          |
-| ‘not\_churn’ | 0.1          |
-| …            | …            |
-| ‘churn’      | 0.9          |
-
-```python
-column_mapping = ColumnMapping()
-
-column_mapping.target = 'target'
-column_mapping.prediction = 'not_churn'
-column_mapping.pos_label = 'churn'
-
-```
-
-Both naming the column after one of the labels and passing the name of the positive class are requirements.
-
-### Option 3
-
-Target: encoded labels, Preds: one column with any name + pos\_label
-
-| target | prediction |
-| ------ | ---------- |
-| 1      | 0.5        |
-| 1      | 0.1        |
-| …      | …          |
-| 0      | 0.9        |
-
-```python
-column_mapping = ColumnMapping()
-
-column_mapping.target = 'target'
-column_mapping.prediction = 'prediction'
-column_mapping.pos_label = 1
-column_mapping.target_names = ['churn', 'not_churn']
-
-```
-
-If you pass the target names, they will appear on the visualizations.
+Further reading: [Abdollahpouri, H., Mansoury, M., Burke, R., Mobasher, B., & Malthouse, E. (2021). User-centered Evaluation of Popularity Bias in Recommender Systems](https://dl.acm.org/doi/fullHtml/10.1145/3450613.3456821)
