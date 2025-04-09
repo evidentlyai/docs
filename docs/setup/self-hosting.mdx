@@ -5,10 +5,10 @@ icon: "window-restore"
 ---
 
 <Info>
-  This page explains how to self-host the open-source platform. [Contact us](https://www.evidentlyai.com/get-demo) for Enterprise version with extra features and support. Compare [OSS vs. Enterprise/Cloud](/faq/oss_vs_cloud).
+This page explains how to self-host the lightweight open-source platform. [Contact us](https://www.evidentlyai.com/get-demo) for Enterprise version with extra features and support. Compare [OSS vs. Enterprise/Cloud](/faq/oss_vs_cloud).
 </Info>
 
-In addition to using Evidently Python library, you can self-host the UI Service to get a monitoring Dashboard and organize the results of your evaluations. This is optional: you can also run evaluations and view results directly in Python or export them to JSON or HTML files.
+In addition to using Evidently Python library, you can self-host the UI Service to get a monitoring Dashboard and organize the results of your evaluations. This is optional: you can also view evaluation results in Python or export to JSON or HTML.
 
 To get a self-hostable Dashboard, you must:
 
@@ -26,17 +26,11 @@ Once you [install Evidently](/docs/setup/installation), you will need to create 
 
 There are three scenarios, based on where you run the UI Service and store data.
 
-* **Local Workspace**
+* **Local Workspace**. Both the UI Service and data storage are local.
 
-  . Both the UI Service and data storage are local.
+* **Remote Workspace**. Both the UI Service and data storage are remote.
 
-* **Remote Workspace**
-
-  . Both the UI Service and data storage are remote.
-
-* **Workspace with remote data storage**
-
-  . Run the UI Service and store data on different servers.
+* **Workspace with remote data storage**. Run the UI Service and store data on different servers.
 
 ### Local Workspace
 
