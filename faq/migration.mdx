@@ -1,5 +1,5 @@
 ---
-title: 'Migration Guide'
+title: "Migration Guide"
 description: "How to migrate to the new Evidently version?"
 ---
 
@@ -9,19 +9,19 @@ This guide explains the key changes introduced in Evidently 0.6. If you're new t
 
 Evidently 0.6 released in January 2025 introduces an update to the core API with breaking changes. Read more in [the blog](https://www.evidentlyai.com/blog/evidently-api-change).
 
-Currently this new API is available when you import components from `evidently.future`. **This API will become the default in one of the upcoming releases in April 2025**. 
+Currently this new API is available when you import components from `evidently.future`. **This API will become the default in one of the upcoming releases in April 2025**.
 
 <Note>
-Both old and new APIs currently co-exist in the library. You can still access the earlier Evidently API inside versions 0.6 and later, so that you have time to adapt. The old docs [are here](https://docs-old.evidentlyai.com/). 
-</Note>  
+  Both old and new APIs currently co-exist in the library. You can still access the earlier Evidently API inside versions 0.6 and later, so that you have time to adapt. The old docs [are here](https://docs-old.evidentlyai.com/).
+</Note>
 
 ## Data Definition
 
-We replaced `column_mapping` with `data_definition`. Now, you also need to explicitly create an Evidently `Dataset` object instead of just passing a dataframe when running a Report. Each `Dataset` object has an associated `DataDefinition`. 
+We replaced `column_mapping` with `data_definition`. Now, you also need to explicitly create an Evidently `Dataset` object instead of just passing a dataframe when running a Report. Each `Dataset` object has an associated `DataDefinition`.
 
 While similar to column mapping, this new structure lets you cleanly map input columns based on their **type** (e.g., categorical, numerical, datetime, text) and **role** (e.g., target, prediction, timestamp). A column can have both a type and role.
 
-You can also now map **multiple targets and predictions** inside the same table: e.g., if you deal with multiple regression or have several classification results in one table. 
+You can also now map **multiple targets and predictions** inside the same table: e.g., if you deal with multiple regression or have several classification results in one table.
 
 Automated column type/role mapping is still available. Additionally, new mappings for LLM use cases, like RAG, will be supported.
 
@@ -29,7 +29,7 @@ Automated column type/role mapping is still available. Additionally, new mapping
   Docs on mapping the input data.
 </Card>
 
-## Descriptors 
+## Descriptors
 
 Descriptors provide row-level text evaluations, ranging from basic checks (e.g., text length) to LLM-based evals (e.g., checking for contradictions). With the increasing focus on LLM-related metrics, we’ve updated the text descriptors API to make it more logical and easier to use.
 
@@ -83,8 +83,9 @@ my_eval = report.run(eval_data, None)
 ```
 
 Key changes:
-* The Report object now defines the configuration (e.g., metrics to include).
-* Running a Report returns a separate result object.
+
+- The Report object now defines the configuration (e.g., metrics to include).
+- Running a Report returns a separate result object.
 
 <Card title="Reports" href="/docs/library/report">
   How to generate Reports.
@@ -92,13 +93,12 @@ Key changes:
 
 Additional improvement: you can also now use "Group by" to compute metrics for specific segments.
 
-We are also adding an option to rename Reference/Current data in the Report render.
-
 ## Test Suites joined with Reports
 
 Most importantly,  Reports and Tests are now unified. Previously, these were separate:
-* Reports provided an overview of metrics (e.g., distribution summaries, statistics).
-* Tests verify pass/fail conditions (e.g., check for missing data or LLM quality thresholds).
+
+- Reports provided an overview of metrics (e.g., distribution summaries, statistics).
+- Tests verify pass/fail conditions (e.g., check for missing data or LLM quality thresholds).
 
 Now, the Test Suite mode is an optional extension of a Report. If you choose to enable Tests, their results appear as a separate tab in the same HTML file. This eliminated duplication and the need to switch between separate files or Reports.
 
@@ -110,18 +110,19 @@ report = Report([
      MaxValue(column="Length", tests=[lt(100)]),
 ])
 ```
-   
-You can still use auto-generated Test conditions based on your reference dataset or define your own expectations. 
+
+You can still use auto-generated Test conditions based on your reference dataset or define your own expectations.
 
 <Card title="Tests" href="/docs/library/tests">
   How to add Tests with conditions.
 </Card>
 
-## Metric redesign 
+## Metric redesign
 
 The Metric object has been simplified:
-* Metrics now produce a single computation result with a fixed structure.
-* Visualization types can be specified directly as parameters to the Metric.
+
+- Metrics now produce a single computation result with a fixed structure.
+- Some visualization types can be specified directly as parameters to the Metric.
 
 This redesign significantly improves JSON result parsing and UI integration, since each Metric has a single or two results only.
 
