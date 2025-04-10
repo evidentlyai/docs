@@ -268,7 +268,8 @@
       "pages": [
         "faq/why_evidently",
         "faq/oss_vs_cloud",
-        "faq/migration"
+        "faq/migration",
+        "faq/cloud_v2"
       ]
     },
     {

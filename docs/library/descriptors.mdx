@@ -10,10 +10,9 @@ For a general introduction, check [Core Concepts](/docs/library/overview).
 ### Imports
 
 ```python
-from evidently.future.datasets import Dataset
-from evidently.future.datasets import DataDefinition
-from evidently.future.datasets import Descriptor
-from evidently.future.descriptors import *
+from evidently import Dataset
+from evidently import DataDefinition
+from evidently.descriptors import *
 ```
 
 **Note**. Some Descriptors that use vocabulary-based checks (like `OOVWordsPercentage()` for out-of-vocabulary words) require downloading `nltk` dictionaries:

@@ -17,8 +17,8 @@ Use the following code to generate toy data for this guide.
 ```python
 import pandas as pd
 import numpy as np
-from evidently.future.datasets import Dataset
-from evidently.future.datasets import DataDefinition
+from evidently import Dataset
+from evidently import DataDefinition
 
 np.random.seed(42)
 
@@ -46,9 +46,9 @@ eval_data_2 = Dataset.from_pandas(
 Imports
 
 ```python
-from evidently.future.report import Report
-from evidently.future.metrics import *
-from evidently.future.generators import ColumnMetricGenerator
+from evidently import Report
+from evidently.metrics import *
+from evidently.generators import ColumnMetricGenerator
 ```
 
 ## Metric generators

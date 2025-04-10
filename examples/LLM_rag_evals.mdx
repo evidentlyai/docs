@@ -41,17 +41,16 @@ Import the required modules:
 ```python
 import pandas as pd
 
-from evidently.future.datasets import Dataset
-from evidently.future.datasets import DataDefinition
-from evidently.future.datasets import Descriptor
-from evidently.future.descriptors import *
+from evidently import Dataset
+from evidently import DataDefinition
+from evidently.descriptors import *
 
-from evidently.future.report import Report
-from evidently.future.presets import TextEvals
-from evidently.future.metrics import *
-from evidently.future.tests import *
+from evidently import Report
+from evidently.presets import TextEvals
+from evidently.metrics import *
+from evidently.tests import *
 
-from evidently.ui.workspace.cloud import CloudWorkspace
+from evidently.ui.workspace import CloudWorkspace
 ```
 
 Pass your OpenAI key as an environment variable:

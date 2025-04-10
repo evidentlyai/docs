@@ -15,9 +15,8 @@ LLM-based descriptors use an external LLM for evaluation. You can:
 ## Imports
 
 ```python
-from evidently.future.datasets import Descriptor
-from evidently.features.llm_judge import BinaryClassificationPromptTemplate, MulticlassClassificationPromptTemplate 
-from evidently.future.descriptors import LLMEval, ToxicityLLMEval, ContextQualityLLMEval, DeclineLLMEval
+from evidently.llm.templates import BinaryClassificationPromptTemplate, MulticlassClassificationPromptTemplate 
+from evidentlydescriptors import LLMEval, ToxicityLLMEval, ContextQualityLLMEval, DeclineLLMEval
 ```
 
 <Accordion title="Toy data to run the example" defaultOpen={false}>
@@ -25,8 +24,8 @@ from evidently.future.descriptors import LLMEval, ToxicityLLMEval, ContextQualit
 
   ```python
   import pandas as pd
-  from evidently.future.datasets import Dataset
-  from evidently.future.datasets import DataDefinition
+  from evidently import Dataset
+  from evidently import DataDefinition
   
   data = [
       ["Why is the sky blue?", 

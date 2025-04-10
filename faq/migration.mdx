@@ -3,19 +3,29 @@ title: "Migration Guide"
 description: "How to migrate to the new Evidently version?"
 ---
 
-This guide explains the key changes introduced in Evidently 0.6. If you're new to Evidently, skip this page and head directly to the Quickstart for [ML](/quickstart_ml) or [LLM](/quickstart_llm).
+This guide explains the key changes introduced in Evidently 0.6 and above. If you're new to Evidently, skip this page and head directly to the Quickstart for [ML](/quickstart_ml) or [LLM](/quickstart_llm).
+
+## What happened?
+
+**New API – Introduced in Version 0.6 (January 2025)**. Evidently 0.6 brought an **updated core API** with a new Report object. You can learn more in [the blog](https://www.evidentlyai.com/blog/evidently-api-change). To use the new API, import components from `evidently.future`, e.g. `from evidently.future import Report`.
+
+**Transition Period – Versions 0.6 to 0.6.7** During the transition period, **both old and new APIs** co-existed in the library. If you're using any version between 0.6 and 0.6.7, you can:
+
+- Use the new API importing it as `from evidently.future import Report.` 
+- Or use legacy API, as documented in [old docs](https://docs-old.evidentlyai.com/).
+
+**Breaking change – Version 0.7 (April 2025)**. With the release of Evidently 0.7:
+- The new API becomes the default.
+- You can import as `from evidently import Report`
+- This is a **breaking change**, coupled with updates to the [core Evidently platform](cloud_v2).
+
+<Info>
+If you still need the old API, pin your Evidently version to `0.6.7` or earlier.
+</Info>
 
 ## What changed?
 
-Evidently 0.6 released in January 2025 introduces an update to the core API with breaking changes. Read more in [the blog](https://www.evidentlyai.com/blog/evidently-api-change).
-
-Currently this new API is available when you import components from `evidently.future`. **This API will become the default in one of the upcoming releases in April 2025**.
-
-<Note>
-  Both old and new APIs currently co-exist in the library. You can still access the earlier Evidently API inside versions 0.6 and later, so that you have time to adapt. The old docs [are here](https://docs-old.evidentlyai.com/).
-</Note>
-
-## Data Definition
+### Data Definition
 
 We replaced `column_mapping` with `data_definition`. Now, you also need to explicitly create an Evidently `Dataset` object instead of just passing a dataframe when running a Report. Each `Dataset` object has an associated `DataDefinition`.
 
@@ -29,7 +39,7 @@ Automated column type/role mapping is still available. Additionally, new mapping
   Docs on mapping the input data.
 </Card>
 
-## Descriptors
+### Descriptors
 
 Descriptors provide row-level text evaluations, ranging from basic checks (e.g., text length) to LLM-based evals (e.g., checking for contradictions). With the increasing focus on LLM-related metrics, we’ve updated the text descriptors API to make it more logical and easier to use.
 
@@ -65,7 +75,7 @@ This decoupling means you can reuse descriptor outputs for multiple tests or agg
   Docs on adding descriptors.
 </Card>
 
-## New Reports API
+### New Reports API
 
 As you may have noticed in the example above, we made the changes to the core Report API. Here is how generating a Report with data summary preset for a single dataset works now:
 
@@ -93,7 +103,7 @@ Key changes:
 
 Additional improvement: you can also now use "Group by" to compute metrics for specific segments.
 
-## Test Suites joined with Reports
+### Test Suites joined with Reports
 
 Most importantly,  Reports and Tests are now unified. Previously, these were separate:
 
@@ -117,7 +127,7 @@ You can still use auto-generated Test conditions based on your reference dataset
   How to add Tests with conditions.
 </Card>
 
-## Metric redesign
+### Metric redesign
 
 The Metric object has been simplified:
 
@@ -134,7 +144,7 @@ You can check the list of new Metrics here:
 
 To get a pre-built combination of multiple checks at once, you can still use Presets.
 
-## Simplified Dashboard API
+### Simplified Dashboard API
 
 With the redesigned Metrics, the Dashboard API is now much, much simpler. You can create new panels and point to specific Metric results with a strictly fixed set of options.
 

@@ -16,8 +16,7 @@ You can score your text by downloading and using ML models from HuggingFace. Thi
 ## Imports
 
 ```python
-from evidently.future.datasets import Descriptor
-from evidently.future.descriptors import HuggingFace, HuggingFaceToxicity
+from evidently.descriptors import HuggingFace, HuggingFaceToxicity
 ```
 
 <Accordion title="Toy data to run the example" defaultOpen={false}>
@@ -26,8 +25,8 @@ from evidently.future.descriptors import HuggingFace, HuggingFaceToxicity
   ```python
   import pandas as pd
 
-  from evidently.future.datasets import Dataset
-  from evidently.future.datasets import DataDefinition
+  from evidently import Dataset
+  from evidently import DataDefinition
 
   data = [
       ["Why is the sky blue?", 

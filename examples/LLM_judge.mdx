@@ -57,18 +57,15 @@ Import the required modules:
 import pandas as pd
 import numpy as np
 
-from evidently.future.datasets import Dataset
-from evidently.future.datasets import DataDefinition
-from evidently.future.datasets import Descriptor
-from evidently.future.descriptors import *
+from evidently import Dataset
+from evidently import DataDefinition
+from evidently import Report
+from evidently import BinaryClassification
+from evidently.descriptors import *
+from evidently.presets import TextEvals, ValueStats, ClassificationPreset
+from evidently.metrics import *
 
-from evidently.future.datasets import BinaryClassification
-
-from evidently.future.report import Report
-from evidently.future.presets import TextEvals, ValueStats, ClassificationPreset
-from evidently.future.metrics import *
-
-from evidently.features.llm_judge import BinaryClassificationPromptTemplate
+from evidently.llm.templates import BinaryClassificationPromptTemplate
 ```
 
 Pass your OpenAI key as an environment variable:
