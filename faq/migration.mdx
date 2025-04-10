@@ -7,20 +7,14 @@ This guide explains the key changes introduced in Evidently 0.6 and above. If yo
 
 ## What happened?
 
-**New API – Introduced in Version 0.6 (January 2025)**. Evidently 0.6 brought an **updated core API** with a new Report object. You can learn more in [the blog](https://www.evidentlyai.com/blog/evidently-api-change). To use the new API, import components from `evidently.future`, e.g. `from evidently.future import Report`.
-
-**Transition Period – Versions 0.6 to 0.6.7** During the transition period, **both old and new APIs** co-existed in the library. If you're using any version between 0.6 and 0.6.7, you can:
-
-- Use the new API importing it as `from evidently.future import Report.` 
-- Or use legacy API, as documented in [old docs](https://docs-old.evidentlyai.com/).
-
-**Breaking change – Version 0.7 (April 2025)**. With the release of Evidently 0.7:
-- The new API becomes the default.
-- You can import as `from evidently import Report`
-- This is a **breaking change**, coupled with updates to the [core Evidently platform](cloud_v2).
+| Change                                       | Date         | Description                                                                                                                                                                                                                                                                        |
+| -------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **New API.** Version 0.6                     | January 2025 | Evidently 0.6 brought an updated core API with a new Report object. You can learn more in [the blog](https://www.evidentlyai.com/blog/evidently-api-change).     To use the new API, import components from `evidently.future` . For example:`from evidently.future import Report` |
+| **Transition Period.** Versions 0.6 to 0.6.7 | -            | During the transition period, both APIs co-existed in the library. For version between 0.6 and 0.6.7, you can choose: <ul><li> - Use the new API importing it as `from evidently.future.` </li><li> - Use the legacy API, as documented in [old docs](https://docs-old.evidentlyai.com/).</li></ul>         |
+| **Breaking change.** Version 0.7.            | April 2025   | Evidently 0.7 release makes the new API the default. You can import it as `from evidently import Report`. This is coupled with updates to the [Evidently platform](cloud_v2).                                                                                                      |
 
 <Info>
-If you still need the old API, pin your Evidently version to `0.6.7` or earlier.
+  If you still need the old API, pin your Evidently version to `0.6.7` or earlier.
 </Info>
 
 ## What changed?
