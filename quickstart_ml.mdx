@@ -1,6 +1,6 @@
 ---
-title: 'Data and ML checks'
-description: 'ML monitoring "hello world"'
+title: "Data and ML checks"
+description: "ML monitoring "hello world""
 ---
 
 import CloudSignup from '/snippets/cloud_signup.mdx';
@@ -35,7 +35,7 @@ This quickstart shows both local open-source and cloud workflows.
     ```python
     import pandas as pd
     from sklearn import datasets
-
+    
     from evidently import Dataset
     from evidently import DataDefinition
     from evidently import Report
@@ -54,7 +54,6 @@ This quickstart shows both local open-source and cloud workflows.
 
     <CreateProject />
   </Tab>
-
   <Tab title="Local">
     You will run a simple evaluation locally and preview the results in your Python environment.
 
@@ -69,9 +68,8 @@ This quickstart shows both local open-source and cloud workflows.
     ```python
     import pandas as pd
     from sklearn import datasets
-
+    
     from evidently import Dataset
-    from evidently import DataDefinition
     from evidently import Report
     from evidently.metrics import *
     from evidently.presets import *
@@ -89,13 +87,13 @@ adult_data = datasets.fetch_openml(name="adult", version=2, as_frame="auto")
 adult = adult_data.frame
 ```
 
-<Accordion title="Have trouble downloading the data?" defaultOpen={false}>
-If OpenML is not available, you can download the same dataset from here:
+<Accordion title="Have trouble downloading the data?" defaultOpen="false">
+  If OpenML is not available, you can download the same dataset from here:
 
-```python
-url = "https://github.com/evidentlyai/evidently/blob/main/test_data/adults.parquet?raw=true"
-adult = pd.read_parquet(url, engine='pyarrow')
-```
+  ```python
+  url = "https://github.com/evidentlyai/evidently/blob/main/test_data/adults.parquet?raw=true"
+  adult = pd.read_parquet(url, engine='pyarrow')
+  ```
 </Accordion>
 
 Let's split the data into two and introduce some artificial drift for demo purposes. `Prod` data will include people with education levels unseen in the reference dataset:
@@ -114,7 +112,7 @@ report = Report([
     DataSummaryPreset()
 ],
 include_tests="True")
-my_eval = report.run(eval_data_1, eval_data_2)
+my_eval = report.run(adult_prod, adult_ref)
 ```
 
 **Note**: in this simple example we directly work with pandas dataframes, but it is recommended to create an Evidently Dataset Object and add [data definition](/docs/library/data_definition) to specify column types.
@@ -135,7 +133,6 @@ my_eval = report.run(eval_data_1, eval_data_2)
 
     You'll see a set of panels that show column stats. Each has a single data point. As you log ongoing evaluation results, you can track trends and set up alerts.
   </Tab>
-
   <Tab title="Local">
     To view the Report in an interactive Python environment like Jupyter notebook or Colab, run:
 
