@@ -193,7 +193,7 @@ There two different mapping options, for binary and multi-class classification. 
 Example mapping:
 
 ```python
-from evidently.future.datasets import MulticlassClassification
+from evidently import MulticlassClassification
 
 definition = DataDefinition(
     classification=[MulticlassClassification()]
@@ -214,7 +214,7 @@ Available options and defaults:
 Example mapping:
 
 ```python
-from evidently.future.datasets import BinaryClassification
+from evidently import BinaryClassification
 
 definition = DataDefinition(
     classification=[BinaryClassification(
