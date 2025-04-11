@@ -195,9 +195,14 @@ Example mapping:
 ```python
 from evidently import MulticlassClassification
 
-definition = DataDefinition(
-    classification=[MulticlassClassification()]
-    )
+data_def = DataDefinition(
+    classification=[MulticlassClassification(
+        target="target",
+        prediction_labels="prediction",
+        prediction_probas=["0", "1", "2"],  # If probabilistic classification
+        labels={"0": "class_0", "1": "class_1", "2": "class_2"}  # Optional, for display only
+    )]
+)
 ```
 
 Available options and defaults:
@@ -208,6 +213,10 @@ Available options and defaults:
     prediction_probas: Optional[List[str]] = None #if probabilistic classification
     labels: Optional[Dict[Label, str]] = None
 ```
+
+<Note>
+When you have multiclass classification with predicted probabilities in separate columns, the column names in `prediction_probas` must exactly match the class labels. For example, if your classes are 0, 1, and 2, your probability columns must be named: "0", "1", "2". Values in `target` and `prediction` columns should be strings.
+</Note>
 
 ### Binary
 
