@@ -36,23 +36,20 @@ Let's implement `MyMaxMetric` which calculates the maximum value in a column.
 Imports:
 
 ```python
-from evidently.future.report import Report
-from evidently.future.report import Context
-from evidently.future.datasets import Dataset
-from evidently.future.metric_types import Metric
-from evidently.future.metric_types import MetricResult
-from evidently.future.metric_types import MetricTestResult
-from evidently.future.metric_types import SingleValue
-from evidently.future.metric_types import SingleValueTest
-from evidently.future.metric_types import SingleValueCalculation
-from evidently.future.metric_types import MetricId
-from evidently.future.metric_types import SingleValueMetric
-from evidently.future.metric_types import TResult
-from evidently.future.preset_types import PresetResult
-from evidently.future.metric_types import BoundTest
-from evidently.future.tests import Reference, eq
+import pandas as pd
+import numpy as np
+from evidently import Report
+from evidently import Dataset
+from evidently import DataDefinition
+from evidently.core.report import Context
+from evidently.core.metric_types import SingleValue
+from evidently.core.metric_types import SingleValueMetric
+from evidently.core.metric_types import SingleValueCalculation
+from evidently.core.metric_types import BoundTest
+from evidently.tests import Reference, eq
 
-from evidently.renderers.html_widgets import plotly_figure
+from evidently.legacy.renderers.html_widgets import plotly_figure
+
 from typing import Optional
 from typing import List
 from plotly.express import line
@@ -64,10 +61,10 @@ Implementation:
 class MyMaxMetric(SingleValueMetric):
     column: str
 
-    def _default_tests(self, context: Context) -> List[BoundTest]:
+    def _default_tests(self) -> List[BoundTest]:
         return [eq(0).bind_single(self.get_fingerprint())]
 
-    def _default_tests_with_reference(self, context: Context) -> List[BoundTest]:
+    def _default_tests_with_reference(self) -> List[BoundTest]:
         return [eq(Reference(relative=0.1)).bind_single(self.get_fingerprint())]
 
 # implementation
@@ -78,7 +75,7 @@ class MaxMetricImplementation(SingleValueCalculation[MyMaxMetric]):
         result = self.result(value=value)
         figure = line(x)
         figure.add_hrect(6, 10)
-        # result.widget = [plotly_figure(title=self.display_name(), figure=figure)]
+        result.widget = [plotly_figure(title=self.display_name(), figure=figure)] #skip this to get a simple counter
         return result
 
     def display_name(self) -> str:
@@ -96,10 +93,6 @@ Once implemented, you can reference your custom Metric in a Report as usual.
 Let’s create a sample toy dataset:
 
 ```python
-import pandas as pd
-import numpy as np
-from evidently.future.datasets import DataDefinition
-
 data = {
     "Item": [f"Item_{i}" for i in range(1, 11)],
     "Quantity": np.random.randint(1, 50, size=10),
