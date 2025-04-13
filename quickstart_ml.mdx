@@ -39,7 +39,7 @@ This quickstart shows both local open-source and cloud workflows.
     from evidently import Dataset
     from evidently import DataDefinition
     from evidently import Report
-    from evidently.presets import DataSummaryPreset
+    from evidently.presets import DataSummaryPreset #or try DataDriftPreset
     ```
 
     Components to connect with Evidently Cloud:
@@ -127,15 +127,17 @@ eval_data_2 = Dataset.from_pandas(
 
 ## 3. Get a Report
 
-Let's a summary of all columns in the dataset, and run auto-generated Tests to check for data quality and core statistics between two datasets:
+Let's get a summary of all columns in the dataset, and run auto-generated Tests to check for data quality and core descriptive statistics between two datasets. 
 
 ```python
 report = Report([
-    DataSummaryPreset()
+    DataSummaryPreset() #or try DataDriftPreset()
 ],
 include_tests="True")
 my_eval = report.run(eval_data_1, eval_data_2)
 ```
+
+Alternatively, you can generate a Data Drift preset that will check for statistical distribution change. Use `DataDriftPreset` instead.
 
 ## 4. Explore the results
 
