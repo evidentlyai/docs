@@ -1,6 +1,6 @@
 ---
 title: 'Data and ML checks'
-description: 'ML monitoring "hello world"'
+description: 'ML monitoring "hello world"''
 ---
 
 import CloudSignup from '/snippets/cloud_signup.mdx';
@@ -36,13 +36,10 @@ This quickstart shows both local open-source and cloud workflows.
     import pandas as pd
     from sklearn import datasets
     
-    from evidently.future.datasets import Dataset
-    from evidently.future.datasets import DataDefinition
-    
-    from evidently.future.report import Report
-    from evidently.future.metrics import *
-    from evidently.future.presets import *
-    from evidently.future.tests import *
+    from evidently import Dataset
+    from evidently import DataDefinition
+    from evidently import Report
+    from evidently.presets import DataSummaryPreset
     ```
 
     Components to connect with Evidently Cloud:
@@ -70,13 +67,10 @@ This quickstart shows both local open-source and cloud workflows.
     import pandas as pd
     from sklearn import datasets
     
-    from evidently.future.datasets import Dataset
-    from evidently.future.datasets import DataDefinition
-    
-    from evidently.future.report import Report
-    from evidently.future.metrics import *
-    from evidently.future.presets import *
-    from evidently.future.tests import *
+    from evidently import Dataset
+    from evidently import DataDefinition
+    from evidently import Report
+    from evidently.presets import DataSummaryPreset
     ```
   </Tab>
 </Tabs>
@@ -90,7 +84,7 @@ adult_data = datasets.fetch_openml(name="adult", version=2, as_frame="auto")
 adult = adult_data.frame
 ```
 
-<Accordion title="Have trouble downloading the data?" defaultOpen={false}>
+<Accordion title="Have trouble downloading the data?" defaultOpen="false">
   If OpenML is not available, you can download the same dataset from here:
 
   ```python
