@@ -1,13 +1,13 @@
 ---
-title: 'Data and ML checks'
-description: 'ML monitoring "hello world'
+title: "Data and ML checks"
+description: "ML monitoring "hello world"
 ---
 
 import CloudSignup from '/snippets/cloud_signup.mdx';
 import CreateProject from '/snippets/create_project.mdx';
 
 <Info>
-Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
+  Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
 </Info>
 
 ## 1. Set up your environment
@@ -36,18 +36,19 @@ This quickstart shows both local open-source and cloud workflows.
     import pandas as pd
     from sklearn import datasets
     
-    from evidently import Dataset
-    from evidently import DataDefinition
-    from evidently import Report
-    from evidently.metrics import *
-    from evidently.presets import *
-    from evidently.tests import *
+    from evidently.future.datasets import Dataset
+    from evidently.future.datasets import DataDefinition
+    
+    from evidently.future.report import Report
+    from evidently.future.metrics import *
+    from evidently.future.presets import *
+    from evidently.future.tests import *
     ```
 
     Components to connect with Evidently Cloud:
 
     ```python
-    from evidently.ui.workspace import CloudWorkspace
+    from evidently.ui.workspace.cloud import CloudWorkspace
     ```
 
     ### 1.3. Create a Project
@@ -69,11 +70,13 @@ This quickstart shows both local open-source and cloud workflows.
     import pandas as pd
     from sklearn import datasets
     
-    from evidently import Dataset
-    from evidently import Report
-    from evidently.metrics import *
-    from evidently.presets import *
-    from evidently.tests import *
+    from evidently.future.datasets import Dataset
+    from evidently.future.datasets import DataDefinition
+    
+    from evidently.future.report import Report
+    from evidently.future.metrics import *
+    from evidently.future.presets import *
+    from evidently.future.tests import *
     ```
   </Tab>
 </Tabs>
@@ -103,6 +106,31 @@ adult_ref = adult[~adult.education.isin(["Some-college", "HS-grad", "Bachelors"]
 adult_prod = adult[adult.education.isin(["Some-college", "HS-grad", "Bachelors"])]
 ```
 
+Map the column types:
+
+```python
+schema = DataDefinition(
+    numerical_columns=["education-num", "age", "capital-gain", "hours-per-week", "capital-loss"],
+    categorical_columns=["education", "occupation", "native-country", "workclass", "marital-status"],
+    )
+```
+
+Create Evidently Datasets to work with:
+
+```python
+eval_data_1 = Dataset.from_pandas(
+    pd.DataFrame(adult_prod),
+    data_definition=schema
+)
+```
+
+```python
+eval_data_2 = Dataset.from_pandas(
+    pd.DataFrame(adult_ref),
+    data_definition=schema
+)
+```
+
 ## 3. Get a Report
 
 Let's a summary of all columns in the dataset, and run auto-generated Tests to check for data quality and core statistics between two datasets:
@@ -112,10 +140,8 @@ report = Report([
     DataSummaryPreset()
 ],
 include_tests="True")
-my_eval = report.run(adult_prod, adult_ref)
+my_eval = report.run(eval_data_1, eval_data_2)
 ```
-
-**Note**: in this simple example we directly work with pandas dataframes, but it is recommended to create an Evidently Dataset Object and add [data definition](/docs/library/data_definition) to specify column types.
 
 ## 4. Explore the results
 
@@ -129,7 +155,7 @@ my_eval = report.run(adult_prod, adult_ref)
 
     **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report. You will see the summary with scores and Test results.
 
-    **Get a Dashboard**. As you run repeated evals, you may want to track the results in time. Go to the "Dashboard" tab in the left menu and enter the "Edit" mode. Add a new tab (using plus sign on the left), and select the "Columns" template.
+    **Get a Dashboard**. As you run repeated evals, you may want to track the results in time. Go to the "Dashboard" tab in the left menu and enter the "Edit" mode. Add a new tab, and select the "Columns" template.
 
     You'll see a set of panels that show column stats. Each has a single data point. As you log ongoing evaluation results, you can track trends and set up alerts.
   </Tab>
