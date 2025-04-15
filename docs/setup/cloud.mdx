@@ -32,12 +32,16 @@ pip install evidently ## or pip install evidently[llm]
 Import the cloud workspace and pass your API token to connect:
 
 ```python
-from evidently.ui.workspace.cloud import CloudWorkspace
+from evidently.ui.workspace import CloudWorkspace
 
 ws = CloudWorkspace(
 token="API_KEY",
 url="https://app.evidently.cloud")
 ```
+
+<Note>
+For Evidently 0.6.7 and Evidently Cloud v1, use `from evidently.ui.workspace.cloud import CloudWorkspace`. [Read more](/faq/cloud_v2).
+</Note>
 
 <Check>
   You can also provide the API key by setting the environment variable `EVIDENTLY_API_KEY`.
