@@ -1,6 +1,6 @@
 ---
-title: 'Overview'
-description: 'Introduction to Dashboard.'
+title: "Overview"
+description: "Introduction to Dashboard."
 ---
 
 <Check>
@@ -9,39 +9,31 @@ description: 'Introduction to Dashboard.'
 
 ## What is a Dashboard?
 
-A Dashboard provides a clear view of your AI application performance, whether over time or across multiple experiments and tests.
+A Dashboard provides a clear view of your AI application performance. You can use it:
 
-Each Project has a Dashboard. It's empty at first. To populate it, you need to run an evaluation and save at least one Report to the Project. You can then choose values from Reports to plot.
+- to track evaluation results across multiple expriments;
+- to track live production quality over time.
+
+Each Project has its own Dashboard. It's empty at first.
+
+To populate it, you need to run an evaluation and **save at least one Report** to the Project. You can then choose values from Reports to plot.
 
 ![](/images/dashboard_llm_light.png)
 
-You can use the Dashboard to track live production quality or results from offline experiments.
+## **Dashboard Panels**
 
-The "Show in order" toggle lets you switch between two views:
-
-* **Time Series.** Displays data with actual time intervals, ideal for live monitoring.
-
-* **Sequential.** Shows results in equal spacing, perfect for experiments.
-
-All Panels in a Dashboard reflect the date range set by the time range filter. You can zoom in on any time series visualization for detailed analysis.
-
-## Dashboard Panels
-
-A Panel is a visual element in the Dashboard that displays specific values or test results. Panels can be counters, line plots, bar plots, etc.
+A Panel is a visual element in the Dashboard that displays specified values in a single widget. Panels can be counters, line plots, bar plots, etc.
 
 You can customize your Dashboard by adding Panels:
 
-* **Using Python API**. Define dashboard as code.
-
-* **Through the UI**. Add Panels directly from the interface. (Cloud and Enterprise only).
+- **Using Python API**. Define dashboard as code.
+- **Through the UI**. Add Panels directly from the interface. (Cloud and Enterprise only).
 
 To create a Panel, you need to specify:
 
-* **Value**. You can plot both Metrics (e.g., drift score) or Test results (e.g., Pass/Fail).
-
-* **Parameters** like type, size, and title.
-
-* **Tags** (optional). You can filter and visualize specific data subsets. To enable this, you must first add Tags (e.g. a model version) to Reports when you run an evaluation.
+- **Value**. Choose individual metric results to plot.
+- **Parameters** like title, panel type, size.
+- **Tags** (optional). You can filter and visualize specific data subsets. To enable this, you must first add Tags (e.g. a model version) to Reports when you run an evaluation.
 
 ## From Dashboard to Reports
 
@@ -49,7 +41,7 @@ By clicking on any individual value on the Dashboard, you can open the associate
 
 ![](/images/dashboard/dashboard_to_report.gif)
 
-## Using Tabs
+## Dashboard Tabs
 
 <Check>
   Multiple Tabs are available in **Evidently Cloud** and **Evidently Enterprise**.
@@ -59,4 +51,26 @@ You can logically organize Panels within the same Dashboard into different Tabs.
 
 ![](/images/dashboard_llm_tabs.gif)
 
-**Pre-built Tabs**. To simplify setup, you can start with dashboard templates for common use cases.
+**Pre-built Tabs**. To simplify setup, you can start with dashboard templates for common use cases. These are preset Panel combination, so you don't have to add them one by one.
+
+Available Tabs:
+
+| Template    | Description                                                                                                                    | Data source                                                                 |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| **Columns** | Shows the results of text evaluations over time OR plots column distributions over time for categorical and numerical columns. | `TextEvals()`, `DataSumaryPreset()`or`ValueStats()` for individual columns. |
+
+**To add a Tab**:
+
+- Enter the "Edit" mode by clicking on the top right corner of the Dashboard.
+- Click on the "Add tab" button using "plus" sign on the left.
+- Choose a template Tab in the dropdown.
+- Optionally, give a custom name to the Tab.
+
+![](/images/dashboard/add_dashboard_tab.gif)
+
+**To delete a Tab**: enter the "Edit" mode again, choose "edit Tabs" sign next to the Tab names, and choose which one to delete.
+
+## What’s next?
+
+- Understand available [monitoring Panels types](/docs/platform/dashboard_panel_types.md).
+- See how to [customize your Dashboard](/docs/platform/dashboard_add_panels.md).

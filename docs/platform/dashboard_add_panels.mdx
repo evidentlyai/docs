@@ -1,544 +1,298 @@
 ---
-title: 'Add dashboard panels'
-description: 'How to design your Dashboard with custom Panels.'
+title: "Add dashboard panels"
+description: "How to design your Dashboard with custom Panels."
 ---
 
-This page shows how to add panels one by one. Check [pre-built Tabs](/docs/platform/dashboard_tabs) for a quick start, and explore [available Panel types](/docs/platform/dashboard_panel_types).
+## What is a monitoring Panel?
 
-## Adding Tabs
+A monitoring Panel is an individual plot or counter on the Monitoring Dashboard. 
 
-<Check>
-  Multiple Tabs are available in the Evidently Cloud and Enterprise.
-</Check>
+- You can add multiple Panels to the Dashboard. You can customize Panel type, values shown, titles and legends.
+- When adding a Panel, you select a **Metric**, and Evidently pulls the corresponding value(s) from all Reports in the Project to plot them.
 
-By default, new Panels appear on a single Dashboard. You can add multiple Tabs to organize them.
+For example, if you log multiple Data Drift Reports (each includes the`DriftedColumnsCount` for the corresponding batch), you can plot how this Metric value changes over time.
 
-**User interface.** Enter the "Edit" mode on the Dashboard (top right corner) and click the plus sign with "add Tab". To create a custom Tab, choose an “empty” tab and give it a name.
+![](/images/dashboard/metric_panels.png)
 
-**Python**. You can add an empty tab using `create_tab`:
+The Panel time resolution depends on logged Report frequency. For instance, if you log Reports daily, you'll see values at daily granularity.
 
-```python
-project.dashboard.create_tab("My tab")
-project.save()
-```
+- You can use **Tags** to filter data from specific Reports. For example, you can plot the accuracy of Model A and Model B on separate Panels. To achieve this, you must first [add relevant Tags](/docs/library/tags_metadata) to the Report, and then filter by these Tags when creating a Panel.
+- You can add multiple **Tabs** to logically group Panels. (In Evidently Cloud and Enterprise).
 
-You can also use the `add_panel` method shown below and specify the destination Tab. If there is no Tab with a set name, you will create both a new Tab and Panel at once. If it already exists, a new Panel will appear below others in this Tab.
-
-## Adding Panels
+## Dashboard Management
 
 You can add Panels in the user interface or using Python API.
 
-### User interface
+### Via UI
 
 <Check>
   No-code Dashboards are available in the Evidently Cloud and Enterprise.
 </Check>
 
-Once you are inside the Project:
+By default, new Panels appear on a single Dashboard. You can add multiple Tabs to organize them.
 
-* Enter the "Edit" mode by clicking on the top right corner of the Dashboard.
+**To add Tabs**.
 
-* Click on the "Add panel" button.
+- Enter the "Edit" mode on the Dashboard (top right corner)
+- Click the plus sign with "add Tab" on the left.
+- To create a custom Tab, select "empty" and enter a name.
 
-* Follow the flow to configure dashboard name, type, etc.
+**To add Panels**.
 
-* Preview and publish.
+- Enter the "Edit" mode on the Dashboard (top right corner)
+- Click on the "Add Panel" sign next to it.
+- Follow the prompts to configure the panel.
+- Preview and publish.
 
 To delete/edit a Panel, enter Edit mode and hover over a specific Panel to choose an action.
 
-### Python API
+### Via Python API
 
 <Check>
   Dashboards as code are available in Evidently OSS, Cloud, Enterprise.
 </Check>
 
 <Tip>
-  You must first connect to [Evidently Cloud](/docs/setup/cloud) (or your [local workspace](/docs/setup/self-hosting)) and [create a Project](/docs/platform/projects_manage).
+  You must first connect to [Evidently Cloud](/docs/setup/cloud), [create a Project](/docs/platform/projects_manage).
 </Tip>
 
-Import the necessary modules to configure the Panels as code:
+**Adding Tabs**. To add a new Tab:
 
 ```python
-from evidently.future.metrics import *
-from evidently.ui.dashboards import DashboardPanelCounter
-from evidently.ui.dashboards import DashboardPanelDistribution
-from evidently.ui.dashboards import DashboardPanelPlot
-from evidently.ui.dashboards import DashboardPanelTestSuiteCounter
-from evidently.ui.dashboards import DashboardPanelTestSuite
-from evidently.ui.dashboards import PanelValue
-from evidently.ui.dashboards import PlotType
-from evidently.ui.dashboards import TestSuitePanelType
-from evidently.ui.dashboards import ReportFilter
-from evidently.ui.dashboards import TestFilter
-from evidently.ui.dashboards import CounterAgg
-from evidently.tests.base_test import TestStatus
-from evidently.renderers.html_widgets import WidgetSize
+project.dashboard.add_tab("Another Tab")
 ```
 
-Here is the general flow to add a new Panel:
+Note: You can also create a new Tab while adding a Panel as shown below. If the destination Tab doesn't exist, it will be created. If it does, the Panel will be added below existing ones in that Tab.
 
-<Steps>
-  <Step title="Connect to the Project">
-    Load the latest dashboard configuration into your Python environment.
+**Deleting Tabs**. To delete a Tab:
 
-    ```python
-    project = ws.get_project("YOUR PROJECT ID HERE")
-    ```
-  </Step>
-
-  <Step title="Add a new Panel">
-    Use the `add_panel` method and configure the Panel:
-
-    * Pick the [Panel type](/docs/platform/dashboard_panel_types): Counter, Plot, Distribution, Test Counter, Test Plot.
-
-    * Set applicable Panel **parameters.** (See below for each type).
-
-    * Specify Panel **title** and **size**.
-
-    * Add optional **Tags** to filter data. If empty, the Panel will use data from all Reports.
-
-    * Define what the Panel will show (see examples below):
-
-      * Use `values` to point a specific Metric result, or
-
-      * Use `test_filters` to select Tests.
-
-    * Set if the Panel should appear on specific **Tab**.
-
-    For example, to add a line plot that shows Row Count in time to the "Overview" tab:
-
-    ```python
-    project.dashboard.add_panel(
-            DashboardPanelPlot(
-                title="Row count",
-                filter=ReportFilter(metadata_values={}, tag_values=[]),
-                values=[
-                    PanelValue(
-                        metric_args={"metric.metric_id": RowCount().metric_id},
-                        field_path="value",
-                        legend="count",
-                    ),
-                ],
-                plot_type=PlotType.LINE,
-                size=WidgetSize.HALF,
-            ),
-            tab="Overview"
-        )
-    project.save()
-    ```
-
-    You can add multiple Panels at once: they will appear in the listed order.
-  </Step>
-
-  <Step title="Save">
-    Save the configuration with `project.save()`. Go back to the web app to see the Dashboard. Refresh the page if needed.
-  </Step>
-</Steps>
-
-
-**Delete Panels.** To delete all monitoring Panels, use:
-
-```
-project.dashboard.panels = []
-
-project.save()
+```python
+project.dashboard.delete_tab("Another Tab")
 ```
 
-<Info>
-  **Note**: This does not delete the Reports or data; it only deletes the Panel configuration.
-</Info>
+**Deleting Panels**. To delete a specific Panel:
 
-## Panel Parameters
+```
+project.dashboard.delete_panel("Dashboard title", "My new tab")
+```
 
-### General parameters
+(First list the Panel name, then the Tab name).
 
-Class `DashboardPanel` is a base class. These parameters apply to all Panel types.
+**[DANGER]. Delete Dashboard**. To delete all Tabs and Panels on the Dashboard:
 
-| Parameter              | Example use                                              | Description                                                                                                                                                                      |
-| ---------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title: str`           | `title="My Panel"`                                       | Panel name visible at the header.                                                                                                                                                |
-| `filter: ReportFilter` | `filter=ReportFilter(metadata_values={}, tag_values=[])` | Filters define a subset of Reports from which to display the data. Tags or metadata values you list must be added when logging Reports. See [docs](/docs/library/tags_metadata). |
-| `size: WidgetSize`     | `size=WidgetSize.HALF`, `size=WidgetSize.FULL` (default) | Sets the Panel size to half-width or full-sized.                                                                                                                                 |
+```python
+project.dashboard.clear_dashboard()
+```
 
-### Counter
+Note: This does **not** delete the underlying Reports or dataset; it only clears the Panel configuration.
 
-`DashboardPanelCounter` shows a value count or works as a text-only Panel.
+## Adding Panels
 
-<Frame>
-  <img src="/images/dashboard/panel_counter_example-min.png" />
-</Frame>
+Imports:
 
-Examples usage:
+```
+from evidently.sdk.models import PanelMetric
+from evidently.sdk.panels import DashboardPanelPlot
+```
 
-<Tabs>
-  <Tab title="Text Panel">
-    **Text only panel**. To create a Panel with the Dashboard title only:
+You can add multiple Panels at once: they will appear in the listed order.
 
-    ```python
-    project.dashboard.add_panel(
-            DashboardPanelCounter(
-                title="LLM chatbot monitoring",
-                filter=ReportFilter(metadata_values={}, tag_values=[]),
-                agg=CounterAgg.NONE,
-                size=WidgetSize.FULL,
-            ),
-            tab="Overview"
-        )
-    project.save()
-    ```
-  </Tab>
+### Text
 
-  <Tab title="Value sum">
-    **Value sum**. To create a Panel that sums up the number of rows over time:
+Text-only panels are perfect for titles.
 
-    ```python
-    project.dashboard.add_panel(
-            DashboardPanelCounter(
-                title="Model calls",
-                filter=ReportFilter(metadata_values={}, tag_values=[]),
-                value=PanelValue(
-                    metric_args={"metric.metric_id": RowCount().metric_id},
-                    field_path="value",
-                    legend="count",
-                ),
-                text="count",
-                agg=CounterAgg.SUM,
-                size=WidgetSize.HALF,
-            ),
-        tab="Overview"
-    )
-    project.save()
-    ```
-  </Tab>
-
-  <Tab title="Last value">
-    **Last value**. To create a Panel that shows the number of rows in the last Report.
-
-    ```python
-    project.dashboard.add_panel(
-            DashboardPanelCounter(
-                title="Row number: last run",
-                filter=ReportFilter(metadata_values={}, tag_values=[]),
-                value=PanelValue(
-                    metric_args={"metric.metric_id": RowCount().metric_id},
-                    field_path="value",
-                    legend="count",
-                ),
-                text="count",
-                agg=CounterAgg.LAST,
-                size=WidgetSize.HALF,
-            ),
-        tab="Overview"
-    )
-    project.save()
-    ```
-  </Tab>
-</Tabs>
-
-All parameters:
-
-| Parameter                     | Description                                                                                                                                                                                                                                                   |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `value: Optional[PanelValue]` | Specifies the value to display. <br /> <br />You must point to a named **Metric** and a specific **result** inside it (`value` or `share`/`count`). *Check the Panel Value section below for details.* <br /><br />If left empty, displays a text-only panel. |
-| `text: Optional[str]`         | Supporting text to display.                                                                                                                                                                                                                                   |
-| `agg: CounterAgg`             | Data aggregation options: <br />`SUM`: Calculates the value sum. <br />`LAST`: Shows the last available value. <br />`NONE`: Reserved for text panels.                                                                                                        |
-
-### Plot
-
-`DashboardPanelPlot` shows individual values over time.&#x20;
-
-<CardGroup cols={2}>
-  <Card title="Line chart" img="/images/dashboard//panel_line_plot_example.png">
-    `PlotType.LINE` shows values over time from multiple Reports.
-  </Card>
-
-  <Card title="Bar chart" img="/images/dashboard//panel_bar_plot_example.png">
-    `PlotType.BAR` shows values over time from multiple Report.
-  </Card>
-</CardGroup>
-
-Example usage:
-
-<Tabs>
-  <Tab title="Single value">
-    **Single value**. To plot row count as a LINE plot (you can change to BAR etc.):
-
-    ```python
-    project.dashboard.add_panel(
-            DashboardPanelPlot(
-                title="Row count",
-                filter=ReportFilter(metadata_values={}, tag_values=[]),
-                values=[
-                    PanelValue(
-                        metric_args={"metric.metric_id": RowCount().metric_id},
-                        field_path="value",
-                        legend="count",
-                    ),
-                ],
-                plot_type=PlotType.LINE,
-                size=WidgetSize.HALF,
-            ),
-            tab="Overview"
-        )
-    project.save()
-    ```
-  </Tab>
-
-  <Tab title="Multiple values">
-    **Multiple values.** To plot min, max and mean values of the "length" column on the same plot:
-
-    ```python
-    project.dashboard.add_panel(
-            DashboardPanelPlot(
-                title="Length",
-                filter=ReportFilter(metadata_values={}, tag_values=[]),
-                values=[
-                    PanelValue(
-                        metric_args={"metric.metric_id": MinValue(column="length").metric_id},
-                        field_path="value",
-                        legend="min",
-                    ),
-                    PanelValue(
-                        metric_args={"metric.metric_id": MeanValue(column="length").metric_id},
-                        field_path="value",
-                        legend="mean",
-                    ),
-                    PanelValue(
-                        metric_args={"metric.metric_id": MaxValue(column="length").metric_id},
-                        field_path="value",
-                        legend="max",
-                    ),
-                ],
-                plot_type=PlotType.LINE,
-                size=WidgetSize.HALF,
-            ),
-            tab="Overview"
-        )
-    project.save()
-    ```
-  </Tab>
-</Tabs>
-
-All parameters:
-
-| Parameter                  | Description                                                                                                                                                                                                                                                                                                                                                                                |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `values: List[PanelValue]` | Specifies the value(s) to display in the Plot. <br /><br /> You must point to a named **Metric** and a specific **result** inside it (`value` or `share`/`count`). *Refer to the Panel Value section below for details.* <br /><br /> You can pass multiple values so that will appear together, e.g., as separate lines on a Line plot, bars on a Bar Chart, or points on a Scatter Plot. |
-| `plot_type: PlotType`      | Specifies the plot type. <br /><br />**Available:** `SCATTER`, `BAR`, `LINE`, `HISTOGRAM`                                                                                                                                                                                                                                                                                                  |
-
-### Distribution
-
-`DashboardPanelDistribution` shows changes in the distribution over time. It's mostly relevant for showing distributions of categorical columns.
-
-<CardGroup cols={2}>
-  <Card title="Stacked" img="/images/dashboard/panel_dist_stacked_2-min.png">
-    `barmode="stack"`: stacked bar chart shows **absolute** counts in a single bar.
-  </Card>
-
-  <Card title="Grouped" img="/images/dashboard/panel_dist_group_2-min.png">
-    `barmode="group"`: grouped bar chart shows **absolute** counts in separate bars.
-  </Card>
-</CardGroup>
-
-**Example**. To plot the distribution of the column "refusals" that contains binary labels:
+**Add a text panel**. Add a new text panel to the specified Tab.
 
 ```python
 project.dashboard.add_panel(
-        DashboardPanelDistribution(
-            title="Is the context valid? (group)",
-            value=PanelValue(
-                field_path="counts", 
-                metric_args={"metric.metric_id": UniqueValueCount(column="context quality").metric_id}
-                ),
-            filter=ReportFilter(metadata_values={}, tag_values=[]),
-            barmode="group",
-            size=WidgetSize.FULL,
-        ),
-    tab="Overview"
-    )
-project.save()
+    DashboardPanelPlot(
+        title="Dashboard title",
+        size="full", 
+        values=[], #leave empty
+        plot_params={"plot_type": "text"},
+    ),
+    tab="My new tab", #will create a Tab if there is no Tab with this name
+)
 ```
 
-All parameters:
+### Counters
 
-| Parameter              | Description                                                                                                                                                                 |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `value: PanelValue`    | Specifies the distribution to display on the Panel. <br /><br /> You must point to a named **Metric** that contains a distribution histogram and set `field_path="counts"`. |
-| `barmode: HistBarMode` | Specifies the distribution plot type. <br /><br />**Available:** `stack`, `group`, `overlay`, `relative`                                                                    |
-
-### Test Counter
-
-`DashboardPanelTestSuiteCounter` shows a counter with Test results.
+Counter panels show a value with optional supporting text.
 
 <Frame>
-  <img src="/images/dashboard/panel_tests_counter_example.png" />
+  ![](/images/dashboard/panel_counter_example-min.png)
 </Frame>
 
-Example usage:
+**Add Counters**. To add panels for the `RowCount` metric with different aggregations:
 
-<Tabs>
-  <Tab title="All Tests (Last result)">
-    **All Tests**. To display the results of the latest Test Suite. Filter by LAST, no filter on Test name.
+```
+# Sum
+project.dashboard.add_panel(
+    DashboardPanelPlot(
+        title="Row count",
+        subtitle="Total number of evaluations over time.",
+        size="half",
+        values=[PanelMetric(legend="Row count", metric="RowCount")],
+        plot_params={"plot_type": "counter", "aggregation": "sum"},
+    ),
+    tab="My tab",
+)
 
-    ```python
-    project.dashboard.add_panel(
-        DashboardPanelTestSuiteCounter(
-            title="Latest Test suite: results",
-            agg=CounterAgg.LAST,
-        ),
-        tab="Overview"
-    )
-    project.save()
-    ```
+# Average
+project.dashboard.add_panel(
+    DashboardPanelPlot(
+        title="Row count",
+        subtitle="Average number of evaluations per Report.",
+        size="half",
+        values=[PanelMetric(legend="Row count", metric="RowCount")],
+        plot_params={"plot_type": "counter", "aggregation": "avg"},
+    ),
+    tab="My tab",
+)
 
-    All parameters:
-  </Tab>
+# Last
+project.dashboard.add_panel(
+    DashboardPanelPlot(
+        title="Row count",
+        subtitle="Latest number of evaluations.",
+        size="half",
+        values=[PanelMetric(legend="Row count", metric="RowCount")],
+        plot_params={"plot_type": "counter", "aggregation": "last"},
+    ),
+    tab="My tab",
+)
+```
 
-  <Tab title="Specific Test (All time)">
-    **Specific Test**. To show all failures of a specific Test over time. (Filtered by status and Test name).
+### Plots
 
-    ```python
-    project.dashboard.add_panel(
-        DashboardPanelTestSuiteCounter(
-            title="Empty Rows Test (Total Failed)",
-            test_filters=[
-                TestFilter(test_args={"test.metric_fingerprint": EmptyRowsCount().metric_id})
-                ],
-            statuses=[TestStatus.FAIL]
-        ),
-        tab="Tests"
-    )
-    project.save()
-    ```
-  </Tab>
-
-  <Tab title="Specific Test (Last result)">
-    **Specific Test**. To show the last result of a specific Test. (Defaults to showing success status).
-
-    ```python
-    project.dashboard.add_panel(
-        DashboardPanelTestSuiteCounter(
-            title="Empty Rows Test (Last result)",
-            test_filters=[
-                TestFilter(test_args={"test.metric_fingerprint": EmptyRowsCount().metric_id})
-                ],
-            agg=CounterAgg.LAST
-        ),
-        tab="Overview"
-    )
-    project.save()
-    ```
-  </Tab>
-</Tabs>
-
-| Parameter                                                                                                                                                                  | Description                                                                                                                                                                |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `test_filters: List[TestFilter]=[]`                                                                                                                                        | Test filters select specific Test(s). Without a filter, the Panel considers the results of all Tests.                                                                      |
-| `statuses: List[statuses]`<br /><br />**Available**:<br />`TestStatus.ERROR`, `TestStatus.FAIL`, `TestStatus.SUCCESS`(default), `TestStatus.WARNING`, `TestStatus.SKIPPED` | Status filters select Tests with specific outcomes. (E.g., choose the FAIL status to display a counter for failed Tests). Without a filter, the Panel shows Tests SUCCESS. |
-| <br />`agg: CounterAgg`<br /><br />**Available**:<br />`SUM`(default),  `LAST`                                                                                             | Data aggregation options:<br />`SUM`: Calculates the sum of Test results. <br />`LAST`: Displays the last available Test result.                                           |
-
-### Test Plot
-
-`DashboardPanelTestSuite` shows Test results over time.
+These Panels display values as bar or line plots.
 
 <CardGroup cols={2}>
-  <Card title="Detailed plot" img="/images/dashboard/panel_tests_detailed_hover_example.png">
-    `TestSuitePanelType.DETAILED`. Individual Test results are visible
+  <Card title="Line chart" img="/images/dashboard//panel_line_plot_example.png">
+    Shows values over time from multiple Reports.
   </Card>
-
-  <Card title="Aggregated plot" img="/images/dashboard/panel_tests_aggregated_hover_example.png">
-    `TestSuitePanelType.AGGREGATE`. Only the total number of Tests by status is visible.
+  <Card title="Bar chart (stacked)" img="/images/dashboard/panel_dist_stacked_2-min.png">
+    Shows values over time from multiple Reports, or distributions of values.Stacked bar chart shows counts in a single bar.
+  </Card>
+  <Card title="Bar chart (grouped)" img="/images/dashboard/panel_dist_group_2-min.png">
+    Shows values over time from multiple Reports, or distributions of values. Grouped bar chart shows counts in separate bars.
   </Card>
 </CardGroup>
 
-Example usage:
+**Add Plots**. To add time series panels for the `RowCount` metric.
 
-<Tabs>
-  <Tab title="Detailed (All Tests)">
-    **All Tests**. Show the results of all Tests in the Project with per-Test granularity.
+```python
+# line chart
+project.dashboard.add_panel(
+             DashboardPanelPlot(
+                title="Row count",
+                subtitle = "Number of evaluations over time.",
+                size="half",
+                values=[
+                    PanelMetric(
+                        legend="Row count",
+                        metric="RowCount",
+                    ),
+                ],
+                plot_params={"plot_type": "line"},
+            ),
+            tab="My tab",
+        )
+        
+# bar chart
+project.dashboard.add_panel(
+             DashboardPanelPlot(
+                title="Row count",
+                subtitle = "Number of evaluations over time.",
+                size="half",
+                values=[
+                    PanelMetric(
+                        legend="Row count",
+                        metric="RowCount",
+                    ),
+                ],
+                plot_params={"plot_type": "bar", "is_stacked": False}, #default False, set as True to get stacked bars
+            ),
+            tab="My tab",
+        )
+```
 
-    ```python
-    project.dashboard.add_panel(
-        DashboardPanelTestSuite(
-            title="All tests: detailed",
-            filter=ReportFilter(metadata_values={}, tag_values=[]),
-            size=WidgetSize.FULL,
-            panel_type=TestSuitePanelType.DETAILED
-        ),
-        tab="Overview"
+**Multiple values**. A single Panel can show multiple values. For example, this will add multiple lines on a Line chart:
+
+```
+project.dashboard.add_panel(
+    DashboardPanelPlot(
+        title="Text Length",
+        subtitle="Text length stats (symbols).",
+        size="full",
+        values=[
+            PanelMetric(legend="max", metric="MaxValue", metric_labels={"column": "length"}),
+            PanelMetric(legend="mean", metric="MeanValue", metric_labels={"column": "length"}),
+            PanelMetric(legend="min", metric="MinValue", metric_labels={"column": "length"}),
+        ]
     )
-    project.save()
-    ```
-  </Tab>
+)
+```
 
-  <Tab title="Detailed (Selected Tests)">
-    **Selected Tests**. Show the results of selected Tests in the Project with per-Test granularity.
+## Configuring Panel values
 
-    ```
-    project.dashboard.add_panel(
-        DashboardPanelTestSuite(
-            title="Selected tests (missing)",
-            test_filters=[
-                TestFilter(test_args={"test.metric_fingerprint": MissingValueCount(column="length").metric_id}),
-                TestFilter(test_args={"test.metric_fingerprint": MissingValueCount(column="sentiment").metric_id})
-            ],
-            filter=ReportFilter(metadata_values={}, tag_values=[]),
-            size=WidgetSize.HALF,
-            panel_type=TestSuitePanelType.DETAILED,
-        ),
-        tab="Overview"
-    )
-    project.save()
-    ```
-  </Tab>
+To plot values in a Panel, reference the name of an Evidently Metric included in the Reports logged to your Project. If the metric isn't present, the Panel will be empty.
 
-  <Tab title="Aggregated (All Tests)">
-    **All Tests.** Show the results of all Tests in aggregate (Total passed/fail).
+- **Dataset-level Metrics**: pass the Metric name directly to `PanelMetric`, e.g., `"RowCount"`.
+- **Presets **(like `TextEvals`). Even when using a Preset, you must reference the exact Metric inside it — such as `UniqueValueCount` or `QuantileValue` . See the [All Metrics Reference Table](/metrics/all_metrics) for a full list of Metrics.
+- **Column-level Metrics**. If the Metric operates on a specific column, use `metric_labels` to specify it.  This also applies to text descriptors logged using TextEvals.
 
-    ```python
-    project.dashboard.add_panel(
-        DashboardPanelTestSuite(
-            title="All tests: detailed",
-            filter=ReportFilter(metadata_values={}, tag_values=[]),
-            size=WidgetSize.FULL,
-            panel_type=TestSuitePanelType.AGGREGATE
-        ),
-        tab="Overview"
-    )
-    project.save()
-    ```
-  </Tab>
-</Tabs>
+Example:
 
-All parameters:
+```python
+# bar chart with stacked values
+project.dashboard.add_panel(
+             DashboardPanelPlot(
+                title="Denials",
+                subtitle = "Number of denials.",
+                size="half",
+                values=[
+                    PanelMetric(
+                        legend="denials",
+                        metric="UniqueValueCount",
+                        metric_labels={"column": "denials", #column name
+                                       "value_type": "share"} 
+                    ),
+                ],
+                plot_params={"plot_type": "bar", "is_stacked": True},
+            ),
+            tab="My tab",
+        )
+```
 
-| Parameter                                                                                                                                                                                          | Description                                                                                                                                                                                                                        |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `test_filters: List[TestFilter]`                                                                                                                                                                   | Test filters select specific Test(s). Without a filter, the Panel shows the results of all Tests.                                                                                                                                  |
-| `statuses: List[statuses]`<br /><br />**Available**:<br />`TestStatus.ERROR`, `TestStatus.FAIL`, `TestStatus.SUCCESS`, `TestStatus.WARNING`, `TestStatus.SKIPPED`                                  | Status filters select Tests with specific outcomes. By default the Panel shows all Test statuses.                                                                                                                                  |
-| `panel_type=TestSuitePanelType`<br /><br />**Available**:<br />`TestSuitePanelType.DETAILED`<br />`TestSuitePanelType.AGGREGATE`                                                                   | Defines the Panel type. **Detailed** shows individual Test results where you can hover and see individual results and click to open a corresponding Test Suite. **Aggregate** (default) shows the total number of Tests by status. |
-| `time_agg: Optional[str] = None`<br /><br />**Available**:<br />`1H`, `1D`, `1W`, `1M` (see [period aliases](https://pandas.pydata.org/docs/user_guide/timeseries.html#timeseries-period-aliases)) | Groups all Test results in a period (e.g., 1 DAY).                                                                                                                                                                                 |
+Use `metric_labels` when the metric has extra parameters and you want to narrow the values shown on the Panel. This includes:
 
-## Panel Value
+- **Column-level metrics**. As shown above.
+- **Metrics with multiple value types**. Some metrics return both `share` and `count` (e.g., `CategoryCount`). Use `{"value_type": "share"}` to specify. 
+- **Metrics with extra configuration**. If a metric has configurable options (like drift method), include those in `metric_labels` to differentiate.
 
-**Metric ID**. To point to the Metric or Test to plot on a Panel, you use  `test_filters` or `metric_args `as shown above and pass `metric_id` or `metric_fingerprint` . They must include the name of the Metric that was logged to the Project. You must use the same Metic name (with any applicable parameters) that you used when creating the Report.
+Otherwise, all values for that metric will be plotted unless you also filter Reports by Tags.
 
-<Note>
-  **Working with Presets.** You must reference a named Evidently Metric even if you used a Preset. You can check the Metrics included in each Preset [here](/metrics/all_metrics).
-</Note>
+## All parameters
 
-**Field path**. For Metric Panels, you also specify the `field_path`. This helps point to a specific **result** inside the Metric. This can take the following values: `value` , `share`/`count` or `values` .
+### Dashboard Panel options
 
-| Field path         | Description                                          | Applicable Metrics                                                               | Applicable Panels |
-| ------------------ | ---------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------- |
-| `value`            | Points to a single result from the Metric.           | Most Metrics                                                                     | Counter, Plot     |
-| `share` or `count` | Points to either absolute count or percentage value. | Metrics that return both absolute and percentage values like `MissingValueCount` | Counter, Plot     |
-| `shares` or `counts`        | Points to a histogram visualization within a Metric. | Metrics with histogram visualizations,  like `UniqueValueCount`.                 | Distribution      |
+| Parameter              | Type   | Required | Default  | Description                                                                            |
+| ---------------------- | ------ | -------- | -------- | -------------------------------------------------------------------------------------- |
+| `title`                | `str`  | ❌        | `None`   | Title of the panel. If `None`, a default name will be used.                            |
+| `description`          | `str`  | ❌        | `None`   | Optional panel description shown as a subtitle.                                        |
+| `size`                 | `str`  | ❌        | `"full"` | Panel size: `"full"` (100% width) or `"half"` (50%).                                   |
+| `values`               | `list` | ✅        | —        | List of `PanelMetric` objects to display.                                              |
+| `tab`                  | `str`  | ❌        | `None`   | Dashboard tab name. If not set, defaults to the first tab or creates "General".        |
+| `create_if_not_exists` | `bool` | ❌        | `True`   | If `True`, creates the tab if it doesn't exist. Throws exception if `False`.           |
+| `plot_params`          | `dict` | ❌        | `{}`     | Additional visualization settings like `"plot_type"`: `"text"`, `"line"`, `"counter"`. |
 
-There are a few exceptions where a Metric can return a different result or a dictionary.
+### `PanelMetric` options
 
-<Note>
-  **How to verify the result of a specific Metric?** Check in the [All Metrics table](/metrics/all_metrics). You can also generate the Report with a given Metric, export the Report as JSON and check the value name it returns.
-</Note>
-
-When working in the Evidently Cloud, you can see available fields in the drop-down menu as you add a new Panel.
+| Parameter       | Type   | Required | Default | Description                                                                      |
+| --------------- | ------ | -------- | ------- | -------------------------------------------------------------------------------- |
+| `legend`        | `str`  | ❌        | `None`  | Legend name in the panel. If `None`, one is auto-generated.                      |
+| `tags`          | `list` | ❌        | `[]`    | Optional tags to select values only from a subset of Reports in the Project.     |
+| `metadata`      | `dict` | ❌        | `{}`    | Optional metadata to select values only from a subset of Reports in the Project. |
+| `metric`        | `str`  | ✅        | —       | Metric name (e.g., `"RowCount"` or `"evidently:metric_v2:MinValue"`).            |
+| `metric_labels` | `dict` | ❌        | `{}`    | Parameters like column names `{"column": "Col_name"}` or value types.            |

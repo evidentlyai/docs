@@ -174,8 +174,6 @@
           "icon": "chart-mixed",
           "pages": [
             "docs/platform/dashboard_overview",
-            "docs/platform/dashboard_tabs",
-            "docs/platform/dashboard_panel_types",
             "docs/platform/dashboard_add_panels"
           ]
         },
