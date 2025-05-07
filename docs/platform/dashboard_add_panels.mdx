@@ -7,17 +7,17 @@ description: "How to design your Dashboard with custom Panels."
 
 A monitoring Panel is an individual plot or counter on the Monitoring Dashboard. 
 
-- You can add multiple Panels to the Dashboard. You can customize Panel type, values shown, titles and legends.
+- You can add multiple **Panels** to the Dashboard and customize their type and values shown.
 - When adding a Panel, you select a **Metric**, and Evidently pulls the corresponding value(s) from all Reports in the Project to plot them.
 
-For example, if you log multiple Data Drift Reports (each includes the`DriftedColumnsCount` for the corresponding batch), you can plot how this Metric value changes over time.
+For example, if you log multiple Data Drift Reports (where each includes the`DriftedColumnsCount` for the corresponding batch), you can plot how this Metric value changes over time.
 
 ![](/images/dashboard/metric_panels.png)
 
 The Panel time resolution depends on logged Report frequency. For instance, if you log Reports daily, you'll see values at daily granularity.
 
 - You can use **Tags** to filter data from specific Reports. For example, you can plot the accuracy of Model A and Model B on separate Panels. To achieve this, you must first [add relevant Tags](/docs/library/tags_metadata) to the Report, and then filter by these Tags when creating a Panel.
-- You can add multiple **Tabs** to logically group Panels. (In Evidently Cloud and Enterprise).
+- You can add multiple **Tabs** to logically group Panels. (Evidently Cloud and Enterprise).
 
 ## Dashboard Management
 
@@ -72,7 +72,7 @@ project.dashboard.delete_tab("Another Tab")
 
 **Deleting Panels**. To delete a specific Panel:
 
-```
+```python
 project.dashboard.delete_panel("Dashboard title", "My new tab")
 ```
 
@@ -84,7 +84,7 @@ project.dashboard.delete_panel("Dashboard title", "My new tab")
 project.dashboard.clear_dashboard()
 ```
 
-Note: This does **not** delete the underlying Reports or dataset; it only clears the Panel configuration.
+Note: This does **not** delete the underlying Reports or dataset; it only clears the Panels.
 
 ## Adding Panels
 
@@ -125,7 +125,7 @@ Counter panels show a value with optional supporting text.
 
 **Add Counters**. To add panels for the `RowCount` metric with different aggregations:
 
-```
+```python
 # Sum
 project.dashboard.add_panel(
     DashboardPanelPlot(
@@ -217,9 +217,11 @@ project.dashboard.add_panel(
         )
 ```
 
-**Multiple values**. A single Panel can show multiple values. For example, this will add multiple lines on a Line chart:
+**Multiple values**. A single Panel can show multiple values. 
 
-```
+For example, this will add multiple lines on a Line chart:
+
+```python
 project.dashboard.add_panel(
     DashboardPanelPlot(
         title="Text Length",
@@ -239,7 +241,7 @@ project.dashboard.add_panel(
 To plot values in a Panel, reference the name of an Evidently Metric included in the Reports logged to your Project. If the metric isn't present, the Panel will be empty.
 
 - **Dataset-level Metrics**: pass the Metric name directly to `PanelMetric`, e.g., `"RowCount"`.
-- **Presets **(like `TextEvals`). Even when using a Preset, you must reference the exact Metric inside it — such as `UniqueValueCount` or `QuantileValue` . See the [All Metrics Reference Table](/metrics/all_metrics) for a full list of Metrics.
+- **Presets** (like `TextEvals`). Even when using a Preset, you must still reference the exact Metric inside it — such as `UniqueValueCount` or `QuantileValue`. (See the [All Metrics Reference Table](/metrics/all_metrics) for a full list of Metrics).
 - **Column-level Metrics**. If the Metric operates on a specific column, use `metric_labels` to specify it.  This also applies to text descriptors logged using TextEvals.
 
 Example:
@@ -279,13 +281,13 @@ Otherwise, all values for that metric will be plotted unless you also filter Rep
 
 | Parameter              | Type   | Required | Default  | Description                                                                            |
 | ---------------------- | ------ | -------- | -------- | -------------------------------------------------------------------------------------- |
-| `title`                | `str`  | ❌        | `None`   | Title of the panel. If `None`, a default name will be used.                            |
+| `title`                | `str`  | ❌        | `None`   | Title of the panel.       |
 | `description`          | `str`  | ❌        | `None`   | Optional panel description shown as a subtitle.                                        |
 | `size`                 | `str`  | ❌        | `"full"` | Panel size: `"full"` (100% width) or `"half"` (50%).                                   |
 | `values`               | `list` | ✅        | —        | List of `PanelMetric` objects to display.                                              |
-| `tab`                  | `str`  | ❌        | `None`   | Dashboard tab name. If not set, defaults to the first tab or creates "General".        |
+| `tab`                  | `str`  | ❌        | `None`   | Dashboard tab name. If not set, defaults to the first tab or creates a new "General" tab.        |
 | `create_if_not_exists` | `bool` | ❌        | `True`   | If `True`, creates the tab if it doesn't exist. Throws exception if `False`.           |
-| `plot_params`          | `dict` | ❌        | `{}`     | Additional visualization settings like `"plot_type"`: `"text"`, `"line"`, `"counter"`. |
+| `plot_params`          | `dict` | ❌        | `{}`     | Panel visualization settings like `"plot_type"`: `"text"`, `"line"`, `"counter"`. |
 
 ### `PanelMetric` options
 
