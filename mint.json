@@ -39,6 +39,10 @@
     {
       "name": "Talk to us",
       "url": "https://www.evidentlyai.com/get-demo"
+    },
+    {
+      "name": "Log in",
+      "url": "https://app.evidently.cloud/"
     }
   ],
   "topbarCtaButton": {
