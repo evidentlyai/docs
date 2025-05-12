@@ -1,6 +1,6 @@
 ---
-title: 'Work with datasets'
-description: 'How to create, upload and manage Datasets.'
+title: "Work with datasets"
+description: "How to create, upload and manage Datasets."
 ---
 
 <Tip>
@@ -11,11 +11,15 @@ description: 'How to create, upload and manage Datasets.'
 
 <Tabs>
   <Tab title="Python">
-    Prepare your dataset as a Pandas DataFrame. To upload a dataframe `df` to the specified Project in workspace `ws`, use the `add_dataset` method:
+    Prepare your dataset as an Evidently Dataset with the corresponding data definition. To upload a Dataset to the specified Project in workspace `ws`, use the `add_dataset` method:
 
     ```python
+    eval_data = Dataset.from_pandas(
+        pd.DataFrame(source_df),
+        data_definition=DataDefinition()
+    )
     ws.add_dataset(
-        df,
+        eval_data,
         name = "dataset_name",
         project_id = project.id, 
         description = "Optional description")
@@ -23,11 +27,14 @@ description: 'How to create, upload and manage Datasets.'
 
     You must always specify the dataset `name` that you will see in the UI. The description is optional.
   </Tab>
-
   <Tab title="UI">
     To upload any existing dataset as a CSV file, click on "Add dataset". When you upload the Dataset, you must also add a [**data definition**](/docs/library/data_definition). This lets Evidently understand the role of specific columns and prepare your Dataset for future evaluations.
   </Tab>
 </Tabs>
+
+<Note>
+  **How to create an Evidently Dataset?** Read the [Data Definition docs](../library/data-definition).
+</Note>
 
 ## Download the Dataset
 
@@ -36,16 +43,18 @@ You can pull the Dataset stored or generated on the platform to your local envir
 Use the `load_dataset` method:
 
 ```python
-downloaded_df = ws.load_dataset(dataset_id = "YOUR_DATASET_ID") 
+downloaded_data = ws.load_dataset(dataset_id = "YOUR_DATASET_ID") 
+
+#to create as pandas dataframe
+df = eval_dataset.as_dataframe()
 ```
 
 ## Include the Dataset
 
 You can include Datasets when you upload Reports to the platform. This way, after running an evaluation locally you simultaneously upload:
 
-* the Report with evaluation result,
-
-* the Dataset it was generated for, with new added scores if applicable.
+- the Report with evaluation result,
+- the Dataset it was generated for, with new added scores if applicable.
 
 By default, you upload only the Report.
 
