@@ -3,6 +3,10 @@ title: "Descriptors"
 description: "How to run evaluations for text data."
 ---
 
+To evaluate text data, like LLM inputs and outputs, you create **Descriptors**. This is a universal interface for all evals - from text statistics to LLM judges.
+
+Each descriptor defines an evaluation that adds a row-level score or label to your dataset. You can add multiple descriptors, and optionally set pass/fail conditions. You can use built-in descriptors or add custom prompt-based evals or Python functions.
+
 For a general introduction, check [Core Concepts](/docs/library/overview).
 
 ## Generate descriptors
@@ -15,7 +19,7 @@ from evidently import DataDefinition
 from evidently.descriptors import *
 ```
 
-**Note**. Some Descriptors that use vocabulary-based checks (like `OOVWordsPercentage()` for out-of-vocabulary words) require downloading `nltk` dictionaries:
+**Note**. Some Descriptors that use vocabulary-based checks (like `OOVWordsPercentage()` for out-of-vocabulary words) may require downloading `nltk` dictionaries:
 
 ```python
 nltk.download('words')
