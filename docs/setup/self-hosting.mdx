@@ -1,20 +1,19 @@
 ---
-title: 'Self-hosting'
-description: 'How to self-host the open-source Evidently UI service.'
+title: "Self-hosting"
+description: "How to self-host the open-source Evidently UI service."
 icon: "window-restore"
 ---
 
 <Info>
-This page explains how to self-host the lightweight open-source platform. [Contact us](https://www.evidentlyai.com/get-demo) for Enterprise version with extra features and support. Compare [OSS vs. Enterprise/Cloud](/faq/oss_vs_cloud).
+  This page explains how to self-host the lightweight open-source platform. [Contact us](https://www.evidentlyai.com/get-demo) for Enterprise version with extra features and support. Compare [OSS vs. Enterprise/Cloud](/faq/oss_vs_cloud).
 </Info>
 
 In addition to using Evidently Python library, you can self-host the UI Service to get a monitoring Dashboard and organize the results of your evaluations. This is optional: you can also view evaluation results in Python or export to JSON or HTML.
 
 To get a self-hostable Dashboard, you must:
 
-* Create a Workspace (local or remote) to store your data.
-
-* Launch the UI service.
+- Create a Workspace (local or remote) to store your data.
+- Launch the UI service.
 
 ## 1. Create a Workspace
 
@@ -26,11 +25,9 @@ Once you [install Evidently](/docs/setup/installation), you will need to create 
 
 There are three scenarios, based on where you run the UI Service and store data.
 
-* **Local Workspace**. Both the UI Service and data storage are local.
-
-* **Remote Workspace**. Both the UI Service and data storage are remote.
-
-* **Workspace with remote data storage**. Run the UI Service and store data on different servers.
+- **Local Workspace**. Both the UI Service and data storage are local.
+- **Remote Workspace**. Both the UI Service and data storage are remote.
+- **Workspace with remote data storage**. Run the UI Service and store data on different servers.
 
 ### Local Workspace
 
@@ -50,7 +47,6 @@ ws = Workspace.create("evidently_ui_workspace")
 ```
 
 You can pass a `path` parameter to specify the path to a local directory.
-
 
 ### Remote Workspace
 
@@ -97,7 +93,7 @@ FSSPEC_S3_KEY=my_key FSSPEC_S3_SECRET=my_secret
 evidently ui --workspace s3://my_bucket/workspace
 ```
 
-### \[DANGER] Delete Workspace
+### [DANGER] Delete Workspace
 
 To delete a Workspace, run the command from the Terminal:
 
@@ -141,3 +137,11 @@ To launch the Evidently service with the demo projects, run:
 ```
 evidently ui --demo-projects all
 ```
+
+## Tutorial
+
+Check this tutorial for an end-to-end example:
+
+<Card title="Evidently UI tutorial" icon="laptop-code" href="https://github.com/evidentlyai/evidently/blob/main/examples/service/workspace_tutorial.ipynb">
+  How to create a workspace, project and run Reports. 
+</Card>
