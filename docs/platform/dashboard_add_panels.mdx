@@ -1,5 +1,5 @@
 ---
-title: "Add dashboard panels"
+title: "Add dashboard panels (API)"
 description: "How to design your Dashboard with custom Panels."
 ---
 
@@ -10,7 +10,7 @@ A monitoring Panel is an individual plot or counter on the Monitoring Dashboard.
 - You can add multiple **Panels** to the Dashboard and customize their type and values shown.
 - When adding a Panel, you select a **Metric**, and Evidently pulls the corresponding value(s) from all Reports in the Project to plot them.
 
-For example, if you log multiple Data Drift Reports (where each includes the`DriftedColumnsCount` for the corresponding batch), you can plot how this Metric value changes over time.
+For example, if you log multiple Data Drift Reports (each includes the`DriftedColumnsCount` for the corresponding batch), you can plot how this Metric value changes over time.
 
 ![](/images/dashboard/metric_panels.png)
 
@@ -19,41 +19,16 @@ The Panel time resolution depends on logged Report frequency. For instance, if y
 - You can use **Tags** to filter data from specific Reports. For example, you can plot the accuracy of Model A and Model B on separate Panels. To achieve this, you must first [add relevant Tags](/docs/library/tags_metadata) to the Report, and then filter by these Tags when creating a Panel.
 - You can add multiple **Tabs** to logically group Panels. (Evidently Cloud and Enterprise).
 
+You can add Panels in the user interface or using Python API. This pages describes the Python API. Check how to [add panels in the UI](dashboard_add_panels_ui).
+
 ## Dashboard Management
-
-You can add Panels in the user interface or using Python API.
-
-### Via UI
-
-<Check>
-  No-code Dashboards are available in the Evidently Cloud and Enterprise.
-</Check>
-
-By default, new Panels appear on a single Dashboard. You can add multiple Tabs to organize them.
-
-**To add Tabs**.
-
-- Enter the "Edit" mode on the Dashboard (top right corner)
-- Click the plus sign with "add Tab" on the left.
-- To create a custom Tab, select "empty" and enter a name.
-
-**To add Panels**.
-
-- Enter the "Edit" mode on the Dashboard (top right corner)
-- Click on the "Add Panel" sign next to it.
-- Follow the prompts to configure the panel.
-- Preview and publish.
-
-To delete/edit a Panel, enter Edit mode and hover over a specific Panel to choose an action.
-
-### Via Python API
 
 <Check>
   Dashboards as code are available in Evidently OSS, Cloud, Enterprise.
 </Check>
 
 <Tip>
-  You must first connect to [Evidently Cloud](/docs/setup/cloud), [create a Project](/docs/platform/projects_manage).
+  You must first connect to [Evidently Cloud](/docs/setup/cloud) and [create a Project](/docs/platform/projects_manage).
 </Tip>
 
 **Adding Tabs**. To add a new Tab:
@@ -62,7 +37,7 @@ To delete/edit a Panel, enter Edit mode and hover over a specific Panel to choos
 project.dashboard.add_tab("Another Tab")
 ```
 
-Note: You can also create a new Tab while adding a Panel as shown below. If the destination Tab doesn't exist, it will be created. If it does, the Panel will be added below existing ones in that Tab.
+You can also create a new Tab while adding a Panel as shown below. If the destination Tab doesn't exist, it will be created. If it does, the Panel will be added below existing ones in that Tab.
 
 **Deleting Tabs**. To delete a Tab:
 
