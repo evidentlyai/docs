@@ -13,11 +13,25 @@ Dashboards let you create Panels to visualize evaluation results over time. Note
 
 By default, new Panels appear on a single Dashboard. You can add multiple Tabs to organize them.
 
+**To add a Tab**:
+
 - Enter "Edit" mode on the Dashboard (top right corner).
 - Click the plus sign with "add Tab" on the left.
 - To create a custom Tab, select "empty" and enter a name.
 
+To simplify setup, you can start with pre-built Tabs. These are dashboard templates with preset Panel combinations:
+
 ![Add Dashboard Tab](/images/dashboard/add_dashboard_tab_v2.gif)
+
+**Pre-built Tabs** rely on having related Metrics (or Presets that include the specific Metrics) within the Project. If the necessary data is not available, the Panels will appear empty until you add Reports that contain those Metrics.
+
+Available Tabs:
+
+| Template    | Description                                                                                                                    | Data source                                                                 |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| **Columns** | Shows the results of text evaluations over time OR plots column distributions over time for categorical and numerical columns. | `TextEvals()`, `DataSumaryPreset()`or`ValueStats()` for individual columns. |
+
+**To delete a Tab**: enter the "Edit" mode again, choose "edit Tabs" sign next to the Tab names on the left, and choose which one to delete.
 
 ## Adding Panels
 
@@ -35,6 +49,8 @@ You can add any number of Panels to your Dashboard, including text panels, count
 - Use the preview to review your setup.
 - Click "Save" and select the Tab where you want to add the Panel.
 
+Here is an example of the panel configuration view:
+
 ![](/images/dashboard/add_panel_ui.png)
 
 - **Select Metrics**. To point to a specific Metric, you must choose the Metric name that matches the name of the Evidently Metric logged inside the Reports in the given Project.
@@ -44,8 +60,8 @@ You can add any number of Panels to your Dashboard, including text panels, count
   - **Value type**: Choose whether to plot value or count for metrics that return both.
 
   You can see all keys available for a given Metric in the dropdown menu. You can add multiple keys, depending on the metric type, like metric-specific parameters.
-- **Set Legend**. You can use the "Label" field to modify what appears on the legend. 
-- **Set Panel Type. **You can also specify the plot type and aggregation level. 
+- **Set Legend**. You can use the "Label" field to modify what appears on the legend.
+- **Set Panel Type**. You can also specify the plot type and aggregation level.
 
 For example, you can switch the view for the same metric as on the screenshot above to a pie chart and set the view to show only the last value instead of all values over time:
 
