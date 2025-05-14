@@ -11,7 +11,7 @@ description: "Introduction to Dashboard."
 
 A Dashboard provides a clear view of your AI application performance. You can use it:
 
-- to track evaluation results across multiple expriments;
+- to track evaluation results across multiple experiments;
 - to track live production quality over time.
 
 Each Project has its own Dashboard. It's empty at first.
@@ -19,27 +19,6 @@ Each Project has its own Dashboard. It's empty at first.
 To populate it, you need to run an evaluation and **save at least one Report** to the Project. You can then choose values from Reports to plot.
 
 ![](/images/dashboard_llm_light.png)
-
-## **Dashboard Panels**
-
-A Panel is a visual element in the Dashboard that displays specified values in a single widget. Panels can be counters, line plots, bar plots, etc.
-
-You can customize your Dashboard by adding Panels:
-
-- **Using Python API**. Define dashboard as code.
-- **Through the UI**. Add Panels directly from the interface. (Cloud and Enterprise only).
-
-To create a Panel, you need to specify:
-
-- **Value**. Choose individual metric results to plot.
-- **Parameters** like title, panel type, size.
-- **Tags** (optional). You can filter and visualize specific data subsets. To enable this, you must first add Tags (e.g. a model version) to Reports when you run an evaluation.
-
-## From Dashboard to Reports
-
-By clicking on any individual value on the Dashboard, you can open the associated Report and source Dataset for further debugging.
-
-![](/images/dashboard/dashboard_to_report.gif)
 
 ## Dashboard Tabs
 
@@ -51,6 +30,38 @@ You can logically organize Panels within the same Dashboard into different Tabs.
 
 ![](/images/dashboard_llm_tabs.gif)
 
+## **Dashboard Panels**
+
+A Panel is a visual element in the Dashboard that displays specified values in a single widget. Panels can be counters, line plots, bar plots, etc. You can add multiple Panels to the Dashboard and customize their type and values shown.
+
+You can add Panels in two ways:
+- Using the Python API – define your Dashboard as code.
+- Through the UI – add Panels directly from the interface (Cloud and Enterprise only).
+  
+To create a Panel, you need to specify:
+- Value – choose an individual metric to plot.
+- Parameters – such as title, panel type, and size.
+- Tags (optional) – use to filter and visualize subsets of your data.
+
+## From Dashboard to Reports
+
+By clicking on any individual value on the Dashboard, you can open the associated Report and source Dataset for further debugging.
+
+![](/images/dashboard/dashboard_to_report.gif)
+
+## Data source
+
+Dashboards rely on having **Reports** in the Project as a data source. 
+
+When adding a Panel, you select a **Metric**, and Evidently pulls the corresponding value(s) from all Reports in the Project to plot them.
+
+For example, if you log multiple Data Drift Reports (each includes the`DriftedColumnsCount` for the corresponding batch), you can plot how this Metric value changes over time.
+
+![](/images/dashboard/metric_panels.png)
+
+The Panel time resolution depends on logged Report frequency. For instance, if you log Reports daily, you'll see values at daily granularity.
+
+You can use **Tags** to filter data from specific Reports. For example, you can plot the accuracy of Model A and Model B on separate Panels. To achieve this, you must first [add relevant Tags](/docs/library/tags_metadata) to the Report, and then filter by these Tags when creating a Panel.
 
 ## What’s next?
 

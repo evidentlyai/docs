@@ -3,22 +3,6 @@ title: "Add dashboard panels (API)"
 description: "How to design your Dashboard with custom Panels."
 ---
 
-## What is a monitoring Panel?
-
-A monitoring Panel is an individual plot or counter on the Monitoring Dashboard. 
-
-- You can add multiple **Panels** to the Dashboard and customize their type and values shown.
-- When adding a Panel, you select a **Metric**, and Evidently pulls the corresponding value(s) from all Reports in the Project to plot them.
-
-For example, if you log multiple Data Drift Reports (each includes the`DriftedColumnsCount` for the corresponding batch), you can plot how this Metric value changes over time.
-
-![](/images/dashboard/metric_panels.png)
-
-The Panel time resolution depends on logged Report frequency. For instance, if you log Reports daily, you'll see values at daily granularity.
-
-- You can use **Tags** to filter data from specific Reports. For example, you can plot the accuracy of Model A and Model B on separate Panels. To achieve this, you must first [add relevant Tags](/docs/library/tags_metadata) to the Report, and then filter by these Tags when creating a Panel.
-- You can add multiple **Tabs** to logically group Panels. (Evidently Cloud and Enterprise).
-
 You can add Panels in the user interface or using Python API. This pages describes the Python API. Check how to [add panels in the UI](dashboard_add_panels_ui).
 
 ## Dashboard Management
