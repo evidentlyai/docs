@@ -119,9 +119,14 @@ project.dashboard.add_panel(
 
 Counter panels show a value with optional supporting text.
 
-<Frame>
-  ![](/images/dashboard/panel_counter_example-min.png)
-</Frame>
+<CardGroup cols={2}>
+  <Card title="Text counter" img="/images/dashboard/panel_counter_example-min.png">
+    Shows the specified value(s) and optional text.
+  </Card>
+  <Card title="Pie chart" img="/images/dashboard/panel_pie_chart.png">
+    Shows the specified value(s) in a pie chart.
+  </Card>
+</CardGroup>
 
 **Add Counters**. To add panels for the `RowCount` metric with different aggregations:
 
@@ -163,19 +168,34 @@ project.dashboard.add_panel(
 )
 ```
 
+**Add pie charts**. You can use the same aggregation params (`sum`, `last`, `avg`).
+
+```python
+project.dashboard.add_panel(
+    DashboardPanelPlot(
+        title="Row count",
+        subtitle="Total number of evaluations over time.",
+        size="half",
+        values=[PanelMetric(legend="Row count", metric="RowCount")],
+        plot_params={"plot_type": "pie", "aggregation": "sum"},
+    ),
+    tab="My tab",
+)
+```
+
 ### Plots
 
 These Panels display values as bar or line plots.
 
-<CardGroup cols={2}>
-  <Card title="Line chart" img="/images/dashboard//panel_line_plot_example.png">
-    Shows values over time from multiple Reports.
+<CardGroup cols={3}>
+  <Card title="Line chart" img="/images/dashboard/panel_line_chart.png">
+    Shows the selected values over time. You can add multiple series to the same chart as multiple lines.
   </Card>
   <Card title="Bar chart (stacked)" img="/images/dashboard/panel_dist_stacked_2-min.png">
-    Shows values over time from multiple Reports, or distributions of values.Stacked bar chart shows counts in a single bar.
+    Shows selected values or distributions over time (if stored in each Report). Stacked in a single bar.
   </Card>
   <Card title="Bar chart (grouped)" img="/images/dashboard/panel_dist_group_2-min.png">
-    Shows values over time from multiple Reports, or distributions of values. Grouped bar chart shows counts in separate bars.
+    Shows selected values or distributions over time (if stored in each Report). Multiple bars.
   </Card>
 </CardGroup>
 
@@ -217,9 +237,7 @@ project.dashboard.add_panel(
         )
 ```
 
-**Multiple values**. A single Panel can show multiple values. 
-
-For example, this will add multiple lines on a Line chart:
+**Multiple values**. A single Panel can show multiple values. For example, this will add multiple lines on a Line chart:
 
 ```python
 project.dashboard.add_panel(
@@ -255,7 +273,7 @@ project.dashboard.add_panel(
                 size="half",
                 values=[
                     PanelMetric(
-                        legend="denials",
+                        legend="""{{label}}""",
                         metric="UniqueValueCount",
                         metric_labels={"column": "denials", #column name
                                        "value_type": "share"} 
@@ -270,7 +288,7 @@ project.dashboard.add_panel(
 Use `metric_labels` when the metric has extra parameters and you want to narrow the values shown on the Panel. This includes:
 
 - **Column-level metrics**. As shown above.
-- **Metrics with multiple value types**. Some metrics return both `share` and `count` (e.g., `CategoryCount`). Use `{"value_type": "share"}` to specify. 
+- **Metrics with multiple value types**. Some metrics return both `share` and `count` (e.g., `CategoryCount`). Use `{"value_type": "share"}` to specify.
 - **Metrics with extra configuration**. If a metric has configurable options (like drift method), include those in `metric_labels` to differentiate.
 
 Otherwise, all values for that metric will be plotted unless you also filter Reports by Tags.
@@ -279,15 +297,15 @@ Otherwise, all values for that metric will be plotted unless you also filter Rep
 
 ### Dashboard Panel options
 
-| Parameter              | Type   | Required | Default  | Description                                                                            |
-| ---------------------- | ------ | -------- | -------- | -------------------------------------------------------------------------------------- |
-| `title`                | `str`  | ❌        | `None`   | Title of the panel.       |
-| `description`          | `str`  | ❌        | `None`   | Optional panel description shown as a subtitle.                                        |
-| `size`                 | `str`  | ❌        | `"full"` | Panel size: `"full"` (100% width) or `"half"` (50%).                                   |
-| `values`               | `list` | ✅        | —        | List of `PanelMetric` objects to display.                                              |
-| `tab`                  | `str`  | ❌        | `None`   | Dashboard tab name. If not set, defaults to the first tab or creates a new "General" tab.        |
-| `create_if_not_exists` | `bool` | ❌        | `True`   | If `True`, creates the tab if it doesn't exist. Throws exception if `False`.           |
-| `plot_params`          | `dict` | ❌        | `{}`     | Panel visualization settings like `"plot_type"`: `"text"`, `"line"`, `"counter"`. |
+| Parameter              | Type   | Required | Default  | Description                                                                               |
+| ---------------------- | ------ | -------- | -------- | ----------------------------------------------------------------------------------------- |
+| `title`                | `str`  | ❌        | `None`   | Title of the panel.                                                                       |
+| `description`          | `str`  | ❌        | `None`   | Optional panel description shown as a subtitle.                                           |
+| `size`                 | `str`  | ❌        | `"full"` | Panel size: `"full"` (100% width) or `"half"` (50%).                                      |
+| `values`               | `list` | ✅        | —        | List of `PanelMetric` objects to display.                                                 |
+| `tab`                  | `str`  | ❌        | `None`   | Dashboard tab name. If not set, defaults to the first tab or creates a new "General" tab. |
+| `create_if_not_exists` | `bool` | ❌        | `True`   | If `True`, creates the tab if it doesn't exist. Throws exception if `False`.              |
+| `plot_params`          | `dict` | ❌        | `{}`     | Panel visualization settings like `"plot_type"`: `"text"`, `"line"`, `"counter"`.         |
 
 ### `PanelMetric` options
 
