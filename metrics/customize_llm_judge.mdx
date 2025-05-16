@@ -19,7 +19,7 @@ from evidently.llm.templates import BinaryClassificationPromptTemplate, Multicla
 from evidently.descriptors import LLMEval, ToxicityLLMEval, ContextQualityLLMEval, DeclineLLMEval
 ```
 
-<Accordion title="Toy data to run the example" defaultOpen={false}>
+<Accordion title="Toy data to run the example" defaultOpen="false">
   To generate toy data and create a Dataset object:
 
   ```python
@@ -199,7 +199,7 @@ conciseness = BinaryClassificationPromptTemplate(
 ```
 
 <Info>
-  You do **not** need to explicitly ask the LLM to classify your input into two classes, return reasoning, or format the output. This is already part of the Evidently template.
+  You do **not** need to explicitly ask the LLM to classify your input into two classes, return reasoning, or format the output. This is already part of the Evidently template. You can preview the complete prompt using `print(conciseness.get_template())`
 </Info>
 
 To apply this descriptor for your data, pass the `template` name to the `LLMEval` descriptor:
@@ -319,10 +319,10 @@ If you want to use more than two classes, use the multi-class template and defin
 
 #### Single column
 
-**Example**. Let's evaluate how well the response aligns with the brand policy, classifying into 5 categories. 
+**Example**. Let's evaluate how well the response aligns with the brand policy, classifying into 5 categories.
 
 <Info>
-It's usually best to use as few categories as possible to make sure each of them is clearly defined.
+  It's usually best to use as few categories as possible to make sure each of them is clearly defined.
 </Info>
 
 To define the template:
@@ -375,12 +375,11 @@ Example output:
 
 ![](/images/examples/llm_judge_example_multi_class_safety.png)
 
-
 #### Multi-column
 
 Similarly to the binary evaluator, you can pass multiple columns to your evaluation prompt. To implement this, mention the additional `{column_name}` inside your evaluation `criteria.`
 
-Let's evaluate the relevance of answer to the question, classifying into "relevant", "irrelevant" and "partially" relevant. To define the evaluation template, we include the {question} placeholder in our template:
+Let's evaluate the relevance of answer to the question, classifying into "relevant", "irrelevant" and "partially" relevant. To define the evaluation template, we include the question placeholder in our template:
 
 ```python
 relevance = MulticlassClassificationPromptTemplate(   
@@ -463,7 +462,7 @@ Example output:
 | `include_reasoning` | Specifies whether to include the LLM-generated explanation of the result.                                                                                                                                                                                                | `True` (Default), `False`       |
 | `pre_messages`      | List of system messages that set context or instructions before the evaluation task.                                                                                                                                                                                     | Custom string (optional)        |
 
-<Accordion title="OpenAIPrompting descriptor"  defaultOpen={false}>
+<Accordion title="OpenAIPrompting descriptor" defaultOpen="false">
   # OpenAIPrompting
 
   There is an earlier implementation of this approach with `OpenAIPrompting` descriptor. See the documentation below.
