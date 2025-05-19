@@ -47,13 +47,11 @@ Automation works in many cases, but manual mapping is more accurate. It is also 
 
 **Step 4. Run evals.** Once the **Dataset** object is ready, you can [add Descriptors ](/docs/library/descriptors) and[ run Reports](/docs/library/report).
 
-<Info>
-  **Do I always need to create a Dataset?** You can sometimes pass a `pandas.DataFrame` directly to `report.run()` . This works for checks like numerical/categorical data summaries or drift detection. However, it's best to always create a `Dataset` object explicitly for clarity and control.
-</Info>
+### Special cases
 
-<Info>
-  **What if I have two datasets**?  If you're working with current and reference datasets (e.g., for drift detection), create a Dataset object for each. Both must share the same data definition
-</Info>
+**Working directly with pandas.DataFrame**. You can sometimes pass a `pandas.DataFrame` directly to `report.run()` without creating the Dataset object. This works for checks like numerical/categorical data summaries or drift detection. However, it's best to always create a `Dataset` object explicitly for clarity and control.
+
+**Working with two datasets**. If you're working with current and reference datasets (e.g., for drift detection), create a Dataset object for each. Both must have identical data definition.
 
 ## Data definition
 
@@ -106,16 +104,16 @@ Explicit mapping helps avoid mistakes like misclassifying numerical columns with
   If you **exclude** certain columns in mapping, they’ll be ignored in all evaluations.
 </Info>
 
-#### Default types
+#### Default column types
 
 If you do not pass explicit mapping, the following defaults apply:
 
-| **Column Type**       | **Description**                                                                                                                | **Automated Mapping**                               |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------- |
-| `numerical_columns`   | <ul>     <li>     Columns with numeric values.</li>          </ul>                                                             | All columns with numeric types (`np.number`).       |
-| `datetime_columns`    | <ul>     <li>     Columns with datetime values.</li>          <li>     Ignored in data drift calculations.</li>          </ul> | All columns with DateTime format (`np.datetime64`). |
-| `categorical_columns` | <ul>     <li>     Columns with categorical values.</li>          </ul>                                                         | All non-numeric/non-datetime columns.               |
-| `text_columns`        | <ul>     <li>     Text columns.</li>          <li>     Mapping required for text data drift detection.</li>          </ul>     | No automated mapping.                               |
+| **Column Type**       | **Description**                                                                                                                       | **Automated Mapping**                               |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `numerical_columns`   | <ul>      <li>      Columns with numeric values.</li>            </ul>                                                                | All columns with numeric types (`np.number`).       |
+| `datetime_columns`    | <ul>      <li>      Columns with datetime values.</li>            <li>      Ignored in data drift calculations.</li>            </ul> | All columns with DateTime format (`np.datetime64`). |
+| `categorical_columns` | <ul>      <li>      Columns with categorical values.</li>            </ul>                                                            | All non-numeric/non-datetime columns.               |
+| `text_columns`        | <ul>      <li>      Text columns.</li>            <li>      Mapping required for text data drift detection.</li>            </ul>     | No automated mapping.                               |
 
 ### ID and timestamp
 
@@ -128,10 +126,10 @@ definition = DataDefinition(
     )
 ```
 
-| **Column role** | **Description**                                                                                                      | **Automated mapping**    |
-| --------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `id_column`     | <ul>     <li>     Identifier column.</li>          <li>     Ignored in data drift calculations.</li>          </ul>  | Column named "id"        |
-| `timestamp`     | <ul>     <li>     Timestamp column.</li>          <li>      Ignored in data drift calculations. </li>          </ul> | Column named "timestamp" |
+| **Column role** | **Description**                                                                                                             | **Automated mapping**    |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `id_column`     | <ul>      <li>      Identifier column.</li>            <li>      Ignored in data drift calculations.</li>            </ul>  | Column named "id"        |
+| `timestamp`     | <ul>      <li>      Timestamp column.</li>            <li>       Ignored in data drift calculations. </li>            </ul> | Column named "timestamp" |
 
 <Info>
   How is`timestamp` different from `datetime_columns`?
