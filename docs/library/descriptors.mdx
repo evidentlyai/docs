@@ -116,16 +116,14 @@ report = Report([
     TextEvals()
 ])
 my_eval = report.run(eval_dataset)
+my_eval
 
+# my_eval.json()
+# ws.add_report(project.id, my_eval, include_data=True)
 ```
 
 You can view the Report in Python, export the outputs (HTML, JSON, Python dictionary) or upload it to the Evidently platform. Check more in [output formats](/docs/library/output_formats).
 
-```python
-my_eval
-# my_eval.json()
-# ws.add_report(project.id, my_eval, include_data=True)
-```
 ![](/images/metrics/descriptors-report.png)
 
 ## Customizing descriptors
