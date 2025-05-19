@@ -34,14 +34,14 @@ init_tracing(
    )
 ```
 
-You can also set parameters using environment variables.
+You can also set parameters using environment variables with the specified names.
 
 ### `init_tracing()` Function Arguments
 
 | Parameter       | Description                                                                                                                        | Environment Variable                    |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | `address`       | Trace collector address. Defaults to `https://app.evidently.cloud/`.                                                               | `EVIDENTLY_TRACE_COLLECTOR`             |
-| `api_key`       | Evidently Cloud API key.                                                                                                           | `EVIDENTLY_TRACE_COLLECTOR_API_KEY`     |
+| `api_key`       | Evidently Cloud API key.                                                                                                           | `EVIDENTLY_TRACE_COLLECTOR_API_KEY` or `EVIDENTLY_API_KEY`    |
 | `export_name`   | Tracing dataset name. Traces with the same name are grouped into a single dataset.                                                 | `EVIDENTLY_TRACE_COLLECTOR_EXPORT_NAME` |
 | `project_id`    | Destination Project ID in Evidently Cloud.                                                                                         | `EVIDENTLY_TRACE_COLLECTOR_PROJECT_ID`  |
 | `exporter_type` | Trace export protocol: `grpc` or `http`.                                                                                           | -                                       |
