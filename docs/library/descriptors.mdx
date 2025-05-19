@@ -49,7 +49,7 @@ from evidently.descriptors import *
 from evidently.presets import TextEvals
 ```
 
-**Note**. Some Descriptors (like `OOVWordsPercentage()` for out-of-vocabulary words) may require downloading `nltk` dictionaries:
+**Note**. Some Descriptors (like `OOVWordsPercentage()` may require `nltk` dictionaries:
 
 ```python
 nltk.download('words')
@@ -60,7 +60,7 @@ nltk.download('vader_lexicon')
 
 **Step 2. Add descriptors** via the Dataset object. There are two ways to do this:
 
-**Option A. Add descriptors when creating Dataset**. Create a `Dataset` from a dataframe `df`, set the [Data Definition](/docs/library/data_definition) and add descriptors at once. You must specify the column you are generating scores for each descriptor.
+- **Option A.** Simultaneously create the `Dataset` object and add descriptors to the selected columns (in this case, "answer" column).
 
 ```python
 eval_dataset = Dataset.from_pandas(
@@ -74,8 +74,13 @@ eval_dataset = Dataset.from_pandas(
     ]
 )
 ```
+<Info>
+Read more on how how to [create the Dataset and Data Definition](/docs/library/data_definition)
+</Info>
 
-**Option B. Add scores to existing Dataset**. You can also add descriptors to the Dataset object later using `add_descriptors`. For example, first create the Dataset.
+- **Option B.** Add descriptors to the existing Dataset using `add_descriptors`.
+
+For example, first create the Dataset.
 
 ```python
 eval_dataset = Dataset.from_pandas(
@@ -94,7 +99,7 @@ eval_dataset.add_descriptors(descriptors=[
 ])
 ```
 
-**Step 3. (Optional). Export results**. You can get the Dataset with newly added descriptors as a DataFrame:
+**Step 3. (Optional). Export results**. You can preview the DataFrame with results: 
 
 ```python
 eval_dataset.as_dataframe()
@@ -102,18 +107,17 @@ eval_dataset.as_dataframe()
 
 ![](/images/metrics/descriptors-min.png)
 
-**Step 4. Get the Report**. Use Reports to summarize the results: see stats for all descriptors, visualize distributions and run conditional tests. The easiest way to get the Report is through `TextEvals` Preset: it instantly summarizes all results.
+**Step 4. Get the Report**. This will summarize the results, capturing stats and distributions for all descriptors. The easiest way to get the Report is through `TextEvals` Preset.
 
-To configure the Report and run it for `eval_dataset`:
+To configure and run the Report for the `eval_dataset`:
 
 ```python
 report = Report([
     TextEvals()
 ])
-my_eval = report.run(eval_dataset, None)
-```
+my_eval = report.run(eval_dataset)
 
-![](/images/metrics/descriptors-report.png)
+```
 
 You can view the Report in Python, export the outputs (HTML, JSON, Python dictionary) or upload it to the Evidently platform. Check more in [output formats](/docs/library/output_formats).
 
@@ -122,6 +126,7 @@ my_eval
 # my_eval.json()
 # ws.add_report(project.id, my_eval, include_data=True)
 ```
+![](/images/metrics/descriptors-report.png)
 
 ## Customizing descriptors
 
@@ -163,16 +168,17 @@ eval_dataset.add_descriptors(descriptors=[
 ])
 ```
 
-<Note>
+<Tip>
   **Using and customizing LLM judge**. Check the [in-depth LLM judge guide](/metrics/customize_llm_judge) on using built-in and custom LLM-based evaluators.
-</Note>
+</Tip>
 
-**Custom evals**. Beyond custom LLM judges, you can also implement your own programmatic evals. Check the [in-depth LLM judge guide](/metrics/customize_llm_judge) on using built-in and custom LLM-based evaluators.
+**Custom evals**. Beyond custom LLM judges, you can also implement your own programmatic evals as Python functions. Check the [custom descriptor guide](/metrics/customize_descriptor).
 
-### Descriptor Tests
+## Descriptor Tests
 
 Descriptor Tests let you define pass/fail checks for each row in your dataset. Instead of just calculating values (like “How long is this text?”), you can ask:
-- Is the text under 100 characters? 
+
+- Is the text under 100 characters?
 - Is the sentiment positive?
 
 You can also combine multiple tests into a single summary result per row.
@@ -184,7 +190,7 @@ from evidently.descriptors import ColumnTest, TestSummary
 from evidently.tests import *
 ```
 
-**Step 2. Add tests to a descriptor**. When creating a descriptor (like `TextLength` or `Sentiment`), use the tests argument to define conditions. Each condition adds a new column with a True/False result.
+**Step 2. Add tests to a descriptor**. When creating a descriptor (like `TextLength` or `Sentiment`), use the tests argument to set conditions. Each test adds a new column with a True/False result.
 
 ```python
 eval_dataset = Dataset.from_pandas(
@@ -221,13 +227,14 @@ eval_dataset = Dataset.from_pandas(
     ]
 )
 ```
-<Info> 
-`TestSummary` will only consider tests added **before it** in the list of descriptors. 
+
+<Info>
+  `TestSummary` will only consider tests added **before it** in the list of descriptors.
 </Info>
 
 You can aggregate Test results differently and include multiple summary columns, such as total count, pass rate, or weighted score:
 
-```
+```python
 eval_dataset.add_descriptors(descriptors=[
     TestSummary(
         success_all=True,     # True if all tests pass
@@ -251,7 +258,7 @@ dataset = Dataset.from_pandas(pd.DataFrame(data), descriptors=[
 ])
 ```
 
-## Custom Reports 
+## Custom Reports
 
 You've already seen how to generate a report using the `TextEvals` preset. It's the simplest and useful way to summarize evaluation results. However, you can also create custom reports using different metric combinations for more control.
 
@@ -266,7 +273,7 @@ from evidently.future.tests import *
 
 **Selecting a list of columns**. You can apply `TextEvals` to specific descriptors in your dataset. This makes your report more focused and lightweight.
 
-```
+```python
 report = Report([
     TextEvals(columns=["Sentiment", "Length", "Test result"])
 ])
@@ -304,7 +311,8 @@ my_custom_eval
 ## Custom Test Suites
 
 You can also attach Tests to your Metrics to get pass/fail results at the **dataset** Report level. Example tests:
-- No response has sentiment < 0
+
+- No response has sentiment \< 0
 - No response exceeds 150 characters
 - No more than 10% of rows fail the summary test
 
@@ -325,5 +333,5 @@ This produces a Test Suite that shows clear pass/fail results for the overall da
 ![](/images/metrics/descriptors-report-test.png)
 
 <Note>
-**Report and Tests API**. Check separate guides on [generating Reports](/docs/library/report) and setting [Test conditions](/docs/library/tests).
+  **Report and Tests API**. Check separate guides on [generating Reports](/docs/library/report) and setting [Test conditions](/docs/library/tests).
 </Note>
