@@ -28,7 +28,7 @@ This page shows the core eval workflow with the Evidently library and links to g
   </Step>
 
   <Step title="(Optional) Add descriptors">
-    For text evals, choose and compute row-level `descriptors`. [How to use Descriptors](/docs/library/descriptors).
+    For text evals, choose and compute row-level `descriptors`. Optionally, add row-level tests to get pass/fail for specific inputs. [How to use Descriptors](/docs/library/descriptors).
 
     ```python
     eval_data.add_descriptors(descriptors=[
@@ -49,7 +49,7 @@ This page shows the core eval workflow with the Evidently library and links to g
   </Step>
 
   <Step title="(Optional) Add Test conditions">
-    Add Pass/Fail conditions, like to check if text length in \< 100 symbols. How to [configure Tests](/docs/library/tests).
+    Add dataset-level Pass/Fail conditions, like to check if all texts are in \< 100 symbols length. How to [configure Tests](/docs/library/tests).
 
     ```python
     report = Report([

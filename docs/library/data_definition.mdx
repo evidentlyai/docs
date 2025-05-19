@@ -6,30 +6,26 @@ description: "How to map the input data."
 To run evaluations, you must create a `Dataset` object with a `DataDefinition`, which maps:
 
 - **Column types** (e.g., categorical, numerical, text).
-- **Column roles** (e.g., id, prediction, target, etc.).
+- **Column roles** (e.g., id, prediction, target).
 
-This helps Evidently process the data correctly. Some evaluations require certain columns, and will fail if these are missing. You can create this mapping using the Python API or by mapping the columns visually when you upload the dataset to the Evidently platform.
-
-<Info>
-  **Do I always need to create a Dataset?** You can sometimes pass a `pandas.DataFrame` directly to `report.run()` . This works for checks like numerical/categorical data summaries or drift detection. However, it's best to always create a `Dataset` object explicitly for clarity and control.
-</Info>
+This allows Evidently to process the data correctly. Some evaluations need specific columns and will fail if they're missing. You can define the mapping using the Python API or by assigning columns visually when uploading data to the Evidently platform.
 
 ## Basic flow
 
-**Import** the following modules:
+**Step 1. Imports.** Import the following modules:
 
 ```python
 from evidently import Dataset
 from evidently import DataDefinition
 ```
 
-**Prepare your data** as a pandas.DataFrame.
+**Step 2. Prepare your data.** Use a pandas.DataFrame.
 
 <Info>
-  Your data can have [flexible structure](/docs/library/overview#dataset) with any number of categorical, numerical or text columns. You can check the data requirements for specific evaluations in the [Reference table](/metrics/all_metrics). 
+  Your data can have [flexible structure](/docs/library/overview#dataset) with any mix of categorical, numerical or text columns. Check the [Reference table](/metrics/all_metrics) for data requirements in specific evaluations.
 </Info>
 
-**Create an Evidently Dataset object** using `Dataset.from_pandas` and pass the corresponding `data_definition`. For automated mapping, you can pass an empty `DataDefinition()`object:
+**Step 3. Create a Dataset object**. Use `Dataset.from_pandas` with `data_definition`:
 
 ```python
 eval_data = Dataset.from_pandas(
@@ -38,30 +34,38 @@ eval_data = Dataset.from_pandas(
 )
 ```
 
-<Info>
-  Once you created the **Dataset**, you can add [text Descriptors ](/docs/library/descriptors) and/or [get Reports](/docs/library/report).
-</Info>
+To map columns automatically, pass an empty `DataDefinition()` . Evidently will map columns:
 
-**Two datasets.** If you have two datasets (like current and reference for drift detection), create a Dataset object for each. They must have identical data definition.
+- By type (numerical, categorical).
+- By matching column names to roles (e.g., a column "target" treated as target).
 
-**Automated data definition.** You can often use the automated mapping like shown above. In this case, Evidently tries to map columns:
-
-- Based on their type (numerical, categorical).
-- By matching column names to known roles (e.g., a column "target" treated as target).
-
-**Manual data definition.** While automation works in many cases, manual mapping is more accurate. Some evaluations, like text or embedding drift always require explicit mapping.
+Automation works in many cases, but manual mapping is more accurate. It is also necessary for evaluating prediction quality or handling text columns.
 
 <Note>
-  This page shows all mapping options. Note that you **only need to use the relevant ones**. For example, you don’t need columns like target/prediction to run data quality or LLM checks.
+  **How to set the data definition manually?** See the section below for available options.
 </Note>
 
-## Column types
+**Step 4. Run evals.** Once the **Dataset** object is ready, you can [add Descriptors ](/docs/library/descriptors) and[ run Reports](/docs/library/report).
 
-Knowing the column type helps Evidently compute correct statistics, visualizations, and pick default tests.
+<Info>
+  **Do I always need to create a Dataset?** You can sometimes pass a `pandas.DataFrame` directly to `report.run()` . This works for checks like numerical/categorical data summaries or drift detection. However, it's best to always create a `Dataset` object explicitly for clarity and control.
+</Info>
 
-### Text data
+<Info>
+  **What if I have two datasets**?  If you're working with current and reference datasets (e.g., for drift detection), create a Dataset object for each. Both must share the same data definition
+</Info>
 
-Map the columns that contain text:
+## Data definition
+
+This page shows all the different mapping options. Note that you **only need to use the relevant ones** that apply for your evaluation scenario. For example, you don’t need columns like target/prediction to run data quality or LLM checks.
+
+### Column types
+
+Knowing the column type helps compute correct statistics, visualizations, and pick default tests.
+
+#### Text data
+
+If you run LLM evaluations, simply specify the columns with inputs/outputs as text.
 
 ```python
 definition = DataDefinition(
@@ -78,7 +82,7 @@ eval_data = Dataset.from_pandas(
   **It's optional but useful**. You can [generate text descriptors](/docs/library/descriptors) without explicit mapping. But it's a good idea to map text columns since you may later run other evals which vary by column type.
 </Info>
 
-### Tabular data
+#### Tabular data
 
 Map numerical, categorical or datetime columns:
 
@@ -102,19 +106,18 @@ Explicit mapping helps avoid mistakes like misclassifying numerical columns with
   If you **exclude** certain columns in mapping, they’ll be ignored in all evaluations.
 </Info>
 
-### Default types
+#### Default types
 
 If you do not pass explicit mapping, the following defaults apply:
 
-| **Column Type**       | **Description**                                                                                    | **Automated Mapping**                               |
-| --------------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
-| `numerical_columns`   | <ul> <li> Columns with numeric values.</li>  </ul>                                                 | All columns with numeric types (`np.number`).       |
-| `datetime_columns`    | <ul> <li> Columns with datetime values.</li>  <li> Ignored in data drift calculations.</li>  </ul> | All columns with DateTime format (`np.datetime64`). |
-| `categorical_columns` | <ul> <li> Columns with categorical values.</li>  </ul>                                             | All non-numeric/non-datetime columns.               |
-| `text_columns`        | <ul> <li> Text columns.</li>  <li> Mapping required for text data drift detection.</li>  </ul>     | No automated mapping.                               |
-|                       |                                                                                                    |                                                     |
+| **Column Type**       | **Description**                                                                                                                | **Automated Mapping**                               |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------- |
+| `numerical_columns`   | <ul>     <li>     Columns with numeric values.</li>          </ul>                                                             | All columns with numeric types (`np.number`).       |
+| `datetime_columns`    | <ul>     <li>     Columns with datetime values.</li>          <li>     Ignored in data drift calculations.</li>          </ul> | All columns with DateTime format (`np.datetime64`). |
+| `categorical_columns` | <ul>     <li>     Columns with categorical values.</li>          </ul>                                                         | All non-numeric/non-datetime columns.               |
+| `text_columns`        | <ul>     <li>     Text columns.</li>          <li>     Mapping required for text data drift detection.</li>          </ul>     | No automated mapping.                               |
 
-## ID and timestamp
+### ID and timestamp
 
 If you have a timestamp or ID column, it's useful to identify them.
 
@@ -125,10 +128,10 @@ definition = DataDefinition(
     )
 ```
 
-| **Column role** | **Description**                                                                          | **Automated mapping**    |
-| --------------- | ---------------------------------------------------------------------------------------- | ------------------------ |
-| `id_column`     | <ul> <li> Identifier column.</li>  <li> Ignored in data drift calculations.</li>  </ul>  | Column named "id"        |
-| `timestamp`     | <ul> <li> Timestamp column.</li>  <li>  Ignored in data drift calculations. </li>  </ul> | Column named "timestamp" |
+| **Column role** | **Description**                                                                                                      | **Automated mapping**    |
+| --------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `id_column`     | <ul>     <li>     Identifier column.</li>          <li>     Ignored in data drift calculations.</li>          </ul>  | Column named "id"        |
+| `timestamp`     | <ul>     <li>     Timestamp column.</li>          <li>      Ignored in data drift calculations. </li>          </ul> | Column named "timestamp" |
 
 <Info>
   How is`timestamp` different from `datetime_columns`?
@@ -137,7 +140,7 @@ definition = DataDefinition(
   - **Timestamp** is a role. You can have a single timestamp column. It often represents the time when a data input was recorded. Use it if you want to see it as index on the plots.
 </Info>
 
-## LLM evals
+### LLM evals
 
 When you generate [text descriptors](/docs/library/descriptors) and add them to the dataset, they are automatically mapped as `descriptors` in Data Definition. This means they will be included in the `TextEvals` [preset](/metrics/preset_text_evals) or treated as descriptors when you plot them on the dashboard.
 
@@ -150,7 +153,7 @@ definition = DataDefinition(
     )
 ```
 
-## Regression
+### Regression
 
 To run regression quality checks, you must map the columns with:
 
@@ -174,7 +177,7 @@ Defaults:
     prediction: str = "prediction"
 ```
 
-## Classification
+### Classification
 
 To run classification checks, you must map the columns with:
 
@@ -183,7 +186,7 @@ To run classification checks, you must map the columns with:
 
 There two different mapping options, for binary and multi-class classification. You can also have several classification results in the dataset. (Pass the mappings in a list).
 
-### Multiclass
+#### Multiclass
 
 Example mapping:
 
@@ -213,7 +216,7 @@ Available options and defaults:
   When you have multiclass classification with predicted probabilities in separate columns, the column names in `prediction_probas` must exactly match the class labels. For example, if your classes are 0, 1, and 2, your probability columns must be named: "0", "1", "2". Values in `target` and `prediction` columns should be strings.
 </Note>
 
-### Binary
+#### Binary
 
 Example mapping:
 
@@ -237,9 +240,9 @@ Available options and defaults:
     labels: Optional[Dict[Label, str]] = None
 ```
 
-## Ranking
+### Ranking
 
-### RecSys
+#### RecSys
 
 To evaluate recommender systems performance, you must map the columns with:
 
