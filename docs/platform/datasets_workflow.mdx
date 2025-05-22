@@ -19,7 +19,7 @@ description: "How to create, upload and manage Datasets."
         data_definition=DataDefinition()
     )
     ws.add_dataset(
-        eval_data,
+        dataset = eval_data, 
         name = "dataset_name",
         project_id = project.id, 
         description = "Optional description")
