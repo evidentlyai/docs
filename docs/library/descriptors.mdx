@@ -172,7 +172,7 @@ eval_dataset.add_descriptors(descriptors=[
 
 **Custom evals**. Beyond custom LLM judges, you can also implement your own programmatic evals as Python functions. Check the [custom descriptor guide](/metrics/customize_descriptor).
 
-## Descriptor Tests
+## Adding Descriptor Tests
 
 Descriptor Tests let you define pass/fail checks for each row in your dataset. Instead of just calculating values (like “How long is this text?”), you can ask:
 
@@ -230,6 +230,10 @@ eval_dataset = Dataset.from_pandas(
   `TestSummary` will only consider tests added **before it** in the list of descriptors.
 </Info>
 
+<Info>
+For LLM judge descriptors returning multiple columns (e.g., label and reasoning), you must specify the target column for the test — see `DeclineLLMEval` in the example.
+</Info>
+
 You can aggregate Test results differently and include multiple summary columns, such as total count, pass rate, or weighted score:
 
 ```python
@@ -256,7 +260,7 @@ dataset = Dataset.from_pandas(pd.DataFrame(data), descriptors=[
 ])
 ```
 
-## Custom Reports
+## Summary Reports
 
 You've already seen how to generate a report using the `TextEvals` preset. It's the simplest and useful way to summarize evaluation results. However, you can also create custom reports using different metric combinations for more control.
 
@@ -306,7 +310,7 @@ my_custom_eval = custom_report.run(eval_dataset, eval_dataset)
 my_custom_eval
 ```
 
-## Custom Test Suites
+## Dataset-level Test Suites
 
 You can also attach Tests to your Metrics to get pass/fail results at the **dataset** Report level. Example tests:
 
