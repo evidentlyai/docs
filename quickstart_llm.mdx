@@ -10,15 +10,17 @@ import CreateProject from '/snippets/create_project.mdx';
   Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
 </Info>
 
-You will run a simple evaluation in Python and explore results in Evidently Cloud. For a fully local workflow, skip Step 1.
+You will run evals in Python and explore results in Evidently Cloud.
 
 ## 1. Set up your environment
 
-### 1.2. Set up Evidently Cloud
+For a fully local flow, skip Steps 1.1 and 1.3.
+
+### 1.1. Set up Evidently Cloud
 
 <CloudSignup />
 
-### 1.3. Installation and imports
+### 1.2. Installation and imports
 
 Install the Evidently Python library:
 
@@ -73,7 +75,7 @@ eval_df = pd.DataFrame(data, columns=columns)
 ```
 
 <Info>
-  **Preparing data**. You can provide data in any structure. Some common setups:
+  **Preparing data**. You can provide data with any structure. Some common setups:
 
   - Inputs and outputs from your LLM
   - Inputs, outputs, and reference outputs (for comparison)
@@ -81,7 +83,7 @@ eval_df = pd.DataFrame(data, columns=columns)
 </Info>
 
 <Info>
-  **Collecting live data**: You can also trace inputs and outputs from your LLM app and download the dataset from traces. See the [Tracing Quickstart](/quickstart_tracing)
+  **Collecting live data**. You can also trace inputs and outputs from your LLM app and download the dataset from traces. See the [Tracing Quickstart](/quickstart_tracing)
 </Info>
 
 ## 3. Run evaluations
@@ -90,29 +92,22 @@ We'll evaluate the answers for:
 
 - **Sentiment:** from -1 (negative) to 1 (positive)
 - **Text length:** character count
-- **Denials:** chatbot refusals, using an LLM-as-a-judge with built-in prompt.
+- **Denials:** refusals to answer. This uses an LLM-as-a-judge with built-in prompt.
 
 Each evaluation adds a `descriptor` to your dataset that appears as a new column.
 
-Set your OpenAI key as an environment variable:
+We'll use OpenAI for LLM-as-a-judge. Set your OpenAI key as an environment variable:
 
 ```python
 ## import os
 ## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
 ```
 
-<Note>
-  No OpenAI key? There is an non-LLM alternative below.
-</Note>
+<Info>
+  If you don't have an OpenAI key, you can use a keyword-based check `IncludesWords` instead.
+</Info>
 
-Set the OpenAI key as an environment variable. [See Open AI docs](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
-
-```python
-## import os
-## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
-```
-
-Pass the dataset and specify the list of `descriptors` to add:
+To run evals, pass the dataset and specify the list of descriptors to add:
 
 ```python
 eval_dataset = Dataset.from_pandas(
@@ -125,8 +120,6 @@ eval_dataset = Dataset.from_pandas(
 
 # Or IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials")
 ```
-
-To use a keyword-based check instead of LLM judge, pass `IncludesWords` as shown.
 
 **Congratulations\!** You've just run your first eval. Preview the results locally in pandas:
 
@@ -142,7 +135,7 @@ eval_dataset.as_dataframe()
 
 ## 4.  Create a Report
 
-Create a Report to summarize the evaluation results:
+**Create a Report**. It will summarize the evaluation results. You can view it locally or in the Cloud.  
 
 ```python
 report = Report([
@@ -152,15 +145,13 @@ report = Report([
 my_eval = report.run(eval_dataset, None)
 ```
 
-You can upload this to the Evidently Cloud or view locally.
-
 **Upload results to Evidently Cloud** with raw data:
 
 ```python
 ws.add_run(project.id, my_eval, include_data=True)
 ```
 
-Now you can go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, and navigate to Reports. You will see all score summaries and browse the data. E.g. sort to find all answers labeled as "Denials".
+**Explore.** Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, and navigate to Reports. You will see all score summaries and can browse the data. E.g. sort to find all answers labeled as "Denials".
 
 ![](/images/examples/llm_quickstart_explore.png)
 
@@ -232,12 +223,11 @@ You can implement this through extra parameters.
   #my_eval
   ```
 
-  To identify rows that failed any criteria, sort by "All_test_passed" column: 
-
+  To identify rows that failed any criteria, sort by "All_test_passed" column:
 </Accordion>
 
-  ![](/images/examples/llm_quickstart_descriptor_tests_report-min.png)
-  
+![](/images/examples/llm_quickstart_descriptor_tests_report-min.png)
+
 ## 6. (Optional) Add a custom LLM jugde
 
 You can implement custom criteria using built-in LLM judge templates.
@@ -245,47 +235,47 @@ You can implement custom criteria using built-in LLM judge templates.
 <Accordion title="Custom LLM judge" description="How to create a custom LLM evaluator" icon="sparkles">
   Let's classify user questions as "appropriate" or "inappropriate" for an educational tool.
 
-```python
-# Define the evaluation criteria
-appropriate_scope = BinaryClassificationPromptTemplate(
-    criteria="""An appropriate question is any educational query related to
-    academic subjects, general school-level world knowledge, or skills.
-    An inappropriate question is anything offensive, irrelevant, or out of scope.""",
-    target_category="APPROPRIATE",
-    non_target_category="INAPPROPRIATE",
-    include_reasoning=True,
-)
-
-# Apply evaluation
-llm_evals = Dataset.from_pandas(
-    eval_df,
-    data_definition=DataDefinition(),
-    descriptors=[
-        LLMEval("question", template=appropriate_scope,
-                provider="openai", model="gpt-4o-mini",
-                alias="Question topic")
-    ]
-)
-
-# Run and upload report
-report = Report([
-    TextEvals()
-])
-
-my_eval = report.run(llm_evals, None)
-ws.add_run(project.id, my_eval, include_data=True)
-
-# Uncomment to replace ws.add_run for a local preview 
-# my_eval
-```
+  ```python
+  # Define the evaluation criteria
+  appropriate_scope = BinaryClassificationPromptTemplate(
+      criteria="""An appropriate question is any educational query related to
+      academic subjects, general school-level world knowledge, or skills.
+      An inappropriate question is anything offensive, irrelevant, or out of scope.""",
+      target_category="APPROPRIATE",
+      non_target_category="INAPPROPRIATE",
+      include_reasoning=True,
+  )
+  
+  # Apply evaluation
+  llm_evals = Dataset.from_pandas(
+      eval_df,
+      data_definition=DataDefinition(),
+      descriptors=[
+          LLMEval("question", template=appropriate_scope,
+                  provider="openai", model="gpt-4o-mini",
+                  alias="Question topic")
+      ]
+  )
+  
+  # Run and upload report
+  report = Report([
+      TextEvals()
+  ])
+  
+  my_eval = report.run(llm_evals, None)
+  ws.add_run(project.id, my_eval, include_data=True)
+  
+  # Uncomment to replace ws.add_run for a local preview 
+  # my_eval
+  ```
 
   You can implement any criteria this way, and plug in different LLM models.
 </Accordion>
 
-  ![](/images/examples/llm_quickstart_descriptor_custom_llm_judge-min.png)
+![](/images/examples/llm_quickstart_descriptor_custom_llm_judge-min.png)
 
 ## What's next?
 
 Read more on how you can configure [LLM judges for custom criteria or using other LLMs](/metrics/customize_llm_judge).
 
-We also have lots of other examples! [Explore tutorials](/metrics/introduction).
+We also have lots of other examples\! [Explore tutorials](/metrics/introduction).
