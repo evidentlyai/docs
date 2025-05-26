@@ -142,7 +142,7 @@ You can calculate metrics separately for different groups in your data, using a 
 **Example**. This will compute the maximum value of salaries by each label in the "Department" column.
 
 ```python
-from evidently.future.metrics.group_by import GroupBy
+from evidently.metrics.group_by import GroupBy
 
 report = Report([
     GroupBy(MaxValue(column="Salary"), "Department"),
