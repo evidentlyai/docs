@@ -100,9 +100,9 @@ We'll evaluate the answers for:
 - **Text length:** character count
 - **Denials:** refusals to answer. This uses an LLM-as-a-judge with built-in prompt.
 
-Each evaluation adds a `descriptor` to your dataset that appears as a new column.
+Each evaluation is a `descriptor`. It adds a new score or label to each row in your dataset. 
 
-We'll use OpenAI for LLM-as-a-judge. Set your OpenAI key as an environment variable:
+For LLM-as-a-judge, we'll use OpenAI GPT-4o mini. Set OpenAI key as an environment variable:
 
 ```python
 ## import os
@@ -165,7 +165,7 @@ ws.add_run(project.id, my_eval, include_data=True)
 
 ![](/images/examples/llm_quickstart_create_tab_new.gif)
 
-You'll see a panels that show descriptor values. Each will have a single data point for now. As you log more evaluation results, you can track trends and set up alerts.
+You'll see a set of panels that show descriptor values. Each will have a single data point for now. As you log more evaluation results, you can track trends and set up alerts.
 
 **Local preview**. To view the Report in the Python environment like Jupyter notebook or Colab, run:
 
