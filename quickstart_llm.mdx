@@ -81,7 +81,7 @@ eval_df = pd.DataFrame(data, columns=columns)
 ```
 
 <Info>
-  **Preparing data**. You can provide data with any structure. Some common setups:
+  **Preparing your own data**. You can provide data with any structure. Some common setups:
 
   - Inputs and outputs from your LLM
   - Inputs, outputs, and reference outputs (for comparison)
@@ -100,7 +100,7 @@ We'll evaluate the answers for:
 - **Text length:** character count
 - **Denials:** refusals to answer. This uses an LLM-as-a-judge with built-in prompt.
 
-Each evaluation is a `descriptor`. It adds a new score or label to each row in your dataset. 
+Each evaluation is a `descriptor`. It adds a new score or label to each row in your dataset.
 
 For LLM-as-a-judge, we'll use OpenAI GPT-4o mini. Set OpenAI key as an environment variable:
 
@@ -141,7 +141,7 @@ eval_dataset.as_dataframe()
 
 ## 4.  Create a Report
 
-**Create a Report**. It will summarize the evaluation results. You can view it locally or in the Cloud.
+**Create and run a Report**. It will summarize the evaluation results. 
 
 ```python
 report = Report([
@@ -151,7 +151,23 @@ report = Report([
 my_eval = report.run(eval_dataset, None)
 ```
 
-**Upload results to Evidently Cloud** with raw data:
+**Local preview**. In a Python environment like Jupyter notebook or Colab, run:
+
+```python
+my_eval
+```
+
+This will render the Report directly in the notebook cell. You can also get a JSON or Python dictionary, or save as an external HTML file.
+
+```python
+# my_eval.json()
+# my_eval.dict()
+# my_report.save_html(“file.html”)
+```
+
+Local Reports are great for quick experiments. To run comparisons, keep track of the results and collaborate with others, upload the results to Evidently Platform.
+
+**Upload the Report to Evidently Cloud** together with scored data:
 
 ```python
 ws.add_run(project.id, my_eval, include_data=True)
@@ -161,25 +177,11 @@ ws.add_run(project.id, my_eval, include_data=True)
 
 ![](/images/examples/llm_quickstart_explore.png)
 
-**Get a Dashboard**. As you run repeated evals, it's useful to track them over time. Go to the "Dashboard" in the left menu, enter the "Edit" mode, and add a new "Columns" tab:
+**Get a Dashboard**. As you run more evals, it's useful to track them over time. Go to "Dashboard" in the left menu, enter the "Edit" mode, and add a new "Columns" tab:
 
 ![](/images/examples/llm_quickstart_create_tab_new.gif)
 
-You'll see a set of panels that show descriptor values. Each will have a single data point for now. As you log more evaluation results, you can track trends and set up alerts.
-
-**Local preview**. To view the Report in the Python environment like Jupyter notebook or Colab, run:
-
-```python
-my_eval
-```
-
-You can also view the results as a JSON or Python dictionary, or save it as an external HTML file.
-
-```python
-# my_eval.json()
-# my_eval.dict()
-# my_report.save_html(“file.html”)
-```
+You'll see a set of panels with descriptor values. Each will have a single data point for now. As you log more evaluation results, you can track trends and set up alerts.
 
 Want to see more complex workflows? You can add pass/fail conditions and custom evals.
 
