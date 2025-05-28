@@ -25,7 +25,7 @@ This tutorial shows how to set up tracing for an LLM app, collect its inputs and
 Install the necessary libraries:
 
 ```python
-! pip install evidently[llm]
+! pip install evidently
 ! pip install tracely 
 ! pip install openai
 ```
@@ -164,39 +164,32 @@ You can run evaluations on this dataset both in the Cloud and locally. For local
 
 ```python
 traced_data = ws.load_dataset(dataset_id = "YOUR_DATASET_ID")
-# traced_data.head()
+
+# to create and preview as pandas dataframe
+# df = traced_data.as_dataframe()
+# df.head()
 ```
 
-You can copy the dataset ID from the Traces page inside your Project.
-
-To run an evaluation, create an Evidently Dataset object and choose the descriptors:
+You can copy the dataset ID from the main Traces page inside your Project. The Dataset is already available as Evidently Dataset. To run evaluations, choose the descriptors to add:
 
 ```python
-eval_dataset = Dataset.from_pandas(pd.DataFrame(traced_data),
-data_definition=DataDefinition(),
-descriptors=[
+traced_data.add_descriptors=[
     SentenceCount("qa.response", alias="SentenceCount"),
     TextLength("qa.response", alias="Length"), 
     Sentiment("qa.response", alias="Sentiment"), 
-])
+]
 ```
 
-Now you can summarize the results and add conditional checks. This will explicitly test if all responses are 1 sentence, and each one's length is \<300 symbols.
+Summarize the results using the Report, and upload to Evidently Cloud.
 
 
 ```python
 report = Report([
-    TextEvals(),
-    MaxValue(column="SentenceCount", tests=[eq(1)]),
-    MaxValue(column="Length", tests=[lte(300)]),
+    TextEvals()
 ])
 
-my_eval = report.run(eval_dataset, None)
-```
+my_eval = report.run(traced_data, None)
 
-To upload the results to your Project:
-
-```python
 ws.add_run(project.id, my_eval, include_data=True)
 ```
 
@@ -206,6 +199,6 @@ You can go to your Project and open the Report:
 
 # What's next?
 
-Check the tutorial on [LLM evaluations](/quickstart_llm) for more details: how to run other evaluation methods, including LLM as a judge, or test for specific conditions. 
+Check the quickstart on [LLM evaluations](/quickstart_llm) for more details: how to run other evaluation methods, including LLM as a judge, or test for specific conditions. 
 
 Need help? Ask in our [Discord community](https://discord.com/invite/xZjKRaNp8b).
