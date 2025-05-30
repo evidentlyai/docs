@@ -28,7 +28,7 @@ from tracely import init_tracing
 
 init_tracing(
    address="https://app.evidently.cloud/",
-   api_key=”YOUR_EVIDENTLY_TOKEN”,
+   api_key="YOUR_EVIDENTLY_TOKEN",
    project_id="YOUR_PROJECT_ID",
    export_name="YOUR_TRACING_DATASET_NAME",
    )
@@ -91,6 +91,42 @@ You can also specify which function arguments should be included in the trace.
 | `track_output: Optional[bool]`     | Indicates whether to track the function's return value.                                                                    | `True`                          |
 | `parse_output: Optional[bool]`     | Indicates whether the result should be parsed, e.g., `dict`, `list`, and `tuple` types will be split into separate fields. | `True`                          |
 
+## Nested events (Spans)
+
+Many LLM workflows involve multiple steps — such as retrieval followed by generation, or extraction followed by summarization. In these cases, it's useful to trace all steps as part of a single parent trace, with each step recorded as a nested child span.
+
+You can trace multi-step workflows using the `@trace_event` decorator and nesting the functions. If a traced function is called inside another traced function, it will automatically appear as a nested child span, as long as it's executed in the same call context (same thread).
+
+For example:
+
+```
+@trace_event(span_name="extraction")
+def extract_info(document):
+    …
+
+@trace_event(span_name="summarization")
+def summarize_info(document):
+    …
+
+@trace_event(span_name="document_processing")
+def process_document(document):
+    extract_output = extract_info(document)
+    summary_output = summarize_info(document)
+    return {
+        "document": document,
+        "extraction_output": extract_output,
+        "summary_output": summary_output
+    }
+```
+
+This results in the following trace structure:
+
+```
+document_processing
+├── extraction
+└── summarization
+```
+
 ## Context manager
 
 To create a trace event without using a decorator (e.g., for a specific piece of code), you can use the context manager:
@@ -111,6 +147,18 @@ with create_trace_event("external_span", session_id=session_id) as event:
     event.set_result({"data": "data"})
 ```
 
+You can also trace multi-step workflows using context blocks. This gives you fine-grained control — useful when tracing inline code or scripts.
+For example, you can nest multiple `create_trace_event()` calls inline inside the same function, using `with` blocks.
+
+```
+def process_document(document):
+    with create_trace_event("document_processing", document=document):
+        with create_trace_event("extraction"):
+            ...
+        with create_trace_event("summarization"):
+            ...
+```
+
 ### `create_trace_event` Function Arguments
 
 | Parameter      | Description                                                                            | Default |
@@ -125,6 +173,12 @@ with create_trace_event("external_span", session_id=session_id) as event:
 | --------------- | ------------------------------------------------------------------ |
 | `set_attribute` | Sets a custom attribute for the event.                             |
 | `set_result`    | Sets a result for the event. Only one result can be set per event. |
+
+## Sessions
+
+If your trace events are created in separate functions or threads you can also pass a shared `session_id`. In this case traces will be separate but you can view the session in the UI to join them together - e.g. to read the chat conversation.
+
+See the example above the "Context Manager" session.
 
 ## Add event attributes
 
