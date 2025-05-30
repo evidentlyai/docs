@@ -99,7 +99,7 @@ You can trace multi-step workflows using the `@trace_event` decorator and nestin
 
 For example:
 
-```
+```python
 @trace_event(span_name="extraction")
 def extract_info(document):
     …
@@ -121,7 +121,7 @@ def process_document(document):
 
 This results in the following trace structure:
 
-```
+```python
 document_processing
 ├── extraction
 └── summarization
