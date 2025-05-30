@@ -28,9 +28,9 @@ from evidently.tests import *
 
 There are 3 ways to run conditional checks:
 
-* **Tests Presets**. Get a suite of pre-selected Tests with auto-generated conditions. No setup required.
+* **Tests Presets**. Get a suite of pre-selected Tests with auto-generated conditions. 
 
-* **Tests with defaults**. Pick Tests one by one, but auto-generate conditions.
+* **Tests with defaults**. Pick Tests one by one, with auto-generate conditions.
 
 * **Custom Tests**. Choose all Tests and set conditions manually.
 
@@ -127,6 +127,10 @@ report = Report([
 ```
 
 Note that you don't need to use `include_tests` when setting Tests manually.
+
+<Info>
+**Sometimes you may need to use other parameters to set test conditions**. The `tests` parameter applies when a metric returns a single value, or to test `count` for metrics that return both `count` and `share`. For metrics with multiple outputs (e.g. MAE returns `mean` and `std`), you may need to use specific test parameters like `mean_tests` and `std_tests`. You can check metric outputs at the [All Metric page](/metrics/all_metrics).
+</Info>
 
 ### Test parameters
 
