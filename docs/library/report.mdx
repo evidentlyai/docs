@@ -14,7 +14,7 @@ Reports perform evaluations on the Dataset level and/or summarize results of the
 * (Optional) for text data, you added Descriptors.
 
 <Note>
-  For a quick end-to-end example of generating Reports, Check the Quickstart [for ML](/quickstart_ml) or [LLM](/quickstart_llm).
+  For a quick end-to-end example of generating Reports, check the Quickstart [for ML](/quickstart_ml) or [LLM](/quickstart_llm).
 </Note>
 
 ## Imports
@@ -35,7 +35,7 @@ You can use Metric Presets, which are pre-built Reports that work out of the box
   **Available Presets**. Check available evals in the [Reference table](/metrics/all_metrics).
 </Tip>
 
-To generate a template Report, simply pass the selected Preset to the Report.
+To generate a template Report, simply pass the selected Preset to the Report and run it over your data. If nothing else is specified, the Report will run with the default parameters for all columns in the dataset. 
 
 **Single dataset**. To generate the Data Summary Report for a single dataset:
 
@@ -49,7 +49,13 @@ my_eval
 #my_eval.json
 ```
 
-**Two datasets**. To generate the Data Drift Report that needs two datasets, pass the second one as a reference when you `run` it:
+After you `run` the Report, the resulting `my_eval` will contains the computed values for each metric, along with associated metadata and visualizations. (We sometimes refer to this computation result as a `snapshot`).
+
+<Note>
+You can render the results in Python, export as HTML, JSON or Python dictionary or upload to the Evidently platform. Check more in [output formats](/docs/library/output_formats).
+</Note>
+
+**Two datasets**. To generate reports like Data Drift that needs two datasets, pass the second one as a reference when you `run` it:
 
 ```python
 report = Report([
@@ -61,13 +67,13 @@ my_eval
 #my_eval.json
 ```
 
-<Note>
-  Note that in this case the order matters: the first `eval_data_1` is the current data you evaluate, the second `eval_data_2` is the reference dataset you consider as a baseline for drift detection.
-</Note>
+In this case the first `eval_data_1` is the current data you evaluate, the second `eval_data_2` is the reference dataset you consider as a baseline for drift detection. You can also pass it explicitly:
 
-If nothing else is specified, the Report will run with the default parameters for all columns in the dataset. You can also pass custom parameters to some Presets.
+```
+my_eval = report.run(current_data=eval_data_1, reference_data=eval_data_2)
+```
 
-**Combine Presets**. You can also include multiple Presets in the same Report. List the m one by one.
+**Combine Presets**. You can also include multiple Presets in the same Report. List them one by one.
 
 ```python
 report = Report([
@@ -92,15 +98,13 @@ my_eval
 #my_eval.json
 ```
 
-You can view the Report in Python, export the outputs (HTML, JSON, Python dictionary) or upload it to the Evidently platform. Check more in [output formats](/docs/library/output_formats).
-
 ## Custom Report
 
 <Tip>
   **Available Metrics and parameters**. Check available evals in the [Reference table](/metrics/all_metrics).
 </Tip>
 
-**Custom Report**. To create a custom Report, simply list the Metics one by one. You can combine both dataset-level and column-level Metrics, and combine Reports and Metrics in one Report. When you use a column-level Metric, you must specify the column it refers to.
+**Choose Metrics**. To create a custom Report, simply list the Metics one by one. You can combine both dataset-level and column-level Metrics, and combine Presets and Metrics in one Report. When you use a column-level Metric, you must specify the column it refers to.
 
 ```python
 report = Report([
@@ -133,6 +137,16 @@ To calculate the Precision at K for a ranking task, you must always pass the `k`
 report = Report([
    PrecisionTopK(k=10)
 ])
+```
+
+## Compare results
+
+If you computed multiple snapshots, you can quickly compare the resulting metrics side-by-side in a dataframe:
+
+```
+from evidently import compare
+
+compare_dataframe = compare(my_eval_1, my_eval_2, my_eval_3)
 ```
 
 ## Group by
