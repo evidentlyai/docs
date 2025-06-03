@@ -122,8 +122,9 @@ report = Report([
 my_eval = report.run(eval_data_1, eval_data_2)
 ```
 
+<Info>
 You can [customize drift parameters](/metrics/customize_data_drift) by choosing different methods and thresholds. In our case we proceed as is so [default tests](/metrics/explainer_drift) selected by Evidently will apply. 
-
+</Info>
 
 ## 4. Explore the results
 
@@ -207,7 +208,7 @@ For now, you will see only one datapoint, but as you add more Reports (e.g. dail
 
 - See available Evidently Metrics: [All Metric Table](/metrics/all_metrics)
 - Understand how you can add conditional tests to your Reports: [Tests](/docs/library/tests).
-- Explore options for Dashboard design: [Dashboards](docs/platform/dashboard_add_panels)
+- Explore options for Dashboard design: [Dashboards](/docs/platform/dashboard_add_panels)
 
 <Info>
 Alternatively, try `DataSummaryPreset` that will generate a summary of all columns in the dataset, and run auto-generated Tests to check for data quality and core descriptive stats.
