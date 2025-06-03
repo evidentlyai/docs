@@ -10,70 +10,53 @@ import CreateProject from '/snippets/create_project.mdx';
   Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
 </Info>
 
+Evidently helps you run tests and evaluations for your production ML systems. This includes:
+- evaluating prediction quality (e.g. classification or regression accuracy)
+- input data quality (e.g. missing values, out-of-range features)
+- data and prediction drift.
+
+Evaluating distribution shifts ([data drift](https://www.evidentlyai.com/ml-in-production/data-drift)) in ML inputs and predictions is a typical use case that helps you detect shifts in the model quality and environment even without ground truth labels. 
+
+In this Quickstart, you'll run a simple data drift report in Python and view the results in Evidently Cloud. If you want to stay fully local, you can also do that - just skip a couple steps.
+
 ## 1. Set up your environment
 
-This quickstart shows both local open-source and cloud workflows.
+For a fully local flow, skip steps 1.1 and 1.3.
 
-<Tabs>
-  <Tab title="Evidently Cloud">
-    You will run a simple evaluation in Python and explore results in Evidently Cloud.
+### 1.1. Set up Evidently Cloud
 
-    ### 1.1. Set up Evidently Cloud
+<CloudSignup />
 
-    <CloudSignup />
+### 1.2. Installation and imports
 
-    ### 1.2. Installation and imports
+Install the Evidently Python library:
 
-    Install the Evidently Python library:
+```python
+!pip install evidently
+```
 
-    ```python
-    !pip install evidently
-    ```
+Components to run the evals:
 
-    Components to run the evals:
-
-    ```python
-    import pandas as pd
-    from sklearn import datasets
+```python
+import pandas as pd
+from sklearn import datasets
     
-    from evidently import Dataset
-    from evidently import DataDefinition
-    from evidently import Report
-    from evidently.presets import DataSummaryPreset #or try DataDriftPreset
-    ```
+from evidently import Dataset
+from evidently import DataDefinition
+from evidently import Report
+from evidently.presets import DataDriftPreset, DataSummaryPreset 
+```
 
-    Components to connect with Evidently Cloud:
+Components to connect with Evidently Cloud:
 
-    ```python
-    from evidently.ui.workspace.cloud import CloudWorkspace
-    ```
+```python
+from evidently.ui.workspace import CloudWorkspace
+```
 
-    ### 1.3. Create a Project
+### 1.3. Create a Project
 
-    <CreateProject />
-  </Tab>
-  <Tab title="Local">
-    You will run a simple evaluation locally and preview the results in your Python environment.
+<CreateProject />
 
-    Install the Evidently Python library:
-
-    ```python
-    !pip install evidently
-    ```
-
-    Components to run the evals:
-
-    ```python
-    import pandas as pd
-    from sklearn import datasets
-    
-    from evidently import Dataset
-    from evidently import DataDefinition
-    from evidently import Report
-    from evidently.presets import DataSummaryPreset
-    ```
-  </Tab>
-</Tabs>
 
 ## 2. Prepare a toy dataset
 
@@ -104,8 +87,8 @@ Map the column types:
 
 ```python
 schema = DataDefinition(
-    numerical_columns=["education-num", "age", "capital-gain", "hours-per-week", "capital-loss"],
-    categorical_columns=["education", "occupation", "native-country", "workclass", "marital-status"],
+    numerical_columns=["education-num", "age", "capital-gain", "hours-per-week", "capital-loss", "fnlwgt"],
+    categorical_columns=["education", "occupation", "native-country", "workclass", "marital-status", "relationship", "race", "sex", "class"],
     )
 ```
 
@@ -125,56 +108,113 @@ eval_data_2 = Dataset.from_pandas(
 )
 ```
 
+`Eval_data_2` will be our reference dataset we'll compare against. 
+
 ## 3. Get a Report
 
-Let's get a summary of all columns in the dataset, and run auto-generated Tests to check for data quality and core descriptive statistics between two datasets. 
+Let's generate a Data Drift preset that will check for statistical distribution changes between all columns in the dataset. 
 
 ```python
 report = Report([
-    DataSummaryPreset() #or try DataDriftPreset()
+    DataDriftPreset() 
+])
+
+my_eval = report.run(eval_data_1, eval_data_2)
+```
+
+You can [customize drift parameters](/metrics/customize_data_drift) by choosing different methods and thresholds. In our case we proceed as is so [default tests](/metrics/explainer_drift) selected by Evidently will apply. 
+
+
+## 4. Explore the results
+
+**Local preview**. In a Python environment like Jupyter notebook or Colab, run:
+
+```python
+my_eval
+```
+
+This will render the Report directly in the notebook cell. You can also get a JSON or Python dictionary, or save as an external HTML file.
+
+```python
+# my_eval.json()
+# my_eval.dict()
+# my_report.save_html(“file.html”)
+```
+
+Local Reports are great for one-off evaluations. To run continuous monitoring (e.g. track the share of drifting features over time), keep track of the results and collaborate with others, upload the results to Evidently Platform.
+
+
+**Upload the Report** with summary results:
+
+```python
+ws.add_run(project.id, my_eval, include_data=False)
+```
+
+**View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report. You will see the summary with scores and Test results.
+
+![](/images/examples/data_drift_quickstart.png)
+
+
+## 5. Get a Dashboard (Optional)
+
+As you run repeated evals, you may want to track the results in time by creating a Dashboard. Evidently lets you configure the dashboard in the UI or using dashboards-as-code. 
+
+```python
+from evidently.sdk.models import PanelMetric
+from evidently.sdk.panels import DashboardPanelPlot
+
+project.dashboard.add_panel(
+             DashboardPanelPlot(
+                title="Dataset column drift",
+                subtitle = "Share of drifted columns",
+                size="half",
+                values=[
+                    PanelMetric(
+                        legend="Share",
+                        metric="DriftedColumnsCount",
+                        metric_labels={"value_type": "share"} 
+                    ),
+                ],
+                plot_params={"plot_type": "line"},
+            ),
+            tab="Data Drift",
+        )
+project.dashboard.add_panel(
+             DashboardPanelPlot(
+                title="Prediction drift",
+                subtitle = """Drift in the prediction column ("class"), method: Jensen-Shannon distance""",
+                size="half",
+                values=[
+                    PanelMetric(
+                        legend="Drift score",
+                        metric="ValueDrift",
+                        metric_labels={"column": "class"} 
+                    ),
+                ],
+                plot_params={"plot_type": "bar"},
+            ),
+            tab="Data Drift",
+        )
+```
+
+This will result in the following Dashboard you'll be able to access in the Dashboard tab (left menu).
+
+![](/images/examples/dashboard_quickstart.png)
+
+# What's next?
+
+- See available Evidently Metrics: [All Metric Table](/metrics/all_metrics)
+- Understand how you can add conditional tests to your Reports: [Tests](/docs/library/tests).
+- Explore options for Dashboard design: [Dashboards](/platform/dashboard_add_panels)
+
+<Info>
+Alternatively, you can try `DataSummaryPreset` that will generate a summary of all columns in the dataset, and run auto-generated Tests to check for data quality and core descriptive statistics between two datasets.
+
+```
+report = Report([
+    DataSummaryPreset() 
 ],
 include_tests="True")
 my_eval = report.run(eval_data_1, eval_data_2)
 ```
-
-Alternatively, you can generate a Data Drift preset that will check for statistical distribution change. Use `DataDriftPreset` instead.
-
-## 4. Explore the results
-
-<Tabs>
-  <Tab title="Evidently Cloud">
-    **Upload the Report** with summary results:
-
-    ```python
-    ws.add_run(project.id, my_eval, include_data=False)
-    ```
-
-    **View the Report**. Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, navigate to "Reports" in the left and open the Report. You will see the summary with scores and Test results.
-
-    **Get a Dashboard**. As you run repeated evals, you may want to track the results in time. Go to the "Dashboard" tab in the left menu and enter the "Edit" mode. Add a new tab, and select the "Columns" template.
-
-    You'll see a set of panels that show column stats. Each has a single data point. As you log ongoing evaluation results, you can track trends and set up alerts.
-  </Tab>
-  <Tab title="Local">
-    To view the Report in an interactive Python environment like Jupyter notebook or Colab, run:
-
-    ```python
-    my_eval
-    ```
-
-    This will show the summary Report. In the separate Tab, you'll see the pass/fail results for all Tests.
-
-    You can also view the results as a JSON or Python dictionary:
-
-    ```python
-    # my_eval.json()
-    # my_eval.dict()
-    ```
-
-    Or save and open an HTML file externally:
-
-    ```python
-    # my_report.save_html(“file.html”)
-    ```
-  </Tab>
-</Tabs>
+</Info>
