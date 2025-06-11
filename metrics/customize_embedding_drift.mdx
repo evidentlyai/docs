@@ -1,11 +1,25 @@
 ---
-title: 'Customize Embedding Drift'
+title: 'Customize Embedding Drift [Unpublished]'
 description: 'How to set embedding drift detection conditions.'
 noindex: "true"
 ---
 
 Pending implementation for the new API.
 
+---
+## Embeddings drift
+
+<Warning>
+  This method is **coming soon** to the new Evidently API! Check the old docs for now.
+</Warning>
+
+The default embedding drift method is a **classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions.
+
+* The default for **small data with \<= 1000 observations** detects drift if the ROC AUC of the drift detection classifier > possible ROC AUC of the random classifier at a 95th percentile.
+
+* The default for **larger data with > 1000 observations** detects drift if the ROC AUC > 0.55.
+
+**You can choose other embedding drift detection methods**. You can specify custom thresholds and parameters such as dimensionality reduction and choose from other methods, including Euclidean distance, Cosine Similarity, Maximum Mean Discrepancy, and share of drifted embeddings. You must specify this as a parameter. 
 
 ---
 

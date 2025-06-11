@@ -17,7 +17,7 @@ Evidently compares the distributions of the values in a given column (or columns
 
 There is a default logic to choosing the appropriate drift test for each column. It is based on:
 
-* column type: categorical, numerical, text data or embeddings
+* column type: categorical, numerical, text data 
 
 * the number of observations in the reference dataset
 
@@ -115,19 +115,6 @@ If the drift is detected, Evidently will also calculate the **top features of t
   **Text descriptors drift**. If you work with raw text data, you can also check for distribution drift in text descriptors (such as text length, etc.) To use this method, first compute the selected [text descriptors](/docs/library/descriptors). Then, use numerical / categorical drift detection methods as usual.
 </Tip>
 
-## Embeddings drift
-
-<Warning>
-  This method is **coming soon** to the new Evidently API! Check the old docs for now.
-</Warning>
-
-The default embedding drift method is a **classifier**. Evidently trains a binary classification model to discriminate between data from reference and current distributions.
-
-* The default for **small data with \<= 1000 observations** detects drift if the ROC AUC of the drift detection classifier > possible ROC AUC of the random classifier at a 95th percentile.
-
-* The default for **larger data with > 1000 observations** detects drift if the ROC AUC > 0.55.
-
-**You can choose other embedding drift detection methods**. You can specify custom thresholds and parameters such as dimensionality reduction and choose from other methods, including Euclidean distance, Cosine Similarity, Maximum Mean Discrepancy, and share of drifted embeddings. You must specify this as a parameter. 
 
 ## Resources
 
