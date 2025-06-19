@@ -54,7 +54,7 @@ from evidently.descriptors import HuggingFace, HuggingFaceToxicity
   df = pd.DataFrame(data, columns=columns)
 
   eval_df = Dataset.from_pandas(
-    pd.DataFrame(df),
+    df,
     data_definition=DataDefinition())
   ```
 </Accordion>

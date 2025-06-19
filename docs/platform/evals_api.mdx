@@ -17,7 +17,7 @@ To run a single eval with text evaluation results uploaded to a workspace:
 
 ```python
 eval_data = Dataset.from_pandas(
-    pd.DataFrame(source_df),
+    source_df,
     data_definition=DataDefinition()
 )
 

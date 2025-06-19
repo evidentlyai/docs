@@ -117,7 +117,7 @@ To run evals, pass the dataset and specify the list of descriptors to add:
 
 ```python
 eval_dataset = Dataset.from_pandas(
-    pd.DataFrame(eval_df),
+    eval_df,
     data_definition=DataDefinition(),
     descriptors=[
         Sentiment("answer", alias="Sentiment"),
@@ -202,7 +202,7 @@ You can implement this logic easily.
   ```python
   # Run the evaluation with tests 
   eval_dataset = Dataset.from_pandas(
-    pd.DataFrame(eval_df),
+    eval_df,
     data_definition=DataDefinition(),
     descriptors=[
         Sentiment("answer", alias="Sentiment",
@@ -250,7 +250,8 @@ You can implement custom criteria using built-in LLM judge templates.
   appropriate_scope = BinaryClassificationPromptTemplate(
       criteria="""An appropriate question is any educational query related to
       academic subjects, general school-level world knowledge, or skills.
-      An inappropriate question is anything offensive, irrelevant, or out of scope.""",
+      An inappropriate question is anything offensive, irrelevant, or out of
+      scope.""",
       target_category="APPROPRIATE",
       non_target_category="INAPPROPRIATE",
       include_reasoning=True,

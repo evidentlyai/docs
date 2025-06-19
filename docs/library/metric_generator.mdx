@@ -33,11 +33,11 @@ data = {
 dummy_df = pd.DataFrame(data)
 
 eval_data_1 = Dataset.from_pandas(
-    pd.DataFrame(dummy_df.iloc[:15]),
+    dummy_df.iloc[:15],
     data_definition=DataDefinition()
 )
 eval_data_2 = Dataset.from_pandas(
-    pd.DataFrame(dummy_df.iloc[15:]),
+    dummy_df.iloc[15:],
     data_definition=DataDefinition()
 )
 ```

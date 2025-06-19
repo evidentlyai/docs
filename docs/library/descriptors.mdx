@@ -64,7 +64,7 @@ nltk.download('vader_lexicon')
 
 ```python
 eval_dataset = Dataset.from_pandas(
-    pd.DataFrame(df),
+    df,
     data_definition=DataDefinition(
         text_columns=["question", "answer"]),
     descriptors=[
@@ -84,7 +84,7 @@ For example, first create the Dataset.
 
 ```python
 eval_dataset = Dataset.from_pandas(
-    pd.DataFrame(df),
+    df,
     data_definition=DataDefinition(text_columns=["question", "answer"]),
 )
 ```
@@ -192,7 +192,7 @@ from evidently.tests import *
 
 ```python
 eval_dataset = Dataset.from_pandas(
-    pd.DataFrame(df),
+    df,
     data_definition=DataDefinition(text_columns=["question", "answer"]),
     descriptors=[
         Sentiment("answer", alias="Sentiment", tests=[
@@ -212,7 +212,7 @@ You can preview the results with: `eval_dataset.as_dataframe()`:
 
 ```python
 eval_dataset = Dataset.from_pandas(
-    pd.DataFrame(df),
+    df,
     data_definition=DataDefinition(text_columns=["question", "answer"]),
     descriptors=[
         Sentiment("answer", alias="Sentiment", tests=[
@@ -267,10 +267,10 @@ You've already seen how to generate a report using the `TextEvals` preset. It's 
 **Imports**. Import the components you'll need:
 
 ```python
-from evidently.future.report import Report
-from evidently.future.presets import TextEvals
-from evidently.future.metrics import *
-from evidently.future.tests import *
+from evidently import Report
+from evidently.presets import TextEvals
+from evidently.metrics import *
+from evidently.tests import *
 ```
 
 **Selecting a list of columns**. You can apply `TextEvals` to specific descriptors in your dataset. This makes your report more focused and lightweight.

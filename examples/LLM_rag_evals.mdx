@@ -102,7 +102,7 @@ pd.set_option('display.max_colwidth', None)
 
 ```python
 context_based_evals = Dataset.from_pandas(
-    pd.DataFrame(synthetic_df),
+    synthetic_df,
     data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
     descriptors=[ContextQualityLLMEval("Context", question="Question")]
 )
@@ -129,7 +129,7 @@ Here is what you get:
 
 ```python
 context_based_evals = Dataset.from_pandas(
-    pd.DataFrame(synthetic_df),
+    synthetic_df,
     data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
     descriptors=[ContextRelevance("Question", "Context", 
                                   output_scores=True, 
@@ -165,7 +165,7 @@ synthetic_df_2 = pd.DataFrame(synthetic_data, columns=columns)
 
 ```python
 context_based_evals = Dataset.from_pandas(
-    pd.DataFrame(synthetic_df_2),
+    synthetic_df_2,
     data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
     descriptors=[ContextRelevance("Question", "Context", 
                                   output_scores=True, 
@@ -184,7 +184,7 @@ You can see the list of individual relevance scores that appear in the same orde
 
 ```python
 context_based_evals = Dataset.from_pandas(
-    pd.DataFrame(synthetic_df_2),
+    synthetic_df_2,
     data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
     descriptors=[ContextRelevance("Question", "Context", 
                                   output_scores=True, 
@@ -224,7 +224,7 @@ There are multiple ways to run this comparison, including LLM-based matching (`C
 
 ```python
 context_based_evals = Dataset.from_pandas(
-    pd.DataFrame(synthetic_df_3),
+    synthetic_df_3,
     data_definition=DataDefinition(text_columns=["Question", "Response", "Target"]),
     descriptors=[
         CorrectnessLLMEval("Response", target_output="Target"),
@@ -249,7 +249,7 @@ If you don't have reference answers, you can use reference-free LLM judges to as
 
 ```python
 context_based_evals = Dataset.from_pandas(
-    pd.DataFrame(synthetic_df),
+    synthetic_df,
     data_definition=DataDefinition(text_columns=["Question", "Context", "Response"]),
     descriptors=[FaithfulnessLLMEval("Response", context="Context")]
 )
@@ -284,7 +284,7 @@ Let's put it all together.
 
 ```python
 context_based_evals = Dataset.from_pandas(
-    pd.DataFrame(synthetic_df),
+    synthetic_df,
     data_definition=DataDefinition(
         text_columns=["Question", "Context", "Response"],
     ),
