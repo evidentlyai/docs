@@ -261,6 +261,12 @@
       ]
     },
     {
+      "group": "Integrations",
+      "pages": [
+        "examples/GitHub_actions"
+      ]
+    },
+    {
       "group": "Intro",
       "pages": [
         "faq/introduction"

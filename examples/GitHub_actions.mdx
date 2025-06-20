@@ -1,0 +1,27 @@
+---
+title: "Evidently and GitHub actions"
+description: "Testing LLM outputs as part of the CI/CD flow."
+---
+
+You can use Evidently together with GitHub Actions to automatically test the outputs of your LLM agent or application - as part of every code push or pull request.
+
+## How the integration work:
+
+- You define a test dataset of inputs (e.g. test prompts with or without reference answers).
+- Run your LLM system or agent against those inputs inside CI.
+- Evidently automatically evaluates the outputs using the user-specified config, including methods like:
+  - LLM judges (e.g., tone, helpfulness, correctness)
+  - Custom Python functions
+  - Dataset-level metrics like classification quality
+- If any test fails, the CI job fails.
+- You get a detailed test report with pass/fail status and metrics.
+
+![](/images/examples/github_actions.gif)
+
+Results are stored locally or pushed to Evidently Cloud for deeper review and tracking.
+
+The final result is CI-native testing for your LLM behavior - so you can safely tweak prompts, models, or logic without breaking things silently.
+
+## Code example and tutorial
+
+👉 Check the full tutorial and example repo: https://github.com/evidentlyai/evidently-ci-example
