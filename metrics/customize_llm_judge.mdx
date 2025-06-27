@@ -6,7 +6,7 @@ description: "How to run prompt-based evaluators for custom criteria."
 LLM-based descriptors use an external LLM for evaluation. You can:
 
 - Use built-in evaluators (with pre-written prompts), or
-- Run evals for custom criteria you configure.
+- Configure custom criteria using templates.
 
 **Pre-requisites**:
 
@@ -123,7 +123,11 @@ eval_df.add_descriptors(descriptors=[
 
 ## Change the evaluator LLM
 
-You can change the model and provider that you use for LLM evaluations.
+OpenAI is the default evalution provider in Evidently, but you can choose any other, including models from Anthropic, Gemini, Mistral, Ollama, etc.
+
+### Using parameters
+
+You can pass model and provider parameters to the built-in LLM-based descriptor or to your custom `LLMEval`.
 
 **Change the model**. Specify a different model from OpenAI:
 
@@ -149,10 +153,12 @@ eval_df.add_descriptors(descriptors=[
 ```
 
 <Note>
-  **List of providers and models**. Evidently uses `litellm` to call different model APIs which implements 50\+ providers. You can match the `provider` name and the `model` name parameters to the list given in the [LiteLLM docs](https://docs.litellm.ai/docs/providers).
+  **List of providers and models**. Evidently uses `litellm` to call different model APIs which implements 50\+ providers. You can match the `provider` name and the `model` name parameters to the list given in the [LiteLLM docs](https://docs.litellm.ai/docs/providers). Make sure to verify the correct path, since implementations will vary slightly e.g. `provider="gemini", model="gemini/gemini-2.0-flash-lite"`. 
 </Note>
 
-You can also pass the API key as an option instead of an environment variable.
+### Using Options
+
+For some of the providers, we implemented Options that let you pass parameters like API key direcly instead of an environment variable.
 
 ```python
 from evidently.utils.llm.wrapper import AnthropicOptions
@@ -164,6 +170,8 @@ llm_options_evals = Dataset.from_pandas(
         NegativityLLMEval("Answer", provider="anthropic", model="claude-3-5-sonnet-20240620"),],
     options=AnthropicOptions(api_key="YOUR_KEY_HERE", rpm_limit=50))
 ```
+
+You can also use Options to pass other parameters like temperature, etc.
 
 For more details and examples, check this tutorial:
 
