@@ -45,7 +45,21 @@ You can also set parameters using environment variables with the specified names
 | `export_name`   | Tracing dataset name. Traces with the same name are grouped into a single dataset.                                                 | `EVIDENTLY_TRACE_COLLECTOR_EXPORT_NAME` |
 | `project_id`    | Destination Project ID in Evidently Cloud.                                                                                         | `EVIDENTLY_TRACE_COLLECTOR_PROJECT_ID`  |
 | `exporter_type` | Trace export protocol: `grpc` or `http`.                                                                                           | -                                       |
-| `as_global`     | Registers the tracing provider (`opentelemetry.trace.TracerProvider`) globally (`True`) or use locally (`False`). Default: `True`. | -                                       |
+| `as_global`     | Registers the tracing provider globally (`True`) or locally (`False`). Default: `True`. Set to false if you want to initiate tracing to multiple datasets from the same environment.| -                                       |
+
+
+## Tracing dataset ID
+
+To get the `export_id` of the tracing dataset, run:
+
+```
+from tracely import get_info
+
+get_info()
+```
+
+You can use the `export_id` as a dataset id for download. See [datasets API](datasets_workflow).
+
 
 ## Decorator
 
