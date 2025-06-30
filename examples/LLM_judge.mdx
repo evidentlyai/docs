@@ -1,7 +1,8 @@
 ---
-title: 'LLM as a judge'
-description: 'How to create and evaluate an LLM judge.'
+title: "LLM as a judge"
+description: "How to create and evaluate an LLM judge."
 ---
+
 import CloudSignup from '/snippets/cloud_signup.mdx';
 import CreateProject from '/snippets/create_project.mdx';
 
@@ -13,29 +14,29 @@ In this tutorial, we'll show how to evaluate text for custom criteria using LLM 
 
 We'll explore two ways to use an LLM as a judge:
 
-* **Reference-based**. Compare new responses against a reference. This is useful for regression testing or whenever you have a "ground truth" (approved responses) to compare against.
-
-* **Open-ended**. Evaluate responses based on custom criteria, which helps evaluate new outputs when there's no reference available.
+- **Reference-based**. Compare new responses against a reference. This is useful for regression testing or whenever you have a "ground truth" (approved responses) to compare against.
+- **Open-ended**. Evaluate responses based on custom criteria, which helps evaluate new outputs when there's no reference available.
 
 We will focus on demonstrating **how to create and tune the LLM evaluator**, which you can then apply in different contexts, like [regression testing](/examples/LLM_regression_testing) or prompt comparison.
+
+<Info>
+  We also have an extended tutorial where we iteratively improve the prompt for LLM judge with a video walkthrough:  https://www.youtube.com/watch?v=kP_aaFnXLmY
+</Info>
 
 ## Tutorial scope
 
 Here's what we'll do:
 
-* **Create an evaluation dataset**. Create a toy Q&A dataset.
-
-* **Create and run an LLM as a judge**. Design an LLM evaluator prompt.
-
-* **Evaluate the judge**. Compare the LLM judge's evaluations with manual labels.
+- **Create an evaluation dataset**. Create a toy Q&A dataset.
+- **Create and run an LLM as a judge**. Design an LLM evaluator prompt.
+- **Evaluate the judge**. Compare the LLM judge's evaluations with manual labels.
 
 We'll start with the reference-based evaluator that determines whether a new response is correct (it's more complex since it requires passing two columns to the prompt). Then, we'll create a simpler judge focused on verbosity.
 
 To complete the tutorial, you will need:
 
-* Basic Python knowledge.
-
-* An OpenAI API key to use for the LLM evaluator.
+- Basic Python knowledge.
+- An OpenAI API key to use for the LLM evaluator.
 
 We recommend running this tutorial in Jupyter Notebook or Google Colab to render rich HTML objects with summary results directly in a notebook cell.
 
@@ -77,107 +78,103 @@ os.environ["OPENAI_API_KEY"] = "YOUR_KEY"
 
 ## 2.  Create the Dataset
 
-First, we'll create a toy Q\&A dataset with customer support question that includes:
+First, we'll create a toy Q&A dataset with customer support question that includes:
 
-* **Questions**. The inputs sent to the LLM app.
-
-* **Target responses**. The approved responses you consider accurate.
-
-* **New responses**. Imitated new responses from the system.
-
-* **Manual labels with explanation**. Labels that say if response is correct or not.
+- **Questions**. The inputs sent to the LLM app.
+- **Target responses**. The approved responses you consider accurate.
+- **New responses**. Imitated new responses from the system.
+- **Manual labels with explanation**. Labels that say if response is correct or not.
 
 Why add the labels? It's a good idea to be the judge yourself before you write a prompt. This helps:
 
-* Formulate better criteria. You discover nuances that help you write a better prompt.
+- Formulate better criteria. You discover nuances that help you write a better prompt.
+- Get the "ground truth". You can use it to evaluate the quality of the LLM judge.
 
-* Get the "ground truth". You can use it to evaluate the quality of the LLM judge.
-
-Ultimately, an LLM judge is a small ML system, and it needs its own evals!
+Ultimately, an LLM judge is a small ML system, and it needs its own evals\!
 
 **Generate the dataframe**. Here's how you can create this dataset in one go:
 
-<Accordion title="Toy data to run the example" defaultOpen={false}>
+<Accordion title="Toy data to run the example" defaultOpen="false">
   ```python
   data = [
     ["Hi there, how do I reset my password?",
      "To reset your password, click on 'Forgot Password' on the login page and follow the instructions sent to your registered email.",
      "To change your password, select 'Forgot Password' on the login screen and follow the steps sent to your registered email address. If you don't receive the email, check your spam folder or contact support for assistance.",
      "incorrect", "adds new information (contact support)"],
-
+  
     ["Where can I find my transaction history?",
      "You can view your transaction history by logging into your account and navigating to the 'Transaction History' section. Here, you can see all your past transactions. You can also filter the transactions by date or type for easier viewing.",
      "Log into your account and go to 'Transaction History' to see all your past transactions. In this section, you can view and filter your transactions by date or type. This allows you to find specific transactions quickly and easily.",
      "correct", ""],
-
+  
     ["How do I add another user to my account?",
      "I am afraid it is not currently possible to add multiple users to the account. Our system supports only one user per account for security reasons. We recommend creating separate accounts for different users.",
      "To add a secondary user, go to 'Account Settings', select 'Manage Users', and enter the details of the person you want to add. You can set permissions for their access, deciding what they can and cannot do within the account.",
      "incorrect", "contradiction (incorrect answer)"],
-
+  
     ["Is it possible to link multiple bank accounts?",
      "Yes, you can link multiple bank accounts by going to 'Account Settings' in the menu and selecting 'Add Bank Account'. Follow the prompts to add your bank account details. Make sure to verify each bank account by following the verification process.",
      "You can add multiple bank accounts by visiting 'Accounts' in the menu and choosing 'Add Bank Account'. Enter your bank details as prompted and complete the verification process for each account to link them successfully.",
      "incorrect", "contradiction (incorrect menu item)"],
-
+  
     ["Can I use your service for cryptocurrency transactions?",
      "Currently, our service does not support cryptocurrency transactions. Please check our website for updates regarding this feature. We are continuously working to expand our services and may include this in the future.",
      "Currently, our service does not support cryptocurrency transactions. Please check our website for updates regarding this feature. We are continuously working to expand our services and may include this in the future.",
      "correct", ""],
-
+  
     ["Hi, can I get a detailed report of my monthly transactions?",
      "Yes, you can generate a detailed monthly report of your transactions by logging into your account, going to 'Transaction History', and selecting 'Generate Report'. You can customize the report by selecting specific dates or transaction types.",
      "You can get a detailed monthly report by logging into your account, navigating to 'Transaction History', and clicking on 'Generate Report'. Customize your report by choosing the date range and types of transactions you want to include.",
      "correct", ""],
-
+  
     ["I am traveling to the US. Can I use the app there?",
      "Yes, you can use the app in the US just like you do at home. Ensure you have an internet connection. You may also want to update your app to the latest version before traveling for optimal performance.",
      "The app will work in the US without any issues. Just make sure you have access to the internet. For the best experience, update your app to the latest version before you travel.",
      "correct", ""],
-
+  
     ["How do I link my payment account to a new mobile number?",
      "To link a new mobile number, log in to your account, go to 'Account Settings', select 'Mobile Number', and follow the instructions to verify your new number. You will need to enter the new number and verify it via a code sent to your phone.",
      "To add a new number, navigate to the 'Account Settings' section, select 'Mobile Number' and proceed with the steps to add and confirm the new number. Enter the new mobile number and verify it using the code sent to your phone.",
      "correct", ""],
-
+  
     ["Can I receive notifications for transactions in real-time?",
      "Yes, you can enable real-time notifications for transactions by going to 'Account Settings', then 'Notifications', and turning on 'Transaction Alerts'. You can choose to receive alerts via SMS, email, or push notifications on your mobile device.",
      "To receive real-time notifications for transactions, log into your account, go to 'Account Settings', select 'Notifications', and enable 'Transaction Alerts'. Choose your preferred notification method between email or push notifications.",
      "incorrect", "omits information (sms notification)"],
-
+  
     ["Hey, can I set up automatic transfers to my savings account?",
      "Yes, you can set up automatic transfers by going to 'Account Settings', selecting 'Automatic Transfers', and specifying the amount and frequency. You can choose to transfer weekly, bi-weekly, or monthly. Make sure to save the settings to activate the transfers.",
      "You can arrange automatic transfers by going to 'Account Settings', choosing 'Automatic Transfers', and setting the desired amount and frequency. Don't forget to save the changes to enable the automatic transfers.",
      "incorrect", "omits information (limited frequency of transfers available)"],
-
+  
     ["Hi there, how do I reset my password?",
      "To reset your password, click on 'Forgot Password' on the login page and follow the instructions sent to your registered email.",
      "To change your password, select 'Forgot Password' on the login screen and follow the steps sent to your registered email address. If you don't receive the email, check your spam folder.",
      "correct", ""],
-
+  
     ["How can I update my billing address?",
      "To update your billing address, log into your account, go to 'Account Settings', select 'Billing Information', and enter your new address. Make sure to save the changes once you are done.",
      "To update your billing address, log into your account, navigate to 'Account Settings', and select 'Billing Information'. Enter your new address and ensure all fields are filled out correctly. Save the changes, and you will receive a confirmation email with the updated address details.",
      "incorrect", "adds new information (confirmation email)"],
-
+  
     ["How do I contact customer support?",
      "You can contact customer support by logging into your account, going to the 'Help' section, and selecting 'Contact Us'. You can choose to reach us via email, phone, or live chat for immediate assistance.",
      "To contact customer support, log into your account and go to the 'Help' section. Select 'Contact Us' and choose your preferred method: email, phone, or live chat. Our support team is available 24/7 to assist you with any issues. Additionally, you can find a FAQ section that may answer your questions without needing to contact support.",
      "incorrect", "adds new information (24/7 availability, FAQ section)"],
-
+  
     ["What should I do if my card is lost or stolen?",
      "If your card is lost or stolen, immediately log into your account, go to 'Card Management', and select 'Report Lost/Stolen'. Follow the instructions to block your card and request a replacement. You can also contact our support team for assistance.",
      "If your card is lost or stolen, navigate to 'Card Management' in your account, and select 'Report Lost/Stolen'. Follow the prompts to block your card and request a replacement. Additionally, you can contact our support team for help.",
      "correct", ""],
-
+  
     ["How do I enable two-factor authentication (2FA)?",
      "To enable two-factor authentication, log into your account, go to 'Security Settings', and select 'Enable 2FA'. Follow the instructions to link your account with a 2FA app like Google Authenticator. Once set up, you will need to enter a code from the app each time you log in.",
      "To enable two-factor authentication, log into your account, navigate to 'Security Settings', and choose 'Enable 2FA'. Follow the on-screen instructions to link your account with a 2FA app such as Google Authenticator. After setup, each login will require a code from the app. Additionally, you can set up backup codes in case you lose access to the 2FA app.",
      "incorrect", "adds new information (backup codes)"]
   ]
-
+  
   columns = ["question", "target_response", "new_response", "label", "comment"]
-
+  
   golden_dataset = pd.DataFrame(data, columns=columns)
   ```
 </Accordion>
@@ -212,17 +209,17 @@ Here's the distribution of examples: we have both correct and incorrect response
 
 ![](/images/examples/llm_judge_tutorial_judge_label_dist-min.png)
 
-<Accordion title="How to preview" defaultOpen={false}>
+<Accordion title="How to preview" defaultOpen="false">
   Run this to preview the distribution of the column.
 
   ```python
   report = Report([
     ValueStats(column="label")
   ])
-
+  
   my_eval = report.run(eval_dataset, None)
   my_eval
-
+  
   # my_eval.dict()
   # my_eval.json()
   ```
@@ -230,7 +227,7 @@ Here's the distribution of examples: we have both correct and incorrect response
 
 ## 3. Correctness evaluator
 
-Now it's time to set up an LLM judge! We'll start with an evaluator that checks if responses are correct compared to the reference. The goal is to match the quality of our manual labels.
+Now it's time to set up an LLM judge\! We'll start with an evaluator that checks if responses are correct compared to the reference. The goal is to match the quality of our manual labels.
 
 **Configure the evaluator prompt**. We'll use the LLMEval [Descriptor](/docs/library/descriptors) to create a custom binary evaluator. Here's how to define the prompt template for correctness:
 
@@ -307,7 +304,7 @@ Since we already performed exact matching, you can see the crude accuracy of our
 
 ## 4. Evaluate the LLM Eval quality
 
-This part is a bit meta: we're going to evaluate the quality of our LLM evaluator itself! We can treat it as a simple **binary classification** problem.
+This part is a bit meta: we're going to evaluate the quality of our LLM evaluator itself\! We can treat it as a simple **binary classification** problem.
 
 **Data definition**. To evaluate the classification quality, we need to map the structure of the dataset accordingly first. The column with the manual label is the "target", and the LLM-judge response is the "prediction":
 
@@ -343,7 +340,7 @@ my_eval
 # or my_eval.as_dict()
 ```
 
-We can now get a well-rounded evaluation and explore the confusion matrix. We have one type of error each: overall the results are pretty good! You can also refine the prompt to try to improve them.
+We can now get a well-rounded evaluation and explore the confusion matrix. We have one type of error each: overall the results are pretty good\! You can also refine the prompt to try to improve them.
 
 ![](/images/examples/llm_judge_tutorial_conf_matrix-min.png)
 
@@ -396,7 +393,7 @@ my_eval
 You can also view the dataframe using `eval_dataset.as_dataframe()`
 
 <Info>
-  Don't fully agree with the results? Use these labels as a starting point, edit the decisions where you see fit - now you've got your golden dataset! Next, iterate on your judge prompt. You can also try different evaluator LLMs to see which one does the job better. [How to change an LLM](/metrics/customize_llm_judge#change-the-evaluator-llm).
+  Don't fully agree with the results? Use these labels as a starting point, edit the decisions where you see fit - now you've got your golden dataset\! Next, iterate on your judge prompt. You can also try different evaluator LLMs to see which one does the job better. [How to change an LLM](/metrics/customize_llm_judge#change-the-evaluator-llm).
 </Info>
 
 ## What's next?

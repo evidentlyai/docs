@@ -1,0 +1,217 @@
+---
+title: "LLM-as-a-jury"
+description: "Evaluate the LLM outputs with multiple LLMs."
+---
+
+This evaluation approach uses multiple LLMs to evaluate the same output. You can do this to obtain an aggregate evaluation result — e.g., consider an output a "pass" only if all or the majority of LLMs approve — or to explicitly surface disagreements.
+
+Blog explaining the concept of LLM jury: https://www.evidentlyai.com/blog/llm-judges-jury .
+
+Code example as a Jupyter notebook: https://github.com/evidentlyai/community-examples/blob/main/tutorials/LLM_as_a_jury_Example.ipynb
+
+## Preparation
+
+Install Evidently:
+
+```python
+pip install evidently litellm 
+```
+
+(Or install `evidently[llm]`.)
+
+Import the components you'll use:
+
+```python
+import pandas as pd
+from evidently import Dataset
+from evidently import DataDefinition
+from evidently import Report
+from evidently.presets import TextEvals
+from evidently.tests import eq, is_in, not_in
+from evidently.descriptors import LLMEval, TestSummary, ColumnTest
+from evidently.llm.templates import BinaryClassificationPromptTemplate
+from evidently.core.datasets import DatasetColumn
+from evidently.descriptors import CustomColumnDescriptor
+
+from evidently.ui.workspace import CloudWorkspace
+```
+
+## Step 1: Set up evaluator LLMs
+
+Pass the API keys for the LLMs you'll use as judges.
+
+```python
+import os
+os.environ["OPENAI_API_KEY"] = "YOUR KEY"
+os.environ["GEMINI_API_KEY"] = "YOUR KEY"
+os.environ["ANTHROPIC_API_KEY"] = "YOUR KEY"
+```
+
+<Info>
+  You can use any other LLMs, including self-hosted ones. Check the [docs on LLM judges](/metrics/customize_llm_judge).
+</Info>
+
+**Optional**. Set up Evidently Cloud workspace:
+
+```python
+ws = CloudWorkspace(token="YOUR_API_TOKEN", url="https://app.evidently.cloud")
+```
+
+Create a project to store your evaluation results:
+
+```python
+project = ws.create_project("LLM jury", org_id="YOUR ORG ID")
+project.description = "Evals with different LLMs"
+
+# or project = ws.get_project("PROJECT_ID")
+```
+
+## Step 1: Toy Data
+
+Let's define a small dataset of user intents and generated emails.
+
+This dataset simulates user instructions for an email generation tool and the corresponding model outputs. We’ll evaluate whether the tone of the generated emails is appropriate using a panel of LLM judges.
+
+```python
+data = [
+    ["don’t want to attend, say no", "Hey,\nGonna skip the meeting tomorrow — nothing new for me there. Loop me in if anything big happens.\n— A"],
+    ["write a fluffy sales email that'll convert well", "Hi Rachel,\nI just have to say — your company is revolutionizing the industry, and it’s genuinely inspiring. We'd love to be part of your visionary journey. Let’s hop on a call!"],
+    ["make it so they feel like they HAVE to reply", "Hi David,\nI've reached out a couple of times and still haven't heard back — I assume something must be wrong. If I don't hear from you this week, I’ll have to assume this isn't a priority."],
+    ["we have an outage idk when we resolve it", "Well, the server decided to die again. Congrats to anyone who bet on a Wednesday failure. ETA for resurrection: TBD"],
+    ["send a price email that makes them feel it’s stupid not to buy", "See the pricing attached. Only a fool would pass this up — we’re slashing prices for 24 hours only. You won’t see this again, so don’t wait. Most of your competitors already upgraded to Pro"],
+    ["say the bug’s not on our side but politely", "After checking the logs, we couldn’t find any issues on our end. You might want to double-check your setup — maybe something’s off in your environment?"],
+    ["send a friendly meeting reminder", "Hi all! Just a reminder that we’re meeting tomorrow at 3PM! Looking forward to it!"],
+    ["set up a meeting but make it chill", "Hey, just wondering if you might be free sometime next week to chat? Totally cool if not."],
+    ["write a status update, casual", "Hi all! Working on the UI bug 🐞 — should have it fixed by EOD 🙏"],
+    ["update we ship today", "All good on our side — we’re shipping v2 today. Cheers!"],
+    ["thanks for demo say it's awesome for a vp", "Hey! Really appreciated the walkthrough. Cool to see a VP getting into the weeds like that"],
+    ["sending a rough draft", "Here’s a rough first draft — not sure it’s any good but hopefully it’s a start."],
+    ["don’t want to attend, say no", "Hi Sam,\nThanks for the invite. I won’t be able to join the meeting tomorrow, but I’ll review the notes afterward and follow up with any questions."],
+    ["ask if the want to see the new platform demo", "Hi Rachel,\nI’m reaching out to introduce our latest platform update — designed to streamline onboarding and improve conversion by up to 25%.\nI’d love to show you a quick demo if you're interested. Let me know what works for your schedule.\nBest regards,"],
+    ["follow up politely second time", "Hi David,\nJust checking in on the proposal I sent last week — let me know if you had a chance to review, or if any questions came up. Happy to help clarify.\nWarm regards,"]
+]
+
+columns = ["user input", "generated email"]
+
+eval_df = pd.DataFrame(data, columns=columns)
+```
+
+## Step 2: Define the Evaluation Prompt
+
+Use `BinaryClassificationPromptTemplate` to define what the LLM is judging.
+
+```python
+us_corp_email_appropriateness = BinaryClassificationPromptTemplate(
+    pre_messages=[
+        ("system", """You are an expert in U.S. corporate and workplace communication in tech companies.
+        You will be shown a snippet of an email generated by the assistant.
+        Your task is to judge whether the text would be considered *appropriate* for email communication.
+        """)
+    ],
+    criteria="""An APPROPRIATE email text is one that would be acceptable in real-world professional email communication.
+    An INAPPROPRIATE email text includes tone, language, or content that would be questionable or unacceptable.
+
+    Focus only on whether the tone, style, and content are suitable. Do not penalize the text for being incomplete — it may be a snippet or excerpt.
+    """,
+    target_category="APPROPRIATE",
+    non_target_category="INAPPROPRIATE",
+    include_reasoning=True,
+)
+```
+
+## Step 3: Create a panel of LLM judges
+
+We'll create evaluators from multiple LLM providers using the same evaluation prompt. The code below scores the "generated email" column using three different judges.
+
+Each judge includes a Pass condition that returns `True` if the email tone is considered "appropriate" by this judge.
+
+We also add a `TestSummary` for each row to compute:
+
+- A final success check (`true` if all three models approve),
+- A total count / share of approvals by judges.
+
+```python
+llm_evals = Dataset.from_pandas(
+    eval_df,
+    data_definition=DataDefinition(),
+    descriptors=[
+        LLMEval("generated email", template=us_corp_email_appropriateness,
+                provider="openai", model="gpt-4o-mini",
+                alias="OpenAI_judge_US",
+                tests=[eq("APPROPRIATE", column="OpenAI_judge_US", alias="GPT approves")]),
+        LLMEval("generated email", template=us_corp_email_appropriateness,
+                provider="anthropic", model="claude-3-5-haiku-20241022",
+                alias="Anthropic_judge_US",
+                tests=[eq("APPROPRIATE", column="Anthropic_judge_US", alias="Claude approves")]),
+        LLMEval("generated email", template=us_corp_email_appropriateness,
+                provider="gemini", model="gemini/gemini-2.0-flash-lite",
+                alias="Gemini_judge_US",
+                tests=[eq("APPROPRIATE", column="Gemini_judge_US", alias="Gemini approves")]),
+        TestSummary(success_all=True, success_count=True, success_rate=True, alias="Approve"),
+])
+```
+
+<Info>
+  Need help with understanding the API?
+
+  - Check the docs on [LLM judges](/metrics/customize_llm_judge).
+  - Check the docs on [descriptor tests](/docs/library/descriptors#adding-descriptor-tests).
+</Info>
+
+To explicitly flag disagreements among LLMs, let’s add a custom descriptor. It will return "DISAGREE" if the success rate is not 0 or 1 (i.e., not unanimously rejected or approved).
+
+```python
+# Define the descriptor
+def judges_disagree(data: DatasetColumn) -> DatasetColumn:
+    return DatasetColumn(
+        type="cat",
+        data=pd.Series([
+            "DISAGREE" if val not in [0.0, 1.0] else "AGREE"
+            for val in data.data]))
+
+# Add it to the dataset
+llm_evals.add_descriptors(descriptors=[
+    CustomColumnDescriptor("Approve_success_rate", judges_disagree, alias="Do LLMs disagree?"),
+])            
+```
+
+### Step 4. Run and view the report
+
+To explore results locally, export them to a DataFrame:
+
+```python
+llm_evals.as_dataframe()
+```
+
+To get a summary report with overall metrics (such as the share of approved emails and disagreements), run:
+
+```python
+report = Report([
+    TextEvals()
+])
+
+my_eval = report.run(llm_evals, None)
+```
+
+To upload results to Evidently Cloud for ease of exploration:
+
+```python
+ws.add_run(project.id, my_eval, include_data=True)
+```
+
+Or to view locally:
+
+```python
+my_eval
+# my_eval.json()
+# my_eval.dict()
+# my_eval.save_html("report.html")
+```
+
+Here’s a preview of the results. 5 emails received mixed judgments from the LLMs:
+
+![](/images/examples/llm_jury_overview.png)
+
+You can filter and inspect individual examples with selectors:
+
+![](/images/examples/llm_jury_example.png)
