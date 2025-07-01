@@ -76,6 +76,10 @@ import os
 os.environ["OPENAI_API_KEY"] = "YOUR_KEY"
 ```
 
+<Info>
+**Using other evaluator LLMs**. Check the [LLM judge docs](/metrics/customize_llm_judge#change-the-evaluator-llm) to see how you can select a different evaluator LLM. 
+</Info>
+
 ## 2.  Create the Dataset
 
 First, we'll create a toy Q&A dataset with customer support question that includes:
@@ -192,7 +196,7 @@ definition = DataDefinition(
     )
 
 eval_dataset = Dataset.from_pandas(
-    pd.DataFrame(golden_dataset),
+    golden_dataset,
     data_definition=definition)
 ```
 
@@ -227,7 +231,7 @@ Here's the distribution of examples: we have both correct and incorrect response
 
 ## 3. Correctness evaluator
 
-Now it's time to set up an LLM judge\! We'll start with an evaluator that checks if responses are correct compared to the reference. The goal is to match the quality of our manual labels.
+Now it's time to set up an LLM judge! We'll start with an evaluator that checks if responses are correct compared to the reference. The goal is to match the quality of our manual labels.
 
 **Configure the evaluator prompt**. We'll use the LLMEval [Descriptor](/docs/library/descriptors) to create a custom binary evaluator. Here's how to define the prompt template for correctness:
 
@@ -248,7 +252,7 @@ correctness = BinaryClassificationPromptTemplate(
 ```
 
 <Info>
-  The **Binary Classification** template (check [docs](/metrics/customize_llm_judge)) instructs an LLM to classify the input into two classes and add reasoning. You don't need to ask for these details explicitly, or worry about parsing the output structure — that's built into the template. You only need to add the criteria.
+  The **Binary Classification** template (check [docs](/metrics/customize_llm_judge)) instructs an LLM to classify the input into two classes and add reasoning. You don't need to ask for these details explicitly, or worry about parsing the output structure — that's built into the template. You only need to add the criteria. You can also use a multi-class template.
 </Info>
 
 In this example, we've set up the prompt to be strict ("all fact and details"). You can write it differently. This flexibility is one of the key benefits of creating a custom judge.
