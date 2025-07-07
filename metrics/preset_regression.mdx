@@ -39,8 +39,6 @@ The Report includes:
 
 * **Various visualizations:** Actual vs Predicted Plot, Error Distribution, Error Normality, etc.
 
-Additionally, if you include feature columns, the Report will show Regression Quality by groups with the highest errors (over- and under-prediction). It displays the relationship between columns/features and the target, showing how the system performs on different data segments.
-
 **Test Suite**. If you enable Tests, this will automatically run checks to assess if the model performance metrics are within bounds.
 
 ![](/images/metrics/test_preset_regression-min.png)
@@ -49,7 +47,7 @@ Tests are auto-generated:
 
 * **Based on reference dataset**. If the reference dataset is provided, conditions like expected prediction accuracy will be derived from it.
 
-Based on heuristics. If there is no reference, Evidently will create a dummy regression model as a baseline and run checks against it.
+* **Based on heuristics**. If there is no reference, Evidently will create a dummy regression model as a baseline and run checks against it.
 
 <Info>
   **How Tests work.** Read about [Tests](/docs/library/tests) and check defaults for each Test in the [reference table](/metrics/all_metrics).
