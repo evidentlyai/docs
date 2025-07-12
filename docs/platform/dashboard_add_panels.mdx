@@ -212,6 +212,17 @@ project.dashboard.add_panel(
     )
 )
 ```
+### Dashboard Panel options
+
+| Parameter              | Type   | Required | Default  | Description                                                                               |
+| ---------------------- | ------ | -------- | -------- | ----------------------------------------------------------------------------------------- |
+| `title`                | `str`  | ❌        | `None`   | Title of the panel.                                                                       |
+| `description`          | `str`  | ❌        | `None`   | Optional panel description shown as a subtitle.                                           |
+| `size`                 | `str`  | ❌        | `"full"` | Panel size: `"full"` (100% width) or `"half"` (50%).                                      |
+| `values`               | `list` | ✅        | —        | List of `PanelMetric` objects to display.                                                 |
+| `tab`                  | `str`  | ❌        | `None`   | Dashboard tab name. If not set, defaults to the first tab or creates a new "General" tab. |
+| `create_if_not_exists` | `bool` | ❌        | `True`   | If `True`, creates the tab if it doesn't exist. Throws exception if `False`.              |
+| `plot_params`          | `dict` | ❌        | `{}`     | Panel visualization settings like `"plot_type"`: `"text"`, `"line"`, `"counter"`.         |
 
 ## Configuring Panel values
 
@@ -302,20 +313,6 @@ In this case, you must point to which value you want using the `value_type` key,
 
 **Metrics with extra parameters**. If a metric has configurable options (like drift method), you must also include those in `metric_labels`.
 
-## All parameters
-
-### Dashboard Panel options
-
-| Parameter              | Type   | Required | Default  | Description                                                                               |
-| ---------------------- | ------ | -------- | -------- | ----------------------------------------------------------------------------------------- |
-| `title`                | `str`  | ❌        | `None`   | Title of the panel.                                                                       |
-| `description`          | `str`  | ❌        | `None`   | Optional panel description shown as a subtitle.                                           |
-| `size`                 | `str`  | ❌        | `"full"` | Panel size: `"full"` (100% width) or `"half"` (50%).                                      |
-| `values`               | `list` | ✅        | —        | List of `PanelMetric` objects to display.                                                 |
-| `tab`                  | `str`  | ❌        | `None`   | Dashboard tab name. If not set, defaults to the first tab or creates a new "General" tab. |
-| `create_if_not_exists` | `bool` | ❌        | `True`   | If `True`, creates the tab if it doesn't exist. Throws exception if `False`.              |
-| `plot_params`          | `dict` | ❌        | `{}`     | Panel visualization settings like `"plot_type"`: `"text"`, `"line"`, `"counter"`.         |
-
 ### `PanelMetric` options
 
 | Parameter       | Type   | Required | Default | Description                                                                      |
@@ -323,5 +320,5 @@ In this case, you must point to which value you want using the `value_type` key,
 | `legend`        | `str`  | ❌        | `None`  | Legend name in the panel. If `None`, one is auto-generated.                      |
 | `tags`          | `list` | ❌        | `[]`    | Optional tags to select values only from a subset of Reports in the Project.     |
 | `metadata`      | `dict` | ❌        | `{}`    | Optional metadata to select values only from a subset of Reports in the Project. |
-| `metric`        | `str`  | ✅        | —       | Metric name (e.g., `"RowCount"` or `"evidently:metric_v2:MinValue"`).            |
-| `metric_labels` | `dict` | ❌        | `{}`    | Parameters like column names `{"column": "Col_name"}` or value types.            |
+| `metric`        | `str`  | ✅        | —       | Metric name (e.g., `"RowCount"`).            |
+| `metric_labels` | `dict` | ❌        | `{}`    | Parameters like column names `{"column": "Col_name"}` or value types {"value_type": "share"}.    |
