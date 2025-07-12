@@ -290,23 +290,42 @@ project.dashboard.add_panel(
         )
 ```
 
-**Column** (For column-level Metrics / Descriptors).
-
-When a metric operates at the column level, use the `column` label to specify which column or descriptor it refers to. 
+**Column / Descriptor**. When you compute a text descriptor or any metric that operates at the column level, use the `column` label to specify which column or descriptor it refers to. 
 
 For example, in a `TextEvals` Report, each text descriptor (e.g., text length, LLM judged "denials", etc.) is treated as a column. These descriptors are summarized with various statistics. To plot one of these values, you need to:
 - First choose a summary Metric like `UniqueValueCount`, `MaxValue`, `MeanValue`, etc.
 - Use the `column` label to point the specific descriptor.
 
-**Value type**. (For Metrics with multiple metric results). 
+Example:
 
-Most Evidently Metrics return a single `value`. For example, `RowCount` returns the row count `value`, and `Accuracy` returns the `accuracy` value. So listing just the `Metric` name is enough.
+```python
+                values=[
+                    PanelMetric(
+                        legend="""{{label}}""",
+                        metric="UniqueValueCount",
+                        metric_labels={"column": "denials", #column name
+                                       "value_type": "share" #metric result
+                                       } 
+                    )
+```
+
+**Value type**. Most Evidently Metrics return a single `value`. For example, `RowCount` returns the row count `value`, and `Accuracy` returns the `accuracy` value. So listing just the `Metric` name is enough.
 
 However, some metrics produce more than one metric result, like:
 - `CategoryCount`: returns both `share` and `count`
 - `MAE`: returns both `mean` and `std`
 
 In this case, you must point to which value you want using the `value_type` key, e.g. `{"value_type": "share"}`
+
+```python
+                values=[
+                    PanelMetric(
+                        legend="Share",
+                        metric="DriftedColumnsCount",
+                        metric_labels={"value_type": "share"} 
+                    ),
+                ],
+```
 
 <Info>
 **How to verify the metric result for a specific metric?** 
