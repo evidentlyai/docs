@@ -212,6 +212,7 @@ project.dashboard.add_panel(
     )
 )
 ```
+
 ### Dashboard Panel options
 
 A summary of all parameters:
@@ -257,19 +258,20 @@ project.dashboard.add_panel(
 **Presets** (like `TextEvals`, `ClassificationPreset`, `DataDriftPreset`) contain multiple sub-metrics. When logging Reports using a Preset, you must reference the specific **metric** inside it, such as `Accuracy`, `Recall`, etc.
 
 <Info>
-**Need help finding metric names?** See the [All Metrics Reference Table](/metrics/all_metrics) for a full list of Metrics.
+  **Need help finding metric names?** See the [All Metrics Reference Table](/metrics/all_metrics) for a full list of Metrics.
 </Info>
 
 ### Metric labels
 
 Some Metrics require additional context. This applies when the metrics:
+
 - Operate at the column level
 - Return multiple values (metric results)
 - Have user-defined custom parameters
 
 In these cases, use `metric_labels` to specify what exactly you want to plot.
 
-Example:
+**Example**. To plot the share of categories inside "Denials" column:
 
 ```python
 project.dashboard.add_panel(
@@ -280,7 +282,7 @@ project.dashboard.add_panel(
                 values=[
                     PanelMetric(
                         legend="""{{label}}""",
-                        metric="UniqueValueCount",
+                        metric="UniqueValueCount", # <- metric from TextEvals Preset that computes distinct values
                         metric_labels={"column": "denials", #column name
                                        "value_type": "share" #metric result
                                        } 
@@ -292,47 +294,51 @@ project.dashboard.add_panel(
         )
 ```
 
-**Column / Descriptor**. When you compute a text descriptor or any metric that operates at the column level, use the `column` label to specify which column or descriptor it refers to. 
+**Column / Descriptor**. When you compute a text descriptor or any metric that operates at the column level, use the `column` label to specify which column or descriptor it refers to.
 
 For example, in a `TextEvals` Report, each text descriptor (e.g., text length, LLM judged "denials", etc.) is treated as a column. These descriptors are summarized with various statistics. To plot one of these values, you need to:
-- First choose a summary Metric like `UniqueValueCount`, `MaxValue`, `MeanValue`, etc.
+
+- Choose a summary Metric like `UniqueValueCount`, `MissingValueCount`, `MaxValue`, etc.
 - Use the `column` label to point the specific descriptor.
 
-Example:
+**Example**. To plot the min value from the "Text Length" column:
 
 ```python
-                values=[
-                    PanelMetric(
-                        legend="""{{label}}""",
-                        metric="UniqueValueCount",
-                        metric_labels={"column": "denials", #column name
-                                       "value_type": "share" #metric result
-                                       } 
-                    )
+values=[
+    PanelMetric(
+        legend="Min text length",
+        metric="MinValue", # <- metric from TextEvals Preset that computes min value
+        metric_labels={
+            "column": "TextLength",  # <- target column name 
+        }
+    )
+]
 ```
 
-**Value type**. Most Evidently Metrics return a single `value`. For example, `RowCount` returns the row count `value`, and `Accuracy` returns the `accuracy` value. So listing just the `Metric` name is enough.
+**Value type**. Most Evidently Metrics return a single `value`. For example, `Accuracy` returns the corresponding accuracy `value`. So listing just the `Metric` name is enough to specify what exactly you want to plot.
 
 However, some metrics produce more than one metric result, like:
+
 - `CategoryCount`: returns both `share` and `count`
 - `MAE`: returns both `mean` and `std`
 
 In this case, you must point to which value you want using the `value_type` key, e.g. `{"value_type": "share"}`
 
 ```python
-                values=[
-                    PanelMetric(
-                        legend="Share",
-                        metric="DriftedColumnsCount",
-                        metric_labels={"value_type": "share"} 
-                    ),
-                ],
+values = [
+    PanelMetric(
+        legend="Share",
+        metric="DriftedColumnsCount",  # <- metric from Data Drift Preset that returns `count` or `share` of drifting columns
+        metric_labels={"value_type": "share"}  # <- plot relative share
+    ),
+]
 ```
 
 <Info>
-**How to verify the metric result for a specific metric?** 
-- Look up the expected outputs in the [All Metrics Table](/metrics/all_metrics). 
-- Or, generate a Report with the `metric` and inspect its structure using `report.dict()` or `report.json()`.
+  **How to verify the metric result for a specific metric?**
+
+  - Look up the expected outputs in the [All Metrics Table](/metrics/all_metrics).
+  - Or, generate a Report with the target `metric` and inspect its structure via`report.dict()` or `report.json()`.
 </Info>
 
 **Metrics with extra parameters**. If a metric has configurable options (like drift method), you must also include those in `metric_labels`.
@@ -346,5 +352,5 @@ A summary of all parameters:
 | `legend`        | `str`  | ❌        | `None`  | Legend name in the panel. If `None`, one is auto-generated.                      |
 | `tags`          | `list` | ❌        | `[]`    | Optional tags to select values only from a subset of Reports in the Project.     |
 | `metadata`      | `dict` | ❌        | `{}`    | Optional metadata to select values only from a subset of Reports in the Project. |
-| `metric`        | `str`  | ✅        | —       | Metric name (e.g., `"RowCount"`).            |
-| `metric_labels` | `dict` | ❌        | `{}`    | Parameters like `column` names (applies to descriptors too) or `value_type`.    |
+| `metric`        | `str`  | ✅        | —       | Metric name (e.g., `"RowCount"`).                                                |
+| `metric_labels` | `dict` | ❌        | `{}`    | Parameters like `column` names (applies to descriptors too) or `value_type`.     |
