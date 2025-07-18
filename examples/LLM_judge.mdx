@@ -17,10 +17,10 @@ We'll explore two ways to use an LLM as a judge:
 - **Reference-based**. Compare new responses against a reference. This is useful for regression testing or whenever you have a "ground truth" (approved responses) to compare against.
 - **Open-ended**. Evaluate responses based on custom criteria, which helps evaluate new outputs when there's no reference available.
 
-We will focus on demonstrating **how to create and tune the LLM evaluator**, which you can then apply in different contexts, like [regression testing](/examples/LLM_regression_testing) or prompt comparison.
+We will focus on demonstrating **how to create and tune the LLM evaluator**, which you can then apply in different contexts, like regression testing or prompt comparison.
 
 <Info>
-  We also have an extended tutorial where we iteratively improve the prompt for LLM judge with a video walkthrough:  https://www.youtube.com/watch?v=kP_aaFnXLmY
+**Prefer videos?** We also have an extended code tutorial where we iteratively improve the prompt for LLM judge with a video walkthrough:  https://www.youtube.com/watch?v=kP_aaFnXLmY
 </Info>
 
 ## Tutorial scope
@@ -98,7 +98,7 @@ Ultimately, an LLM judge is a small ML system, and it needs its own evals\!
 
 **Generate the dataframe**. Here's how you can create this dataset in one go:
 
-<Accordion title="Toy data to run the example" defaultOpen="false">
+<Accordion title="Toy data to run the example" defaultOpen={false}>
   ```python
   data = [
     ["Hi there, how do I reset my password?",
