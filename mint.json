@@ -256,7 +256,6 @@
       "pages": [
         "examples/LLM_evals",
         "examples/LLM_rag_evals",
-        "examples/LLM_regression_testing",
         "examples/LLM_judge",
         "examples/LLM_jury"
       ]
