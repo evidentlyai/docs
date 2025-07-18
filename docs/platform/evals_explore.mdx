@@ -1,6 +1,6 @@
 ---
-title: 'Explore view'
-description: 'Reviewing the evaluation results on the Platform.'
+title: "Explore view"
+description: "Reviewing the evaluation results on the Platform."
 ---
 
 The result of each evaluation is a Report (summary of metrics with visuals) with an optional Test Suite (when it also includes pass/fail results on set conditions).
@@ -15,10 +15,16 @@ To see and compare the evaluation results, click on "Explore" next to the indivi
 
 ![](/images/evals_explore_view-min.png)
 
-* To view the Report only, click on the "dataset" sign at the top to hide the dataset.
+- To view the Report only, click on the "dataset" sign at the top to hide the dataset.
+- To see results from a specific evaluation within the Report, use the dropdown menu to select the Metric.
+- To compare Reports side by side, click on "duplicate snapshot" (this will keep the current Metric in view), and then select a different Report for comparison.
 
-* To see results from a specific evaluation within the Report, use the dropdown menu to select the Metric.
+**Compare**. To analyze multiple evaluation results side by side, simply select them from the Report list (e.g., reports generated using different LLMs) and click the **"Compare"** button. This allows you to quickly identify differences in performance, quality, or behavior across model versions or configurations.
 
-* To compare Reports side by side, click on "duplicate snapshot" (this will keep the current Metric in view), and then select a different Report for comparison.
+![](/images/platform_compare_select.png)
+
+You will see the Compare view, where you can explore different metric scores (or pass/fail test results) side by side.
+
+![](/images/platform_compare_view.png)
 
 **Track progress over time**. As you run multiple evaluations, you can build a Dashboard to track progress, see performance improvements, and monitor how tests perform over time. This will let you visualize results over time from multiple Reports within a Project. [Read more](/docs/platform/dashboard_overview).
