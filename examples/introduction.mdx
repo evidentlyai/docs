@@ -27,21 +27,27 @@ If you are new, start here.
 
 End-to-end examples of specific workflows and use cases.
 
-<CardGroup cols={3}>
-  <Card title="LLM judges" icon="scale-balanced" href="/examples/LLM_judge">
-    How to create and evaluate an LLM judge.
+<CardGroup cols={2}>
+  <Card title="LLM as a judge" icon="scale-balanced" href="/examples/LLM_judge">
+    How to create and evaluate an LLM judge against human labels.
   </Card>
   <Card title="RAG evaluation" icon="comment" href="/examples/LLM_rag_evals">
-    A walkthrough of different RAG evaluation methods.
+    A walkthrough of different RAG evaluation metrics.
   </Card>
-  <Card title="LLM jury" icon="dice" href="LLM_jury">
+  <Card title="LLM as a jury" icon="dice" href="LLM_jury">
     Using multiple LLMs to evaluate the same output.
   </Card>
-  <Card title="LLM eval methods" icon="text" href="LLM_evals">
-    Different LLM evaluation methods. [CODE \+ VIDEO]
+  <Card title="LLM evaluation methods" icon="text" href="LLM_evals">
+    A walkthrough of different LLM evaluation methods. [CODE \+ VIDEO]
   </Card>
   <Card title="Descriptor cookbook" icon="book" href="https://github.com/evidentlyai/evidently/blob/main/examples/cookbook/descriptors.ipynb">
-    Various descriptors in a single notebook.
+    A walkthrough of different descriptors (deterministic, ML, etc.) a single notebook.
+  </Card>
+  <Card title="LLM judge prompt optimization (1)" icon="hotel" href="https://github.com/evidentlyai/evidently/blob/main/examples/cookbook/prompt_optimization_bookings_example.ipynb">
+    Optimize a multi-class classifier using target labels.
+  </Card>
+  <Card title="LLM judge prompt optimization (2)" icon="code" href="https://github.com/evidentlyai/evidently/blob/main/examples/cookbook/prompt_optimization_code_review_example.ipynb">
+    Optimize a binary classifier using target labels and free-form feedback.
   </Card>
 </CardGroup>
 
@@ -49,7 +55,7 @@ End-to-end examples of specific workflows and use cases.
 
 End-to-end examples of specific workflows and use cases.
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="Metric cookbook" icon="book" href="https://github.com/evidentlyai/evidently/blob/main/examples/cookbook/metrics.ipynb">
     Various data/ML metrics: Regression, Classification, Data Quality, Data Drift.
   </Card>
@@ -59,15 +65,18 @@ End-to-end examples of specific workflows and use cases.
 
 End-to-end examples of integrating Evidently with other tools and platforms.
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="GitHub actions" icon="code" href="/examples/GitHub_actions">
-    Running Evidently evals as part of CI/CD workflow.
+    Running Evidently evals as part of CI/CD workflow. Native GitHub action integration for regression testing.
+  </Card>
+  <Card title="Different LLM providers as judges" icon="sparkles" href="https://github.com/evidentlyai/evidently/blob/main/examples/future_examples/llm_providers.ipynb">
+    Examples of using different external evaluator LLMs as LLM judges: OpenAI, Gemini, Google Vertex, Mistral, Ollama.
   </Card>
 </CardGroup>
 
 ## Deployment
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="Evidently Open-source UI tutorial" icon="laptop-code" href="https://github.com/evidentlyai/evidently/blob/main/examples/service/workspace_tutorial.ipynb">
     How to create a workspace, project and run Reports.
   </Card>
@@ -81,16 +90,16 @@ We have an applied LLM evaluation course where we walk through the core evaluati
 
 📹 [See complete Youtube playlist](https://www.youtube.com/watch?v=K8LLVi5Xrh8&list=PL9omX6impEuNTr0KGLChHwhvN-q3ZF12d&index=2)
 
-| **Tutorial**                     | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                        | **Code example**                                                                                                                         | **Video**                                                                                                             |
-| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| **Intro to LLM Evals**           | Introduction to LLM evaluation: concepts, goals, and motivations behind evaluating LLM outputs.                                                                                                                                                                                                                                                                                                                                        | –                                                                                                                                        | <ul>      <li>      Video</li>            </ul>                                                                       |
-| **LLM Evaluation Methods**       | Tutorial with an overview of methods. <ul>      <li>      Part 1. Anatomy of a single evaluation. Covers basic LLM evaluation API and setup.</li>            <li>      Part 2. Reference-based evaluation: exact match, semantic similarity, BERTScore, and LLM judge.</li>            <li>      Part 3. Reference-free evaluation: text statistics, regex, ML models, LLM judges, and session-level evaluators.</li>            </ul> | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_Tutorial_1_Intro_to_LLM_evals_methods.ipynb) | <ul>      <li>      Video 1</li>            <li>      Video 2</li>            <li>      Video 3</li>            </ul> |
-| **LLM as a Judge**               | Tutorial on creating and tuning LLM judges aligned with human preferences.                                                                                                                                                                                                                                                                                                                                                             | [Open Notebook](LLMCourse_Tutorial_2_LLM_as_a_judge.ipynb)                                                                               | <ul>      <li>      Video</li>            </ul>                                                                       |
-| **Clasification Evaluation**     | Tutorial on evaluating LLMs and a simple predictive ML baseline on a multi-class classification task.                                                                                                                                                                                                                                                                                                                                  | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_Classification_Evals.ipynb)                  | <ul>      <li>      Video</li>            </ul>                                                                       |
-| **Content Generation with LLMs** | Tutorial on how to use LLMs to write tweets and evaluate how engaging they are. Introduction to the concept of tracing.                                                                                                                                                                                                                                                                                                                | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_Content_Generation_Evals.ipynb)              | <ul>      <li>      Video</li>            </ul>                                                                       |
-| **RAG evaluations**              | <ul>      <li>      Part 1. Theory on how to evaluate RAG systems: retrieval, generation quality and synthetic data.</li>            <li>      Part 2. Tutorial on building a toy RAG application and evaluating correctness and faithfulness.</li>            </ul>                                                                                                                                                                   | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_RAG_Evals.ipynb)                             | <ul>      <li>      Video 1</li>            <li>      Video 2</li>            </ul>                                   |
-| **AI agent evaluations**         | Tutorial on how to build a simple Q&A agent and evaluate tool choice and answer correctness.                                                                                                                                                                                                                                                                                                                                           | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_Agent_Evals.ipynb)                           | <ul>      <li>      Video</li>            </ul>                                                                       |
-| **Adversarial testing**          | Tutorial on how to run scenario-based risk testing on forbidden topics and brand risks.                                                                                                                                                                                                                                                                                                                                                | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_Adversarial_Testing.ipynb)                   | <ul>      <li>      Video</li>            </ul>                                                                       |
+| **Tutorial**                     | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                            | **Code example**                                                                                                                         | **Video**                                                                                                                                 |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **Intro to LLM Evals**           | Introduction to LLM evaluation: concepts, goals, and motivations behind evaluating LLM outputs.                                                                                                                                                                                                                                                                                                                                                            | –                                                                                                                                        | <ul>        <li>        Video</li>                </ul>                                                                                   |
+| **LLM Evaluation Methods**       | Tutorial with an overview of methods. <ul>        <li>        Part 1. Anatomy of a single evaluation. Covers basic LLM evaluation API and setup.</li>                <li>        Part 2. Reference-based evaluation: exact match, semantic similarity, BERTScore, and LLM judge.</li>                <li>        Part 3. Reference-free evaluation: text statistics, regex, ML models, LLM judges, and session-level evaluators.</li>                </ul> | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_Tutorial_1_Intro_to_LLM_evals_methods.ipynb) | <ul>        <li>        Video 1</li>                <li>        Video 2</li>                <li>        Video 3</li>                </ul> |
+| **LLM as a Judge**               | Tutorial on creating and tuning LLM judges aligned with human preferences.                                                                                                                                                                                                                                                                                                                                                                                 | [Open Notebook](LLMCourse_Tutorial_2_LLM_as_a_judge.ipynb)                                                                               | <ul>        <li>        Video</li>                </ul>                                                                                   |
+| **Clasification Evaluation**     | Tutorial on evaluating LLMs and a simple predictive ML baseline on a multi-class classification task.                                                                                                                                                                                                                                                                                                                                                      | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_Classification_Evals.ipynb)                  | <ul>        <li>        Video</li>                </ul>                                                                                   |
+| **Content Generation with LLMs** | Tutorial on how to use LLMs to write tweets and evaluate how engaging they are. Introduction to the concept of tracing.                                                                                                                                                                                                                                                                                                                                    | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_Content_Generation_Evals.ipynb)              | <ul>        <li>        Video</li>                </ul>                                                                                   |
+| **RAG evaluations**              | <ul>        <li>        Part 1. Theory on how to evaluate RAG systems: retrieval, generation quality and synthetic data.</li>                <li>        Part 2. Tutorial on building a toy RAG application and evaluating correctness and faithfulness.</li>                </ul>                                                                                                                                                                         | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_RAG_Evals.ipynb)                             | <ul>        <li>        Video 1</li>                <li>        Video 2</li>                </ul>                                         |
+| **AI agent evaluations**         | Tutorial on how to build a simple Q&A agent and evaluate tool choice and answer correctness.                                                                                                                                                                                                                                                                                                                                                               | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_Agent_Evals.ipynb)                           | <ul>        <li>        Video</li>                </ul>                                                                                   |
+| **Adversarial testing**          | Tutorial on how to run scenario-based risk testing on forbidden topics and brand risks.                                                                                                                                                                                                                                                                                                                                                                    | [Open Notebook](https://github.com/evidentlyai/community-examples/blob/main/learn/LLMCourse_Adversarial_Testing.ipynb)                   | <ul>        <li>        Video</li>                </ul>                                                                                   |
 
 ## More examples
 
