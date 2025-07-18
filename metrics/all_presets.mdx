@@ -5,11 +5,14 @@ description: "All available Presets."
 
 These are pre-built evaluation templates that are easy to run without setup. They are great for a start: you can create a custom setup later.
 
+<Note>
+  Note that Presets apply on the **dataset level**. If you looking at row-level evaluations (e.g. scoring relevance, correcteness, etc. for LLM outputs), it's best to explore [built-in descriptors](/metrics/all_descriptors) for RAG etc.
+</Note>
+
 <CardGroup cols={2}>
   <Card title="Text Evals" icon="comments" href="/metrics/preset_text_evals">
     Evals for text and LLMs.
   </Card>
-
   <Card title="Data Drift" icon="chart-simple" href="/metrics/preset_data_drift">
     Data distribution drift detection.
   </Card>
@@ -19,7 +22,6 @@ These are pre-built evaluation templates that are easy to run without setup. The
   <Card title="Data Summary" icon="file-chart-column" href="/metrics/preset_data_summary">
     Dataset overview and statistics .
   </Card>
-
   <Card title="Classification" icon="dice-two" href="/metrics/preset_classification">
     Quality for classification tasks.
   </Card>
@@ -29,5 +31,4 @@ These are pre-built evaluation templates that are easy to run without setup. The
   <Card title="Regression" icon="chart-line" href="/metrics/preset_regression">
     Quality for regression tasks.
   </Card>
-
 </CardGroup>
