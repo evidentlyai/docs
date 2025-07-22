@@ -133,17 +133,17 @@
           ]
         },
         {
-          "group": "Generate data",
-          "icon": "wand-magic-sparkles",
-          "pages": [
-            "docs/library/synthetic_data_api"
-          ]
-        },
-        {
           "group": "Optimize prompts",
           "icon": "comment",
           "pages": [
             "docs/library/prompt_optimization"
+          ]
+        },
+        {
+          "group": "Generate data",
+          "icon": "wand-magic-sparkles",
+          "pages": [
+            "docs/library/synthetic_data_api"
           ]
         }
       ]
