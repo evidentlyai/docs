@@ -1,10 +1,10 @@
 ---
-title: 'Overview'
-description: 'Introduction to Tracing.'
+title: "Overview"
+description: "Introduction to Tracing."
 ---
 
 <Check>
-  Trace store and viewer are Pro features available in **Evidently Cloud** and **Evidently Enterprise**.
+  Trace store and viewer are available in **Evidently OSS, Evidently Cloud** and **Evidently Enterprise**.
 </Check>
 
 Tracing uses the open-source `Tracely` library, based on OpenTelemetry.
@@ -23,12 +23,9 @@ Evidently provides multiple ways to explore tracing data.
 
     ![](/images/tracing.png)
   </Tab>
-
   <Tab title="Dataset view">
-    Automatically generate a tabular view for easier evaluation or labeling.
-    ![](/images/examples/tracing_tutorial_dataset_view.png)
+    Automatically generate a tabular view for easier evaluation or labeling. <img src="/images/examples/tracing_tutorial_dataset_view.png" alt="" />
   </Tab>
-
   <Tab title="Dialogue view">
     For conversational applications, browse traces by user or session to focus on chat flows.
 
@@ -42,8 +39,7 @@ Once you capture the data, you can also run evals on the tracing datasets.
 
 Tracing is optional on the Evidently Platform. You can also:
 
-* Upload tabular datasets using Dataset API.
-
-* Run evals locally and send results to the platform without tracing.
+- Upload tabular datasets using Dataset API.
+- Run evals locally and send results to the platform without tracing.
 
 However, tracing is especially useful for understanding complex LLM chains and execution flows, both in experiments and production monitoring.
