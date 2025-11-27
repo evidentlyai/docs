@@ -1,21 +1,18 @@
 ---
-title: 'Overview'
-description: 'End-to-end evaluation workflow.'
+title: "Overview"
+description: "This page explains the core eval workflow using the Evidently library at a glance and links to detailed guides on all features."
 ---
-
-This page shows the core eval workflow with the Evidently library and links to guides.
 
 ## Define and run the eval
 
 <Tip>
-  To log the evaluation results to the Evidently Platform, first connect to [Evidently Cloud](/docs/setup/cloud) or your [local workspace](/docs/setup/self-hosting) and [create a Project](/docs/platform/projects_manage). It's optional: you can also run evals locally.
+  To log the evaluation results to the Evidently Platform, first connect to [Evidently Cloud](/docs/setup/cloud) or your [local workspace](/docs/setup/self-hosting) and [create a Project](/docs/platform/projects_manage). It's optional: you can also run evals locally in Python.
 </Tip>
 
 <Steps>
   <Step title="Prepare the input data">
-    Get your data in a table like a `pandas.DataFrame`. More on [data requirements](/docs/library/overview#dataset). You can also [load data](/docs/platform/datasets_workflow) from Evidently Platform, like tracing or synthetic datasets.
+    Get your data in a table like a `pandas.DataFrame`. More on [data requirements](/docs/library/overview#dataset). You can also [load data](/docs/platform/datasets_workflow) from Evidently Platform, like tracing data you captured or synthetic datasets.
   </Step>
-
   <Step title="Create a Dataset object">
     Create a Dataset object with `DataDefinition()` that specifies column role and types. You can also use default type detection. [How to set Data Definition](/docs/library/data_definition).
 
@@ -26,9 +23,8 @@ This page shows the core eval workflow with the Evidently library and links to g
     )
     ```
   </Step>
-
   <Step title="(Optional) Add descriptors">
-    For text evals, choose and compute row-level `descriptors`. Optionally, add row-level tests to get pass/fail for specific inputs. [How to use Descriptors](/docs/library/descriptors).
+    For LLM and text evals, define row-level `descriptors` to compute. Here, you can use a variety of methods, from deterministic to LLM judges. Optionally, add row-level tests to get explicit pass/fail outcomes on set conditions. [How to use Descriptors](/docs/library/descriptors).
 
     ```python
     eval_data.add_descriptors(descriptors=[
@@ -37,7 +33,6 @@ This page shows the core eval workflow with the Evidently library and links to g
     ])
     ```
   </Step>
-
   <Step title="Configure Report">
     For dataset-level evals (classification, data drift) or to summarize descriptors, create a `Report` with chosen `metrics`  or `presets`. How to [configure Reports](/docs/library/report).
 
@@ -47,9 +42,8 @@ This page shows the core eval workflow with the Evidently library and links to g
     ])
     ```
   </Step>
-
   <Step title="(Optional) Add Test conditions">
-    Add dataset-level Pass/Fail conditions, like to check if all texts are in \< 100 symbols length. How to [configure Tests](/docs/library/tests).
+    Add dataset-level Pass/Fail conditions, like to check if all texts in the dataset are in \< 100 symbols length. How to [configure Tests](/docs/library/tests).
 
     ```python
     report = Report([
@@ -58,11 +52,9 @@ This page shows the core eval workflow with the Evidently library and links to g
     ])
     ```
   </Step>
-
   <Step title="(Optional) Add Tags and Timestamps">
     Add `tags` or `metadata` to identify specific evaluation runs or datasets, or override the default `timestamp `. [How to add metadata](/docs/library/tags_metadata).
   </Step>
-
   <Step title="Run the Report">
     To execute the eval, `run`the Report on the `Dataset` (or two).
 
@@ -70,15 +62,14 @@ This page shows the core eval workflow with the Evidently library and links to g
     my_eval = report.run(eval_data, None)
     ```
   </Step>
-
   <Step title="Explore the results">
-    * To upload to the Evidently Platform. [How to upload results](/docs/platform/evals_api).
+    - To upload to the Evidently Platform. [How to upload results](/docs/platform/evals_api).
 
     ```python
     ws.add_run(project.id, my_eval, include_data=True)
     ```
 
-    * To view locally. [All output formats](/docs/library/output_formats).
+    - To view locally. [All output formats](/docs/library/output_formats).
 
     ```python
     my_eval
@@ -95,7 +86,6 @@ Check for end-to-end examples:
   <Card title="LLM quickstart" icon="comment-text" href="/quickstart_llm">
     Evaluate the quality of text outputs.
   </Card>
-
   <Card title="ML quickstart" icon="table" href="/quickstart_ml">
     Test tabular data quality and data drift.
   </Card>

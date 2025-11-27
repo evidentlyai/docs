@@ -21,7 +21,13 @@ To get a self-hostable Dashboard, you must:
   Sign up for a free [Evidently Cloud](cloud) account to get a managed version instantly.
 </Tip>
 
-Once you [install Evidently](/docs/setup/installation), you will need to create a `workspace`. This designates a remote or local directory where you will store the evaluation results (JSON Reports called `snapshots`). The UI Service will read the data from this source.
+Once you [install Evidently](/docs/setup/installation), you will need to create a `workspace`. This designates a remote or local directory where you will store the evaluation results (JSON Reports called `snapshots`), traces or datasets. The UI Service will read the data from this source.
+
+As a storage backend, Evidently supports:
+
+- a file system
+- any SQL-like database (such as SQLite or Postgres)
+- any S3-compatible storage (such as Amazon S3, GCS, or MinIO – through `fsspec`).
 
 There are three scenarios, based on where you run the UI Service and store data.
 
@@ -138,10 +144,16 @@ To launch the Evidently service with the demo projects, run:
 evidently ui --demo-projects all
 ```
 
-## Tutorial
+## Tutorials
 
-Check this tutorial for an end-to-end example:
+1. Check this tutorial for a simple end-to-end example:
 
 <Card title="Evidently UI tutorial" icon="laptop-code" href="https://github.com/evidentlyai/evidently/blob/main/examples/service/workspace_tutorial.ipynb">
-  How to create a workspace, project and run Reports. 
+  How to create a workspace, project and run Reports.
+</Card>
+
+2. Check this extended tutorial that shows LLM judge evaluation over collected traces and prompt optimization using a local workspace. There is also a [video walkthrough](https://youtu.be/Gem8TG6wNhU).
+   
+<Card title="Evidently UI tutorial" icon="laptop-code" href="https://github.com/evidentlyai/community-examples/blob/main/tutorials/local_content_generation.ipynb">
+  LLM evaluation for tweet generation using local workspace. 
 </Card>
