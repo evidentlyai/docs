@@ -1,0 +1,328 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Evidently AI - Documentation",
+  "colors": {
+    "primary": "#ed0400",
+    "light": "#f59aa2",
+    "dark": "#ed0400"
+  },
+  "favicon": "/logo/favicon.png",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Docs",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              {
+                "group": "Quickstart",
+                "icon": "rocket",
+                "pages": [
+                  "quickstart_llm",
+                  "quickstart_ml",
+                  "quickstart_tracing"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Setup",
+            "pages": [
+              "docs/setup/installation",
+              "docs/setup/cloud",
+              "docs/setup/self-hosting"
+            ]
+          },
+          {
+            "group": "Evaluation library",
+            "pages": [
+              "docs/library/overview",
+              {
+                "group": "Run an evaluation",
+                "icon": "traffic-light-stop",
+                "pages": [
+                  "docs/library/evaluations_overview",
+                  "docs/library/data_definition",
+                  "docs/library/descriptors",
+                  "docs/library/report",
+                  "docs/library/tests",
+                  "docs/library/metric_generator",
+                  "docs/library/output_formats",
+                  "docs/library/tags_metadata"
+                ]
+              },
+              {
+                "group": "Optimize prompts",
+                "icon": "comment",
+                "pages": [
+                  "docs/library/prompt_optimization"
+                ]
+              },
+              {
+                "group": "Generate data",
+                "icon": "wand-magic-sparkles",
+                "pages": [
+                  "docs/library/synthetic_data_api"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Platform",
+            "pages": [
+              "docs/platform/overview",
+              {
+                "group": "Projects",
+                "icon": "folder",
+                "pages": [
+                  "docs/platform/projects_overview",
+                  "docs/platform/projects_manage"
+                ]
+              },
+              {
+                "group": "Datasets",
+                "icon": "table",
+                "pages": [
+                  "docs/platform/datasets_overview",
+                  "docs/platform/datasets_workflow",
+                  "docs/platform/datasets_generate"
+                ]
+              },
+              {
+                "group": "Tracing",
+                "icon": "bars-staggered",
+                "pages": [
+                  "docs/platform/tracing_overview",
+                  "docs/platform/tracing_setup"
+                ]
+              },
+              {
+                "group": "Evaluations",
+                "icon": "chart-simple",
+                "pages": [
+                  "docs/platform/evals_overview",
+                  "docs/platform/evals_api",
+                  "docs/platform/evals_no_code",
+                  "docs/platform/evals_explore"
+                ]
+              },
+              {
+                "group": "Dashboard",
+                "icon": "chart-mixed",
+                "pages": [
+                  "docs/platform/dashboard_overview",
+                  "docs/platform/dashboard_add_panels",
+                  "docs/platform/dashboard_add_panels_ui"
+                ]
+              },
+              {
+                "group": "Monitoring",
+                "icon": "bell",
+                "pages": [
+                  "docs/platform/monitoring_overview",
+                  "docs/platform/monitoring_local_batch",
+                  "docs/platform/monitoring_scheduled_evals",
+                  "docs/platform/alerts"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Evaluations",
+        "groups": [
+          {
+            "group": "Reference",
+            "pages": [
+              "metrics/introduction",
+              "metrics/all_metrics",
+              "metrics/all_descriptors",
+              {
+                "group": "All Presets",
+                "pages": [
+                  "metrics/all_presets",
+                  "metrics/preset_text_evals",
+                  "metrics/preset_data_drift",
+                  "metrics/preset_data_summary",
+                  "metrics/preset_classification",
+                  "metrics/preset_regression"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Metric Customization",
+            "pages": [
+              "metrics/customize_descriptor",
+              "metrics/customize_llm_judge",
+              "metrics/customize_hf_descriptor",
+              "metrics/customize_data_drift",
+              "metrics/customize_metric"
+            ]
+          },
+          {
+            "group": "Explainers",
+            "pages": [
+              "metrics/explainer_drift",
+              "metrics/explainer_recsys"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Synthetic data",
+        "groups": [
+          {
+            "group": "Intro",
+            "pages": [
+              "synthetic-data/introduction",
+              "synthetic-data/why_synthetic"
+            ]
+          },
+          {
+            "group": "Generation",
+            "pages": [
+              "synthetic-data/rag_data",
+              "synthetic-data/adversarial_data",
+              "synthetic-data/input_data"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Examples",
+        "groups": [
+          {
+            "group": "Intro",
+            "pages": [
+              "examples/introduction"
+            ]
+          },
+          {
+            "group": "LLM Tutorials",
+            "pages": [
+              "examples/LLM_evals",
+              "examples/LLM_rag_evals",
+              "examples/LLM_judge",
+              "examples/LLM_jury"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "examples/GitHub_actions"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "F.A.Q.",
+        "groups": [
+          {
+            "group": "Intro",
+            "pages": [
+              "faq/introduction"
+            ]
+          },
+          {
+            "group": "General",
+            "pages": [
+              "faq/why_evidently",
+              "faq/oss_vs_cloud",
+              "faq/migration",
+              "faq/cloud_v2"
+            ]
+          },
+          {
+            "group": "Misc",
+            "pages": [
+              "faq/telemetry",
+              "faq/contact"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": "Changelog",
+            "pages": [
+              "changelog/changelog"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Old docs",
+        "href": "https://docs-old.evidentlyai.com"
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "GitHub",
+          "href": "https://github.com/evidentlyai/evidently",
+          "icon": "github"
+        },
+        {
+          "anchor": "Community",
+          "href": "https://discord.gg/xZjKRaNp8b",
+          "icon": "discord"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/logo/evidently_ai_logo_docs.svg",
+    "dark": "/logo/evidently_ai_logo_docs_dark.svg"
+  },
+  "background": {
+    "decoration": "gradient"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Website",
+        "href": "https://www.evidentlyai.com"
+      },
+      {
+        "label": "Talk to us",
+        "href": "https://www.evidentlyai.com/get-demo"
+      },
+      {
+        "label": "Log in",
+        "href": "https://app.evidently.cloud/"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Sign up",
+      "href": "https://www.evidentlyai.com/register"
+    }
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/EvidentlyAI",
+      "github": "https://github.com/evidentlyai/evidently",
+      "linkedin": "https://www.linkedin.com/company/evidently-ai"
+    }
+  },
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-K75F5C0XM0"
+    }
+  },
+  "fonts": {
+    "heading": {
+      "family": "Manrope"
+    },
+    "body": {
+      "family": "Manrope"
+    }
+  }
+}
