@@ -1,20 +1,21 @@
 ---
-title: 'Tracing'
-description: 'How to capture LLM inputs and outputs and evaluate them.'
+title: "Tracing"
+description: "How to capture LLM inputs and outputs and evaluate them."
 ---
 
 import CloudSignup from '/snippets/cloud_signup.mdx';
 import CreateProject from '/snippets/create_project.mdx';
 
-This tutorial shows how to set up tracing for an LLM app, collect its inputs and outputs, view them in Evidently Cloud, and optionally run evaluations. You will use the following tools:
+This tutorial shows how to set up tracing for an LLM app, collect its inputs and outputs, view them in Evidently platform, and optionally run evaluations. You will use the following tools:
 
-* **Tracely**: An open-source tracing library based on OpenTelemetry.
+- **Tracely**: An open-source tracing library based on OpenTelemetry.
+- **Evidently**: An open-source library to run LLM evaluations and interact with Evidently Platform
+- **Evidently Platform:** A web platform to view traces and run evaluations.
+- **OpenAI**: Used to simulate an LLM application.
 
-* **Evidently**: An open-source library to run LLM evaluations and interact with Evidently Cloud. 
-
-* **Evidently Cloud**: A web platform to view traces and run evaluations.
-
-* **OpenAI**: Used to simulate an LLM application.
+<Note>
+  Evidently Cloud is no longer available as a SaaS product, but you can [self-host the open-source Evidently Platform](https://docs.evidentlyai.com/docs/setup/self-hosting) to store and view your tracing results.
+</Note>
 
 <Info>
   Need help? Ask on [Discord](https://discord.com/invite/xZjKRaNp8b).
@@ -89,11 +90,9 @@ init_tracing(
  )
 ```
 
-* The `address` is the destination backend to store collected traces.
-
-* `Project_id` is the ID of the Evidently Project you just created. Go to the [Home page](https://app.evidently.cloud/), enter the Project and copy its ID from above the dashboard.
-
-* `Dataset_name` helps identify the resulting Tracing dataset. All data with the same ID is grouped into a single dataset.
+- The `address` is the destination backend to store collected traces.
+- `Project_id` is the ID of the Evidently Project you just created. Go to the [Home page](https://app.evidently.cloud/), enter the Project and copy its ID from above the dashboard.
+- `Dataset_name` helps identify the resulting Tracing dataset. All data with the same ID is grouped into a single dataset.
 
 ## 4. Trace a simple LLM app 
 
@@ -148,11 +147,9 @@ You can now view, sort, export, and work with the traced dataset. You can switch
   <Tab title="Dialog ">
     ![](/images/examples/tracing_tutorial_session_view.png)
   </Tab>
-
   <Tab title="Dataset">
     ![](/images/examples/tracing_tutorial_dataset_view.png)
   </Tab>
-
   <Tab title="Traces">
     ![](/images/examples/tracing_tutorial_traces_view.png)
   </Tab>
@@ -181,7 +178,6 @@ traced_data.add_descriptors=[
 ```
 
 Summarize the results using the Report, and upload to Evidently Cloud.
-
 
 ```python
 report = Report([

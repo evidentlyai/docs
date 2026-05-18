@@ -4,9 +4,9 @@ description: "How to self-host the open-source Evidently UI service."
 icon: "window-restore"
 ---
 
-<Info>
-  This page explains how to self-host the lightweight open-source platform. [Contact us](https://www.evidentlyai.com/get-demo) for Enterprise version with extra features and support. Compare [OSS vs. Enterprise/Cloud](/faq/oss_vs_cloud).
-</Info>
+<Note>
+  Evidently Cloud is no longer available as a SaaS product, but you can self-host the open-source Evidently Platform (as described on this page), or use the Evidently library with other tools.
+</Note>
 
 In addition to using Evidently Python library, you can self-host the UI Service to get a monitoring Dashboard and organize the results of your evaluations. This is optional: you can also view evaluation results in Python or export to JSON or HTML.
 
@@ -16,10 +16,6 @@ To get a self-hostable Dashboard, you must:
 - Launch the UI service.
 
 ## 1. Create a Workspace
-
-<Tip>
-  Sign up for a free [Evidently Cloud](cloud) account to get a managed version instantly.
-</Tip>
 
 Once you [install Evidently](/docs/setup/installation), you will need to create a `workspace`. This designates a remote or local directory where you will store the evaluation results (JSON Reports called `snapshots`), traces or datasets. The UI Service will read the data from this source.
 
@@ -78,10 +74,10 @@ workspace = RemoteWorkspace("http://localhost:8000")
 
 You can pass the following parameters:
 
-| Parameter                  | Description                                                                                  |
-| -------------------------- | -------------------------------------------------------------------------------------------- |
-| `self.base_url = base_url` | URL for the remote UI service.                                                               |
-| `self.secret = secret`     | String with secret, None by default. Use it if access to the URL is protected by a password. |
+| Parameter | Description |
+| --- | --- |
+| `self.base_url = base_url` | URL for the remote UI service. |
+| `self.secret = secret` | String with secret, None by default. Use it if access to the URL is protected by a password. |
 
 ### Remote snapshot storage
 
@@ -93,13 +89,13 @@ You can verify supported data stores in the Fsspec documentation ([built-in impl
 
 For example, to read snapshots from an S3 bucket (with MinIO running on localhost:9000), you must specify environment variables:
 
-```
+```text
 FSSPEC_S3_ENDPOINT_URL=http://localhost:9000/
 FSSPEC_S3_KEY=my_key FSSPEC_S3_SECRET=my_secret
 evidently ui --workspace s3://my_bucket/workspace
 ```
 
-### [DANGER] Delete Workspace
+### \[DANGER\] Delete Workspace
 
 To delete a Workspace, run the command from the Terminal:
 
@@ -134,13 +130,13 @@ evidently ui --workspace . /workspace
 evidently ui --workspace ./workspace --port 8080
 ```
 
-To view the Evidently interface, go to URL http://localhost:8000 or a specified port in your web browser.
+To view the Evidently interface, go to URL [http://localhost:8000](http://localhost:8000) or a specified port in your web browser.
 
 ### Demo projects
 
 To launch the Evidently service with the demo projects, run:
 
-```
+```text
 evidently ui --demo-projects all
 ```
 
@@ -153,7 +149,7 @@ evidently ui --demo-projects all
 </Card>
 
 2. Check this extended tutorial that shows LLM judge evaluation over collected traces and prompt optimization using a local workspace. There is also a [video walkthrough](https://youtu.be/Gem8TG6wNhU).
-   
+
 <Card title="Evidently UI tutorial" icon="laptop-code" href="https://github.com/evidentlyai/community-examples/blob/main/tutorials/local_content_generation.ipynb">
-  LLM evaluation for tweet generation using local workspace. 
+  LLM evaluation for tweet generation using local workspace.
 </Card>

@@ -8,9 +8,7 @@ import CreateProject from '/snippets/create_project.mdx';
 
 Evidently helps you evaluate LLM outputs automatically. The lets you compare prompts, models, run regression or adversarial tests with clear, repeatable checks. That means faster iterations, more confident decisions, and fewer surprises in production.
 
-In this Quickstart, you'll try a simple eval in Python and view the results in Evidently Cloud. If you want to stay fully local, you can also do that - just skip a couple steps.
-
-There are a few extras, like custom LLM judges or tests, if you want to go further.
+In this Quickstart, you'll try a simple eval in Python and view the results in Jupyter notebook or Colab. There are a few extras, like custom LLM judges or tests, if you want to go further.
 
 Let’s dive in.
 
@@ -19,14 +17,6 @@ Let’s dive in.
 </Info>
 
 ## 1. Set up your environment
-
-For a fully local flow, skip steps 1.1 and 1.3.
-
-### 1.1. Set up Evidently Cloud
-
-<CloudSignup />
-
-### 1.2. Installation and imports
 
 Install the Evidently Python library:
 
@@ -46,16 +36,6 @@ from evidently.tests import lte, gte, eq
 from evidently.descriptors import LLMEval, TestSummary, DeclineLLMEval, Sentiment, TextLength, IncludesWords
 from evidently.llm.templates import BinaryClassificationPromptTemplate
 ```
-
-Components to connect with Evidently Cloud:
-
-```python
-from evidently.ui.workspace import CloudWorkspace
-```
-
-### 1.3. Create a Project
-
-<CreateProject />
 
 ## 2. Prepare the dataset
 
@@ -127,7 +107,7 @@ eval_dataset = Dataset.from_pandas(
 # Or IncludesWords("answer", words_list=['sorry', 'apologize'], alias="Denials")
 ```
 
-**Congratulations\!** You've just run your first eval. Preview the results locally in pandas:
+**Congratulations!** You've just run your first eval. Preview the results locally in pandas:
 
 ```python
 eval_dataset.as_dataframe()
@@ -141,7 +121,7 @@ eval_dataset.as_dataframe()
 
 ## 4.  Create a Report
 
-**Create and run a Report**. It will summarize the evaluation results. 
+**Create and run a Report**. It will summarize the evaluation results.
 
 ```python
 report = Report([
@@ -157,7 +137,7 @@ my_eval = report.run(eval_dataset, None)
 my_eval
 ```
 
-This will render the Report directly in the notebook cell. You can also get a JSON or Python dictionary, or save as an external HTML file.
+This will render the Report directly in the notebook cell. You can also get a JSON or Python dictionary, or save as an external HTML file.  
 
 ```python
 # my_eval.json()
@@ -165,29 +145,11 @@ This will render the Report directly in the notebook cell. You can also get a JS
 # my_report.save_html(“file.html”)
 ```
 
-Local Reports are great for quick experiments. To run comparisons, keep track of the results and collaborate with others, upload the results to Evidently Platform.
+<Info>
+  Local Reports are great for quick experiments. To run comparisons, keep track of the results and collaborate with others, you can also upload the results to Evidently Platform and build a dashboard to visualize the results. Read more about [platform self-hosting](https://docs.evidentlyai.com/docs/setup/self-hosting). 
+</Info>
 
-**Upload the Report to Evidently Cloud** together with scored data:
-
-```python
-ws.add_run(project.id, my_eval, include_data=True)
-```
-
-**Explore.** Go to [Evidently Cloud](https://app.evidently.cloud/), open your Project, and navigate to Reports. You will see all score summaries and can browse the data. E.g. sort to find all answers labeled as "Denials".
-
-![](/images/examples/llm_quickstart_explore.png)
-
-## 5. Get a Dashboard 
-
-As you run more evals, it's useful to track them over time. Go to "Dashboard" in the left menu, enter the "Edit" mode, and add a new "Columns" tab:
-
-![](/images/examples/llm_quickstart_create_tab_new.gif)
-
-You'll see a set of panels with descriptor values. Each will have a single data point for now. As you log more evaluation results, you can track trends and set up alerts.
-
-Want to see more complex workflows? You can add pass/fail conditions and custom evals.
-
-## 6. (Optional) Add tests
+## 5. (Optional) Add tests
 
 You can add conditions to your evaluations. For example, you may expect that:
 
@@ -233,12 +195,12 @@ You can implement this logic easily.
   #my_eval
   ```
 
-  To identify rows that failed any criteria, sort by "All_test_passed" column:
+  To identify rows that failed any criteria, sort by "All\_test\_passed" column:
 </Accordion>
 
 ![](/images/examples/llm_quickstart_descriptor_tests_report-min.png)
 
-## 7. (Optional) Add a custom LLM jugde
+## 6. (Optional) Add a custom LLM jugde
 
 You can implement custom criteria using built-in LLM judge templates.
 
@@ -289,4 +251,4 @@ You can implement custom criteria using built-in LLM judge templates.
 
 Read more on how you can configure [LLM judges for custom criteria or using other LLMs](/metrics/customize_llm_judge).
 
-We also have lots of other examples\! [Explore tutorials](/metrics/introduction).
+We also have lots of other examples! [Explore tutorials](/metrics/introduction).
