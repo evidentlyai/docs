@@ -82,7 +82,13 @@ We'll evaluate the answers for:
 
 Each evaluation is a `descriptor`. It adds a new score or label to each row in your dataset.
 
-For LLM-as-a-judge, we'll use OpenAI GPT-4o mini. Set OpenAI key as an environment variable:
+For LLM-as-a-judge, we'll use OpenAI GPT-4o mini. This requires the `openai` package, which is not installed by default:
+
+```python
+!pip install openai
+```
+
+Set OpenAI key as an environment variable:
 
 ```python
 ## import os
@@ -250,5 +256,3 @@ You can implement custom criteria using built-in LLM judge templates.
 ## What's next?
 
 Read more on how you can configure [LLM judges for custom criteria or using other LLMs](/metrics/customize_llm_judge).
-
-We also have lots of other examples! [Explore tutorials](/metrics/introduction).
