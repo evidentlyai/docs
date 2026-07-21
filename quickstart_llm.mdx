@@ -18,11 +18,18 @@ Let’s dive in.
 
 ## 1. Set up your environment
 
-Install the Evidently Python library:
+Install the Evidently Python library. The OpenAI-backed LLM judges in this
+quickstart (for example `DeclineLLMEval`, which defaults to `provider="openai"`)
+also need the `openai` package. Installing `openai` alone is enough for these
+examples — you do not need the heavier `evidently[llm]` extra (which pulls
+`transformers[torch]` and similar deps).
 
 ```python
-!pip install evidently
+!pip install evidently openai
 ```
+
+If you only need deterministic descriptors (`Sentiment`, `TextLength`,
+`IncludesWords`, …), `pip install evidently` is sufficient.
 
 Components to run the evals:
 
